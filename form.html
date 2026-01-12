@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MyCPRC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Search CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+  
+  <!-- jQuery (REQUIRED for Select2) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Main CSS -->
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header"></div>
+
+<!-- BODY -->
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- LEFT PANEL -->
+    <aside class="col-md-3 col-lg-2 sidebar p-0">
+
+      <div class="p-4 border-bottom">
+        <h6 class="mb-1">User Name</h6>
+        <small class="text-muted">user@email.com</small>
+      </div>
+
+      <ul class="nav flex-column mt-2">
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person me-2"></i>User Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-file-earmark-text me-2"></i>Reporting</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bar-chart me-2"></i>Analysis</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-life-preserver me-2"></i>Helpdesk</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-book me-2"></i>Manual</a></li>
+        <li class="nav-item mt-3"><a class="nav-link logout" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+      </ul>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="col-md-9 col-lg-10 p-4">
+      <div class="card shadow-sm border-1">
+        <div class="card-body">
+          <h4 class="card-title mb-3">Welcome</h4>
+          <p class="card-text text-muted">
+            This is your central workspace for dashboards, reporting, and analytics.
+            Select a module from the left panel to begin.
+          </p>
+        </div>
+        <div class="card-body">
+        <div class="mb-4">
+            <ul class="nav nav-pills justify-content-center" id="stepIndicator">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active" data-step="0">1</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="1">2</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="2">3</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="3">4</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="4">5</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="5">6</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="6">7</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="7">8</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="8">9</button>
+                </li>
+            </ul>
+        </div>
+        
+        <form id="wizardForm" novalidate>
+        <!-- ================= STEP 1 ================= -->
+        <div class="wizard-step active">
+            <h5 class="mb-3">BAHAGIAN 1 : MAKLUMAT ASAS</h5>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Negeri</label>
+                <select class="form-select" id="negeri" name="negeri" required>
+                <option value="">-- Sila Pilih Negeri --</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Daerah</label>
+                <select class="form-select" id="daerah" name="daerah" required>
+                    <option value="">-- Sila Pilih Daerah --</option>
+                    <option value="Lain-Lain">Lain-lain</option>
+                </select>
+                </div>
+            
+                <div class="col-md-6 d-none" id="daerahLainWrapper">
+                <label class="form-label">Sila Nyatakan Daerah</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="daerahLain"
+                    name="daerahLain"
+                    placeholder="Nama Daerah"
+                >
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Minggu Epid (1–53)</label>
+                <input
+                    type="number"
+                    min="1"
+                    max="53"
+                    class="form-control"
+                    name="minggu_epid"
+                    required
+                >
+                <div class="form-text">
+                    Minggu Epidemiologi berdasarkan tarikh laporan wabak dilaporkan.
+                </div>
+                </div>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Tahun</label>
+                <input
+                    type="number"
+                    class="form-control"
+                    placeholder="YYYY"
+                    min="2023"
+                    name="tahun"
+                    required
+                >
+                </div>
+            </div>
+
+            </div>
+
+            <!-- ================= STEP 2 ================= -->
+            <div class="wizard-step">
+            <h5 class="mb-3">BAHAGIAN 2 : DATA PENYAKIT</h5>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Penyakit</label>
+                <select class="form-select" id="penyakit" name="penyakit" required>
+                    <option value="">-- Sila Pilih Penyakit --</option>
+                    <option value="LAIN_LAIN">Lain-lain</option>
+                </select>
+                </div>
+
+                <div class="col-md-6 d-none" id="penyakitLainWrapper">
+                <label class="form-label">Sila Nyatakan Penyakit</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="penyakitLain"
+                    name="penyakitLain"
+                    placeholder="Nama Penyakit"
+                >
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Kategori Tempat</label>
+                <select class="form-select" id="kategori_tempat" name="kategori_tempat" required>
+                    <option value="">-- Sila Pilih Kategori Tempat --</option>
+                    <option value="LAIN_LAIN">Lain-lain</option>
+                </select>
+                </div>
+
+                <div class="col-md-6 d-none" id="tempatLainWrapper">
+                <label class="form-label">Sila Nyatakan Kategori Tempat</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="tempatLain"
+                    name="tempatLain"
+                    placeholder="Kategori Tempat"
+                >
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Alamat Penuh Lokasi Wabak</label>
+                <textarea
+                    class="form-control"
+                    id="alamatLokasi"
+                    name="alamatLokasi"
+                    placeholder="Contoh: Klinik Kesihatan Putrajaya"
+                    rows="2"
+                    required
+                ></textarea>
+            </div>
+
+            <button
+                type="button"
+                class="btn btn-outline-primary btn-sm mb-3"
+                id="cariLokasi"
+            >
+                Cari Lokasi Berdasarkan Alamat
+            </button>
+
+            <div id="map" style="height:350px;"></div>
+
+            <!-- Simpan koordinat -->
+            <input type="hidden" name="latitude" id="latitude" required>
+            <input type="hidden" name="longitude" id="longitude" required>
+            </div>                    
+
+            <!-- ================= STEP 3 ================= -->
+            <div class="wizard-step">
+            <h5 class="mb-3">BAHAGIAN 3 : MAKLUMAT KEJADIAN WABAK</h5>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Kes</label>
+                <input type="number" class="form-control" id="bilangan_kes" name="bilangan_kes" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Terdedah</label>
+                <input type="number" class="form-control" id="bilangan_terdedah" name="bilangan_terdedah" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Kadar Serangan (%)</label>
+                <input
+                    type="number"
+                    class="form-control"
+                    step="0.1"
+                    min="0"
+                    max="100"
+                    placeholder="cth: 20.1"
+                    id="kadar_serangan"
+                    name="kadar_serangan"
+                    required
+                >
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Kes Lelaki</label>
+                <input type="number" class="form-control" id="bilangan_kes_lelaki" name="bilangan_kes_lelaki" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Kes Perempuan</label>
+                <input type="number" class="form-control" id="bilangan_kes_perempuan" name="bilangan_kes_perempuan" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Kes Warganegara</label>
+                <input type="number" class="form-control" id="bilangan_kes_warganegara" name="bilangan_kes_warganegara" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Kes Bukan Warganegara</label>
+                <input type="number" class="form-control" id="bilangan_kes_bukan_warganegara" name="bilangan_kes_bukan_warganegara" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Kes Pengesanan Melalui ACD</label>
+                <input type="number" class="form-control" id="bilangan_kes_acd" name="bilangan_kes_acd" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Kes Pengesanan Melalui PCD</label>
+                <input type="number" class="form-control" id="bilangan_kes_pcd" name="bilangan_kes_pcd" required>
+                </div>
+
+                <h6 class="mt-4 mb-3">Taburan Umur Kes</h6>
+
+                <div class="row g-3">
+
+                    <div class="col-md-4">
+                        <label class="form-label">0 - 4 tahun</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_0_4" name="umur_0_4" 
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">5 - 6 tahun</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_5_6" name="umur_5_6"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">7 - 12 tahun</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_7_12" name="umur_7_12"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">13 - 17 tahun</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_13_17" name="umur_13_17"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">18 - 19 tahun</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_18_19" name="umur_18_19"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">20 - 29 tahun</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_20_29" name="umur_20_29"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">30 - 39 tahun</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_30_39" name="umur_30_39"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">40 - 49 tahun</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_40_49" name="umur_40_49"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">50 - 59 tahun</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_50_59" name="umur_50_59"
+                        >
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="form-label">60 tahun & ke atas</label>
+                        <input type="number" class="form-control" min="0" value="0"
+                        id="umur_60_up" name="umur_60_up"
+                        >
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Dirawat Pesakit Luar</label>
+                <input type="number" class="form-control" id="bilangan_rawat_pesakit_luar" name="bilangan_rawat_pesakit_luar" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Masuk Wad</label>
+                <input type="number" class="form-control" id="bilangan_masuk_wad" name="bilangan_masuk_wad" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Masuk ICU</label>
+                <input type="number" class="form-control" id="bilangan_masuk_icu" name="bilangan_masuk_icu" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Sebab-Sebab Dimasukkan ke Wad/ICU</label>
+                <textarea class="form-control" id="sebab_masuk_wad/icu" name="sebab_masuk_wad/icu" required></textarea>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Bilangan Kematian</label>
+                <input type="number" class="form-control" id="bilangan_kematian" name="bilangan_kematian" required>
+                </div>
+
+            </div>
+            </div>
+
+            <!-- ================= STEP 4 ================= -->
+            <div class="wizard-step">
+            <h5 class="mb-3">BAHAGIAN 4 : PELAPORAN WABAK</h5>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                <label class="form-label">
+                    Tarikh Notifikasi Wabak
+                    <i
+                    class="bi bi-info-circle ms-1 text-muted"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Merujuk kepada kes kedua atau pertama mengikut definisi wabak penyakit berkenaan."
+                    ></i>
+                </label>
+
+                <input type="date" class="form-control" id="tarikh_notifikasi_wabak" name="tarikh_notifikasi_wabak" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Masa Notifikasi Wabak</label>
+                <input type="time" class="form-control" id="masa_notifikasi_wabak" name="masa_notifikasi_wabak" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Tarikh Siasatan Awal Wabak</label>
+                <input type="date" class="form-control" id="tarikh_siasatan_awal_wabak" name="tarikh_siasatan_awal_wabak" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">
+                    Tarikh Isytihar Wabak
+                    <i
+                    class="bi bi-info-circle ms-1 text-muted"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Merujuk kepada wabak yang disahkan berlaku dan diperakui oleh Pegawai Kesihatan Daerah/Pegawai Epidemiologi Daerah."
+                    ></i>
+                </label>
+                <input type="date" class="form-control" id="tarikh_isytihar_wabak" name="tarikh_isytihar_wabak" required>
+                </div>
+                
+                <div class="col-md-6">
+                <label class="form-label">Tempoh Inkubasi</label>
+                <select
+                    class="form-select"
+                    id="tempohInkubasi"
+                    name="tempohInkubasi"
+                    multiple
+                    required
+                >
+                    <option value="1-3">1 – 3 hari</option>
+                    <option value="4-7">4 – 7 hari</option>
+                    <option value="8-14">8 – 14 hari</option>
+                    <option value="15-21">15 – 21 hari</option>
+                    <option value="22-28">22 – 28 hari</option>
+                    <!-- more options -->
+                    <option value="LAIN_LAIN">Lain-lain</option>
+                </select>
+                </div>
+
+                <div class="col-md-6 d-none" id="inkubasiLainWrapper">
+                <label class="form-label">Nyatakan Tempoh Inkubasi</label>
+                <input type="text" class="form-control" id="inkubasiLain" name="inkubasiLain" placeholder="Tempoh Inkubasi">
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">
+                    Tarikh Wabak Dijangka Tamat
+                    <i
+                    class="bi bi-info-circle ms-1 text-muted"
+                    data-bs-toggle="tooltip"
+                    data-bs-placement="top"
+                    title="Merujuk kepada wabak dijangka tamat mengikut tempoh inkubasi setiap penyakit bermula dari tarikh onset terakhir."
+                    ></i>
+                </label>
+                <input type="date" class="form-control" id="tarikh_wabak_dijangka_tamat" name="tarikh_wabak_dijangka_tamat" required>
+                </div>
+
+            </div>
+            </div>
+
+            <!-- ================= STEP 5 ================= -->
+            <div class="wizard-step">
+            <h5 class="mb-3">BAHAGIAN 5 : ONSET / GEJALA</h5>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Tarikh Pendedahan bagi Indeks Kes</label>
+                <input type="date" class="form-control" id="tarikh_pendedahan_indeks_kes" name="tarikh_pendedahan_indeks_kes" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Masa Pendedahan bagi Indeks Kes</label>
+                <input type="time" class="form-control" id="masa_pendedahan_indeks_kes" name="masa_pendedahan_indeks_kes" required>
+                </div>
+
+                <div class="col-md-6">
+                <label class="form-label">Tarikh Onset bagi Indeks Kes</label>
+                <input type="date" class="form-control" id="tarikh_onset_indeks_kes" name="tarikh_onset_indeks_kes" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Masa Onset bagi Indeks Kes</label>
+                <input type="time" class="form-control" id="masa_onset_indeks_kes" name="masa_onset_indeks_kes" required>
+                </div>
+
+                <div class="col-md-6">
+                <label class="form-label">Tarikh Onset Terakhir</label>
+                <input type="date" class="form-control" id="tarikh_onset_terakhir" name="tarikh_onset_terakhir" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Masa Onset Terakhir</label>
+                <input type="time" class="form-control" id="masa_onset_terakhir" name="masa_onset_terakhir" required>
+                </div>
+
+                <h6 class="mt-4 mb-3">Simptom/Gejala Klinikal</h6>
+                <!-- <h8 class="mt-4 mb-3">Nyatakan mengikut susunan kekerapan dari yang tertinggi ke yang terendah.</h8> -->
+
+                <div class="col-12">
+                <label class="form-label">Simptom / Gejala</label>
+
+                <div id="symptomContainer">
+                    <!-- ROW 1 -->
+                    <div class="row g-2 align-items-end symptom-row">
+                    <div class="col-md-5">
+                        <input type="text" class="form-control" name="symptom[]" placeholder="Contoh: Demam" required>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="number" class="form-control" name="kes[]" placeholder="Bil. Kes" min="0" required>
+                    </div>
+
+                    <div class="col-md-3">
+                        <input type="number" step="0.1" class="form-control" name="peratus[]" placeholder="Peratus (%)" min="0" max="100" required>
+                    </div>
+
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-outline-danger w-100 remove-row d-none">
+                        <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                    </div>
+                </div>
+
+                <!-- ADD BUTTON -->
+                <button type="button" class="btn btn-outline-primary mt-3" id="addSymptom">
+                    <i class="bi bi-plus-circle"></i> Tambah Simptom
+                </button>
+                </div>
+
+            </div>
+            </div>
+
+            <!-- ================= STEP 6 ================= -->
+            <div class="wizard-step">
+            <h5 class="mb-3">BAHAGIAN 6 : SAMPEL, AGEN DISYAKI & FAKTOR PENYUMBANG</h5>
+
+            <div class="col-md-6">
+                <label class="form-label">Sampel/Spesimen Klinikal</label>
+                <select
+                    class="form-select"
+                    id="sampel"
+                    multiple
+                    required
+                >
+                    <option value="Darah">Darah</option>
+                    <option value="Swab">Swab</option>
+                    <option value="Saliva">Saliva</option>
+                    <option value="Stool">Stool</option>
+                    <option value="Air Kencing">Air Kencing</option>
+                    <option value="Tiada">Tiada</option>
+                    <option value="LAIN_LAIN">Lain-lain</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 d-none" id="sampelLainWrapper">
+                <label class="form-label">Nyatakan Sampel</label>
+                <input type="text" class="form-control" id="sampelLain" name="sampelLain" placeholder="Sampel">
+            </div>
+
+            <div class="col-12 mt-3" id="ujianContainer"></div>
+
+            <div class="col-12 mt-4">
+                <label class="form-label">
+                    Sampel / Spesimen Persekitaran
+                </label>
+
+                <div id="persekitaranContainer"></div>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-primary btn-sm mt-2"
+                    id="addPersekitaran"
+                    name="addPersekitaran"
+                >
+                    + Tambah Sampel
+                </button>
+            </div>
+
+            <div class="col-12 mt-4">
+                <label class="form-label">
+                    Sampel/Spesimen Makanan/Minuman
+                </label>
+
+                <div id="krmContainer"></div>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-primary btn-sm mt-2"
+                    id="addKrm"
+                    name="addKrm"
+                >
+                    + Tambah Sampel
+                </button>
+            </div>
+
+            <div class="mt-3">
+                <label class="form-label">Agen Disyaki</label>
+                <input type="text" class="form-control" id="agenDisyaki" name="agenDisyaki" placeholder="Agen Disyaki" required>
+            </div>
+
+            <div class="col-12 mt-4">
+                <label class="form-label">
+                    Makanan / Minuman Disyaki
+                </label>
+
+                <div id="krmFinalContainer" class="ms-2">
+                    <small class="text-muted">
+                    Pilih satu berdasarkan siasatan
+                    </small>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <label class="form-label">Keputusan Sampel</label>
+                <input type="text" class="form-control" id="keputusanSampel" name="keputusanSampel" required>
+            </div>
+
+            <div class="col-12 mt-4">
+                <label class="form-label">
+                    Faktor Penyumbang
+                </label>
+
+                <div id="faktorContainer"></div>
+
+                <button
+                    type="button"
+                    class="btn btn-outline-primary btn-sm mt-2"
+                    id="addFaktor"
+                    name="addFaktor"
+                >
+                    + Tambah Faktor
+                </button>
+            </div>
+            </div>
+
+            <!-- ================= STEP 7 ================= -->
+            <div class="wizard-step">
+            <h5 class="mb-3">BAHAGIAN 7 : STATUS VAKSINASI</h5>
+            <h6>Bilangan Kes bagi:</h6>
+            <br>
+            <br>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                <label class="form-label">Vaksin Lengkap</label>
+                <input type="number" class="form-control" id="vaksin_lengkap" name="vaksin_lengkap" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Belum Layak Vaksin</label>
+                <input type="number" class="form-control" id="belum_layak_vaksin" name="belum_layak_vaksin" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Belum Lengkap Vaksin</label>
+                <input type="number" class="form-control" id="belum_lengkap_vaksin" name="belum_lengkap_vaksin" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Status Tidak Diketahui</label>
+                <input type="number" class="form-control" id="status_tidak_diketahui" name="status_tidak_diketahui" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Tidak Vaksin</label>
+                <input type="number" class="form-control" id="tidak_vaksin" name="tidak_vaksin" required>
+                </div>
+            </div>
+            </div>
+
+            <!-- ================= STEP 8 ================= -->
+            <div class="wizard-step">
+            <h5 class="mb-3">BAHAGIAN 8 : TINDAKAN KAWALAN DAN PENCEGAHAN</h5>
+            <div class="row g-3">
+                <!-- <div class="col-12">
+                <label class="form-label">Tindakan Pencegahan dan Kawalan</label>
+                <textarea class="form-control" id="tindakan_pencegahan" name="tindakan_pencegahan"></textarea>
+                </div> -->
+
+                <div class="col-md-6">
+                <label class="form-label">Tindakan Pencegahan dan Kawalan</label>
+                <select class="form-select" id="tindakan_pencegahan" name= "tindakan_pencegahan" required>
+                    <option value="">-- Sila Pilih Kategori Tempat --</option>
+                    <option value="LAIN_LAIN">Lain-lain</option>
+                </select>
+                </div>
+
+                <div class="col-md-6 d-none" id="tindakanPencegahanLainWrapper">
+                <label class="form-label">Lain-Lain Tindakan</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="tindakanPencegahan"
+                    name="tindakanPencegahanLain"
+                    placeholder="Tindakan"
+                >
+                </div>
+
+                <div class="col-md-6">
+                <label class="form-label">Tindakan Dibawah Undang-Undang Kesihatan Awam</label>
+                <select class="form-select" id="tindakan_undang" name= "tindakan_undang" required>
+                    <option value="">-- Sila Pilih Kategori Tempat --</option>
+                    <option value="LAIN_LAIN">Lain-lain</option>
+                </select>
+                </div>
+
+                <div class="col-md-6 d-none" id="tindakanUndangLainWrapper">
+                <label class="form-label">Lain-Lain Undang-Undang</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="tindakanUndang"
+                    name="tindakanUndangLain"
+                    placeholder="Tindakan"
+                >
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Tarikh Laporan Awal</label>
+                <input type="date" class="form-control" id="tarikh_laporan_awal" name="tarikh_laporan_awal" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Masa Laporan Awal</label>
+                <input type="time" class="form-control" id="masa_laporan_awal" name="masa_laporan_awal" required>
+                </div>
+
+                <!--ULASAN PEGAWAI PENYIASAT-->
+                <div class="col-12 mt-4">
+                <h6 class="fw-bold text-primary">
+                    Ulasan Pegawai Penyiasat
+                </h6>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Nama Pegawai</label>
+                <input type="text" class="form-control" name="pegawai[penyiasat][nama]" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Jawatan</label>
+                <input type="text" class="form-control" name="pegawai[penyiasat][jawatan]" required>
+                </div>
+
+                <!-- <div class="col-md-4">
+                <label class="form-label">No Telefon Bimbit</label>
+                <input type="tel" class="form-control" name="pegawai[penyiasat][telefon]" required>
+                </div> -->
+
+                <div class="col-md-4">
+                <label class="form-label">No. Telefon Bimbit</label>
+                <input 
+                    type="tel" 
+                    class="form-control" 
+                    name="pegawai[penyiasat][telefon]" 
+                    placeholder="Contoh: 0123456789"
+                    pattern="^[0-9]{10,11}$" 
+                    required
+                >
+                </div>
+
+                <div class="col-12">
+                <label class="form-label">Ulasan</label>
+                <textarea class="form-control" rows="3" name="pegawai[penyiasat][ulasan]" required></textarea>
+                </div>
+
+                 <!--ULASAN PEGAWAI PENYELIA DAERAH-->
+                <div class="col-12 mt-4">
+                <h6 class="fw-bold text-primary">
+                    Ulasan Pegawai Penyelia Daerah
+                </h6>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Nama Pegawai</label>
+                <input type="text" class="form-control" name="pegawai[penyelia_daerah][nama]" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Jawatan</label>
+                <input type="text" class="form-control" name="pegawai[penyelia_daerah][jawatan]" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">No. Telefon Bimbit</label>
+                <input 
+                    type="tel" 
+                    class="form-control" 
+                    name="pegawai[penyelia_daerah][telefon]" 
+                    placeholder="Contoh: 0123456789"
+                    pattern="^[0-9]{10,11}$" 
+                    required
+                >
+                </div>
+
+                <div class="col-12">
+                <label class="form-label">Ulasan</label>
+                <textarea class="form-control" rows="3" name="pegawai[penyelia_daerah][ulasan]" required></textarea>
+                </div>
+
+                <!--ULASAN PEGAWAI KESIHATAN DAERAH / EPIDEMIOLOGI DAERAH-->
+                <div class="col-12 mt-4">
+                <h6 class="fw-bold text-primary">
+                    Ulasan Pegawai Kesihatan Daerah / Pegawai Epidemiologi Daerah
+                </h6>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Nama Pegawai</label>
+                <input type="text" class="form-control" name="pegawai[pkd_epid][nama]" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Jawatan</label>
+                <input type="text" class="form-control" name="pegawai[pkd_epid][jawatan]" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">No. Telefon Bimbit</label>
+                <input 
+                    type="tel" 
+                    class="form-control" 
+                    name="pegawai[pkd_epid][telefon]" 
+                    placeholder="Contoh: 0123456789"
+                    pattern="^[0-9]{10,11}$" 
+                    required
+                >
+                </div>
+
+                <div class="col-12">
+                <label class="form-label">Ulasan</label>
+                <textarea class="form-control" rows="3" name="pegawai[pkd_epid][ulasan]" required></textarea>
+                </div>
+
+                <!--ULASAN PEGAWAI EPIDEMIOLOGI NEGERI-->
+                <div class="col-12 mt-4">
+                <h6 class="fw-bold text-primary">
+                    Ulasan Pegawai Epidemiologi Negeri
+                </h6>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Nama Pegawai</label>
+                <input type="text" class="form-control" name="pegawai[pkd_epid_neg][nama]" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Jawatan</label>
+                <input type="text" class="form-control" name="pegawai[pkd_epid_neg][jawatan]" required>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">No. Telefon Bimbit</label>
+                <input 
+                    type="tel" 
+                    class="form-control" 
+                    name="pegawai[pkd_epid_neg][telefon]" 
+                    placeholder="Contoh: 0123456789"
+                    pattern="^[0-9]{10,11}$" 
+                    required
+                >
+                </div>
+
+                <div class="col-12">
+                <label class="form-label">Ulasan</label>
+                <textarea class="form-control" rows="3" name="pegawai[pkd_epid_neg][ulasan]" required></textarea>
+                </div>
+
+            </div>
+            </div>
+
+            <!-- ================= STEP 9 ================= -->
+            <div class="wizard-step">
+                <h5 class="mb-3">BAHAGIAN 9 : ULASAN LAPORAN AKHIR</h5>
+                <h6>Ulasan oleh Pegawai selepas wabak tamat.</h6>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                    <label class="form-label">Tarikh Sebenar Tamat Wabak</label>
+                    <input type="date" class="form-control" id="tarikh_sebenar_tamat_wabak" name="tarikh_sebenar_tamat_wabak" required>
+                    </div>
+                
+                    <div class="col-md-6">
+                    <label class="form-label">Diagnosa Akhir Penyakit</label>
+                    <select class="form-select" id="akhirPenyakit" name= "akhirPenyakit" required>
+                        <option value="">-- Sila Pilih Penyakit --</option>
+                        <option value="LAIN_LAIN">Lain-lain</option>
+                    </select>
+                    </div>
+
+                    <div class="col-md-6 d-none" id="akhirPenyakitLainWrapper">
+                    <label class="form-label">Sila Nyatakan Penyakit</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="akhirPenyakitLain"
+                        name="akhirPenyakitLain"
+                        placeholder="Nama Penyakit"
+                    >
+                    </div>
+
+                    <div class="mt-3">
+                        <label class="form-label">Agen Dikesan (melalui keputusan sampel)</label>
+                        <input type="text" class="form-control" id="agenDikesan" name="agenDikesan" placeholder="Agen Dikesan" required>
+                    </div>
+
+                    <!--ULASAN AKHIR PEGAWAI KESIHATAN DAERAH / EPIDEMIOLOGI DAERAH-->
+                    <div class="col-12 mt-4">
+                    <h6 class="fw-bold text-primary">
+                        Ulasan Akhir Pegawai Kesihatan Daerah / Epidemiologi Daerah
+                    </h6>
+                    </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label">Nama Pegawai</label>
+                    <input type="text" class="form-control" name="akhirPegawai[pkd_epid][nama]" required>
+                    </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label">Jawatan</label>
+                    <input type="text" class="form-control" name="akhirpegawai[pkd_epid][jawatan]" required>
+                    </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label">No. Telefon Bimbit</label>
+                    <input 
+                        type="tel" 
+                        class="form-control" 
+                        name="pegawai[pkd_epid][telefon]" 
+                        placeholder="Contoh: 0123456789"
+                        pattern="^[0-9]{10,11}$" 
+                        required
+                    >
+                    </div>
+
+                    <div class="col-md-6">
+                    <label class="form-label">Tarikh Ulasan Laporan Akhir</label>
+                    <input type="date" class="form-control" id="tarikh_ulasan_laporan_akhir" name="tarikh_ulasan_laporan_akhir" required>
+                    </div>
+
+                    <div class="col-12">
+                    <label class="form-label">Ulasan</label>
+                    <textarea class="form-control" rows="3" name="akhirpegawai[pkd_epid][ulasan]" required></textarea>
+                    </div>
+
+                    <!--ULASAN AKHIR PEGAWAI EPIDEMIOLOGI NEGERI-->
+                    <div class="col-12 mt-4">
+                    <h6 class="fw-bold text-primary">
+                        Ulasan Akhir Pegawai Epidemiologi Negeri
+                    </h6>
+                    </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label">Nama Pegawai</label>
+                    <input type="text" class="form-control" name="akhirPegawaiNeg[pkd_epid_neg][nama]" required>
+                    </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label">Jawatan</label>
+                    <input type="text" class="form-control" name="akhirPegawaiNeg[pkd_epid_neg][jawatan]" required>
+                    </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label">No. Telefon Bimbit</label>
+                    <input 
+                        type="tel" 
+                        class="form-control" 
+                        name="pegawai[pkd_epid_neg][telefon]" 
+                        placeholder="Contoh: 0123456789"
+                        pattern="^[0-9]{10,11}$" 
+                        required
+                    >
+                    </div>
+
+                    <div class="col-md-6">
+                    <label class="form-label">Tarikh Ulasan Laporan Akhir</label>
+                    <input type="date" class="form-control" id="tarikh_ulasan_laporan_akhir_neg" name="tarikh_ulasan_laporan_akhir_neg" required>
+                    </div>
+                    
+                    <div class="col-12">
+                    <label class="form-label">Ulasan</label>
+                    <textarea class="form-control" rows="3" name="akhirPegawaiNeg[pkd_epid][ulasan]" required></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NAVIGATION -->
+            <div class="d-flex justify-content-start mt-4 gap-2">
+            <button type="button" class="btn btn-secondary" id="prevBtn">Back</button>
+            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+        </div>
+        </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div id="footer"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Load Header & Footer -->
+<script src="assets/js/common.js"></script>
+<!--Wizard-->
+<script src="assets/js/wizard-form.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+</body>
+</html>

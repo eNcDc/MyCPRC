@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disaster Management Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0077b6;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem auto;
+            max-width: 1200px;
+            gap: 2rem;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            width: 300px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card h2 {
+            margin-top: 0;
+            color: #023e8a;
+        }
+
+        .sub-options {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .sub-options li {
+            margin: 0.5rem 0;
+        }
+
+        .sub-options a {
+            text-decoration: none;
+            color: #0077b6;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        .sub-options a:hover {
+            color: #023e8a;
+        }
+
+        @media (max-width: 960px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Disaster Management Dashboard</h1>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <h2>Preparedness</h2>
+            <ul class="sub-options">
+                <li><a href="#">District Profile</a></li>
+                <li><a href="#">Disaster Resources Management</a></li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Surveillance</h2>
+            <ul class="sub-options">
+                <li><a href="#">Sentiment Analysis</a></li>
+                <li><a href="#">Spot Repository</a></li>
+                <li><a href="#">Rumour Surveillance</a></li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2>Response</h2>
+            <ul class="sub-options">
+                <li><a href="#">DOCE Event Reporting</a></li>
+                <li><a href="#">Flood Management</a></li>
+                <li><a href="#">Disease Specific</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
