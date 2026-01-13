@@ -144,3 +144,36 @@ footer {
     grid-template-columns: 1fr;
   }
 }
+
+.rating-group {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+
+.rating-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+
+.rating-label:hover {
+  transform: scale(1.1);
+}
+
+.rating-label input {
+  display: none;
+}
+
+.rating-label input:checked + span {
+  outline: 3px solid black;
+  outline-offset: 2px;
+  border-radius: 50%;
+}

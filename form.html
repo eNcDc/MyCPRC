@@ -216,32 +216,29 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Alamat Penuh Lokasi Wabak</label>
-                <textarea
-                    class="form-control"
-                    id="alamatLokasi"
-                    name="alamatLokasi"
-                    placeholder="Contoh: Klinik Kesihatan Putrajaya"
-                    rows="2"
-                    required
-                ></textarea>
+                <label class="form-label">Alamat Penuh</label>
+                <textarea id="alamatLokasiDOCE" class="form-control" rows="2" placeholder="Contoh: Klinik Kesihatan Putrajaya"></textarea>
             </div>
 
-            <button
-                type="button"
-                class="btn btn-outline-primary btn-sm mb-3"
-                id="cariLokasi"
-            >
-                Cari Lokasi Berdasarkan Alamat
-            </button>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-3" id="cariLokasiDOCE">Cari Lokasi Berdasarkan Alamat</button>
 
-            <div id="map" style="height:350px;"></div>
+            <div id="map_doce" style="height:350px;"></div>
 
             <!-- Simpan koordinat -->
-            <input type="hidden" name="latitude" id="latitude" required>
-            <input type="hidden" name="longitude" id="longitude" required>
-            </div>                    
+            <input type="hidden" name="latitude_doce" id="latitude_doce" required>
+            <input type="hidden" name="longitude_doce" id="longitude_doce" required>
 
+            <!-- Display koordinat live -->
+            <div class="mt-2">
+            <strong>Latitude:</strong> <span id="latDisplay_doce">-</span> |
+            <strong>Longitude:</strong> <span id="lngDisplay_doce">-</span>
+            </div>
+
+            <!-- Simpan koordinat -->
+            <input type="hidden" name="latitude_doce" id="latitude_doce" required>
+            <input type="hidden" name="longitude_doce" id="longitude_doce" required>
+            </div>                  
+            
             <!-- ================= STEP 3 ================= -->
             <div class="wizard-step">
             <h5 class="mb-3">BAHAGIAN 3 : MAKLUMAT KEJADIAN WABAK</h5>
@@ -1039,6 +1036,33 @@
 <script src="assets/js/common.js"></script>
 <!--Wizard-->
 <script src="assets/js/wizard-form.js"></script>
+
+<script src="assets/js/doce_form.js"></script>
+
+<script src="assets/js/negeri-daerah.js"></script>
+
+<script>
+initNegeriDaerah({
+  negeriId: "negeri",
+  daerahId: "daerah",
+  lainWrapperId: "daerahLainWrapper",
+  lainInputId: "daerahLain"
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  initMap(
+    'map_doce',
+    'latitude_doce',
+    'longitude_doce',
+    'latDisplay_doce',
+    'lngDisplay_doce',
+    'cariLokasiDOCE',
+    'alamatLokasiDOCE'
+  );
+});
+</script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
