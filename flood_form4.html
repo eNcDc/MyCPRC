@@ -72,12 +72,12 @@
           </ul>
          
           <ul class="nav nav-pills justify-content-center">       
-            <li class="nav-item"><a class="nav-link" href="borang4.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 4 (BPKK)</a></li>
-            <li class="nav-item"><a class="nav-link" href="borang5_1.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 5.1 (HECC)</a></li>
-            <li class="nav-item"><a class="nav-link" href="borang5_2.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 5.2 (HECC)</a></li>
-            <li class="nav-item"><a class="nav-link" href="borang6.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 6 (BKP)</a></li>
-            <li class="nav-item"><a class="nav-link" href="borang7.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 7 (BKP)</a></li>
-            <li class="nav-item"><a class="nav-link" href="borang11.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 11 (KMAM)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form4.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 4 (BPKK)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form5_1.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 5.1 (HECC)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form5_2.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 5.2 (HECC)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 6 (BKP)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 7 (BKP)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 11 (KMAM)</a></li>
           </ul>
         </div>
 
@@ -91,7 +91,7 @@
                 <div class="col-md-6">
                 <label class="form-label">Negeri</label>
                 <select class="form-select" id="negeri" name="negeri" required>
-                    <option value="">-- Sila Pilih Negeri --</option>
+                <option value="">-- Sila Pilih Negeri --</option>
                 </select>
                 </div>
             </div>
@@ -182,8 +182,17 @@
 <script src="assets/js/common.js"></script>
 <!--Wizard-->
 <script src="assets/js/wizard-form.js"></script>
-
+<script src="assets/js/negeri-daerah.js"></script>
+<script src="assets/js/flood_form.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+initNegeriDaerah({
+  negeriId: "negeri",
+  daerahId: "daerah",
+  lainWrapperId: "daerahLainWrapper",
+  lainInputId: "daerahLain"
+});
+</script>
 
 </body>
 </html>
