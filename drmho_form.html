@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DRP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Search CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+  
+  <!-- jQuery (REQUIRED for Select2) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Main CSS -->
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header"></div>
+
+<!-- BODY -->
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- LEFT PANEL -->
+    <aside class="col-md-3 col-lg-2 sidebar p-0">
+
+      <div class="p-4 border-bottom">
+        <h6 class="mb-1">User Name</h6>
+        <small class="text-muted">user@email.com</small>
+      </div>
+
+      <ul class="nav flex-column mt-2">
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person me-2"></i>User Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-file-earmark-text me-2"></i>Reporting</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bar-chart me-2"></i>Analysis</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-life-preserver me-2"></i>Helpdesk</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-book me-2"></i>Manual</a></li>
+        <li class="nav-item mt-3"><a class="nav-link logout" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+      </ul>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="col-md-9 col-lg-10 p-4">
+      <div class="card shadow-sm border-1">
+        <div class="card-body">
+          <h4 class="card-title mb-3">BORANG DISTRICT RISK PROFILE</h4>
+          <p class="card-text text-muted">
+            This is your central workspace for dashboards, reporting, and analytics.
+          </p>
+        </div>
+        <div class="card-body">
+        <div class="mb-4">
+            <ul class="nav nav-pills justify-content-center" id="stepIndicator">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active" data-step="0">1</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="1">2</button>
+                </li>
+            </ul>
+        </div>
+       
+        <form id="wizardForm" novalidate>
+
+            <!-- STEP 1 : GENERAL -->
+            <div class="form-step active">
+            <h5>PART 1 : GENERAL</h5>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                <label class="form-label required">Disaster Management Plan - Year</label>
+                <input type="number" class="form-control" id ="dmp_year" name="dmp_year" required>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                <label>Bilik Gerakan Phone Number</label>
+                <input type="number" class="form-control" name="bilik_gerakan_phone" required>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                <label>Disaster Management Plan</label>
+                <select class="form-select" name="dmp_available" required>
+                    <option value="">Select</option>
+                    <option>YES</option>
+                    <option>NO</option>
+                </select>
+                </div>
+            </div>
+            </div>
+
+            <!-- STEP 2 : HUMAN RESOURCES -->
+            <div class="wizard-step">
+        
+            <h5>Human Resources</h5>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                <label>Disaster Management Committee</label>
+                <select class="form-select" name="dmc">
+                    <option>YES</option>
+                    <option>NO</option>
+                </select>
+                </div>
+
+                <div class="col-md-4 mb-3">
+                <label>No. of Boat Man (Sea)</label>
+                <input type="number" class="form-control" name="boatman_sea">
+                </div>
+
+                <div class="col-md-4 mb-3">
+                <label>No. of Boat Man (River)</label>
+                <input type="number" class="form-control" name="boatman_river">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Family Medicine Specialists</label>
+                <input type="number" class="form-control" name="fms">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Public Health Medicine Specialists</label>
+                <input type="number" class="form-control" name="phms">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Entomologists</label>
+                <input type="number" class="form-control" name="entomologist">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Psychologist</label>
+                <input type="number" class="form-control" name="psychologist">
+                </div>
+            </div>
+            </div>
+
+            <!-- STEP 3 : MEDICAL DEVICES -->
+            <div class="wizard-step">
+            <h5>Medical Devices</h5>
+
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                <label>Portable Ventilator</label>
+                <input type="number" class="form-control">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Defibrillator</label>
+                <input type="number" class="form-control">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Syringe Pumps</label>
+                <input type="number" class="form-control">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Portable Oxygen Tanks</label>
+                <select class="form-select">
+                    <option>YES</option>
+                    <option>NO</option>
+                </select>
+                </div>
+            </div>
+            </div>
+
+            <!-- STEP 4 : NON MEDICAL DEVICES -->
+            <div class="wizard-step">
+            <h5>Non-Medical Devices</h5>
+
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                <label>Disaster Tent</label>
+                <input type="number" class="form-control">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Portable Lighting System</label>
+                <input type="number" class="form-control">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Power Generator</label>
+                <select class="form-select">
+                    <option>YES</option>
+                    <option>NO</option>
+                </select>
+                </div>
+            </div>
+            </div>
+
+            <!-- STEP 5 : FACILITIES -->
+            <div class="wizard-step">
+            <h5>Facilities</h5>
+
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                <label>Designated Disaster KK</label>
+                <select class="form-select"><option>YES</option><option>NO</option></select>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Emergency Unit</label>
+                <select class="form-select"><option>YES</option><option>NO</option></select>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                <label>Helipad</label>
+                <select class="form-select"><option>YES</option><option>NO</option></select>
+                </div>
+            </div>
+            </div>
+
+            <!-- STEP 6 : COMMUNICATION -->
+            <div class="wizard-step">
+            <h5>Communication</h5>
+            <div class="row">
+                <div class="col-md-3 mb-3"><label>GIRN Handheld</label><input type="number" class="form-control"></div>
+                <div class="col-md-3 mb-3"><label>Satellite Phone</label><input type="number" class="form-control"></div>
+                <div class="col-md-3 mb-3"><label>Walkie Talkie</label><input type="number" class="form-control"></div>
+            </div>
+            </div>
+
+            <!-- STEP 7 : TRANSPORTATION -->
+            <div class="wizard-step">
+            <h5>Transportation</h5>
+            <div class="row">
+                <div class="col-md-3 mb-3"><label>Lorry</label><input type="number" class="form-control"></div>
+                <div class="col-md-3 mb-3"><label>Ambulance</label><input type="number" class="form-control"></div>
+                <div class="col-md-3 mb-3"><label>No. of Boat</label><input type="number" class="form-control"></div>
+            </div>
+            </div>
+
+            <!-- STEP 8 : LOGISTICS -->
+            <div class="wizard-step">
+            <h5>Logistics Suppliers</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                <label>Adequate PPE Supply</label>
+                <select class="form-select"><option>YES</option><option>NO</option></select>
+                </div>
+                <div class="col-md-4 mb-3">
+                <label>Life Jackets</label>
+                <input type="number" class="form-control">
+                </div>
+            </div>
+            </div>
+
+            <!-- STEP 9 : SPECIAL UNIT -->
+            <div class="wizard-step">
+            <h5>Special Unit</h5>
+            <div class="row">
+                <div class="col-md-4 mb-3"><label>MHPSS</label><select class="form-select"><option>YES</option><option>NO</option></select></div>
+                <div class="col-md-4 mb-3"><label>RAT</label><select class="form-select"><option>YES</option><option>NO</option></select></div>
+                <div class="col-md-4 mb-3"><label>RRT</label><select class="form-select"><option>YES</option><option>NO</option></select></div>
+            </div>
+            </div>
+
+            <!-- STEP 10 : SUBMIT -->
+            <div class="wizard-step">
+            <h5>Review & Submit</h5>
+            <p>Please review all information before submission.</p>
+            <button type="submit" class="btn btn-success">Submit Report</button>
+            </div>
+
+            <!-- NAVIGATION -->
+            <div class="d-flex justify-content-start mt-4 gap-2">
+            <button type="button" class="btn btn-secondary" id="prevBtn">Back</button>
+            <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+        </div>
+        </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div id="footer"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Load Header & Footer -->
+<script src="assets/js/common.js"></script>
+
+<script src="assets/js/wizard-form.js"></script>
+
+<script src="assets/js/doce_form.js"></script>
+
+<script src="assets/js/negeri-daerah.js"></script>
+
+<script>
+initNegeriDaerah({
+  negeriId: "negeri_drp",
+  daerahId: "daerah_drp",
+  lainWrapperId: "daerahLainWrapperDRP",
+  lainInputId: "daerahLainDRP"
+});
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  initMap(
+    'map_drp',
+    'latitude_drp',
+    'longitude_drp',
+    'latDisplayDRP',
+    'lngDisplayDRP',
+    'cariLokasiDRP',
+    'alamatLokasiDRP'
+  );
+});
+</script>
+
+
+<script src="assets/js/drp_form.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+</body>
+</html>
