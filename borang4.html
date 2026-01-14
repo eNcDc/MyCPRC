@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MyCPRC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Search CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+  
+  <!-- jQuery (REQUIRED for Select2) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Main CSS -->
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header"></div>
+
+<!-- BODY -->
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- LEFT PANEL -->
+    <aside class="col-md-3 col-lg-2 sidebar p-0">
+
+      <div class="p-4 border-bottom">
+        <h6 class="mb-1">User Name</h6>
+        <small class="text-muted">user@email.com</small>
+      </div>
+
+      <ul class="nav flex-column mt-2">
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-person me-2"></i>User Profile</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-file-earmark-text me-2"></i>Reporting</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-bar-chart me-2"></i>Analysis</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-life-preserver me-2"></i>Helpdesk</a></li>
+        <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-book me-2"></i>Manual</a></li>
+        <li class="nav-item mt-3"><a class="nav-link logout" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+      </ul>
+
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="col-md-9 col-lg-10 p-4">
+      <div class="card shadow-sm border-1">
+        <div class="card-body">
+          <h4 class="card-title mb-3">RETEN BANJIR</h4>
+          <p class="card-text text-muted"></p> 
+
+          <ul class="nav nav-pills justify-content-center">       
+            <li class="nav-item"><a class="nav-link" href="drmho_form.html"><i class="bi bi-book me-2"></i>DRM</a></li>
+            <li class="nav-item"><a class="nav-link" href="drp_form.html"><i class="bi bi-book me-2"></i>DRP</a></li>
+            <li class="nav-item"><a class="nav-link" href="form.html"><i class="bi bi-book me-2"></i>DOCE</a></li>
+          </ul>
+         
+          <ul class="nav nav-pills justify-content-center">       
+            <li class="nav-item"><a class="nav-link" href="borang4.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 4 (BPKK)</a></li>
+            <li class="nav-item"><a class="nav-link" href="borang5_1.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 5.1 (HECC)</a></li>
+            <li class="nav-item"><a class="nav-link" href="borang5_2.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 5.2 (HECC)</a></li>
+            <li class="nav-item"><a class="nav-link" href="borang6.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 6 (BKP)</a></li>
+            <li class="nav-item"><a class="nav-link" href="borang7.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 7 (BKP)</a></li>
+            <li class="nav-item"><a class="nav-link" href="borang11.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 11 (KMAM)</a></li>
+          </ul>
+        </div>
+
+        <div class="card-body">
+        <form id="wizardForm" action="http://localhost:3000/submit" method="POST">
+
+        <div class="wizard-step active">
+            <h5 class="mb-3">BORANG 4 : FASILITI KESIHATAN TERJEJAS BANJIR</h5>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Negeri</label>
+                <select class="form-select" id="negeri" name="negeri" required>
+                    <option value="">-- Sila Pilih Negeri --</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Daerah</label>
+                <select class="form-select" id="daerah" name="daerah" required>
+                    <option value="">-- Sila Pilih Daerah --</option>
+                    <option value="Lain-Lain">Lain-lain</option>
+                </select>
+                </div>
+            
+                <div class="col-md-6 d-none" id="daerahLainWrapper">
+                <label class="form-label">Sila Nyatakan Daerah</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="daerahLain"
+                    name="daerahLain"
+                    placeholder="Nama Daerah"
+                >
+                </div>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Nama Fasiliti Kesihatan Yang Terlibat</label>
+                <input type="text" class="form-control" id="namaFasiliti" name="namaFasiliti" placeholder="Nama Fasiliti">
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Status Operasi Awal</label>
+                <select class="form-select" id="status_awal" name="status_awal" required>
+                    <option value="">-- Sila Pilih Status Operasi --</option>
+                </select>
+                </div>
+            </div>
+            
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Perkhidmatan Dipindahkan (Tempat)</label>
+                <input type="text" class="form-control" id="namaFasilitiAlternatif" name="namaFasilitiAlternatif" placeholder="Nama Fasiliti">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Tarikh Tutup/ Pindah</label>
+                <input type="date" class="form-control" id="tarikh_tutup" name="tarikh_tutup" required>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Status Operasi Semasa</label>
+                <select class="form-select" id="status_semasa" name="status_semasa" required>
+                    <option value="">-- Sila Pilih Status Operasi Semasa--</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label">Tarikh Buka Semula</label>
+                <input type="date" class="form-control" id="tarikh_buka" name="tarikh_buka" required>
+            </div>
+
+        </div>           
+        <!-- NAVIGATION -->
+        <div class="d-flex justify-content-start mt-4 gap-2">
+        <button type="button" class="btn btn-secondary" id="prevBtn">Back</button>
+        <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+        </div>
+        </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div id="footer"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Load Header & Footer -->
+<script src="assets/js/common.js"></script>
+<!--Wizard-->
+<script src="assets/js/wizard-form.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+</body>
+</html>
