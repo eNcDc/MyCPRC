@@ -61,7 +61,8 @@
     <!-- MAIN CONTENT -->
     <main class="col-md-9 col-lg-10 p-4">
       <div class="card shadow-sm border-1">
-        <ul class="nav nav-pills justify-content-center">
+        <div class="card-body">
+          <ul class="nav nav-pills justify-content-center">
             <li class="nav-item"><h4><a class="nav-link" href="form.html"><i class="bi bi-book me-2"></i>DOCE</a></h4></li>
             <li class="nav-item"><h4><a class="nav-link" href="drmho_form.html"><i class="bi bi-book me-2"></i>DRM</a></h4></li>
             <li class="nav-item"><h4><a class="nav-link" href="drp_form.html"><i class="bi bi-book me-2"></i>DRP</a></h4></li>
@@ -86,80 +87,114 @@
         <form id="wizardForm" action="http://localhost:3000/submit" method="POST">
 
         <div class="wizard-step active">
-            <h5 class="mb-3">BORANG 4 : FASILITI KESIHATAN TERJEJAS BANJIR</h5>
+            <h5 class="mb-3">BORANG 7 : KEJADIAN PENYAKIT BERJANGKIT DI KALANGAN MANGSA BANJIR</h5>
 
             <div class="row g-3">
                 <div class="col-md-6">
                 <label class="form-label">Negeri</label>
                 <select class="form-select" id="negeri" name="negeri" required>
                 <option value="">-- Sila Pilih Negeri --</option>
-                </select>
-                </div>
-            </div>
-
-            <div class="row g-3">
-                <div class="col-md-6">
-                <label class="form-label">Daerah</label>
-                <select class="form-select" id="daerah" name="daerah" required>
-                    <option value="">-- Sila Pilih Daerah --</option>
-                    <option value="Lain-Lain">Lain-lain</option>
-                </select>
-                </div>
-            
-                <div class="col-md-6 d-none" id="daerahLainWrapper">
-                <label class="form-label">Sila Nyatakan Daerah</label>
-                <input
-                    type="text"
-                    class="form-control"
-                    id="daerahLain"
-                    name="daerahLain"
-                    placeholder="Nama Daerah"
-                >
-                </div>
-            </div>
-            
-            <div class="row g-3">
-                <div class="col-md-6">
-                <label class="form-label">Nama Fasiliti Kesihatan Yang Terlibat</label>
-                <input type="text" class="form-control" id="namaFasiliti" name="namaFasiliti" placeholder="Nama Fasiliti">
-                </div>
-            </div>
-
-            <div class="row g-3">
-                <div class="col-md-6">
-                <label class="form-label">Status Operasi Awal</label>
-                <select class="form-select" id="status_awal" name="status_awal" required>
-                    <option value="">-- Sila Pilih Status Operasi --</option>
-                </select>
-                </div>
-            </div>
-            
-            <div class="row g-3">
-                <div class="col-md-6">
-                <label class="form-label">Perkhidmatan Dipindahkan (Tempat)</label>
-                <input type="text" class="form-control" id="namaFasilitiAlternatif" name="namaFasilitiAlternatif" placeholder="Nama Fasiliti">
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">Tarikh Tutup/ Pindah</label>
-                <input type="date" class="form-control" id="tarikh_tutup" name="tarikh_tutup" required>
-            </div>
-
-            <div class="row g-3">
-                <div class="col-md-6">
-                <label class="form-label">Status Operasi Semasa</label>
-                <select class="form-select" id="status_semasa" name="status_semasa" required>
-                    <option value="">-- Sila Pilih Status Operasi Semasa--</option>
+                <option value="Johor"> JOHOR</option>
+                <option value="Kedah"> KEDAH</option>
+                <option value="Kelantan"> KELANTAN</option>
+                <option value="Melaka"> MELAKA</option>
+                <option value="Negeri Sembilan"> NEGERI SEMBILAN</option>
+                <option value="Pahang"> PAHANG</option>
+                <option value="Perak"> PERAK</option>
+                <option value="Perlis"> PERLIS</option>
+                <option value="Pulau Pinang"> PULAU PINANG</option>
+                <option value="Sabah"> SABAH</option>
+                <option value="Sarawak"> SARAWAK</option>
+                <option value="Selangor"> SELANGOR</option>
+                <option value="Terengganu"> TERENGGANU</option>
+                <option value="WP Labuan"> WP LABUAN</option>
+                <option value="WPKL & Putrajaya"> WPKL & Putrajaya</option>
                 </select>
                 </div>
             </div>
 
             <div class="col-md-6">
-                <label class="form-label">Tarikh Buka Semula</label>
-                <input type="date" class="form-control" id="tarikh_buka" name="tarikh_buka" required>
+                <label class="form-label">Tarikh Laporan</label>
+                <input type="date" class="form-control" id="tarikh_laporan" name="tarikh_laporan" required>
             </div>
+            <h6 class="mt-4 mb-3">Jenis Penyakit Berjangkit</h6>
+              <div class="row g-3">
+                  <div class="col-md-4">
+                      <label class="form-label">AGE</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="age" name="age" 
+                      >
+                  </div>
 
+                  <div class="col-md-4">
+                      <label class="form-label">ARI</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="ari" name="ari"
+                      >
+                  </div>
+
+                  <div class="col-md-4">
+                      <label class="form-label">Konjunktivitis</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="konjunktivitis" name="konjunktivitis"
+                      >
+                  </div>
+
+                  <div class="col-md-4">
+                      <label class="form-label">Skin Infection</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="skin_infection" name="skin_infection"
+                      >
+                  </div>
+
+                  <div class="col-md-4">
+                      <label class="form-label">Demam (Tiada Simptom Lain)</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="demam" name="demam"
+                      >
+                  </div>
+
+                  <div class="col-md-4">
+                      <label class="form-label">HFMD</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="hfmd" name="hfmd"
+                      >
+                  </div>
+
+                  <div class="col-md-4">
+                      <label class="form-label">Tifoid</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="tifoid" name="tifoid"
+                      >
+                  </div>
+
+                  <div class="col-md-4">
+                      <label class="form-label">Chicken Pox</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="chicken_pox" name="chicken_pox"
+                      >
+                  </div>
+
+                  <div class="col-md-4">
+                      <label class="form-label">Leptospirosis</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="leptospirosis" name="leptospirosis"
+                      >
+                  </div>
+
+                  <div class="col-md-4">
+                      <label class="form-label">Other Notifiable Diseases</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="other_diseases" name="other_diseases"
+                      >
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Jumlah Keseluruhan Penyakit</label>
+                    <p><span id="jumlah_penyakit_pps"></span></p>
+                </div>
+
+              </div>
         </div>           
         <!-- NAVIGATION -->
         <div class="d-flex justify-content-start mt-4 gap-2">
@@ -181,17 +216,39 @@
 
 <!-- Load Header & Footer -->
 <script src="assets/js/common.js"></script>
-<!--Wizard-->
+
 <script src="assets/js/wizard-form.js"></script>
 <script src="assets/js/negeri-daerah.js"></script>
 <script src="assets/js/flood_form.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-initNegeriDaerah({
-  negeriId: "negeri",
-  daerahId: "daerah",
-  lainWrapperId: "daerahLainWrapper",
-  lainInputId: "daerahLain"
+
+function sumPenyakit() {
+    const ids = [
+        'age',
+        'ari',
+        'konjunktivitis',
+        'skin_infection',
+        'demam',
+        'hfmd',
+        'tifoid',
+        'chicken_pox',
+        'leptospirosis',
+        'other_diseases'
+    ];
+
+    let total = 0;
+
+    ids.forEach(id => {
+        const value = parseInt(document.getElementById(id).value, 10) || 0;
+        total += value;
+    });
+
+    document.getElementById('jumlah_penyakit_pps').textContent = total;
+}
+
+document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener('input', sumPenyakit);
 });
 </script>
 
