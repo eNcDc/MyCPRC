@@ -11,7 +11,7 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Main CSS -->
+  <!-- Main CSS (if you have custom styles) -->
   <link href="assets/css/main.css" rel="stylesheet">
 
   <style>
@@ -43,11 +43,12 @@
     .iframe-container {
       position: relative;
       width: 100%;
-      height: 90vh; /* Adjust as needed - make it fill most of the space */
+      height: 90vh;           /* Adjust height as needed (90% of viewport) */
       min-height: 720px;
       border: 1px solid #dee2e6;
       border-radius: 8px;
       overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
     iframe {
@@ -86,23 +87,22 @@
       </ul>
     </aside>
 
-    <!-- DASHBOARD CONTAINER - Replaced Mockup with Real QuickSight Embed -->
+    <!-- MAIN CONTENT: Real QuickSight Dashboard Embed -->
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
       <div class="dashboard-container">
         <h3 class="mb-4">MyCPRC Dashboard</h3>
 
-        <!-- Real QuickSight Embedded Dashboard -->
+        <!-- QuickSight Embedded Dashboard -->
         <div class="iframe-container">
-          
-    <iframe
-        width="960"
-        height="720"
-        src="https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/917003953046/dashboards/24000dab-50bb-471b-8375-3c56de3506af?directory_alias=poc-mycprc-quicksuite">
-    </iframe>
+          <iframe
+            src="https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/917003953046/dashboards/24000dab-50bb-471b-8375-3c56de3506af?directory_alias=poc-mycprc-quicksuite"
+            frameborder="0"
+            allowfullscreen>
+          </iframe>
         </div>
       </div>
     </main>
-    
+
   </div>
 </div>
 
