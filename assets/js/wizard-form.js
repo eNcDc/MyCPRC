@@ -1,88 +1,83 @@
-let currentStep = 0;
-const steps = document.querySelectorAll(".wizard-step");
-const indicators = document.querySelectorAll("#stepIndicator .nav-link");
-const nextBtn = document.getElementById("nextBtn");
-const prevBtn = document.getElementById("prevBtn");
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector('#wizardForm');
+  if (!form) return; // no wizard on this page
 
-// CLICK STEP NAVIGATION
-indicators.forEach((indicator, index) => {
-  indicator.addEventListener("click", () => {
-    goToStep(index);
+  const steps = form.querySelectorAll('.wizard-step');
+  const indicators = form.querySelectorAll('#stepIndicator .nav-link');
+  const nextBtn = form.querySelector('#nextBtn');
+  const prevBtn = form.querySelector('#prevBtn');
+  const API_URL = form.dataset.apiUrl || 'https://l7gq79uyvd.execute-api.ap-southeast-5.amazonaws.com/dev/submit';
+
+  if (!nextBtn || !prevBtn || steps.length === 0) return;
+
+  let currentStep = 0;
+
+  const isLastStep = () => currentStep === steps.length - 1;
+
+  // Step indicators click
+  indicators.forEach((indicator, index) => {
+    indicator.addEventListener('click', () => goToStep(index));
   });
-});
 
-function goToStep(index) {
-  if (index < 0 || index >= steps.length) return;
-  currentStep = index;
-  showStep(currentStep);
-}
-
-function showStep(index) {
-  steps.forEach((s, i) =>
-    s.classList.toggle("active", i === index)
-  );
-
-  if (index === 2 && map) {   // pastikan map step 2
-    setTimeout(() => {
-      map.invalidateSize();   // panggil selepas DOM render
-    }, 300);
+  function goToStep(index) {
+    if (index < 0 || index >= steps.length) return;
+    currentStep = index;
+    showStep(currentStep);
   }
 
-  indicators.forEach((i, idx) =>
-    i.classList.toggle("active", idx === index)
-  );
+  function showStep(index) {
+    // Show the current wizard step
+    steps.forEach((step, i) => step.classList.toggle('active', i === index));
 
-  prevBtn.style.display = index === 0 ? "none" : "inline-block";
-  nextBtn.textContent =
-    index === steps.length - 1 ? "Submit" : "Next";
+    // Update step indicators
+    indicators.forEach((indicator) => indicator.classList.remove('active')); // remove all
+    const currentIndicator = indicators[index];
+    if (currentIndicator) currentIndicator.classList.add('active'); // add only current
 
-  // STEP 2: Penyakit
-  if (index === 1 && !$('#penyakit').hasClass('select2-hidden-accessible')) {
+    // Update prev/next buttons
+    prevBtn.style.display = index === 0 ? 'none' : 'inline-block';
+    nextBtn.textContent = index === steps.length - 1 ? 'Submit' : 'Next';
+  
+    // Optional: step-specific JS
+  const stepEl = steps[index];
+  if (stepEl.querySelector('#penyakit') &&
+      !$('#penyakit').hasClass('select2-hidden-accessible')) {
     initPenyakitSelect();
   }
-
-  // STEP 2: Lokasi (PIN MAP)
-  if (index === 1) {
+  if (stepEl.querySelector('#map') && typeof initMap === 'function') {
     setTimeout(() => {
       initMap();
-      map.invalidateSize(); // 🔥 penting untuk Leaflet
+      if (typeof map !== 'undefined' && map) map.invalidateSize();
     }, 300);
   }
 }
 
-const API_URL = 'https://l7gq79uyvd.execute-api.ap-southeast-5.amazonaws.com/dev/submit'; 
+  // NEXT button click
+  nextBtn.addEventListener('click', async () => {
+    const currentInputs = steps[currentStep].querySelectorAll('input, select, textarea');
 
-nextBtn.onclick = async () => {
-  const form = document.getElementById('wizardForm');
+    // Validate current step only
+    let valid = true;
+    currentInputs.forEach(input => { if (!input.checkValidity()) valid = false; });
 
-  // Validasi semua input di current step
-  const currentInputs = steps[currentStep].querySelectorAll('input, select, textarea');
-  let valid = true;
-  currentInputs.forEach(input => {
-    if (!input.checkValidity()) valid = false;
-  });
-  if (!valid) {
-    form.reportValidity();
-    return;
-  }
+    if (!valid) {
+      form.reportValidity();
+      return;
+    }
 
-  if (currentStep < steps.length - 1) {
-    currentStep++;
-    showStep(currentStep);
-  } else {
-    // LAST STEP → SUBMIT
+    if (!isLastStep()) {
+      currentStep++;
+      showStep(currentStep);
+      return;
+    }
+
+    // LAST STEP → Submit
     const formData = new FormData(form);
     const data = {};
-    formData.forEach((value, key) => {
-      if (value !== '') {
-        if (data[key]) {
-          if (!Array.isArray(data[key])) data[key] = [data[key]];
-          data[key].push(value);
-        } else {
-          data[key] = value;
-        }
-      }
-    });
+    formData.forEach((value, key) => { data[key] = value || ''; });
+
+    // Optional: add form type to API
+    data.form_type = form.id;
 
     try {
       const res = await fetch(API_URL, {
@@ -94,24 +89,39 @@ nextBtn.onclick = async () => {
       if (!res.ok) throw new Error(`Server error: ${res.status}`);
       const result = await res.json();
       alert(result.message || 'Data berjaya disimpan!');
+
       form.reset();
       currentStep = 0;
       showStep(currentStep);
+
     } catch (err) {
       console.error(err);
       alert('Data gagal disimpan. Sila cuba lagi.');
     }
-  }
-};
+  });
 
+  // PREVIOUS button
+  prevBtn.addEventListener('click', () => {
+    if (currentStep > 0) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  });
 
-// PREVIOUS BUTTON
-prevBtn.onclick = () => {
-  if (currentStep > 0) {
-    currentStep--;
-    showStep(currentStep);
-  }
-};
+  showStep(currentStep);
+});
 
-// INIT STEP 1
-showStep(currentStep);
+document.addEventListener("DOMContentLoaded", () => {
+  const sidebarPlaceholder = document.getElementById("sidebar-placeholder");
+  if (!sidebarPlaceholder) return;
+
+  fetch("/sidebar.html")
+    .then(response => {
+      if (!response.ok) throw new Error("Failed to load sidebar");
+      return response.text();
+    })
+    .then(html => {
+      sidebarPlaceholder.innerHTML = html;
+    })
+    .catch(err => console.error(err));
+});

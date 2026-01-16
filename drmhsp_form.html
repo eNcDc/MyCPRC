@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DRM Hospital Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Search CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+  
+  <!-- jQuery (REQUIRED for Select2) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Main CSS -->
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header"></div>
+
+<!-- BODY -->
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- LEFT PANEL -->
+    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
+      <!-- Sidebar will be loaded here -->
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="col-md-9 col-lg-10 p-4">
+      <div class="card shadow-sm border-1">
+        <div class="card-body">
+          <h4 class="card-title mb-3">DRM HOSPITAL FORM</h4>
+          <p class="card-text text-muted">
+            This is your central workspace for dashboards, reporting, and analytics.
+          </p>
+        </div>
+        <div class="card-body">
+        <div class="mb-4">
+            <ul class="nav nav-pills justify-content-center" id="stepIndicator">
+                <li class="nav-item">
+                    <button type="button" class="nav-link active" data-step="0">1</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="1">2</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="2">3</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="3">4</button>
+                </li>
+                <li class="nav-item">
+                    <button type="button" class="nav-link" data-step="4">5</button>
+                </li>
+            </ul>
+        </div>
+        
+        <form id="wizardForm" novalidate>
+          <!-- ================= PAGE 1 ================= -->
+          <div class="wizard-step active">
+              <h5 class="mb-3">PART 1 : GENERAL INFORMATION</h5>
+              
+              <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Disaster Management Plan - Year</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        placeholder="YYYY"
+                        min="2000"
+                        id="hsp_year"
+                        name="hsp_year"
+                        required
+                    >
+                  </div>
+                
+                <div class="col-md-6">
+                <label>Bilik Gerakan Phone Number</label>
+                <input type="tel" class="form-control"  id = "hsp_bilik_gerakan_phone" name="hsp_bilik_gerakan_phone" 
+                    placeholder="Contoh: 0123456789"
+                    pattern="^[0-9]{10,11}$" 
+                    required
+                >
+                </div>
+              
+                <div class="col-md-3 mb-3">
+                  <label>Emergency Physician</label>
+                  <input type="number" class="form-control" name="emergency_physician" id="emergency_physician" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Internal Medicine Specialists</label>
+                  <input type="number" class="form-control" name="internal_medicine" id="internal_medicine" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Trauma Surgeon</label>
+                  <input type="number" class="form-control" name="trauma_surgeon" id="trauma_surgeon" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>General Surgeon</label>
+                  <input type="number" class="form-control" name="general_surgeon" id="general_surgeon" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Neurosurgeon</label>
+                  <input type="number" class="form-control" name="neurosurgeon" id="neurosurgeon" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Vascular Surgeon</label>
+                  <input type="number" class="form-control" name="vascular_surgeon" id="vascular_surgeon" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Cardiothoracic Surgeon</label>
+                  <input type="number" class="form-control" name="cardiothoracic_surgeon" id="cardiothoracic_surgeon" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Orthopaedic Surgeon</label>
+                  <input type="number" class="form-control" name="orthopaedic_surgeon" id="orthopaedic_surgeon" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Oral Surgeons</label>
+                  <input type="number" class="form-control" name="oral_surgeon" id="oral_surgeon" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Plastic Surgeons</label>
+                  <input type="number" class="form-control" name="plastic_surgeon" id="plastic_surgeon" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Urologist</label>
+                  <input type="number" class="form-control" name="urologist" id="urologist" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Anaesthesiologist</label>
+                  <input type="number" class="form-control" name="anaesthesiologist" id="anaesthesiologist" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Intensivist</label>
+                  <input type="number" class="form-control" name="intensivist" id="intensivist" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Infectious Disease Physician</label>
+                  <input type="number" class="form-control" name="infectious_disease_physician" id="infectious_disease_physician" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Paediatrician</label>
+                  <input type="number" class="form-control" name="paediatrician" id="paediatrician" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Forensic Medicine Specialists</label>
+                  <input type="number" class="form-control" name="forensic_medicine" id="forensic_medicine" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Forensic Odontologists</label>
+                  <input type="number" class="form-control" name="forensic_odontologist" id="forensic_odontologist" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Psychiatrist</label>
+                  <input type="number" class="form-control" name="psychiatrist" id="psychiatrist" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Clinical Psychologists</label>
+                  <input type="number" class="form-control" name="clinical_psychologist" id="clinical_psychologist" min="0" step="1">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Obstetrician and Gynaecologist</label>
+                  <input type="number" class="form-control" name="obgyn" id="obgyn" min="0" step="1">
+                </div>
+
+              </div>
+          </div>
+            
+          <!-- ================= PAGE 2 ================= -->
+          <div class="wizard-step">
+            <h5 class="mb-3">PART 2 : MEDICAL DEVICES (IN EMERGENCY & TRAUMA DEPARTMENT)</h5>
+
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                  <label>Portable Ventilator</label>
+                  <input type="number" class="form-control" id="hsp_portable_ventilator" name="hsp_portable_ventilator">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Portable Transport Monitor</label>
+                  <input type="number" class="form-control" id="hsp_portable_transport_monitor" name="hsp_portable_transport_monitor">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Portable Manual Defibrillator</label>
+                  <input type="number" class="form-control" id="hsp_manual_defibrillator" name="hsp_manual_defibrillator">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Automated/Semi-Auto External Defibrillator</label>
+                  <input type="number" class="form-control" id="hsp_aed" name="hsp_aed">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Syringe Pumps</label>
+                  <input type="number" class="form-control" id="hsp_syringe_pump" name="hsp_syringe_pump">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Infusion Pumps</label>
+                  <input type="number" class="form-control" id="hsp_infusion_pump" name="hsp_infusion_pump">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Automated CPR Machine</label>
+                  <input type="number" class="form-control" id="hsp_automated_cpr_machine" name="hsp_automated_cpr_machine">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Spinal Board</label>
+                  <input type="number" class="form-control" id="hsp_spinal_board" name="hsp_spinal_board">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Foldable Stretcher</label>
+                  <input type="number" class="form-control" id="hsp_foldable_stretcher" name="hsp_foldable_stretcher">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Basket Stretcher</label>
+                  <input type="number" class="form-control" id="hsp_basket_stretcher" name="hsp_basket_stretcher">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Rescue Stretcher</label>
+                  <input type="number" class="form-control" id="hsp_rescue_stretcher" name="hsp_rescue_stretcher">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Scoop Stretcher</label>
+                  <input type="number" class="form-control" id="hsp_scoop_stretcher" name="hsp_scoop_stretcher">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Vacuum Mattress</label>
+                  <input type="number" class="form-control" id="hsp_vacuum_mattress" name="hsp_vacuum_mattress">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Portable Oxygen Tanks</label>
+                  <select class="form-select" id="hsp_portable_oxygen_tank" name="hsp_portable_oxygen_tank">
+                    <option value="">Select</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                  </select>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Portable Suction Machine</label>
+                  <input type="number" class="form-control" id="hsp_portable_suction_machine" name="hsp_portable_suction_machine">
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Evacuation Trolley</label>
+                  <input type="number" class="form-control" id="hsp_evacuation_trolley" name="hsp_evacuation_trolley">
+                </div>
+            </div>
+          
+
+            <br>
+            <br>
+
+            <h5 class="mb-3">PART 3 : MEDICAL DEVICES (ENTIRE HOSPITAL)</h5>
+
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                  <label>Portable Oxygen Tanks</label>
+                  <select class="form-select" id="hsp_portable_oxygen_tank" name="hsp_portable_oxygen_tank">
+                    <option value="">Select</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                  </select>
+                </div>
+
+                <div class="col-md-3 mb-3">
+                  <label>Oxygen Concentrator</label>
+                  <input type="number" class="form-control" id="hsp_oxy_conc" name="hsp_oxy_conc">
+                </div>
+            </div>
+          </div>
+
+          <!-- ================= PAGE 3 ================= -->
+          <div class="wizard-step">
+            <h5 class="mb-3">PART 4 : NON-MEDICAL DEVICES</h5>
+
+            <div class="row">
+              <div class="col-md-6">
+                <label>Disaster Tent</label>
+                <input type="number" class="form-control" name="hsp_disaster_tent" id="hsp_disaster_tent">
+              </div>
+
+              <div class="col-md-6">
+                <label>Inflatable Disaster Tent</label>
+                <input type="number" class="form-control" name="hsp_inf_dis_tent" id="hsp_inf_dis_tent">
+              </div>
+
+              <div class="col-md-6">
+                <label>Camping Tent</label>
+                <input type="number" class="form-control" name="hsp_camping_tent" id="hsp_camping_tent">
+              </div>
+
+              <div class="col-md-6">
+                <label>Other Types of Tent</label>
+                <input type="number" class="form-control" name="hsp_other_tent" id="hsp_other_tent">
+              </div>
+
+              <div class="col-md-6">
+                <label>Portable Lighting System</label>
+                <input type="number" class="form-control" name="hsp_port_light" id="hsp_port_light">
+              </div>
+
+              <div class="col-md-6">
+                <label>Portable Emergency Lamps/Lanterns</label>
+                <input type="number" class="form-control" name="hsp_port_emg" id="hsp_port_emg">
+              </div>
+
+              <div class="col-md-6">
+                <label>Canvas Beds</label>
+                <input type="number" class="form-control" name="hsp_canvas_bed" id="hsp_canvas_bed">
+              </div>
+
+              <div class="col-md-6">
+                <label>Medical cold chain box</label>
+                <input type="number" class="form-control" name="hsp_med_chainbox" id="hsp_med_chainbox">
+              </div>
+
+              <div class="col-md-6">
+                <label>Portable Negative Pressure Tent</label>
+                <input type="number" class="form-control" name="hsp_port_neg_tent" id="hsp_port_neg_tent">
+              </div>
+
+              <div class="col-md-6">
+                <label>Portable Decontamination Shower Tent</label>
+                <input type="number" class="form-control" name="hsp_port_decon_tent" id="hsp_port_decon_tent">
+              </div>
+
+              <div class="col-md-6">
+                  <label>Portable Genset</label>
+                  <input type="number" class="form-control" name="hsp_port_genset" id="hsp_port_genset">
+              </div>
+              
+              <div class="col-md-6">
+              <label>Portable Sterilizer</label>
+                  <select class="form-select" name="hsp_portable_str" id="hsp_portable_str">
+                      <option>YES</option>
+                      <option>NO</option>
+                  </select>
+              </div>
+               
+              <div class="col-md-6">
+                <label>Power Generator </label>
+                  <select class="form-select" name="hsp_power_gen" id="hsp_power_gen">
+                      <option>YES</option>
+                      <option>NO</option>
+                  </select>
+              </div>
+              
+              <div class="col-md-6">
+                  <label>Linen Stock</label>
+                  <input type="number" class="form-control" name="hsp_linen_stock" id="hsp_linen_stock">
+              </div>
+
+              <div class="col-md-6">
+                  <label>Patient Garments</label>
+                  <input type="number" class="form-control" name="hsp_pat_garment" id="hsp_pat_garment">
+              </div>
+
+              <div class="col-md-6">
+                  <label>Blankets</label>
+                  <input type="number" class="form-control" name="hsp_blankets" id="hsp_blankets">
+              </div>
+               
+            </div>
+
+            <br>
+            <br>
+            <h5 class="mb-3">PART 5 : FACILITIES</h5>
+
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <label>Red Zone Bays</label>
+                <input type="number" class="form-control" id="hsp_red_zone_bays" name="hsp_red_zone_bays" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Yellow Zone Bays</label>
+                <input type="number" class="form-control" id="hsp_yellow_zone_bays" name="hsp_yellow_zone_bays" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Observation Bays</label>
+                <input type="number" class="form-control" id="hsp_observation_bays" name="hsp_observation_bays" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Medical Emergency Coordinating Center (MECC)</label>
+                <input type="number" class="form-control" id="hsp_mecc" name="hsp_mecc" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Decontamination Bays</label>
+                <input type="number" class="form-control" id="hsp_decontamination_bays" name="hsp_decontamination_bays" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Waste Disposal after Decontamination</label>
+                <select class="form-select" id="hsp_waste_disposal_decon" name="hsp_waste_disposal_decon">
+                  <option value="">Select</option>
+                  <option value="YES">YES</option>
+                  <option value="NO">NO</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Intensive Care Unit (ICU)</label>
+                <input type="number" class="form-control" id="hsp_icu" name="hsp_icu" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Operation Theater</label>
+                <input type="number" class="form-control" id="hsp_operation_theater" name="hsp_operation_theater" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Blood Bank</label>
+                <input type="number" class="form-control" id="hsp_blood_bank" name="hsp_blood_bank" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>CT Scan</label>
+                <input type="number" class="form-control" id="hsp_ct_scan" name="hsp_ct_scan" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Mortuary</label>
+                <input type="number" class="form-control" id="hsp_mortuary" name="hsp_mortuary" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Labour Room</label>
+                <input type="number" class="form-control" id="hsp_labour_room" name="hsp_labour_room" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Burn Unit</label>
+                <select class="form-select" id="hsp_burn_unit" name="hsp_burn_unit">
+                  <option value="">Select</option>
+                  <option value="YES">YES</option>
+                  <option value="NO">NO</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Helipad</label>
+                <select class="form-select" id="hsp_helipad" name="hsp_helipad">
+                  <option value="">Select</option>
+                  <option value="YES">YES</option>
+                  <option value="NO">NO</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Negative Pressure Isolation Room</label>
+                <input type="number" class="form-control" id="hsp_negative_pressure_room" name="hsp_negative_pressure_room" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Water Tank Storage Capacity</label>
+                <input type="number" class="form-control" id="hsp_water_tank_capacity" name="hsp_water_tank_capacity" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Water Tank Storage Supply</label>
+                <input type="number" class="form-control" id="hsp_water_tank_supply" name="hsp_water_tank_supply" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Rain Water Harvesting Tank Capacity</label>
+                <input type="number" class="form-control" id="hsp_rainwater_capacity" name="hsp_rainwater_capacity" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Rain Water Harvesting Tank Supply</label>
+                <input type="number" class="form-control" id="hsp_rainwater_supply" name="hsp_rainwater_supply" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Tube Well</label>
+                <input type="number" class="form-control" id="hsp_tube_well" name="hsp_tube_well" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Petrol Storage Capacity</label>
+                <input type="number" class="form-control" id="hsp_petrol_capacity" name="hsp_petrol_capacity" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Petrol Storage Supply</label>
+                <input type="number" class="form-control" id="hsp_petrol_supply" name="hsp_petrol_supply" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Diesel Storage Capacity</label>
+                <input type="number" class="form-control" id="hsp_diesel_capacity" name="hsp_diesel_capacity" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Diesel Storage Supply</label>
+                <input type="number" class="form-control" id="hsp_diesel_supply" name="hsp_diesel_supply" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Dialysis Unit</label>
+                <input type="number" class="form-control" id="hsp_dialysis_unit" name="hsp_dialysis_unit" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Food Supply</label>
+                <input type="number" class="form-control" id="hsp_food_supply" name="hsp_food_supply" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Dry Ration</label>
+                <input type="number" class="form-control" id="hsp_dry_ration" name="hsp_dry_ration" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Enough Blood Supply</label>
+                <select class="form-select" id="hsp_enough_blood_supply" name="hsp_enough_blood_supply">
+                  <option value="">Select</option>
+                  <option value="YES">YES</option>
+                  <option value="NO">NO</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- ================= PAGE 4 ================= -->
+          <div class="wizard-step">
+            <h5 class="mb-3">PART 6 : COMMUNICATION</h5>
+
+            <div class="row">
+              <div class="col-md-6">
+                <label>GIRN Handheld</label>
+                <input type="number" class="form-control" name="hsp_girn_handheld" id="hsp_girn_handheld">
+              </div>
+
+              <div class="col-md-6">
+                <label>GIRN Vehicular</label>
+                <input type="number" class="form-control" name="hsp_girn_vehicular" id="hsp_girn_vehicular">
+              </div>
+
+              <div class="col-md-6">
+                <label>GIRN Desktop</label>
+                <input type="number" class="form-control" name="hsp_girn_desktop" id="hsp_girn_desktop">
+              </div>
+
+              <div class="col-md-6">
+                <label>GIRN Briefcase</label>
+                <input type="number" class="form-control" name="hsp_girn_briefcase" id="hsp_girn_briefcase">
+              </div>
+
+              <div class="col-md-6">
+                <label>GIRN Rapid Deployment Unit</label>
+                <input type="number" class="form-control" name="hsp_girn_rdu" id="hsp_girn_rdu">
+              </div>
+
+              <div class="col-md-6">
+                <label>Satellite Phone</label>
+                <input type="number" class="form-control" name="hsp_satellite_phone" id="hsp_satellite_phone">
+              </div>
+
+              <div class="col-md-6">
+                <label>Full Duplex Communication System</label>
+                <input type="number" class="form-control" name="hsp_full_duplex_comm" id="hsp_full_duplex_comm">
+              </div>
+
+              <div class="col-md-6">
+                <label>Amateur Radio</label>
+                <input type="number" class="form-control" name="hsp_amateur_radio" id="hsp_amateur_radio">
+              </div>
+
+              <div class="col-md-6">
+                <label>Walkie Talkie</label>
+                <input type="number" class="form-control" name="hsp_walkie_talkie" id="hsp_walkie_talkie">
+              </div>
+            </div>
+
+              <br>
+              <br>
+            <div class="row">
+              <h5 class="mb-3">PART 7 : TRANSPORTATION</h5>
+
+              <div class="col-md-6">
+                <label>Lorry</label>
+                <input type="number" class="form-control" name="hsp_lorry" id="hsp_lorry">
+              </div>
+
+              <div class="col-md-6">
+                <label>Bus</label>
+                <input type="number" class="form-control" name="hsp_bus" id="hsp_bus">
+              </div>
+
+              <div class="col-md-6">
+                <label>Type A Land Ambulance</label>
+                <input type="number" class="form-control" name="hsp_ambulance_type_a" id="hsp_ambulance_type_a">
+              </div>
+
+              <div class="col-md-6">
+                <label>Type B Land Ambulance</label>
+                <input type="number" class="form-control" name="hsp_ambulance_type_b" id="hsp_ambulance_type_b">
+              </div>
+            </div>
+          </div>
+
+          <!-- ================= PAGE 5 ================= -->
+          <div class="wizard-step">
+            <h5 class="mb-3">PART 8 : LOGISTICS SUPPLIERS/PROVIDERS</h5>
+
+            <div class="row">
+              <div class="col-md-6">
+                  <label>Adequate PPE Supply </label>
+                    <select class="form-select" name="hsp_adq_ppe_supply" id="hsp_adq_ppe_supply">
+                        <option>YES</option>
+                        <option>NO</option>
+                    </select>
+              </div>
+            </div>
+
+              <br>
+              <br>
+            <div class="row">
+              <h5 class="mb-3">PART 9 : SPECIAL UNIT</h5>
+
+              <div class="col-md-3 mb-3">
+                <label>Disaster Response Unit (Team and Vehicle)</label>
+                <select class="form-select" id="hsp_disaster_response_unit" name="hsp_disaster_response_unit">
+                  <option value="">Select</option>
+                  <option value="YES">YES</option>
+                  <option value="NO">NO</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Disaster Response Team (No vehicle)</label>
+                <select class="form-select" id="hsp_disaster_response_team_no_vehicle" name="hsp_disaster_response_team_no_vehicle">
+                  <option value="">Select</option>
+                  <option value="YES">YES</option>
+                  <option value="NO">NO</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>CBRNe Special Team</label>
+                <select class="form-select" id="hsp_cbrne_special_team" name="hsp_cbrne_special_team">
+                  <option value="">Select</option>
+                  <option value="YES">YES</option>
+                  <option value="NO">NO</option>
+                </select>
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Mental Health and Psychosocial Support (MHPSS)</label>
+                <input type="number" class="form-control" id="hsp_mhpss" name="hsp_mhpss" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Medical Emergencies Response Team (MERT)</label>
+                <input type="number" class="form-control" id="hsp_mert" name="hsp_mert" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Rapid Assessment Team (RAT)</label>
+                <input type="number" class="form-control" id="hsp_rat" name="hsp_rat" min="0" step="1">
+              </div>
+
+              <div class="col-md-3 mb-3">
+                <label>Rapid Response Team (RRT)</label>
+                <input type="number" class="form-control" id="hsp_rrt" name="hsp_rrt" min="0" step="1">
+              </div>
+
+            </div>
+          </div>
+
+          <!-- NAVIGATION -->
+          <div class="d-flex justify-content-start mt-4 gap-2">
+          <button type="button" class="btn btn-secondary" id="prevBtn">Back</button>
+          <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+        </div>
+        </div>
+        </form>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div id="footer"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Load Header & Footer -->
+<script src="assets/js/common.js"></script>
+
+<script src="assets/js/wizard-form.js"></script>
+
+<script src="assets/js/drp_form.js"></script>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+</body>
+</html>
