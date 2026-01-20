@@ -33,15 +33,41 @@
     <!-- MAIN CONTENT -->
     <main class="col-md-9 col-lg-10 p-4">
 
-      <!-- ===== Welcome Card ===== -->
-    <div class="card welcome mb-4">
-      <div class="icon-circle">
-        <img src="https://img.icons8.com/ios-filled/50/ffffff/home.png" alt="Welcome Icon">
+      <div class="card welcome mb-4">
+      <h2>WEATHER ALERT</h2>
+      <h6>METMalaysia</h6>
       </div>
-      <h2>Welcome</h2>
-      <p>This is your central workspace for dashboards, reporting, and analytics.</p>
-    </div>
+       <div class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h2 class="text-center">AMARAN HUJAN BERTERUSAN</h2>
+              <img class="alert" src="https://www.met.gov.my/data/AmaranHujanLebat.jpg" alt="Amaran Hujan">
+            </div>
+          </div>
+        </div>
 
+        <div class="col-md-4">
+          <div class="card shadow-sm">
+            <div class="card-body test">
+              <h2 class="text-center">AMARAN RIBUT PETIR</h2>
+              <img src="https://www.met.gov.my/data/AmaranRibutPetir.jpg" alt="Amaran Ribut">
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-md-8">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h2 class="text-center">NOWCASTING</h2>
+              <img src="https://www.met.gov.my/data/swirl-latest.gif" alt="Nowcasting">
+            </div>
+          </div>
+        </div>
+
+          </div>
     </main>
   </div>
 </div>
@@ -62,6 +88,18 @@
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
 </script>
+<style>
+  .card-body test{
+  max-width: 100%; /* Ensures the image doesn't exceed the container's width */
+  max-height: 100px;    /* Maintains the image's aspect ratio */
+  display: block;  /* Helps with alignment and margin issues */
+  }
+  img {
+  max-width: 100%; /* Ensures the image doesn't exceed the container's width */
+  max-height: auto;    /* Maintains the image's aspect ratio */
+  display: block;  /* Helps with alignment and margin issues */
+}
+</style>
 <script src="assets/js/wizard-form.js"></script>
 </body>
 </html>
