@@ -1,26 +1,45 @@
 <nav class="navbar border-bottom position-relative" style="background-color: #0077B6;">
-  <div class="container-fluid">
+  <div class="container-fluid d-flex align-items-center justify-content-between">
 
     <!-- LEFT LOGO -->
     <div class="d-flex align-items-center">
       <img src="assets/img/cprc.png"
            class="header-logo"
-           alt="CPRC Logo">
+           alt="CPRC Logo"
+           style="height: 60px; width: auto; max-width: 180px;">
     </div>
 
-    <!-- CENTER TITLE -->
-    <div class="position-absolute start-50 translate-middle-x text-center">
+    <!-- CENTER TITLE (perfectly centered) -->
+    <div class="position-absolute start-50 translate-middle-x text-center d-none d-md-block">
       <span class="navbar-brand mb-0 h5 fw-semibold" style="color: white;">
         National Crisis Preparedness and Response Centre (MyCPRC)
       </span>
     </div>
 
     <!-- RIGHT LOGO -->
-    <div class="d-flex align-items-center ms-auto">
+    <div class="d-flex align-items-center">
       <img src="assets/img/logoencdc-removebg-preview.png"
            class="header-logo"
-           alt="eNCDC Logo">
+           alt="eNCDC Logo"
+           style="height: 60px; width: auto; max-width: 180px;">
     </div>
 
   </div>
 </nav>
+
+<style>
+  .header-logo {
+    max-height: 70px;          /* ← change this to adjust logo size */
+    width: auto;
+    object-fit: contain;
+  }
+
+  @media (max-width: 767px) {
+    .header-logo {
+      max-height: 50px;        /* smaller on mobile */
+    }
+    .navbar-brand {
+      font-size: 1.1rem;       /* smaller title on mobile */
+    }
+  }
+</style>
