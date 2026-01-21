@@ -35,54 +35,35 @@
 
       <!-- ===== Welcome Card ===== -->
     <div class="card welcome mb-4">
-      <div class="icon-circle">
-        <img src="https://img.icons8.com/ios-filled/50/ffffff/home.png" alt="Welcome Icon">
-      </div>
-      <h2>Welcome</h2>
-      <p>This is your central workspace for dashboards, reporting, and analytics.</p>
+      <h2>USER MANUALS</h2>
+      <h6></h6>
     </div>
 
     <!-- ===== Main Cards ===== -->
     <div class="main-cards">
-
-      <!-- Preparedness -->
-      <div class="card preparedness">
-        <div class="icon-circle">
-          <img src="https://img.icons8.com/ios-filled/50/ffffff/shield.png" alt="Preparedness Icon">
-        </div>
-        <h2 class="text-center">Preparedness</h2>
-        <ul class="sub-options">
-          <li><a href="landingDRP.html">Disaster Risk Profile</a></li>
-          <li><a href="landingDRM.html">Disaster Resources Management</a></li>
-        </ul>
-      </div>
-
-      <!-- Surveillance -->
       <div class="card surveillance">
-        <div class="icon-circle">
-          <img src="https://img.icons8.com/ios-filled/50/ffffff/graph.png" alt="Surveillance Icon">
+        <div class="text-center">
+        <iframe
+          src="https://www.youtube.com/embed/6xeVdkfaPtA?si=uSJaNifUnMbFrAjM" 
+          title="YouTube video player" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen></iframe>
         </div>
-        <h2 class="text-center">Surveillance</h2>
-        <ul class="sub-options">
-          <li><a href="#">Sentiment Analysis</a></li>
-          <li><a href="#">SPOTREP/SITREP</a></li>
-          <li><a href="#">Rumour Surveillance</a></li>
-        </ul>
       </div>
-
-      <!-- Response -->
-      <div class="card response">
-        <div class="icon-circle">
-          <img src="assets\img\lifebuoy_icon_244142.webp" alt="Response Icon">
+      
+      <div class="card surveillance">
+        <div class="text-center">
+         <iframe
+          src="https://www.youtube.com/embed/k7ZSHxljMXk?si=BKLWH6rvQKwIDK-i" 
+          title="YouTube video player" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+          referrerpolicy="strict-origin-when-cross-origin" 
+          allowfullscreen></iframe>
         </div>
-        <h2 class="text-center">Response</h2>
-        <ul class="sub-options">
-          <li><a href="landingDOCE.html">DOCE Event Reporting</a></li>
-          <li><a href="landingFlood.html">Flood Management</a></li>
-          <li><a href="#">Disease Specific</a></li>
-        </ul>
       </div>
-
     </div>
     </main>
   </div>
@@ -104,6 +85,13 @@
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
 </script>
+<style>
+  .card iframe{
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+</style>
 <script src="assets/js/wizard-form.js"></script>
 </body>
 </html>

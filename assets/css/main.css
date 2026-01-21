@@ -196,3 +196,19 @@ footer {
   max-width: 1200px;
   margin: 0 auto;
 }
+
+.card .icon-helpdesk {
+  background: rgb(255, 255, 255);
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 1rem auto;
+}
+
+.card .icon-helpdesk img {
+  width: auto;
+  height: 100px;
+}

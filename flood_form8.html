@@ -47,7 +47,7 @@
     <!-- MAIN CONTENT -->
     <main class="col-md-9 col-lg-10 p-4">
       <div class="card shadow-sm border-1">
-        <div class="card-body">         
+        <div class="card-body">
           <ul class="nav nav-pills justify-content-center">
             <li class="nav-item"><a class="nav-link" href="flood_form3.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 3 (BKP)</a></li>
             <li class="nav-item"><a class="nav-link" href="flood_form4.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 4 (BPKK)</a></li>
@@ -66,7 +66,7 @@
         <form id="wizardForm" action="http://localhost:3000/submit" method="POST">
 
         <div class="wizard-step active">
-            <h5 class="mb-3">BORANG 3 : PASUKAN PERUBATAN DAN KESIHATAN HARIAN (SEMASA)</h5>
+            <h5 class="mb-3">BORANG 8 : AKTIVITI KAWALAN VEKTOR DENGGI DI PUSAT PEMINDAHAN SEMENTARA (PPS) SEMASA BANJIR</h5>
 
             <div class="row g-3">
                 <div class="col-md-6">
@@ -97,34 +97,48 @@
                 <input type="date" class="form-control" id="tarikh_laporan" name="tarikh_laporan" required>
             </div>
 
-            <h6 class="mt-4 mb-3">Pasukan Perubatan Kecemasan (EMT)</h6>
               <div class="row g-3">
                   <div class="col-md-4">
-                      <label class="form-label">RRT Perubatan</label>
+                      <label class="form-label">Bil. PPS Aktif</label>
                       <input type="number" class="form-control" min="0" value="0"
-                      id="rrt_perubatan" name="rrt_perubatan" 
+                      id="pps_aktif" name="pps_aktif" 
                       >
                   </div>
 
                   <div class="col-md-4">
-                      <label class="form-label">RRT Kesihatan</label>
+                      <label class="form-label">Bil. PPS Diperiksa</label>
                       <input type="number" class="form-control" min="0" value="0"
-                      id="rrt_kesihatan" name="rrt_kesihatan"
+                      id="pps_diperiksa" name="pps_diperiksa"
                       >
                   </div>
 
                   <div class="col-md-4">
-                      <label class="form-label">Pasukan MHPSS</label>
+                      <label class="form-label">Bil. PPS Positif</label>
                       <input type="number" class="form-control" min="0" value="0"
-                      id="pasukan_mhpss" name="pasukan_mhpss"
+                      id="pps_positif" name="pps_positif"
                       >
                   </div>
 
-                  <div class="col-md-6">
-                      <label class="form-label">Jumlah Pasukan (Harian)</label>
-                      <p><span id="jumlah_pasukan"></span></p>
+                  <div class="col-md-4">
+                      <label class="form-label">Bil. Bekas Diperiksa</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="bekas_diperiksa" name="bekas_diperiksa"
+                      >
                   </div>
-                  
+
+                  <div class="col-md-4">
+                      <label class="form-label">Bil. PPS Disembur Kabus</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="pps_kabus" name="pps_kabus"
+                      >
+                  </div>
+
+                  <div class="col-md-4">
+                      <label class="form-label">Bil. PPS Dijalankan Larviciding</label>
+                      <input type="number" class="form-control" min="0" value="0"
+                      id="pps_larviciding" name="pps_larviciding"
+                      >
+                  </div>
               </div>
         </div>           
         <!-- NAVIGATION -->
@@ -148,31 +162,10 @@
 <!-- Load Header & Footer -->
 <script src="assets/js/common.js"></script>
 
-<!--Wizard-->
 <script src="assets/js/wizard-form.js"></script>
 <script src="assets/js/negeri-daerah.js"></script>
 <script src="assets/js/flood_form.js"></script>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script>
-  const numOneInput = document.getElementById('rrt_perubatan');
-  const numTwoInput = document.getElementById('rrt_kesihatan');
-  const numThreeInput = document.getElementById('pasukan_mhpss');
-  const resultSpan = document.getElementById('jumlah_pasukan');
-  
-  function calculateSum() {
-    const numOne = parseFloat(numOneInput.value) || 0;
-    const numTwo = parseFloat(numTwoInput.value) || 0;
-    const numThree = parseFloat(numThreeInput.value) || 0;
-    const sum = numOne + numTwo + numThree;
-    
-    resultSpan.textContent = sum;
-}
 
-// Attach event listeners to the input fields for the 'input' event
-numOneInput.addEventListener('input', calculateSum);
-numTwoInput.addEventListener('input', calculateSum);
-numThreeInput.addEventListener('input', calculateSum);
-
-</script>
 </body>
 </html>

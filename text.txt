@@ -1,0 +1,119 @@
+Emergency Physician
+Internal Medicine Specialists
+Trauma Surgeon
+General Surgeon
+Neurosurgeon
+Vascular Surgeon
+Cardiothoracic Surgeon
+Orthopaedic Surgeon
+Oral Surgeons
+Plastic Surgeons
+Urologist
+Anaesthesiologist
+Intensivist
+Infectious Disease Physician
+Paediatrician
+Forensic Medicine Specialists
+Forensic Odontologists
+Psychiatrist
+Clinical Psychologists
+Obstetrician and Gynaecologist
+
+-Medical Devices (in emergency & trauma department)-
+Portable Ventilator
+Portable transport monitor
+Portable Manual Defibrillator
+Automated/Semi-Auto External Defibrillator
+Syringe Pumps
+Infusion Pumps
+Automated CPR machine
+Spinal Board
+Foldable Stretcher
+Basket Stretcher
+Rescue Stretcher
+Scoop Stretcher
+Vacuum Mattress
+Portable Oxygen Tanks - YES/NO
+Portable Suction Machine
+Evacuation Trolley
+
+-Medical Devices (Entire Hospital)-
+Portable Oxygen Tanks - YES/NO
+Oxygen Concentrator
+
+-Non-Medical Devices-
+Disaster Tent
+Inflatable disaster tent
+Camping tent
+Other types of tent
+Portable lighting system
+Portable emergency lamps/lanterns
+Canvas Beds
+Medical cold chain box
+Portable Negative Pressure Tent
+Portable Decontamination Shower Tent
+Portable Sterilizer - YES/NO
+Power generator - YES/NO
+Portable Genset
+Linen stock
+Patient Garments
+Blankets
+
+-Facilities-
+Red Zone bays
+Yellow Zone bays
+Observation bays
+Medical Emergency Coordinating Center (MECC)
+Decontamination bays
+Waste Disposal after Decontamination - YES/NO
+Intensive Care Unit
+Operation Theater
+Blood Bank
+CT Scan
+Mortuary
+Labour Room
+Burn Unit - YES/NO
+Helipad - YES/NO
+Negative Pressure Isolation Room
+Water tank storage - capacity
+Water tank storage - supply
+Capacity of rain water harversting tank
+Rain water harversting tank - supply
+Tube well
+Petrol storage capacity
+Petrol storage - supply
+Diesel storage capacity
+Diesel storage - supply
+Dialysis Unit
+Food supply
+Dry ration
+Enough blood supply
+
+-Communication-
+GIRN Handheld
+GIRN Vehicular
+GIRN Desktop
+GIRN Briefcase
+GIRN Rapid Deployment Unit
+Satellite Phone
+Full duplex communication system
+Amateur Radio
+Walkie talkie
+
+-Transportation-
+Lorry
+Bus
+Type A Land Ambulance
+Type B Land Ambulance
+
+-Logistics Suppliers/Providers-
+Adequate PPE supply -YES/NO
+
+-Special Unit-
+Disaster Response Unit (Team and Vehicle)- YES/NO
+Disaster Response Team (No vehicle)- YES/NO
+CBRNe Special team - YES/NO
+Mental Health and Psychosocial Support (MHPSS)
+Medical Emergencies Response Team (MERT)
+Rapid Assessment Team (RAT)
+Rapid Response Team (RRT)
