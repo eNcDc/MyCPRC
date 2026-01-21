@@ -43,7 +43,7 @@
     .iframe-container {
       position: relative;
       width: 100%;
-      height: 90vh;           /* Adjust height as needed (90% of viewport) */
+      height: 90vh;           /* Adjust height as needed */
       min-height: 720px;
       border: 1px solid #dee2e6;
       border-radius: 8px;
@@ -69,10 +69,6 @@
 <div class="container-fluid">
   <div class="row">
 
-    <!-- LEFT PANEL -->
-    <!-- LEFT PANEL -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
-      <!-- Sidebar will be loaded here -->
     <!-- LEFT PANEL (Sidebar) - Unchanged -->
     <aside class="col-md-3 col-lg-2 sidebar p-0">
       <div class="p-4 border-bottom">
@@ -99,7 +95,7 @@
         <!-- QuickSight Embedded Dashboard -->
         <div class="iframe-container">
           <iframe
-            src="https://us-east-1.quicksight.aws.amazon.com/sn/accounts/917003953046/dashboards/146efa3e-e038-48fc-8690-3e6cdd5d1e83?directory_alias=poc-mycprc-quicksuite"
+            src="https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/917003953046/dashboards/29a70825-839a-4e6e-aac6-2480eebf0f6c?directory_alias=poc-mycprc-quicksuite"
             frameborder="0"
             allowfullscreen>
           </iframe>
@@ -127,6 +123,5 @@
     .then(data => document.getElementById("footer").innerHTML = data);
 </script>
 
-<script src="assets/js/wizard-form.js"></script>
 </body>
 </html>
