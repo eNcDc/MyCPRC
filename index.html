@@ -126,41 +126,16 @@
   <div class="row">
 
     <!-- LEFT SIDEBAR -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0">
-      <div class="user-info">
-        <h6 class="mb-1 fw-semibold">User Name</h6>
-        <small class="text-muted">user@email.com</small>
-      </div>
+    <aside class="col-md-3 col-lg-2 p-0">
+  <!-- Load sidebar from sidebar.html -->
+  <div id="sidebar-container"></div>
+</aside>
 
-      <ul class="nav flex-column mt-3 px-2">
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-person me-2"></i>User Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" 
-             href="https://us-east-1.quicksight.aws.amazon.com/sn/account/poc-mycprc-quicksuite/dashboards/29a70825-839a-4e6e-aac6-2480eebf0f6c"
-             target="_blank" 
-             rel="noopener noreferrer">
-            <i class="bi bi-speedometer2 me-2"></i>Dashboard
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="report.html"><i class="bi bi-file-earmark-text me-2"></i>Reporting</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-bar-chart me-2"></i>Analysis</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-life-preserver me-2"></i>Helpdesk</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#"><i class="bi bi-book me-2"></i>Manual</a>
-        </li>
-        <li class="nav-item mt-4">
-          <a class="nav-link text-danger" href="#"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
-        </li>
-      </ul>
-    </aside>
+<script>
+  fetch("sidebar.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("sidebar-container").innerHTML = data);
+</script>
 
     <!-- MAIN CONTENT -->
     <main class="col-md-9 ms-sm-auto col-lg-10 px-0 px-md-4">
