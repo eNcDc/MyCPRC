@@ -139,6 +139,36 @@
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
 </script>
-<script src="assets/js/wizard-form.js"></script>
+<script src="assets/js/wizard-form.js">
+
+</script>
+<!-- Improved Sidebar Sign Out (waits for sidebar to load) -->
+<script>
+  // Run this after everything loads, including fetch
+  window.addEventListener('load', function() {
+    // Give fetch a little time to complete (0.5–1 second delay)
+    setTimeout(() => {
+      const sidebarSignOut = document.getElementById('sidebarSignOut');
+      const loginOverlay = document.getElementById('loginOverlay');
+      const dashboardContent = document.getElementById('dashboardContent');
+
+      console.log("Looking for sidebarSignOut:", sidebarSignOut); // Debug
+
+      if (sidebarSignOut) {
+        sidebarSignOut.addEventListener('click', function(e) {
+          e.preventDefault();
+          console.log("Sidebar Sign Out clicked!");
+
+          loginOverlay.style.display = 'flex';               // Show login
+          dashboardContent.classList.add('d-none');          // Hide dashboard
+          localStorage.removeItem('mycprc_loggedIn');        // Clear state
+          document.getElementById('loginForm')?.reset();     // Reset form
+        });
+      } else {
+        console.log("sidebarSignOut ID NOT FOUND — check sidebar.html");
+      }
+    }, 800); // 800ms delay — adjust to 1500 if still not found
+  });
+</script>
 </body>
 </html>
