@@ -188,34 +188,8 @@
       <div id="sidebar-container"></div>
     </aside>
 
-    <!-- MAIN CONTENT (unchanged except for login overlay) -->
+    <!-- MAIN CONTENT (unchanged) -->
     <main class="col-md-9 ms-sm-auto col-lg-10 px-0 px-md-4">
-
-      <!-- === Added: Login Overlay (shown on load) === -->
-      <div id="loginOverlay" class="login-overlay">
-        <div class="login-box">
-          <div class="mb-4">
-            <h3 class="fw-semibold">MyCPRC Login</h3>
-            <p class="text-muted">Sign in to access your dashboard</p>
-          </div>
-
-          <form id="loginForm">
-            <div class="mb-3">
-              <label for="email" class="form-label">Email address</label>
-              <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
-            </div>
-
-            <div class="mb-4">
-              <label for="password" class="form-label">Password</label>
-              <input type="password" class="form-control" id="password" placeholder="••••••••" required>
-            </div>
-
-            <button type="submit" class="btn-login">Sign In</button>
-          </form>
-        </div>
-      </div>
-
-      <!-- Original Dashboard Content (unchanged) -->
       <div class="dashboard-container">
         <div class="dashboard-header">
           <h3 class="mb-0 fw-semibold text-dark">MyCPRC Dashboard</h3>
@@ -230,15 +204,7 @@
             allowfullscreen>
           </iframe>
         </div>
-
-        <!-- === Added: Sign Out Button === -->
-        <div class="text-center mt-4">
-          <button id="signOutBtn" class="btn-signout" style="display:none;">
-            Sign Out
-          </button>
-        </div>
       </div>
-
     </main>
 
   </div>
@@ -268,14 +234,46 @@
     .then(data => document.getElementById("sidebar-container").innerHTML = data);
 </script>
 
-<!-- Basic Login Logic (added at the end) -->
+<!-- === Added: Basic Login Overlay & Logic === -->
+<div id="loginOverlay" class="login-overlay">
+  <div class="login-box">
+    <div class="mb-4">
+      <h3 class="fw-semibold">MyCPRC Login</h3>
+      <p class="text-muted">Sign in to access your dashboard</p>
+    </div>
+
+    <form id="loginForm">
+      <div class="mb-3">
+        <label for="email" class="form-label">Email address</label>
+        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+      </div>
+
+      <div class="mb-4">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+      </div>
+
+      <button type="submit" class="btn-login">Sign In</button>
+    </form>
+  </div>
+</div>
+
+<!-- Sign Out Button (placed at bottom of dashboard) -->
+<div class="text-center mt-4 d-none" id="signOutWrapper">
+  <button id="signOutBtn" class="btn-signout">
+    Sign Out
+  </button>
+</div>
+
+<!-- Basic Login Logic (client-side demo only) -->
 <script>
   const loginOverlay = document.getElementById('loginOverlay');
-  const signOutBtn = document.getElementById('signOutBtn');
+  const signOutWrapper = document.getElementById('signOutWrapper');
   const loginForm = document.getElementById('loginForm');
+  const signOutBtn = document.getElementById('signOutBtn');
 
   // Show sign out button only after login
-  signOutBtn.style.display = 'none';
+  signOutWrapper.classList.add('d-none');
 
   // On form submit
   loginForm.addEventListener('submit', function(e) {
@@ -284,10 +282,10 @@
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value.trim();
 
-    // Very basic demo check
+    // Basic demo validation
     if (email.includes('@') && password.length >= 6) {
-      loginOverlay.style.display = 'none';
-      signOutBtn.style.display = 'inline-block';
+      loginOverlay.classList.add('d-none');
+      signOutWrapper.classList.remove('d-none');
       localStorage.setItem('mycprc_loggedIn', 'true');
     } else {
       alert('Please enter a valid email and password (at least 6 characters).');
@@ -296,16 +294,16 @@
 
   // Sign Out
   signOutBtn.addEventListener('click', function() {
-    loginOverlay.style.display = 'flex';
-    signOutBtn.style.display = 'none';
+    loginOverlay.classList.remove('d-none');
+    signOutWrapper.classList.add('d-none');
     localStorage.removeItem('mycprc_loggedIn');
     loginForm.reset();
   });
 
   // Auto-show dashboard if previously "logged in" (demo)
   if (localStorage.getItem('mycprc_loggedIn') === 'true') {
-    loginOverlay.style.display = 'none';
-    signOutBtn.style.display = 'inline-block';
+    loginOverlay.classList.add('d-none');
+    signOutWrapper.classList.remove('d-none');
   }
 </script>
 
