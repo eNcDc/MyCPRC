@@ -314,9 +314,9 @@
     signOutBtn.style.display = 'inline-block';
   }
 </script>
-<!-- Connect sidebar Logout to sign-out action -->
+<!-- Connect sidebar "Sign Out" link to hide dashboard and show login -->
 <script>
-  // Wait for sidebar to load
+  // Wait for sidebar to load from fetch
   document.addEventListener('DOMContentLoaded', function() {
     const sidebarSignOut = document.getElementById('sidebarSignOut');
     const loginOverlay = document.getElementById('loginOverlay');
@@ -324,18 +324,18 @@
 
     if (sidebarSignOut) {
       sidebarSignOut.addEventListener('click', function(e) {
-        e.preventDefault(); // Stop default link behavior
+        e.preventDefault();
 
-        // Show login screen
+        // Show login overlay
         loginOverlay.style.display = 'flex';
 
         // Hide dashboard
         dashboardContent.classList.add('d-none');
 
-        // Clear "logged in" state
+        // Clear login state
         localStorage.removeItem('mycprc_loggedIn');
 
-        // Reset login form (if it exists)
+        // Reset login form
         document.getElementById('loginForm')?.reset();
       });
     }
