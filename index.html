@@ -314,11 +314,9 @@
     signOutBtn.style.display = 'inline-block';
   }
 </script>
-
-</body>
-</html>
-<!-- Connect sidebar Sign Out to login overlay -->
+<!-- Connect sidebar Logout to sign-out action -->
 <script>
+  // Wait for sidebar to load
   document.addEventListener('DOMContentLoaded', function() {
     const sidebarSignOut = document.getElementById('sidebarSignOut');
     const loginOverlay = document.getElementById('loginOverlay');
@@ -326,12 +324,22 @@
 
     if (sidebarSignOut) {
       sidebarSignOut.addEventListener('click', function(e) {
-        e.preventDefault();
-        loginOverlay.style.display = 'flex';           // Show login screen
-        dashboardContent.classList.add('d-none');      // Hide dashboard
-        localStorage.removeItem('mycprc_loggedIn');    // Clear login state
-        document.getElementById('loginForm')?.reset(); // Reset form
+        e.preventDefault(); // Stop default link behavior
+
+        // Show login screen
+        loginOverlay.style.display = 'flex';
+
+        // Hide dashboard
+        dashboardContent.classList.add('d-none');
+
+        // Clear "logged in" state
+        localStorage.removeItem('mycprc_loggedIn');
+
+        // Reset login form (if it exists)
+        document.getElementById('loginForm')?.reset();
       });
     }
   });
 </script>
+</body>
+</html>
