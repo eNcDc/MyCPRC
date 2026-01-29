@@ -139,6 +139,12 @@
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
 </script>
+<!-- Load Sidebar -->
+<script>
+  fetch("sidebar.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("sidebar-container").innerHTML = data);
+</script>
 <script src="assets/js/wizard-form.js">
 
 </script>
