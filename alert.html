@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MyCPRC - Weather Alert</title>
+  <title>MyCPRC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
@@ -11,50 +11,10 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Main CSS (if you have it) -->
+  <!-- Main CSS -->
   <link href="assets/css/main.css" rel="stylesheet">
-
-  <style>
-    body {
-      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-      min-height: 100vh;
-      margin: 0;
-      font-family: system-ui, -apple-system, sans-serif;
-    }
-
-    .sidebar {
-      background-color: #ffffff;
-      border-right: 1px solid #e9ecef;
-      min-height: 100vh;
-      box-shadow: 2px 0 10px rgba(0,0,0,0.03);
-    }
-
-    .card {
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-      margin-bottom: 1.5rem;
-    }
-
-    .card-body img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-      display: block;
-      margin: 1rem auto;
-    }
-
-    .welcome {
-      background: linear-gradient(135deg, #0d6efd, #0b5ed7);
-      color: white;
-      text-align: center;
-    }
-
-    .surveillance h2 {
-      font-weight: 600;
-      margin-bottom: 1rem;
-    }
-  </style>
 </head>
+
 <body>
 
 <!-- HEADER -->
@@ -64,10 +24,10 @@
 <div class="container-fluid">
   <div class="row">
 
-    <!-- LEFT SIDEBAR -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0">
-      <!-- Correct ID for fetch -->
-      <div id="sidebar-container"></div>
+    <!-- LEFT PANEL -->
+    <!-- LEFT PANEL -->
+    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
+      <!-- Sidebar will be loaded here -->
     </aside>
 
     <!-- MAIN CONTENT -->
@@ -75,44 +35,35 @@
 
       <!-- ===== Welcome Card ===== -->
       <div class="card welcome mb-4">
-        <div class="card-body">
-          <h2>WEATHER ALERT</h2>
-          <h6>METMalaysia</h6>
-        </div>
+      <h2>WEATHER ALERT</h2>
+      <h6>METMalaysia</h6>
       </div>
 
       <!-- ===== Main Cards ===== -->
-      <div class="main-cards row g-4">
-        <div class="col-md-6">
-          <div class="card surveillance">
-            <div class="card-body text-center">
-              <h2>AMARAN HUJAN BERTERUSAN</h2>
+      <div class="main-cards">
+      <div class="card surveillance">
+        <div class="card-body">
+              <h2 class="text-center">AMARAN HUJAN BERTERUSAN</h2>
               <img class="alert" src="https://www.met.gov.my/data/AmaranHujanLebat.jpg" alt="Amaran Hujan">
             </div>
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="card surveillance">
-            <div class="card-body text-center">
-              <h2>AMARAN RIBUT PETIR</h2>
+      </div>
+      
+      <div class="card surveillance">
+        <div class="card-body test">
+              <h2 class="text-center">AMARAN RIBUT PETIR</h2>
               <img src="https://www.met.gov.my/data/AmaranRibutPetir.jpg" alt="Amaran Ribut">
             </div>
-          </div>
-        </div>
+      </div>
       </div>
 
-      <div class="main-cards row g-4 mt-3">
-        <div class="col-12">
-          <div class="card surveillance">
-            <div class="card-body text-center">
-              <h2>NOWCASTING</h2>
+      <div class="main-cards">
+      <div class="card surveillance">
+        <div class="card-body">
+              <h2 class="text-center">NOWCASTING</h2>
               <img src="https://www.met.gov.my/data/swirl-latest.gif" alt="Nowcasting">
             </div>
-          </div>
-        </div>
       </div>
-
+      </div>
     </main>
   </div>
 </div>
@@ -133,45 +84,48 @@
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
 </script>
-
-<!-- Load Sidebar (fixed ID) -->
+<!-- Load Sidebar -->
 <script>
   fetch("sidebar.html")
     .then(res => res.text())
     .then(data => document.getElementById("sidebar-container").innerHTML = data);
 </script>
+<style>
+  .card-body img{
+  max-width: 100%; /* Ensures the image doesn't exceed the container's width */
+  max-height: 100%;    /* Maintains the image's aspect ratio */
+  display: block;  /* Helps with alignment and margin issues */
+  }
+</style>
+<script src="assets/js/wizard-form.js">
 
-<!-- Sidebar Sign Out handler (safe version) -->
+</script>
+<!-- Improved Sidebar Sign Out (waits for sidebar to load) -->
 <script>
+  // Run this after everything loads, including fetch
   window.addEventListener('load', function() {
+    // Give fetch a little time to complete (0.5–1 second delay)
     setTimeout(() => {
       const sidebarSignOut = document.getElementById('sidebarSignOut');
       const loginOverlay = document.getElementById('loginOverlay');
       const dashboardContent = document.getElementById('dashboardContent');
 
-      console.log("Looking for sidebarSignOut:", sidebarSignOut);
+      console.log("Looking for sidebarSignOut:", sidebarSignOut); // Debug
 
       if (sidebarSignOut) {
         sidebarSignOut.addEventListener('click', function(e) {
           e.preventDefault();
           console.log("Sidebar Sign Out clicked!");
 
-          // Only run if login elements exist on this page
-          if (loginOverlay && dashboardContent) {
-            loginOverlay.style.display = 'flex';
-            dashboardContent.classList.add('d-none');
-            localStorage.removeItem('mycprc_loggedIn');
-            document.getElementById('loginForm')?.reset();
-          } else {
-            // On non-dashboard pages (like this one), just reload or redirect
-            console.log("No login/dashboard on this page — reloading");
-            window.location.reload(); // or redirect to login page: window.location.href = "index.html";
-          }
+          loginOverlay.style.display = 'flex';               // Show login
+          dashboardContent.classList.add('d-none');          // Hide dashboard
+          localStorage.removeItem('mycprc_loggedIn');        // Clear state
+          document.getElementById('loginForm')?.reset();     // Reset form
         });
       } else {
         console.log("sidebarSignOut ID NOT FOUND — check sidebar.html");
       }
-    }, 1000);
+    }, 800); // 800ms delay — adjust to 1500 if still not found
   });
 </script>
 </body>
