@@ -11,13 +11,13 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Google Fonts (clean & modern) -->
+  <!-- Google Fonts (optional - clean modern font) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --primary: #0d6efd;
-      --primary-dark: #0b5ed7;
+      --primary-dark: #0a58ca;
       --sidebar-bg: #ffffff;
       --sidebar-border: #e9ecef;
       --text-muted: #6c757d;
@@ -41,50 +41,79 @@
       transition: all 0.3s ease;
     }
 
-    .user-info {
-      padding: 1.5rem 1.25rem;
-      border-bottom: 1px solid var(--sidebar-border);
-    }
-
-    .nav-link {
+    .sidebar .nav-link {
       color: #495057;
       padding: 0.75rem 1.25rem;
       border-radius: 0.5rem;
       margin: 0.25rem 0.75rem;
       transition: all 0.25s ease;
-      font-weight: 500;
     }
 
-    .nav-link:hover {
+    .sidebar .nav-link:hover {
       background-color: #e9ecef;
       color: var(--primary);
-      transform: translateX(4px);
     }
 
-    .nav-link.active {
+    .sidebar .nav-link.active {
       background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white !important;
       box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
-      transform: translateX(4px);
     }
 
-    .nav-link i {
+    .sidebar .nav-link i {
       width: 24px;
       text-align: center;
     }
 
-    .nav-link.logout:hover {
-      background-color: #f8d7da;
-      color: #dc3545 !important;
+    .user-info {
+      padding: 1.5rem 1.25rem;
+      border-bottom: 1px solid var(--sidebar-border);
     }
 
+    .dashboard-container {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      margin: 2rem;
+      padding: 1.5rem;
+      display: none; /* Hidden until logged in */
+    }
+
+    .dashboard-header {
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .iframe-container {
+      position: relative;
+      width: 100%;
+      height: 85vh;
+      min-height: 700px;
+      background: #f1f3f5;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
+    }
+
+    iframe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* Login Overlay */
     .login-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      background: rgba(0, 0, 0, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -137,42 +166,6 @@
       background: #c82333;
     }
 
-    .dashboard-container {
-      background: var(--card-bg);
-      border-radius: 16px;
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      margin: 2rem;
-      padding: 1.5rem;
-      display: none; /* Hidden until logged in */
-    }
-
-    .dashboard-header {
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #e9ecef;
-    }
-
-    .iframe-container {
-      position: relative;
-      width: 100%;
-      height: 85vh;
-      min-height: 700px;
-      background: #f1f3f5;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: inset 0 2px 8px rgba(0,0,0,0.05);
-    }
-
-    iframe {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
     @media (max-width: 991px) {
       .dashboard-container {
         margin: 1rem;
@@ -198,50 +191,10 @@
 <div class="container-fluid">
   <div class="row">
 
-    <!-- LEFT SIDEBAR (always visible) -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0">
-      <div class="user-info">
-        <h6 class="mb-1 fw-semibold">User Name</h6>
-        <small class="text-muted">user@email.com</small>
-      </div>
-
-      <ul class="nav flex-column mt-3 px-2">
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="bi bi-person me-2"></i>User Profile
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="bi bi-speedometer2 me-2"></i>Dashboard
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="report.html">
-            <i class="bi bi-file-earmark-text me-2"></i>Reporting
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="bi bi-bar-chart me-2"></i>Analysis
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="bi bi-life-preserver me-2"></i>Helpdesk
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">
-            <i class="bi bi-book me-2"></i>Manual
-          </a>
-        </li>
-        <li class="nav-item mt-4">
-          <a class="nav-link text-danger" href="#">
-            <i class="bi bi-box-arrow-right me-2"></i>Logout
-          </a>
-        </li>
-      </ul>
+    <!-- LEFT SIDEBAR -->
+    <aside class="col-md-3 col-lg-2 p-0">
+      <!-- Load sidebar from sidebar.html -->
+      <div id="sidebar-container"></div>
     </aside>
 
     <!-- MAIN CONTENT -->
@@ -317,6 +270,13 @@
   fetch("footer.html")
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
+</script>
+
+<!-- Load Sidebar -->
+<script>
+  fetch("sidebar.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("sidebar-container").innerHTML = data);
 </script>
 
 <!-- Basic Login Logic (client-side demo only) -->
