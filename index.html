@@ -116,7 +116,7 @@
       }
     }
 
-    /* === Added: Login Overlay === */
+    /* Login Overlay (shown first) */
     .login-overlay {
       position: fixed;
       inset: 0;
@@ -188,23 +188,59 @@
       <div id="sidebar-container"></div>
     </aside>
 
-    <!-- MAIN CONTENT (unchanged) -->
+    <!-- MAIN CONTENT -->
     <main class="col-md-9 ms-sm-auto col-lg-10 px-0 px-md-4">
-      <div class="dashboard-container">
-        <div class="dashboard-header">
-          <h3 class="mb-0 fw-semibold text-dark">MyCPRC Dashboard</h3>
-          <small class="text-muted">Real-time Crisis Preparedness & Response Overview</small>
-        </div>
 
-        <!-- QuickSight Embedded Dashboard (unchanged) -->
-        <div class="iframe-container">
-          <iframe
-            src="https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/917003953046/dashboards/29a70825-839a-4e6e-aac6-2480eebf0f6c?directory_alias=poc-mycprc-quicksuite"
-            frameborder="0"
-            allowfullscreen>
-          </iframe>
+      <!-- Login Overlay (shown first) -->
+      <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+          <div class="mb-4">
+            <h3 class="fw-semibold">MyCPRC Login</h3>
+            <p class="text-muted">Sign in to access your dashboard</p>
+          </div>
+
+          <form id="loginForm">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-login">Sign In</button>
+          </form>
         </div>
       </div>
+
+      <!-- Original Dashboard (hidden until login) -->
+      <div id="dashboardContent" class="d-none">
+        <div class="dashboard-container">
+          <div class="dashboard-header">
+            <h3 class="mb-0 fw-semibold text-dark">MyCPRC Dashboard</h3>
+            <small class="text-muted">Real-time Crisis Preparedness & Response Overview</small>
+          </div>
+
+          <!-- QuickSight Embedded Dashboard (unchanged) -->
+          <div class="iframe-container">
+            <iframe
+              src="https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/917003953046/dashboards/29a70825-839a-4e6e-aac6-2480eebf0f6c?directory_alias=poc-mycprc-quicksuite"
+              frameborder="0"
+              allowfullscreen>
+            </iframe>
+          </div>
+
+          <!-- Sign Out Button (added at bottom) -->
+          <div class="text-center mt-4">
+            <button id="signOutBtn" class="btn-signout">
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+
     </main>
 
   </div>
@@ -234,48 +270,17 @@
     .then(data => document.getElementById("sidebar-container").innerHTML = data);
 </script>
 
-<!-- === Added: Basic Login Overlay & Logic === -->
-<div id="loginOverlay" class="login-overlay">
-  <div class="login-box">
-    <div class="mb-4">
-      <h3 class="fw-semibold">MyCPRC Login</h3>
-      <p class="text-muted">Sign in to access your dashboard</p>
-    </div>
-
-    <form id="loginForm">
-      <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
-      </div>
-
-      <div class="mb-4">
-        <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="••••••••" required>
-      </div>
-
-      <button type="submit" class="btn-login">Sign In</button>
-    </form>
-  </div>
-</div>
-
-<!-- Sign Out Button (placed at bottom of dashboard) -->
-<div class="text-center mt-4 d-none" id="signOutWrapper">
-  <button id="signOutBtn" class="btn-signout">
-    Sign Out
-  </button>
-</div>
-
 <!-- Basic Login Logic (client-side demo only) -->
 <script>
   const loginOverlay = document.getElementById('loginOverlay');
-  const signOutWrapper = document.getElementById('signOutWrapper');
+  const dashboardContent = document.getElementById('dashboardContent');
   const loginForm = document.getElementById('loginForm');
   const signOutBtn = document.getElementById('signOutBtn');
 
-  // Show sign out button only after login
-  signOutWrapper.classList.add('d-none');
+  // Hide sign out button initially
+  signOutBtn.style.display = 'none';
 
-  // On form submit
+  // Login form submit
   loginForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -284,8 +289,9 @@
 
     // Basic demo validation
     if (email.includes('@') && password.length >= 6) {
-      loginOverlay.classList.add('d-none');
-      signOutWrapper.classList.remove('d-none');
+      loginOverlay.style.display = 'none';
+      dashboardContent.classList.remove('d-none');
+      signOutBtn.style.display = 'inline-block';
       localStorage.setItem('mycprc_loggedIn', 'true');
     } else {
       alert('Please enter a valid email and password (at least 6 characters).');
@@ -294,16 +300,18 @@
 
   // Sign Out
   signOutBtn.addEventListener('click', function() {
-    loginOverlay.classList.remove('d-none');
-    signOutWrapper.classList.add('d-none');
+    loginOverlay.style.display = 'flex';
+    dashboardContent.classList.add('d-none');
+    signOutBtn.style.display = 'none';
     localStorage.removeItem('mycprc_loggedIn');
     loginForm.reset();
   });
 
-  // Auto-show dashboard if previously "logged in" (demo)
+  // Auto-login if previously "logged in" (demo)
   if (localStorage.getItem('mycprc_loggedIn') === 'true') {
-    loginOverlay.classList.add('d-none');
-    signOutWrapper.classList.remove('d-none');
+    loginOverlay.style.display = 'none';
+    dashboardContent.classList.remove('d-none');
+    signOutBtn.style.display = 'inline-block';
   }
 </script>
 
