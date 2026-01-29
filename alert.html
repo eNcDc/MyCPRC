@@ -100,32 +100,33 @@
 <script src="assets/js/wizard-form.js">
 
 </script>
-<!-- Improved Sidebar Sign Out (waits for sidebar to load) -->
+<!-- Sidebar Sign Out (works on all pages) -->
 <script>
-  // Run this after everything loads, including fetch
   window.addEventListener('load', function() {
-    // Give fetch a little time to complete (0.5–1 second delay)
     setTimeout(() => {
       const sidebarSignOut = document.getElementById('sidebarSignOut');
-      const loginOverlay = document.getElementById('loginOverlay');
-      const dashboardContent = document.getElementById('dashboardContent');
-
-      console.log("Looking for sidebarSignOut:", sidebarSignOut); // Debug
 
       if (sidebarSignOut) {
         sidebarSignOut.addEventListener('click', function(e) {
           e.preventDefault();
-          console.log("Sidebar Sign Out clicked!");
 
-          loginOverlay.style.display = 'flex';               // Show login
-          dashboardContent.classList.add('d-none');          // Hide dashboard
-          localStorage.removeItem('mycprc_loggedIn');        // Clear state
-          document.getElementById('loginForm')?.reset();     // Reset form
+          // Check if this page has login/dashboard elements
+          const loginOverlay = document.getElementById('loginOverlay');
+          const dashboardContent = document.getElementById('dashboardContent');
+
+          if (loginOverlay && dashboardContent) {
+            // Dashboard page — show login, hide dashboard
+            loginOverlay.style.display = 'flex';
+            dashboardContent.classList.add('d-none');
+            localStorage.removeItem('mycprc_loggedIn');
+            document.getElementById('loginForm')?.reset();
+          } else {
+            // Non-dashboard page (like alert.html) — redirect to login/dashboard page
+            window.location.href = "index.html";
+          }
         });
-      } else {
-        console.log("sidebarSignOut ID NOT FOUND — check sidebar.html");
       }
-    }, 800); // 800ms delay — adjust to 1500 if still not found
+    }, 1000); // Delay for sidebar fetch to finish
   });
 </script>
 </body>
