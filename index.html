@@ -314,31 +314,32 @@
     signOutBtn.style.display = 'inline-block';
   }
 </script>
-<!-- Connect sidebar "Sign Out" link to hide dashboard and show login -->
+<!-- Improved Sidebar Sign Out (waits for sidebar to load) -->
 <script>
-  // Wait for sidebar to load from fetch
-  document.addEventListener('DOMContentLoaded', function() {
-    const sidebarSignOut = document.getElementById('sidebarSignOut');
-    const loginOverlay = document.getElementById('loginOverlay');
-    const dashboardContent = document.getElementById('dashboardContent');
+  // Run this after everything loads, including fetch
+  window.addEventListener('load', function() {
+    // Give fetch a little time to complete (0.5–1 second delay)
+    setTimeout(() => {
+      const sidebarSignOut = document.getElementById('sidebarSignOut');
+      const loginOverlay = document.getElementById('loginOverlay');
+      const dashboardContent = document.getElementById('dashboardContent');
 
-    if (sidebarSignOut) {
-      sidebarSignOut.addEventListener('click', function(e) {
-        e.preventDefault();
+      console.log("Looking for sidebarSignOut:", sidebarSignOut); // Debug
 
-        // Show login overlay
-        loginOverlay.style.display = 'flex';
+      if (sidebarSignOut) {
+        sidebarSignOut.addEventListener('click', function(e) {
+          e.preventDefault();
+          console.log("Sidebar Sign Out clicked!");
 
-        // Hide dashboard
-        dashboardContent.classList.add('d-none');
-
-        // Clear login state
-        localStorage.removeItem('mycprc_loggedIn');
-
-        // Reset login form
-        document.getElementById('loginForm')?.reset();
-      });
-    }
+          loginOverlay.style.display = 'flex';               // Show login
+          dashboardContent.classList.add('d-none');          // Hide dashboard
+          localStorage.removeItem('mycprc_loggedIn');        // Clear state
+          document.getElementById('loginForm')?.reset();     // Reset form
+        });
+      } else {
+        console.log("sidebarSignOut ID NOT FOUND — check sidebar.html");
+      }
+    }, 800); // 800ms delay — adjust to 1500 if still not found
   });
 </script>
 </body>
