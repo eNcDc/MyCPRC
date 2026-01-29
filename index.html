@@ -11,13 +11,13 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
-  <!-- Google Fonts (optional - clean modern font) -->
+  <!-- Google Fonts (clean & modern) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
       --primary: #0d6efd;
-      --primary-dark: #0a58ca;
+      --primary-dark: #0b5ed7;
       --sidebar-bg: #ffffff;
       --sidebar-border: #e9ecef;
       --text-muted: #6c757d;
@@ -41,33 +41,100 @@
       transition: all 0.3s ease;
     }
 
-    .sidebar .nav-link {
+    .user-info {
+      padding: 1.5rem 1.25rem;
+      border-bottom: 1px solid var(--sidebar-border);
+    }
+
+    .nav-link {
       color: #495057;
       padding: 0.75rem 1.25rem;
       border-radius: 0.5rem;
       margin: 0.25rem 0.75rem;
       transition: all 0.25s ease;
+      font-weight: 500;
     }
 
-    .sidebar .nav-link:hover {
+    .nav-link:hover {
       background-color: #e9ecef;
       color: var(--primary);
+      transform: translateX(4px);
     }
 
-    .sidebar .nav-link.active {
+    .nav-link.active {
       background: linear-gradient(90deg, var(--primary) 0%, var(--primary-dark) 100%);
       color: white !important;
       box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+      transform: translateX(4px);
     }
 
-    .sidebar .nav-link i {
+    .nav-link i {
       width: 24px;
       text-align: center;
     }
 
-    .user-info {
-      padding: 1.5rem 1.25rem;
-      border-bottom: 1px solid var(--sidebar-border);
+    .nav-link.logout:hover {
+      background-color: #f8d7da;
+      color: #dc3545 !important;
+    }
+
+    .login-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .login-box {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: var(--shadow);
+      padding: 3rem 2.5rem;
+      width: 100%;
+      max-width: 450px;
+      text-align: center;
+    }
+
+    .form-control {
+      border-radius: 10px;
+      padding: 0.75rem 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 0.8rem;
+      font-size: 1.1rem;
+      border-radius: 10px;
+      background: var(--primary);
+      border: none;
+      color: white;
+      transition: all 0.3s;
+    }
+
+    .btn-login:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-signout {
+      padding: 0.6rem 1.5rem;
+      background: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      margin-top: 1rem;
+      transition: all 0.3s;
+    }
+
+    .btn-signout:hover {
+      background: #c82333;
     }
 
     .dashboard-container {
@@ -77,6 +144,7 @@
       overflow: hidden;
       margin: 2rem;
       padding: 1.5rem;
+      display: none; /* Hidden until logged in */
     }
 
     .dashboard-header {
@@ -114,6 +182,11 @@
         height: 70vh;
         min-height: 500px;
       }
+      .sidebar {
+        min-height: auto;
+        border-right: none;
+        border-bottom: 1px solid var(--sidebar-border);
+      }
     }
   </style>
 </head>
@@ -125,35 +198,105 @@
 <div class="container-fluid">
   <div class="row">
 
-    <!-- LEFT SIDEBAR -->
-    <aside class="col-md-3 col-lg-2 p-0">
-  <!-- Load sidebar from sidebar.html -->
-  <div id="sidebar-container"></div>
-</aside>
+    <!-- LEFT SIDEBAR (always visible) -->
+    <aside class="col-md-3 col-lg-2 sidebar p-0">
+      <div class="user-info">
+        <h6 class="mb-1 fw-semibold">User Name</h6>
+        <small class="text-muted">user@email.com</small>
+      </div>
 
-<script>
-  fetch("sidebar.html")
-    .then(res => res.text())
-    .then(data => document.getElementById("sidebar-container").innerHTML = data);
-</script>
+      <ul class="nav flex-column mt-3 px-2">
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-person me-2"></i>User Profile
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-speedometer2 me-2"></i>Dashboard
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="report.html">
+            <i class="bi bi-file-earmark-text me-2"></i>Reporting
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-bar-chart me-2"></i>Analysis
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-life-preserver me-2"></i>Helpdesk
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">
+            <i class="bi bi-book me-2"></i>Manual
+          </a>
+        </li>
+        <li class="nav-item mt-4">
+          <a class="nav-link text-danger" href="#">
+            <i class="bi bi-box-arrow-right me-2"></i>Logout
+          </a>
+        </li>
+      </ul>
+    </aside>
 
     <!-- MAIN CONTENT -->
     <main class="col-md-9 ms-sm-auto col-lg-10 px-0 px-md-4">
-      <div class="dashboard-container">
-        <div class="dashboard-header">
-          <h3 class="mb-0 fw-semibold text-dark">MyCPRC Dashboard</h3>
-          <small class="text-muted">Real-time Crisis Preparedness & Response Overview</small>
-        </div>
 
-        <!-- QuickSight Embedded Dashboard -->
-        <div class="iframe-container">
-          <iframe
-            src="https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/917003953046/dashboards/29a70825-839a-4e6e-aac6-2480eebf0f6c?directory_alias=poc-mycprc-quicksuite"
-            frameborder="0"
-            allowfullscreen>
-          </iframe>
+      <!-- Login Overlay (shown on load) -->
+      <div id="loginOverlay" class="login-overlay">
+        <div class="login-box">
+          <div class="login-header">
+            <h3 class="fw-semibold mb-1">MyCPRC Login</h3>
+            <p class="text-muted">Sign in to access your dashboard</p>
+          </div>
+
+          <form id="loginForm">
+            <div class="mb-3">
+              <label for="email" class="form-label">Email address</label>
+              <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+            </div>
+
+            <div class="mb-4">
+              <label for="password" class="form-label">Password</label>
+              <input type="password" class="form-control" id="password" placeholder="••••••••" required>
+            </div>
+
+            <button type="submit" class="btn-login">Sign In</button>
+          </form>
         </div>
       </div>
+
+      <!-- Dashboard Content (hidden until login) -->
+      <div id="dashboardContent" class="d-none">
+        <div class="dashboard-container">
+          <div class="dashboard-header">
+            <h3 class="mb-0 fw-semibold text-dark">MyCPRC Dashboard</h3>
+            <small class="text-muted">Real-time Crisis Preparedness & Response Overview</small>
+          </div>
+
+          <!-- QuickSight Embedded Dashboard -->
+          <div class="iframe-container">
+            <iframe
+              src="https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/917003953046/dashboards/29a70825-839a-4e6e-aac6-2480eebf0f6c?directory_alias=poc-mycprc-quicksuite"
+              frameborder="0"
+              allowfullscreen>
+            </iframe>
+          </div>
+
+          <!-- Sign Out Button -->
+          <div class="text-center mt-4">
+            <button id="signOutBtn" class="btn-signout">
+              Sign Out
+            </button>
+          </div>
+        </div>
+      </div>
+
     </main>
 
   </div>
@@ -174,6 +317,45 @@
   fetch("footer.html")
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
+</script>
+
+<!-- Basic Login Logic (client-side demo only) -->
+<script>
+  const loginOverlay = document.getElementById('loginOverlay');
+  const dashboardContent = document.getElementById('dashboardContent');
+  const loginForm = document.getElementById('loginForm');
+  const signOutBtn = document.getElementById('signOutBtn');
+
+  // Simple demo login check
+  loginForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    // Basic validation (demo only - no real security)
+    if (email.includes('@') && password.length >= 6) {
+      loginOverlay.classList.add('d-none');
+      dashboardContent.classList.remove('d-none');
+      localStorage.setItem('mycprc_loggedIn', 'true'); // Remember login (demo)
+    } else {
+      alert('Please enter a valid email and password (at least 6 characters).');
+    }
+  });
+
+  // Sign Out
+  signOutBtn.addEventListener('click', function() {
+    loginOverlay.classList.remove('d-none');
+    dashboardContent.classList.add('d-none');
+    localStorage.removeItem('mycprc_loggedIn');
+    loginForm.reset();
+  });
+
+  // Auto-show dashboard if already "logged in" (demo)
+  if (localStorage.getItem('mycprc_loggedIn') === 'true') {
+    loginOverlay.classList.add('d-none');
+    dashboardContent.classList.remove('d-none');
+  }
 </script>
 
 </body>
