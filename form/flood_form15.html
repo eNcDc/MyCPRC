@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MyCPRC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Search CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet">
+  
+  <!-- jQuery (REQUIRED for Select2) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Main CSS -->
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div id="header"></div>
+
+<!-- BODY -->
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- LEFT PANEL -->
+    <!-- LEFT PANEL -->
+    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
+      <!-- Sidebar will be loaded here -->
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="col-md-9 col-lg-10 p-4">
+      <div class="card shadow-sm border-1">
+        <div class="card-body">
+          <ul class="nav nav-pills justify-content-center">
+            <li class="nav-item"><a class="nav-link" href="flood_form3.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 3 (BKP)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form4.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 4 (BPKK)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form5.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 5 (HECC)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form6.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 6 (BKP)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form7.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 7 (BKP)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form8.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 8 (BKP)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form11.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 11 (BPKj)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form12.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 12 (BKP/BPP)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form13.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 13 (BKKM)</a></li>
+            <li class="nav-item"><a class="nav-link" href="flood_form15.html"><i class="bi bi-file-earmark-text me-2"></i>Borang 15 (BSM)</a></li>
+          </ul>
+        </div>
+
+        <div class="card-body">
+        <form id="wizardForm" action="http://localhost:3000/submit" method="POST">
+
+        <div class="wizard-step active">
+            <h5 class="mb-3">BORANG 15 : ANGGOTA KKM TERJEJAS BANJIR</h5>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                <label class="form-label">Negeri</label>
+                <select class="form-select" id="negeri" name="negeri" required>
+                    <option value="">-- Sila Pilih Negeri --</option>
+                </select>
+                </div>
+
+                <div class="col-md-6">
+                <label class="form-label">Daerah</label>
+                <select class="form-select" id="daerah" name="daerah" required>
+                    <option value="">-- Sila Pilih Daerah --</option>
+                    <option value="Lain-Lain">Lain-lain</option>
+                </select>
+                </div>
+
+                <div class="col-md-6 d-none" id="daerahLainWrapper">
+                <label class="form-label">Sila Nyatakan Daerah</label>
+                <input type="text" class="form-control" id="daerahLain" name="daerahLain" placeholder="Nama Daerah">
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                <label class="form-label">Nama Anggota</label>
+                <textarea id="nama_anggota" class="form-control" placeholder="Nama Penuh"></textarea>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                <label class="form-label">Jawatan</label>
+                <textarea id="jawatan" class="form-control" placeholder="Contoh: Pembantu Kesihatan Awam"></textarea>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Kategori Tempat Bertugas</label>
+                <select class="form-select" id="kategori_tempat_bertugas" name="kategori_tempat_bertugas" required>
+                <option value="">-- Sila Pilih Kategori --</option>
+                <option value="Ibu Pejabat"> Ibu Pejabat</option>
+                <option value="JKN"> JKN</option>
+                <option value="PKD"> PKD</option>
+                <option value="Pergigian"> Pergigian</option>
+                <option value="Hospital"> Hospital</option>
+                <option value="Institusi"> Institusi</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                <label class="form-label">Nama Tempat Bertugas</label>
+                <textarea id="tempat_bertugas" class="form-control" placeholder="Contoh: Klinik Kesihatan Nilai"></textarea>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Status</label>
+                <select class="form-select" id="status_terjejas" name="status_terjejas" required>
+                <option value="">-- Sila Pilih Status --</option>
+                <option value="Rumah Terjejas"> Rumah Terjejas</option>
+                <option value="Laluan Terjejas"> Laluan Terjejas</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Hadir Bekerja</label>
+                <select class="form-select" id="hadir_bekerja" name="hadir_bekerja" required>
+                <option value="">-- Sila Pilih Status --</option>
+                <option value="Ya"> Ya</option>
+                <option value="Tidak"> Tidak</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                <label class="form-label">Berada di PPS</label>
+                <select class="form-select" id="berada_di_pps" name="berada_di_pps" required>
+                <option value="">-- Sila Pilih Status --</option>
+                <option value="Ya"> Ya</option>
+                <option value="Tidak"> Tidak</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                <label class="form-label">Catatan</label>
+                <textarea id="catatan" class="form-control" placeholder="Jika terdapat maklumat tambahan"></textarea>
+            </div>
+        </div>           
+        <!-- NAVIGATION -->
+        <div class="d-flex justify-content-start mt-4 gap-2">
+        <button type="button" class="btn btn-secondary" id="prevBtn">Back</button>
+        <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+        </div>
+        </form>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div id="footer"></div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Load Header & Footer -->
+<script src="assets/js/common.js"></script>
+
+<script src="assets/js/wizard-form.js"></script>
+<script src="assets/js/negeri-daerah.js"></script>
+<script src="assets/js/flood_form.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+initNegeriDaerah({
+  negeriId: "negeri",
+  daerahId: "daerah",
+  lainWrapperId: "daerahLainWrapper",
+  lainInputId: "daerahLain"
+});
+</script>
+</body>
+</html>
