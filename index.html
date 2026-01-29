@@ -317,3 +317,21 @@
 
 </body>
 </html>
+<!-- Connect sidebar Sign Out to login overlay -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const sidebarSignOut = document.getElementById('sidebarSignOut');
+    const loginOverlay = document.getElementById('loginOverlay');
+    const dashboardContent = document.getElementById('dashboardContent');
+
+    if (sidebarSignOut) {
+      sidebarSignOut.addEventListener('click', function(e) {
+        e.preventDefault();
+        loginOverlay.style.display = 'flex';           // Show login screen
+        dashboardContent.classList.add('d-none');      // Hide dashboard
+        localStorage.removeItem('mycprc_loggedIn');    // Clear login state
+        document.getElementById('loginForm')?.reset(); // Reset form
+      });
+    }
+  });
+</script>
