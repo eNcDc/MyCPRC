@@ -158,20 +158,6 @@
       background: var(--primary-dark);
       transform: translateY(-2px);
     }
-
-    .btn-signout {
-      padding: 0.6rem 1.5rem;
-      background: #dc3545;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      margin-top: 1.5rem;
-      transition: all 0.3s;
-    }
-
-    .btn-signout:hover {
-      background: #c82333;
-    }
   </style>
 </head>
 <body>
@@ -182,7 +168,7 @@
 <div class="container-fluid">
   <div class="row">
 
-    <!-- LEFT SIDEBAR (unchanged) -->
+    <!-- LEFT SIDEBAR -->
     <aside class="col-md-3 col-lg-2 p-0">
       <!-- Load sidebar from sidebar.html -->
       <div id="sidebar-container"></div>
@@ -215,7 +201,7 @@
         </div>
       </div>
 
-      <!-- Original Dashboard (hidden until login) -->
+      <!-- Dashboard (hidden until login) -->
       <div id="dashboardContent" class="d-none">
         <div class="dashboard-container">
           <div class="dashboard-header">
@@ -223,20 +209,13 @@
             <small class="text-muted">Real-time Crisis Preparedness & Response Overview</small>
           </div>
 
-          <!-- QuickSight Embedded Dashboard (unchanged) -->
+          <!-- QuickSight Embedded Dashboard -->
           <div class="iframe-container">
             <iframe
               src="https://us-east-1.quicksight.aws.amazon.com/sn/embed/share/accounts/917003953046/dashboards/29a70825-839a-4e6e-aac6-2480eebf0f6c?directory_alias=poc-mycprc-quicksuite"
               frameborder="0"
               allowfullscreen>
             </iframe>
-          </div>
-
-          <!-- Sign Out Button (added at bottom) -->
-          <div class="text-center mt-4">
-            <button id="signOutBtn" class="btn-signout">
-              Sign Out
-            </button>
           </div>
         </div>
       </div>
@@ -275,12 +254,8 @@
   const loginOverlay = document.getElementById('loginOverlay');
   const dashboardContent = document.getElementById('dashboardContent');
   const loginForm = document.getElementById('loginForm');
-  const signOutBtn = document.getElementById('signOutBtn');
 
-  // Hide sign out button initially
-  signOutBtn.style.display = 'none';
-
-  // Login form submit
+  // On form submit
   loginForm.addEventListener('submit', function(e) {
     e.preventDefault();
 
@@ -291,38 +266,25 @@
     if (email.includes('@') && password.length >= 6) {
       loginOverlay.style.display = 'none';
       dashboardContent.classList.remove('d-none');
-      signOutBtn.style.display = 'inline-block';
       localStorage.setItem('mycprc_loggedIn', 'true');
     } else {
       alert('Please enter a valid email and password (at least 6 characters).');
     }
   });
 
-  // Sign Out
-  signOutBtn.addEventListener('click', function() {
-    loginOverlay.style.display = 'flex';
-    dashboardContent.classList.add('d-none');
-    signOutBtn.style.display = 'none';
-    localStorage.removeItem('mycprc_loggedIn');
-    loginForm.reset();
-  });
-
   // Auto-login if previously "logged in" (demo)
   if (localStorage.getItem('mycprc_loggedIn') === 'true') {
     loginOverlay.style.display = 'none';
     dashboardContent.classList.remove('d-none');
-    signOutBtn.style.display = 'inline-block';
   }
 </script>
-<!-- Improved Sidebar Sign Out (waits for sidebar to load) -->
+
+<!-- Sidebar Sign Out handler (waits for sidebar to load) -->
 <script>
   // Run this after everything loads, including fetch
   window.addEventListener('load', function() {
-    // Give fetch a little time to complete (0.5–1 second delay)
     setTimeout(() => {
       const sidebarSignOut = document.getElementById('sidebarSignOut');
-      const loginOverlay = document.getElementById('loginOverlay');
-      const dashboardContent = document.getElementById('dashboardContent');
 
       console.log("Looking for sidebarSignOut:", sidebarSignOut); // Debug
 
@@ -339,8 +301,9 @@
       } else {
         console.log("sidebarSignOut ID NOT FOUND — check sidebar.html");
       }
-    }, 800); // 800ms delay — adjust to 1500 if still not found
+    }, 800);
   });
 </script>
+
 </body>
 </html>
