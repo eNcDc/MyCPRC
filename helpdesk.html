@@ -171,5 +171,34 @@
     }, 800); // 800ms delay — adjust to 1500 if still not found
   });
 </script>
+<!-- Sidebar Sign Out (works on all pages) -->
+<script>
+  window.addEventListener('load', function() {
+    setTimeout(() => {
+      const sidebarSignOut = document.getElementById('sidebarSignOut');
+
+      if (sidebarSignOut) {
+        sidebarSignOut.addEventListener('click', function(e) {
+          e.preventDefault();
+
+          // Check if this page has login/dashboard elements
+          const loginOverlay = document.getElementById('loginOverlay');
+          const dashboardContent = document.getElementById('dashboardContent');
+
+          if (loginOverlay && dashboardContent) {
+            // Dashboard page — show login, hide dashboard
+            loginOverlay.style.display = 'flex';
+            dashboardContent.classList.add('d-none');
+            localStorage.removeItem('mycprc_loggedIn');
+            document.getElementById('loginForm')?.reset();
+          } else {
+            // Non-dashboard page (like alert.html) — redirect to login/dashboard page
+            window.location.href = "index.html";
+          }
+        });
+      }
+    }, 1000); // Delay for sidebar fetch to finish
+  });
+</script>
 </body>
 </html>
