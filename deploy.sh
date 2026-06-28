@@ -4,7 +4,6 @@ set -e
 
 STACK_NAME="mycprc-myemt"
 REGION="ap-southeast-1"
-S3_DEPLOY_BUCKET="poc-mycprc-myemt"   # reuse the same bucket for SAM artifacts
 
 echo "▶  Building SAM..."
 sam build
@@ -12,8 +11,7 @@ sam build
 echo "▶  Deploying stack: $STACK_NAME ..."
 sam deploy \
   --stack-name "$STACK_NAME" \
-  --s3-bucket  "$S3_DEPLOY_BUCKET" \
-  --s3-prefix  "sam-deploy" \
+  --resolve-s3 \
   --region     "$REGION" \
   --capabilities CAPABILITY_IAM \
   --no-confirm-changeset
