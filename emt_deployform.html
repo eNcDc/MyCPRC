@@ -140,7 +140,7 @@ async function approve() {
   if (!DEPLOY_ID) return alert('ID permohonan tidak ditemui.');
   if (!confirm("Sahkan LULUS permohonan ini?")) return;
   try {
-    const res = await fetch(`/api/members/${DEPLOY_ID}/status`, {
+    const res = await fetch(`${API}/api/members/${DEPLOY_ID}/status`, {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'approved' })
     });
@@ -156,7 +156,7 @@ async function reject() {
   if (!DEPLOY_ID) return alert('ID permohonan tidak ditemui.');
   if (!confirm("Sahkan TOLAK permohonan ini?")) return;
   try {
-    const res = await fetch(`/api/members/${DEPLOY_ID}/status`, {
+    const res = await fetch(`${API}/api/members/${DEPLOY_ID}/status`, {
       method: 'PATCH', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status: 'rejected' })
     });
@@ -178,7 +178,7 @@ function set(id, val) { const el = document.getElementById(id); if (el) el.textC
 async function loadDeployForm() {
   if (!DEPLOY_ID) return;
   try {
-    const res  = await fetch(`/api/members/${DEPLOY_ID}`);
+    const res  = await fetch(`${API}/api/members/${DEPLOY_ID}`);
     const json = await res.json();
     if (!json.success || !json.data) return;
     const m = json.data;

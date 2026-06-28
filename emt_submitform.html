@@ -171,7 +171,7 @@ async function loadSubmitForm() {
     return;
   }
   try {
-    const res  = await fetch(`/api/members/${memberId}`);
+    const res  = await fetch(`${API}/api/members/${memberId}`);
     const json = await res.json();
     if (!json.success || !json.data) return;
     const m = json.data;

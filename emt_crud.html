@@ -243,6 +243,7 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
@@ -254,8 +255,8 @@ const MISSION_STATUS = {
 
 async function loadDashboard() {
   const [mRes, aRes] = await Promise.all([
-    fetch('/api/missions'),
-    fetch('/api/members')
+    fetch(`${API}/api/missions`),
+    fetch(`${API}/api/members`)
   ]);
   const missions = (await mRes.json()).data || [];
   const members  = (await aRes.json()).data || [];

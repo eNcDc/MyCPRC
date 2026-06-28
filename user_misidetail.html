@@ -409,6 +409,7 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- ══ LIVE MISSION DATA ══ -->
@@ -418,7 +419,7 @@ fetch("sidebar.html")
   if (!id) return;
 
   try {
-    const res  = await fetch('/api/missions/' + id);
+    const res  = await fetch(`${API}/api/missions/` + id);
     const json = await res.json();
     if (!json.success || !json.data) { document.getElementById('ud-name').textContent = 'Misi tidak dijumpai.'; return; }
     const m = json.data;

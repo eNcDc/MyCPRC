@@ -159,14 +159,15 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 async function loadPemohon() {
   try {
     const [mRes, cRes] = await Promise.all([
-      fetch('/api/members?status=approved'),
-      fetch('/api/course-applications?status=approved')
+      fetch(`${API}/api/members?status=approved`),
+      fetch(`${API}/api/course-applications?status=approved`)
     ]);
     const members     = (await mRes.json()).data || [];
     const courseApps  = (await cRes.json()).data || [];

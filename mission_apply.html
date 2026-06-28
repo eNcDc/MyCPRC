@@ -237,6 +237,7 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
@@ -250,7 +251,7 @@ async function loadMissionApply() {
   // Load mission details
   if (MISSION_ID) {
     try {
-      const res  = await fetch('/api/missions/' + MISSION_ID);
+      const res  = await fetch(`${API}/api/missions/` + MISSION_ID);
       const json = await res.json();
       if (json.success && json.data) {
         const m = json.data;
@@ -273,8 +274,8 @@ async function loadMissionApply() {
   }
   try {
     const [mRes, cRes] = await Promise.all([
-      fetch('/api/members/' + MEMBER_ID),
-      fetch('/api/course-applications?memberId=' + MEMBER_ID)
+      fetch(`${API}/api/members/` + MEMBER_ID),
+      fetch(`${API}/api/course-applications?memberId=` + MEMBER_ID)
     ]);
     const mJson = await mRes.json();
     const cJson = await cRes.json();
@@ -308,7 +309,7 @@ document.getElementById('btn-confirm-join').addEventListener('click', async func
   this.disabled = true;
   this.textContent = 'Menghantar...';
   try {
-    const res  = await fetch('/api/mission-applications', {
+    const res  = await fetch(`${API}/api/mission-applications`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ memberId: MEMBER_ID, missionId: MISSION_ID })

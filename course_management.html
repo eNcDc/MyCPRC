@@ -269,6 +269,7 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
@@ -280,7 +281,7 @@ const SESSION_STATUS_BADGE = {
 
 async function loadSessions() {
   try {
-    const res  = await fetch('/api/sessions');
+    const res  = await fetch(`${API}/api/sessions`);
     const json = await res.json();
     const sessions = json.data || [];
     const tbody = document.getElementById('tbody-sessions');
