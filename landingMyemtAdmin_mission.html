@@ -117,7 +117,7 @@
 
                                 <div>
                                     <small class="text-muted d-block">Semua Misi</small>
-                                    <h3 class="fw-bold mb-0">30</h3>
+                                    <h3 class="fw-bold mb-0" id="cnt-misi-semua">...</h3>
                                 </div>
 
                                 <div class="border rounded-circle p-3 bg-light">
@@ -226,28 +226,8 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody>
-                                        <tr>
-                                            <td>EMT Sabah Flood Ops</td>
-                                            <td>Sabah</td>
-                                            <td><span class="badge bg-primary">Aktif</span></td>
-                                            <td>
-                                                <a href="mission_detail.html" class="btn btn-sm btn-outline-primary">
-                                                    Papar
-                                                </a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>EMT Kelantan Flood Ops</td>
-                                            <td>Kelantan</td>
-                                            <td><span class="badge bg-success">Selesai</span></td>
-                                            <td>
-                                                <a href="mission_detail.html" class="btn btn-sm btn-outline-primary">
-                                                    Papar
-                                                </a>
-                                            </td>   
-                                        </tr>
+                                    <tbody id="tbody-all-missions">
+                                        <!-- populated by loadMissionData() -->
                                     </tbody>
                                 </table>
 
@@ -270,7 +250,7 @@
                                     <small class="text-muted d-block">
                                         Misi Berjaya Disiapkan
                                     </small>
-                                    <h3 class="fw-bold mb-0">18</h3>
+                                    <h3 class="fw-bold mb-0" id="cnt-misi-selesai">...</h3>
                                 </div>
 
                                 <div class="border rounded-circle p-3 bg-light">
@@ -296,7 +276,7 @@
                                     <small class="text-muted d-block">
                                         Misi Sedang Aktif
                                     </small>
-                                    <h3 class="fw-bold mb-0">5</h3>
+                                    <h3 class="fw-bold mb-0" id="cnt-misi-aktif">...</h3>
                                 </div>
 
                                 <div class="border rounded-circle p-3 bg-light">
@@ -325,7 +305,7 @@
                                     <small class="text-muted d-block">
                                         Misi Dalam Perancangan
                                     </small>
-                                    <h3 class="fw-bold mb-0">7</h3>
+                                    <h3 class="fw-bold mb-0" id="cnt-misi-plan">...</h3>
                                 </div>
 
                                 <div class="border rounded-circle p-3 bg-light">
@@ -369,38 +349,8 @@
                                             </tr>
                                         </thead>
 
-                                        <tbody>
-
-                                            <tr>
-                                                <td>EMT Sabah Flood Ops</td>
-                                                <td>Sabah</td>
-                                                <td>20/06/2026</td>
-                                                <td>
-                                                    <span class="badge bg-warning text-dark">Perancangan</span>
-                                                </td>
-                                                <td class="text-end">
-                                                    <a href="mission_detail.html?id=1"
-                                                    class="btn btn-sm btn-outline-primary">
-                                                        Kemaskini
-                                                    </a>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-                                                <td>EMT Johor Emergency Ops</td>
-                                                <td>Johor</td>
-                                                <td>25/06/2026</td>
-                                                <td>
-                                                    <span class="badge bg-warning text-dark">Perancangan</span>
-                                                </td>
-                                                <td class="text-end">
-                                                    <a href="mission_detail.html?id=2"
-                                                    class="btn btn-sm btn-outline-primary">
-                                                        Kemaskini
-                                                    </a>
-                                                </td>
-                                            </tr>
-
+                                        <tbody id="tbody-plan-missions">
+                                            <!-- populated by loadMissionData() -->
                                         </tbody>
 
                                     </table>
@@ -424,7 +374,7 @@
                                         <small class="text-muted d-block">
                                             Jumlah Asset EMT
                                         </small>
-                                        <h3 class="fw-bold mb-0">342</h3>
+                                        <h3 class="fw-bold mb-0">0</h3>
                                     </div>
 
                                     <div class="border rounded-circle p-3 bg-light">
@@ -451,7 +401,7 @@
                         <small class="text-muted d-block">
                             Jumlah Logistik
                         </small>
-                        <h3 class="fw-bold mb-0">26</h3>
+                        <h3 class="fw-bold mb-0">0</h3>
                         </div>
 
                         <div class="border rounded-circle p-3 bg-light">
@@ -479,7 +429,7 @@
                                         <small class="text-muted d-block">
                                             Lokasi Penyimpanan
                                         </small>
-                                        <h3 class="fw-bold mb-0 text-dark">12</h3>
+                                        <h3 class="fw-bold mb-0 text-dark">0</h3>
                                     </div>
 
                                     <div class="border rounded-circle p-3 bg-light">
@@ -505,7 +455,7 @@
                                         <small class="text-muted d-block">
                                             Laporan MDS EMT
                                         </small>
-                                        <h3 class="fw-bold mb-0">1,254</h3>
+                                        <h3 class="fw-bold mb-0">0</h3>
                                     </div>
 
                                     <div class="border rounded-circle p-3 bg-light">
@@ -547,24 +497,24 @@
 
                                 <div class="mb-3">
                                     <small class="text-muted">Jumlah Semua Misi</small>
-                                    <h4 class="fw-bold mb-0">34</h4>
+                                    <h4 class="fw-bold mb-0" id="summary-total">...</h4>
                                 </div>
 
                                 <hr>
 
                                 <div class="mb-3">
                                     <small class="text-muted">Misi Sedang Berjalan</small>
-                                    <h5 class="fw-bold mb-0">5</h5>
+                                    <h5 class="fw-bold mb-0" id="summary-aktif">...</h5>
                                 </div>
 
                                 <div class="mb-3">
                                     <small class="text-muted">Misi Berjaya Disiapkan</small>
-                                    <h5 class="fw-bold mb-0">18</h5>
+                                    <h5 class="fw-bold mb-0" id="summary-selesai">...</h5>
                                 </div>
 
                                 <div class="mb-3">
                                     <small class="text-muted">Misi Dalam Perancangan</small>
-                                    <h5 class="fw-bold mb-0">11</h5>
+                                    <h5 class="fw-bold mb-0" id="summary-plan">...</h5>
                                 </div>
 
                             </div>
@@ -602,6 +552,7 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
@@ -610,67 +561,25 @@ fetch("sidebar.html")
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
-    // ===== ASSET =====
-    const assetChart = new Chart(document.getElementById('assetChart'), {
+    // ===== ASSET (no API yet) =====
+    new Chart(document.getElementById('assetChart'), {
         type: 'bar',
-        data: {
-            labels: ['Asset', 'Logistik', 'Storage', 'MDS'],
-            datasets: [{
-                label: 'Jumlah',
-                data: [342, 26, 12, 1254]
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
+        data: { labels: ['Asset', 'Logistik', 'Storage', 'MDS'], datasets: [{ label: 'Jumlah', data: [0, 0, 0, 0] }] },
+        options: { responsive: true, maintainAspectRatio: false }
     });
 
-    // ===== LOGISTIC =====
-    const logisticChart = new Chart(document.getElementById('logisticChart'), {
+    // ===== LOGISTIC (no API yet) =====
+    new Chart(document.getElementById('logisticChart'), {
         type: 'bar',
-        data: {
-            labels: ['Aktif', 'In Transit', 'Idle'],
-            datasets: [{
-                label: 'Logistik',
-                data: [10, 8, 8]
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
+        data: { labels: ['Aktif', 'In Transit', 'Idle'], datasets: [{ label: 'Logistik', data: [0, 0, 0] }] },
+        options: { responsive: true, maintainAspectRatio: false }
     });
 
-    // ===== MDS =====
-    const mdsChart = new Chart(document.getElementById('mdsChart'), {
+    // ===== MDS (no API yet) =====
+    new Chart(document.getElementById('mdsChart'), {
         type: 'bar',
-        data: {
-            labels: ['Trauma', 'Infeksi', 'Kecemasan', 'Lain-lain'],
-            datasets: [{
-                label: 'Kes',
-                data: [120, 300, 150, 80]
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
-    });
-
-    // ===== MISI STATUS =====
-    const missionChart = new Chart(document.getElementById('missionChart'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Aktif', 'Berjaya', 'Belum Siap', 'Perancangan'],
-            datasets: [{
-                data: [5, 18, 7, 4]
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
+        data: { labels: ['Trauma', 'Infeksi', 'Kecemasan', 'Lain-lain'], datasets: [{ label: 'Kes', data: [0, 0, 0, 0] }] },
+        options: { responsive: true, maintainAspectRatio: false }
     });
 
 });
@@ -692,35 +601,117 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-<!--charts-->
+<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+<!-- ══ LIVE MISSION DATA ══ -->
 <script>
-const ctx = document.getElementById('missionPieChart');
 
-new Chart(ctx, {
-    type: 'doughnut',
-    data: {
-        labels: [
-            'Sedang Berjalan',
-            'Berjaya',
-            'Perancangan'
-        ],
-        datasets: [{
-            data: [5, 18, 11],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: {
-            legend: {
-                position: 'bottom'
-            }
-        }
+
+function statusBadge(status) {
+  const map = {
+    'Sedang Dijalankan': 'bg-primary',
+    'Selesai':           'bg-success',
+    'Perancangan':       'bg-warning text-dark'
+  };
+  return `<span class="badge ${map[status] || 'bg-secondary'}">${status}</span>`;
+}
+
+function fmtDate(d) {
+  if (!d) return '-';
+  const p = d.split('-');
+  return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
+}
+
+async function loadMissionData() {
+  try {
+    const [summaryRes, missionsRes] = await Promise.all([
+      fetch(`${API}/api/missions/summary`),
+      fetch(`${API}/api/missions`)
+    ]);
+    const s = await summaryRes.json();
+    const m = await missionsRes.json();
+    const missions = m.data || [];
+
+    // Update counter cards
+    document.getElementById('cnt-misi-semua').textContent  = s.total    || 0;
+    document.getElementById('cnt-misi-selesai').textContent = s.completed || 0;
+    document.getElementById('cnt-misi-aktif').textContent   = s.active    || 0;
+    document.getElementById('cnt-misi-plan').textContent    = s.planning  || 0;
+
+    // Update Ringkasan sidebar
+    document.getElementById('summary-total').textContent   = s.total     || 0;
+    document.getElementById('summary-aktif').textContent   = s.active    || 0;
+    document.getElementById('summary-selesai').textContent = s.completed || 0;
+    document.getElementById('summary-plan').textContent    = s.planning  || 0;
+
+    // All missions modal table
+    const tbodyAll = document.getElementById('tbody-all-missions');
+    if (tbodyAll) {
+      tbodyAll.innerHTML = missions.length ? missions.map(mis => `
+        <tr>
+          <td>${mis.name}</td>
+          <td>${mis.state}</td>
+          <td>${statusBadge(mis.status)}</td>
+          <td><a href="mission_detail.html?id=${mis.id}" class="btn btn-sm btn-outline-primary">Papar</a></td>
+        </tr>`).join('') : '<tr><td colspan="4" class="text-center text-muted">Tiada rekod.</td></tr>';
     }
-});
+
+    // Planning missions modal table
+    const tbodyPlan = document.getElementById('tbody-plan-missions');
+    const planningMissions = missions.filter(mis => mis.status === 'Perancangan');
+    if (tbodyPlan) {
+      tbodyPlan.innerHTML = planningMissions.length ? planningMissions.map(mis => `
+        <tr>
+          <td>${mis.name}</td>
+          <td>${mis.state}</td>
+          <td>${fmtDate(mis.estimatedEnd)}</td>
+          <td>${statusBadge(mis.status)}</td>
+          <td class="text-end">
+            <a href="mission_detail.html?id=${mis.id}" class="btn btn-sm btn-outline-primary">Kemaskini</a>
+          </td>
+        </tr>`).join('') : '<tr><td colspan="5" class="text-center text-muted">Tiada misi dalam perancangan.</td></tr>';
+    }
+
+    // Update pie chart
+    updateMissionChart(s.active || 0, s.completed || 0, s.planning || 0);
+
+  } catch (err) {
+    console.error('Gagal muatkan data misi:', err);
+  }
+}
+
+let missionPieChart, missionModalChart;
+function updateMissionChart(active, completed, planning) {
+  // Outside-modal pie chart
+  const ctx = document.getElementById('missionPieChart');
+  if (ctx) {
+    if (missionPieChart) missionPieChart.destroy();
+    missionPieChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Sedang Berjalan', 'Berjaya', 'Perancangan'],
+        datasets: [{ data: [active, completed, planning], borderWidth: 1 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+    });
+  }
+  // In-modal mission status chart
+  const ctx2 = document.getElementById('missionChart');
+  if (ctx2) {
+    if (missionModalChart) missionModalChart.destroy();
+    missionModalChart = new Chart(ctx2, {
+      type: 'doughnut',
+      data: {
+        labels: ['Aktif', 'Berjaya', 'Perancangan'],
+        datasets: [{ data: [active, completed, planning] }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadMissionData);
 </script>
 
 </body>

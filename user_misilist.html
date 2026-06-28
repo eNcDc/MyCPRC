@@ -112,7 +112,7 @@
 
                     <div>
                     <small class="text-muted">Selesai</small>
-                    <h4 class="fw-bold mb-0">18</h4>
+                    <h4 class="fw-bold mb-0" id="cnt-selesai">-</h4>
                     </div>
 
                 </div>
@@ -130,7 +130,7 @@
 
                     <div>
                     <small class="text-muted">Sedang Dijalankan</small>
-                    <h4 class="fw-bold mb-0">7</h4>
+                    <h4 class="fw-bold mb-0" id="cnt-aktif">-</h4>
                     </div>
 
                 </div>
@@ -148,7 +148,7 @@
 
                     <div>
                     <small class="text-muted">Perancangan</small>
-                    <h4 class="fw-bold mb-0">12</h4>
+                    <h4 class="fw-bold mb-0" id="cnt-perancangan">-</h4>
                     </div>
 
                 </div>
@@ -191,50 +191,8 @@
                                 </tr>
                             </thead>
 
-                            <tbody>
-
-                                <tr>
-                                    <td class="fw-semibold">EMT Operasi Banjir Sabah</td>
-                                    <td>01/06/2026</td>
-                                    <td>15/06/2026</td>
-                                    <td class="text-muted">-</td>
-                                    <td><span class="badge bg-primary">Sedang Dijalankan</span></td>
-                                    <td class="text-center">
-                                        <a href="user_misidetail.html"
-                                        class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                            Papar Butiran
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td class="fw-semibold">EMT Kelantan Flood Ops</td>
-                                    <td>10/05/2026</td>
-                                    <td>25/05/2026</td>
-                                    <td>24/05/2026</td>
-                                    <td><span class="badge bg-success">Selesai</span></td>
-                                    <td class="text-center">
-                                        <a href="user_misidetail.html"
-                                        class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                            Papar Butiran
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td class="fw-semibold">EMT Ops Kecemasan Johor</td>
-                                    <td>20/06/2026</td>
-                                    <td>05/07/2026</td>
-                                    <td class="text-muted">-</td>
-                                    <td><span class="badge bg-warning text-dark">Perancangan</span></td>
-                                    <td class="text-center">
-                                        <a href="user_misidetail.html"
-                                        class="btn btn-sm btn-outline-primary rounded-pill px-3">
-                                            Papar Butiran
-                                        </a>
-                                    </td>
-                                </tr>
-
+                            <tbody id="tbody-misi-list">
+                                <tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr>
                             </tbody>
 
                         </table>
@@ -271,5 +229,45 @@ fetch("sidebar.html")
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const STATUS_BADGE = {
+  'Selesai':           'bg-success',
+  'Sedang Dijalankan': 'bg-primary',
+  'Perancangan':       'bg-warning text-dark'
+};
+
+async function loadMisiList() {
+  try {
+    const res = await fetch('/api/missions');
+    const missions = (await res.json()).data || [];
+
+    document.getElementById('cnt-selesai').textContent    = missions.filter(m => m.status === 'Selesai').length;
+    document.getElementById('cnt-aktif').textContent      = missions.filter(m => m.status === 'Sedang Dijalankan').length;
+    document.getElementById('cnt-perancangan').textContent = missions.filter(m => m.status === 'Perancangan').length;
+
+    const tbody = document.getElementById('tbody-misi-list');
+    if (!missions.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">Tiada misi berdaftar</td></tr>';
+      return;
+    }
+    tbody.innerHTML = missions.map(m => `
+      <tr>
+        <td class="fw-semibold">${m.name || '-'}</td>
+        <td>${m.startDate || '-'}</td>
+        <td>${m.estimatedEnd || '-'}</td>
+        <td>${m.actualEnd || '<span class="text-muted">-</span>'}</td>
+        <td><span class="badge ${STATUS_BADGE[m.status] || 'bg-secondary'}">${m.status || '-'}</span></td>
+        <td class="text-center">
+          <a href="user_misidetail.html?id=${m.id}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Papar Butiran</a>
+        </td>
+      </tr>`).join('');
+  } catch (e) {
+    document.getElementById('tbody-misi-list').innerHTML = '<tr><td colspan="6" class="text-center text-danger py-3">Gagal memuatkan data.</td></tr>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadMisiList);
+</script>
 </body>
 </html>

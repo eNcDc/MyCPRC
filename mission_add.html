@@ -105,7 +105,7 @@
   <div class="card shadow-sm mb-4">
     <div class="card-body">
 
-      <form>
+      <form id="missionForm">
 
         <!-- STEP CONTENT -->
         <div class="tab-content">
@@ -119,32 +119,32 @@
 
               <div class="col-md-6">
                 <label class="form-label">Nama Misi</label>
-                <input type="text" class="form-control" placeholder="Contoh: EMT Operasi Banjir Sabah">
+                <input type="text" id="missionName" class="form-control" placeholder="Contoh: EMT Operasi Banjir Sabah" required>
               </div>
 
               <div class="col-md-3">
                 <label class="form-label">Tarikh Mula</label>
-                <input type="date" class="form-control">
+                <input type="date" id="startDate" class="form-control" required>
               </div>
 
               <div class="col-md-3">
                 <label class="form-label">Anggaran Tamat</label>
-                <input type="date" class="form-control">
+                <input type="date" id="estimatedEnd" class="form-control" required>
               </div>
 
               <div class="col-md-3">
                 <label class="form-label">Tarikh Selesai</label>
-                <input type="date" class="form-control">
+                <input type="date" id="actualEnd" class="form-control">
               </div>
 
               <div class="col-md-3">
                 <label class="form-label">Status Misi</label>
 
-                <select class="form-select">
-                  <option selected disabled>-- Pilih Status --</option>
-                  <option value="planning">Dalam Perancangan</option>
-                  <option value="active">Sedang Dijalankan</option>
-                  <option value="completed">Selesai</option>
+                <select class="form-select" id="missionStatus" required>
+                  <option selected disabled value="">-- Pilih Status --</option>
+                  <option value="Perancangan">Dalam Perancangan</option>
+                  <option value="Sedang Dijalankan">Sedang Dijalankan</option>
+                  <option value="Selesai">Selesai</option>
                 </select>
 
                 <small class="text-muted">
@@ -163,12 +163,12 @@
 
               <div class="col-md-6">
                 <label class="form-label">Nama Ketua Misi</label>
-                <input type="text" class="form-control" placeholder="Contoh: Dr. Ahmad">
+                <input type="text" id="leader" class="form-control" placeholder="Contoh: Dr. Ahmad">
               </div>
 
               <div class="col-md-6">
                 <label class="form-label">Lokasi Misi</label>
-                <input type="text" class="form-control" placeholder="Contoh: Sabah, Malaysia">
+                <input type="text" id="location" class="form-control" placeholder="Contoh: Sabah, Malaysia">
               </div>
 
                 <div class="col-md-6">
@@ -176,10 +176,10 @@
 
                 <select class="form-select" id="jenisMisi" onchange="toggleJenisLain()">
                     <option selected disabled>-- Pilih Jenis Misi --</option>
-                    <option value="banjir">Bantuan Banjir</option>
-                    <option value="gempa">Bantuan Gempa Bumi</option>
-                    <option value="perubatan">Penghantaran Perubatan</option>
-                    <option value="kecemasan">Sokongan Kecemasan</option>
+                    <option value="Bantuan Banjir">Bantuan Banjir</option>
+                    <option value="Bantuan Gempa Bumi">Bantuan Gempa Bumi</option>
+                    <option value="Penghantaran Perubatan">Penghantaran Perubatan</option>
+                    <option value="Sokongan Kecemasan">Sokongan Kecemasan</option>
                     <option value="lain">Lain-lain</option>
                 </select>
                 </div>
@@ -187,12 +187,12 @@
                 <!-- INPUT LAIN-LAIN -->
                 <div class="col-md-6 d-none" id="jenisMisiLainBox">
                 <label class="form-label">Nyatakan Jenis Misi</label>
-                <input type="text" class="form-control" placeholder="Sila nyatakan jenis misi">
+                <input type="text" id="jenisMisiLain" class="form-control" placeholder="Sila nyatakan jenis misi">
                 </div>
 
               <div class="col-md-6">
                 <label class="form-label">Catatan</label>
-                <textarea class="form-control" rows="2" placeholder="Maklumat tambahan (jika ada)"></textarea>
+                <textarea id="notes" class="form-control" rows="2" placeholder="Maklumat tambahan (jika ada)"></textarea>
               </div>
 
             </div>
@@ -203,7 +203,7 @@
 
         <!-- SUBMIT BUTTON -->
         <div class="d-flex justify-content-end mt-4">
-          <button type="submit" class="btn btn-primary rounded-pill shadow-sm px-4">
+          <button type="submit" id="submitBtn" class="btn btn-primary rounded-pill shadow-sm px-4">
             <i class="bi bi-check-circle me-1"></i> Simpan Misi
           </button>
         </div>
@@ -242,13 +242,61 @@ fetch("sidebar.html")
 function toggleJenisLain() {
   const select = document.getElementById("jenisMisi");
   const box = document.getElementById("jenisMisiLainBox");
-
   if (select.value === "lain") {
     box.classList.remove("d-none");
   } else {
     box.classList.add("d-none");
   }
 }
+</script>
+
+<script>
+document.getElementById('missionForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const jenisMisi = document.getElementById('jenisMisi');
+  const type = jenisMisi.value === 'lain'
+    ? (document.getElementById('jenisMisiLain').value.trim() || 'Lain-lain')
+    : jenisMisi.value;
+
+  const payload = {
+    name:         document.getElementById('missionName').value.trim(),
+    startDate:    document.getElementById('startDate').value,
+    estimatedEnd: document.getElementById('estimatedEnd').value,
+    actualEnd:    document.getElementById('actualEnd').value || null,
+    status:       document.getElementById('missionStatus').value,
+    leader:       document.getElementById('leader').value.trim(),
+    location:     document.getElementById('location').value.trim(),
+    type,
+    notes:        document.getElementById('notes').value.trim()
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
+
+  try {
+    const res    = await fetch('/api/missions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+
+    if (result.success) {
+      alert('✅ Misi berjaya disimpan! ID: ' + result.data.id);
+      window.location.href = 'emt_crud.html';
+    } else {
+      alert('❌ Ralat: ' + result.message);
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Simpan Misi';
+    }
+  } catch (err) {
+    alert('❌ Gagal menghubungi pelayan.');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Simpan Misi';
+  }
+});
 </script>
 
 </body>

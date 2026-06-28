@@ -37,6 +37,17 @@
 
       </div>
 
+      <!-- NOT REGISTERED ALERT (hidden by default) -->
+      <div class="alert alert-warning d-flex justify-content-between align-items-center mb-3" id="not-registered-alert" style="display:none!important">
+        <div>
+          <i class="bi bi-exclamation-triangle-fill me-2"></i>
+          Anda belum mendaftar sebagai ahli MyEMT. Sila hantar permohonan terlebih dahulu.
+        </div>
+        <a href="emt_form.html" class="btn btn-warning btn-sm ms-3 text-nowrap">
+          <i class="bi bi-pencil-square me-1"></i> Daftar Sekarang
+        </a>
+      </div>
+
       <!-- STATUS CARD -->
       <div class="card shadow-sm mb-3">
         <div class="card-body d-flex justify-content-between align-items-center">
@@ -56,20 +67,20 @@
         <div class="card-header bg-white"><strong>1. Maklumat Pemohon</strong></div>
         <div class="card-body">
 
-          <div class="row mb-2"><div class="col-md-4 text-muted">Nama</div><div class="col-md-8">Muhammad Bin Abdullah</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">No Pengenalan</div><div class="col-md-8">101010101010</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Umur</div><div class="col-md-8">29</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Jantina</div><div class="col-md-8">Lelaki</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Jawatan</div><div class="col-md-8">Pegawai Perubatan</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Gred</div><div class="col-md-8">XX</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Tempoh</div><div class="col-md-8">5 tahun</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Negeri</div><div class="col-md-8">Kelantan</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Fasiliti</div><div class="col-md-8">Klinik Kesihatan</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Tempat Bekerja</div><div class="col-md-8">Klinik Kesihatan Kota Bharu</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Alamat Rumah</div><div class="col-md-8">No 13, Jalan Batu Pahat, 00000, Selangor</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Emel Pejabat</div><div class="col-md-8">test@kkm.gov.my</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Emel Peribadi</div><div class="col-md-8">test@gmail.com.my</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Telefon</div><div class="col-md-8">0123456789</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Nama</div><div class="col-md-8" id="sf-name">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">No Pengenalan</div><div class="col-md-8" id="sf-ic">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Umur</div><div class="col-md-8" id="sf-age">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Jantina</div><div class="col-md-8" id="sf-gender">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Jawatan</div><div class="col-md-8" id="sf-designation">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Gred</div><div class="col-md-8" id="sf-grade">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Tempoh</div><div class="col-md-8" id="sf-service">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Negeri</div><div class="col-md-8" id="sf-state">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Fasiliti</div><div class="col-md-8" id="sf-facility">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Tempat Bekerja</div><div class="col-md-8" id="sf-workplace">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Alamat Rumah</div><div class="col-md-8" id="sf-address">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Emel Pejabat</div><div class="col-md-8" id="sf-email-office">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Emel Peribadi</div><div class="col-md-8" id="sf-email-personal">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Telefon</div><div class="col-md-8" id="sf-phone">-</div></div>
         </div>
       </div>
 
@@ -78,10 +89,10 @@
         <div class="card-header bg-white"><strong>2. Maklumat Kecemasan</strong></div>
         <div class="card-body">
 
-          <div class="row mb-2"><div class="col-md-4 text-muted">Waris</div><div class="col-md-8">Ali bin Ahmad</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Hubungan</div><div class="col-md-8">Bapa</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Alamat Rumah</div><div class="col-md-8">No 13, Jalan Batu Pahat, 00000, Selangor</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Telefon</div><div class="col-md-8">0199999999</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Waris</div><div class="col-md-8" id="sf-emergency-name">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Hubungan</div><div class="col-md-8" id="sf-emergency-relation">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Alamat Rumah</div><div class="col-md-8" id="sf-emergency-address">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Telefon</div><div class="col-md-8" id="sf-emergency-phone">-</div></div>
 
         </div>
       </div>
@@ -91,8 +102,8 @@
         <div class="card-header bg-white"><strong>3. Profesional</strong></div>
         <div class="card-body">
 
-          <div class="row mb-2"><div class="col-md-4 text-muted">Pernah menghadiri latihan bencana atau respons kecemasan?</div><div class="col-md-8">Ya</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Pengalaman penugasan antarabangsa / misi kemanusiaan?</div><div class="col-md-8">Tidak</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Pernah menghadiri latihan bencana atau respons kecemasan?</div><div class="col-md-8" id="sf-pro-training">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Pengalaman penugasan antarabangsa / misi kemanusiaan?</div><div class="col-md-8" id="sf-pro-international">-</div></div>
 
         </div>
       </div>
@@ -102,11 +113,11 @@
         <div class="card-header bg-white"><strong>4. Kesihatan</strong></div>
         <div class="card-body">
 
-          <div class="row mb-2"><div class="col-md-4 text-muted">Mempunyai keadaan perubatan yang boleh menjejaskan keupayaan bekerja dalam persekitaran bencana atau kecemasan</div><div class="col-md-8">Tiada</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Menerima rawatan profesional atau kaunseling berkaitan kesihatan mental </div><div class="col-md-8">Tidak</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Mempunyai alahan</div><div class="col-md-8">Tidak</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Tinggi (cm)</div><div class="col-md-8">165cm</div></div>
-          <div class="row mb-2"><div class="col-md-4 text-muted">Berat (kg)</div><div class="col-md-8">60kg</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Mempunyai keadaan perubatan yang boleh menjejaskan keupayaan bekerja dalam persekitaran bencana atau kecemasan</div><div class="col-md-8" id="sf-health-condition">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Menerima rawatan profesional atau kaunseling berkaitan kesihatan mental </div><div class="col-md-8" id="sf-health-mental">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Mempunyai alahan</div><div class="col-md-8" id="sf-health-allergy">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Tinggi (cm)</div><div class="col-md-8" id="sf-height">-</div></div>
+          <div class="row mb-2"><div class="col-md-4 text-muted">Berat (kg)</div><div class="col-md-8" id="sf-weight">-</div></div>
         </div>
       </div>
 
@@ -145,6 +156,63 @@
   .then(res => res.text())
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
   .catch(err => console.error("Sidebar load failed:", err));
+</script>
+
+<script>
+function sfSet(id, val) { const el = document.getElementById(id); if (el) el.textContent = val || '-'; }
+
+async function loadSubmitForm() {
+  const memberId = localStorage.getItem('myemt_memberId');
+  if (!memberId) {
+    const badge = document.getElementById('statusBadge');
+    if (badge) { badge.className = 'badge bg-secondary px-3 py-2'; badge.textContent = 'Belum Mendaftar'; }
+    const alert = document.getElementById('not-registered-alert');
+    if (alert) alert.style.removeProperty('display');
+    return;
+  }
+  try {
+    const res  = await fetch(`/api/members/${memberId}`);
+    const json = await res.json();
+    if (!json.success || !json.data) return;
+    const m = json.data;
+
+    sfSet('sf-name',             m.full_name || m.name);
+    sfSet('sf-ic',               m.identification_number || m.ic);
+    sfSet('sf-age',              m.age);
+    sfSet('sf-gender',           m.gender);
+    sfSet('sf-designation',      m.designation);
+    sfSet('sf-grade',            m.grade);
+    sfSet('sf-service',          m.service_period);
+    sfSet('sf-state',            m.state);
+    sfSet('sf-facility',         m.facility_type || m.facility);
+    sfSet('sf-workplace',        m.workplace || m.facility);
+    sfSet('sf-address',          m.home_address || m.address);
+    sfSet('sf-email-office',     m.office_email || m.email);
+    sfSet('sf-email-personal',   m.personal_email);
+    sfSet('sf-phone',            m.phone);
+    sfSet('sf-emergency-name',   m.emergency_name);
+    sfSet('sf-emergency-relation', m.emergency_relation);
+    sfSet('sf-emergency-address', m.emergency_address);
+    sfSet('sf-emergency-phone',  m.emergency_phone);
+    sfSet('sf-pro-training',     m.disaster_training);
+    sfSet('sf-pro-international', m.international_experience);
+    sfSet('sf-health-condition', m.medical_condition);
+    sfSet('sf-health-mental',    m.mental_health);
+    sfSet('sf-health-allergy',   m.allergy);
+    sfSet('sf-height',           m.height ? m.height + ' cm' : null);
+    sfSet('sf-weight',           m.weight ? m.weight + ' kg' : null);
+
+    const badge = document.getElementById('statusBadge');
+    if (badge) {
+      const map = { pending: ['bg-warning text-dark', 'Dalam Semakan'], approved: ['bg-success', 'Diluluskan'], rejected: ['bg-danger', 'Ditolak'] };
+      const [cls, label] = map[m.status] || ['bg-secondary', m.status || 'Tidak Diketahui'];
+      badge.className = `badge ${cls} px-3 py-2`;
+      badge.textContent = label;
+    }
+  } catch (e) { console.error('Gagal muatkan borang:', e); }
+}
+
+document.addEventListener('DOMContentLoaded', loadSubmitForm);
 </script>
 
 </body>

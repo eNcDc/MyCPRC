@@ -106,7 +106,7 @@
                     data-bs-target="#modalSemuaPermohonan">
                     <div class="card-body">
                         <small class="text-muted">Jumlah Permohonan</small>
-                        <h3 class="fw-bold mb-0">125</h3>
+                        <h3 class="fw-bold mb-0" id="countCourseTotal">0</h3>
                     </div>
                 </div>
             </div>
@@ -140,65 +140,8 @@
                                         </tr>
                                     </thead>
 
-                                    <tbody>
-
-                                        <tr>
-                                            <td>BC20260001</td>
-                                            <td>15/06/2026</td>
-                                            <td>Muhammad Ali bin Abu Bakar</td>
-                                            <td>Doktor</td>
-                                            <td>Hospital Kuala Lumpur</td>
-                                            <td>
-                                                <span class="badge bg-warning text-dark">
-                                                    Menunggu Semakan
-                                                </span>
-                                            </td>
-                                            <td class="text-end">
-                                                <a href="course_tindakan.html"
-                                                    class="btn btn-sm btn-outline-secondary">
-                                                    Papar
-                                                </a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>CC20260002</td>
-                                            <td>14/06/2026</td>
-                                            <td>Siti Khadijah</td>
-                                            <td>Jururawat</td>
-                                            <td>Hospital Putrajaya</td>
-                                            <td>
-                                                <span class="badge bg-success">
-                                                    Diluluskan
-                                                </span>
-                                            </td>
-                                            <td class="text-end">
-                                                <a href="course_tindakan.html"
-                                                    class="btn btn-sm btn-outline-secondary">
-                                                    Papar
-                                                </a>
-                                            </td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>BC20260003</td>
-                                            <td>13/06/2026</td>
-                                            <td>Ahmad Faiz</td>
-                                            <td>Paramedik</td>
-                                            <td>Hospital Sultanah Aminah</td>
-                                            <td>
-                                                <span class="badge bg-danger">
-                                                    Ditolak
-                                                </span>
-                                            </td>
-                                            <td class="text-end">
-                                                <a href="course_tindakan.html"
-                                                    class="btn btn-sm btn-outline-secondary">
-                                                    Papar
-                                                </a>
-                                            </td>
-                                        </tr>
-
+                                    <tbody id="tbodyCourseAll">
+                                        <tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod</td></tr>
                                     </tbody>
 
                                 </table>
@@ -218,7 +161,7 @@
                     data-bs-target="#modalMenungguSemakan">
                     <div class="card-body">
                         <small class="text-muted">Menunggu Semakan</small>
-                        <h3 class="fw-bold mb-0">35</h3>
+                        <h3 class="fw-bold mb-0" id="countCoursePending">0</h3>
                     </div>
                 </div>
             </div>
@@ -249,22 +192,8 @@
                         </tr>
                         </thead>
 
-                        <tbody>
-
-                        <tr>
-                            <td>BC20260001</td>
-                            <td>15/06/2026</td>
-                            <td>Muhammad Ali bin Abu Bakar</td>
-                            <td>Doktor</td>
-                            <td>Hospital Kuala Lumpur</td>
-                            <td><span class="badge bg-warning text-dark">Menunggu Semakan</span></td>
-                            <td class="text-end">
-                            <a href="course_tindakan.html" class="btn btn-sm btn-outline-secondary">
-                                Papar
-                            </a>
-                            </td>
-                        </tr>
-
+                        <tbody id="tbodyCoursePending">
+                            <tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod</td></tr>
                         </tbody>
 
                     </table>
@@ -284,7 +213,7 @@
                     data-bs-target="#modalDiluluskan">
                     <div class="card-body">
                         <small class="text-muted">Diluluskan</small>
-                        <h3 class="fw-bold mb-0">72</h3>
+                        <h3 class="fw-bold mb-0" id="countCourseApproved">0</h3>
                     </div>
                 </div>
             </div>
@@ -315,22 +244,8 @@
                         </tr>
                         </thead>
 
-                        <tbody>
-
-                        <tr>
-                            <td>CC20260002</td>
-                            <td>14/06/2026</td>
-                            <td>Siti Khadijah</td>
-                            <td>Jururawat</td>
-                            <td>Hospital Putrajaya</td>
-                            <td><span class="badge bg-success">Diluluskan</span></td>
-                            <td class="text-end">
-                            <a href="course_tindakan.html" class="btn btn-sm btn-outline-secondary">
-                                Papar
-                            </a>
-                            </td>
-                        </tr>
-
+                        <tbody id="tbodyCourseApproved">
+                            <tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod</td></tr>
                         </tbody>
 
                     </table>
@@ -350,7 +265,7 @@
                     data-bs-target="#modalDitolak">
                     <div class="card-body">
                         <small class="text-muted">Ditolak</small>
-                        <h3 class="fw-bold mb-0">18</h3>
+                        <h3 class="fw-bold mb-0" id="countCourseRejected">0</h3>
                     </div>
                 </div>
             </div>
@@ -381,22 +296,8 @@
                         </tr>
                         </thead>
 
-                        <tbody>
-
-                        <tr>
-                            <td>BC20260003</td>
-                            <td>13/06/2026</td>
-                            <td>Ahmad Faiz</td>
-                            <td>Paramedik</td>
-                            <td>Hospital Sultanah Aminah</td>
-                            <td><span class="badge bg-danger">Ditolak</span></td>
-                            <td class="text-end">
-                            <a href="course_tindakan.html" class="btn btn-sm btn-outline-secondary">
-                                Papar
-                            </a>
-                            </td>
-                        </tr>
-
+                        <tbody id="tbodyCourseRejected">
+                            <tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod</td></tr>
                         </tbody>
 
                     </table>
@@ -476,65 +377,8 @@
                         </tr>
                     </thead>
 
-                    <tbody>
-
-                        <tr>
-                            <td>BC20260001</td>
-                            <td>15/06/2026</td>
-                            <td>Muhammad Ali bin Abu Bakar</td>
-                            <td>Doktor</td>
-                            <td>Hospital Kuala Lumpur</td>
-                            <td>
-                                <span class="badge bg-warning text-dark">
-                                    Menunggu Semakan
-                                </span>
-                            </td>
-                            <td class="text-end">
-                                <a href="course_tindakan.html"
-                                class="btn btn-sm btn-outline-primary">
-                                    Papar
-                                </a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>CC20260002</td>
-                            <td>14/06/2026</td>
-                            <td>Siti Khadijah</td>
-                            <td>Jururawat</td>
-                            <td>Hospital Putrajaya</td>
-                            <td>
-                                <span class="badge bg-success">
-                                    Diluluskan
-                                </span>
-                            </td>
-                            <td class="text-end">
-                                <a href="course_tindakan.html"
-                                class="btn btn-sm btn-outline-primary">
-                                    Papar
-                                </a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>BC20260003</td>
-                            <td>13/06/2026</td>
-                            <td>Ahmad Faiz</td>
-                            <td>Paramedik</td>
-                            <td>Hospital Sultanah Aminah</td>
-                            <td>
-                                <span class="badge bg-danger">
-                                    Ditolak
-                                </span>
-                            </td>
-                            <td class="text-end">
-                                <a href="course_tindakan.html"
-                                class="btn btn-sm btn-outline-primary">
-                                    Papar
-                                </a>
-                            </td>
-                        </tr>
-
+                    <tbody id="tbodyCourseMain">
+                        <tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod permohonan</td></tr>
                     </tbody>
 
                 </table>
@@ -569,6 +413,59 @@ fetch("sidebar.html")
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const COURSE_STATUS = {
+  pending:  { label: 'Menunggu Semakan', badge: 'bg-warning text-dark' },
+  approved: { label: 'Diluluskan',       badge: 'bg-success' },
+  rejected: { label: 'Ditolak',          badge: 'bg-danger' }
+};
+
+function courseRow(a) {
+  const s = COURSE_STATUS[a.status] || { label: a.status, badge: 'bg-secondary' };
+  return `<tr>
+    <td>${a.id}</td>
+    <td>${a.submittedAt || '-'}</td>
+    <td>${a.memberName || '-'}</td>
+    <td>${a.designation || '-'}</td>
+    <td>${a.facility || '-'}</td>
+    <td><span class="badge ${s.badge}">${s.label}</span></td>
+    <td class="text-end">
+      <a href="course_tindakan.html?id=${a.id}" class="btn btn-sm btn-outline-primary">Papar</a>
+    </td>
+  </tr>`;
+}
+
+function fillTbody(id, rows, colspan) {
+  const el = document.getElementById(id);
+  el.innerHTML = rows.length
+    ? rows.map(courseRow).join('')
+    : `<tr><td colspan="${colspan}" class="text-center text-muted py-3">Tiada rekod</td></tr>`;
+}
+
+async function loadCourseApps() {
+  const res  = await fetch('/api/course-applications');
+  const json = await res.json();
+  const apps = json.data || json;
+
+  const pending  = apps.filter(a => a.status === 'pending');
+  const approved = apps.filter(a => a.status === 'approved');
+  const rejected = apps.filter(a => a.status === 'rejected');
+
+  document.getElementById('countCourseTotal').textContent    = apps.length;
+  document.getElementById('countCoursePending').textContent  = pending.length;
+  document.getElementById('countCourseApproved').textContent = approved.length;
+  document.getElementById('countCourseRejected').textContent = rejected.length;
+
+  fillTbody('tbodyCourseAll',      apps,     7);
+  fillTbody('tbodyCoursePending',  pending,  7);
+  fillTbody('tbodyCourseApproved', approved, 7);
+  fillTbody('tbodyCourseRejected', rejected, 7);
+  fillTbody('tbodyCourseMain',     apps,     7);
+}
+
+document.addEventListener('DOMContentLoaded', loadCourseApps);
+</script>
 
 </body>
 </html>

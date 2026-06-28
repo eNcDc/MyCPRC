@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: MyCPRC MyEMT — API Gateway + Lambda backed by S3
+
+Globals:
+  Function:
+    Runtime: nodejs18.x
+    Timeout: 30
+    MemorySize: 256
+    Environment:
+      Variables:
+        S3_BUCKET: poc-mycprc-myemt
+
+Resources:
+
+  # ── HTTP API (API Gateway v2) ───────────────────────────────────────────────
+  MyEMTApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      CorsConfiguration:
+        AllowOrigins:
+          - '*'
+        AllowMethods:
+          - GET
+          - POST
+          - PATCH
+          - OPTIONS
+        AllowHeaders:
+          - Content-Type
+          - Authorization
+
+  # ── Lambda function ─────────────────────────────────────────────────────────
+  MyEMTFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: mycprc-myemt-api
+      CodeUri: lambda/
+      Handler: handler.handler
+      Description: MyCPRC MyEMT REST API
+      Events:
+        # Catch all routes under /api/
+        ApiProxy:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref MyEMTApi
+            Path: /api/{proxy+}
+            Method: ANY
+        # OPTIONS preflight
+        ApiOptions:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref MyEMTApi
+            Path: /api/{proxy+}
+            Method: OPTIONS
+      Policies:
+        - S3CrudPolicy:
+            BucketName: poc-mycprc-myemt
+
+Outputs:
+  ApiUrl:
+    Description: API Gateway base URL — put this in assets/js/config.js
+    Value: !Sub 'https://${MyEMTApi}.execute-api.${AWS::Region}.amazonaws.com'
+    Export:
+      Name: MyEMTApiUrl

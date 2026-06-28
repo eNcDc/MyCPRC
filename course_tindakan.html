@@ -527,7 +527,7 @@
 </div>
 
 <!-- ================= KEPUTUSAN PERMOHONAN ================= -->
-<div class="card shadow-sm border-success mt-4">
+<div class="card shadow-sm border-success mt-4" id="keputusanCard">
 
     <div class="card-header bg-success-subtle">
         <strong>Keputusan Permohonan B-Course & C-Course</strong>
@@ -595,7 +595,7 @@
                     Batal
                 </button>
 
-                <button class="btn btn-success">
+                <button class="btn btn-success" id="btnConfirmLulus">
                     Ya, Luluskan
                 </button>
             </div>
@@ -633,7 +633,7 @@
                     Batal
                 </button>
 
-                <button class="btn btn-danger">
+                <button class="btn btn-danger" id="btnConfirmTolak">
                     Ya, Tolak Permohonan
                 </button>
             </div>
@@ -668,6 +668,77 @@ fetch("sidebar.html")
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+(async function () {
+  const params = new URLSearchParams(window.location.search);
+  const appId  = params.get('id');
+  if (!appId) return; // no ID — leave page as-is
+
+  // Load application data to show current status
+  const res  = await fetch('/api/course-applications');
+  const json = await res.json();
+  const apps = json.data || json;
+  const app  = apps.find(a => a.id === appId);
+
+  if (app) {
+    // Update status badge in the Keputusan card
+    const statusBadge = document.querySelector('#keputusanCard .badge');
+    if (statusBadge) {
+      const map = { pending: ['bg-warning text-dark', 'Dalam Semakan'], approved: ['bg-success', 'Diluluskan'], rejected: ['bg-danger', 'Ditolak'] };
+      const [cls, label] = map[app.status] || ['bg-secondary', app.status];
+      statusBadge.className = `badge ${cls} fs-6`;
+      statusBadge.textContent = label;
+    }
+    // Disable action buttons if already processed
+    if (app.status !== 'pending') {
+      document.getElementById('btnConfirmLulus').disabled = true;
+      document.getElementById('btnConfirmTolak').disabled = true;
+    }
+  }
+
+  async function patchStatus(status, remark) {
+    const r = await fetch(`/api/course-applications/${appId}/status`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status, remark: remark || '' })
+    });
+    return r.json();
+  }
+
+  document.getElementById('btnConfirmLulus').addEventListener('click', async function () {
+    this.disabled = true;
+    this.textContent = 'Memuatkan...';
+    const result = await patchStatus('approved');
+    if (result.success) {
+      bootstrap.Modal.getInstance(document.getElementById('lulusModal')).hide();
+      alert('✅ Permohonan telah diluluskan.');
+      window.location.href = 'course_application.html';
+    } else {
+      alert('❌ Ralat: ' + result.message);
+      this.disabled = false;
+      this.textContent = 'Ya, Luluskan';
+    }
+  });
+
+  document.getElementById('btnConfirmTolak').addEventListener('click', async function () {
+    const remark = document.querySelector('#gagalModal textarea').value.trim();
+    if (!remark) { alert('Sila nyatakan sebab penolakan.'); return; }
+    this.disabled = true;
+    this.textContent = 'Memuatkan...';
+    const result = await patchStatus('rejected', remark);
+    if (result.success) {
+      bootstrap.Modal.getInstance(document.getElementById('gagalModal')).hide();
+      alert('✅ Permohonan telah ditolak.');
+      window.location.href = 'course_application.html';
+    } else {
+      alert('❌ Ralat: ' + result.message);
+      this.disabled = false;
+      this.textContent = 'Ya, Tolak Permohonan';
+    }
+  });
+})();
+</script>
 
 </body>
 </html>

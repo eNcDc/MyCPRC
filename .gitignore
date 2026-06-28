@@ -1,0 +1,16 @@
+# Environment variables — never commit these
+.env
+
+# Node
+node_modules/
+npm-debug.log*
+
+# AWS SAM build artifacts
+.aws-sam/
+
+# Editor / IDE
+.vscode/
+.kiro/
+
+# OS
+.DS_Store

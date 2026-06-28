@@ -168,7 +168,7 @@
 
           <div class="col-md-4">
             <small class="text-muted d-block">Sesi</small>
-            <div class="fw-semibold">Sesi 1 / 2026</div>
+            <div class="fw-semibold" id="app-session-name">-</div>
           </div>
 
           <div class="col-md-4">
@@ -199,8 +199,8 @@
 
             <div>
               <small class="text-muted d-block">Status Semasa</small>
-              <span class="badge bg-warning text-dark fs-6">
-                Menunggu Kelulusan
+              <span id="app-status-badge" class="badge bg-secondary fs-6">
+                Tiada Permohonan
               </span>
             </div>
 
@@ -235,49 +235,8 @@
                 </tr>
               </thead>
 
-              <tbody>
-
-                <tr>
-                  <td>Sesi 1 / 2026</td>
-                  <td>15 - 19 Mac 2026</td>
-                  <td>Kuala Lumpur</td>
-                  <td>National</td>
-                  <td><span class="badge bg-success">Dibuka</span></td>
-                  <td class="text-end">
-                    <a href="user_healthform.html"
-                      class="btn btn-sm btn-outline-primary">
-                      Daftar
-                    </a>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Sesi 2 / 2026</td>
-                  <td>10 - 14 Jun 2026</td>
-                  <td>Selangor</td>
-                  <td>State</td>
-                  <td><span class="badge bg-warning text-dark">Hampir Penuh</span></td>
-                  <td class="text-end">
-                    <a href="user_healthform.html"
-                      class="btn btn-sm btn-outline-primary">
-                      Daftar
-                    </a>
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Sesi 3 / 2026</td>
-                  <td>20 - 24 September 2026</td>
-                  <td>Johor</td>
-                  <td>National</td>
-                  <td><span class="badge bg-secondary">Belum Dibuka</span></td>
-                  <td class="text-end">
-                    <button class="btn btn-sm btn-outline-secondary" disabled>
-                      Tidak Tersedia
-                    </button>
-                  </td>
-                </tr>
-
+              <tbody id="tbody-sessions">
+                <tr><td colspan="6" class="text-center text-muted">Memuatkan sesi...</td></tr>
               </tbody>
 
             </table>
@@ -313,26 +272,105 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!--daftar kursus-->
 <script>
-function submitCourse() {
 
-    const modal = bootstrap.Modal.getInstance(
-        document.getElementById('registerCourseModal')
-    );
+const MEMBER_ID = localStorage.getItem('myemt_memberId') || '';
 
-    modal.hide();
+async function loadSessions() {
+  try {
+    const res = await fetch(`${API}/api/sessions`);
+    const { data: sessions } = await res.json();
+    const tbody = document.getElementById('tbody-sessions');
+    if (!tbody) return;
 
-    setTimeout(() => {
-        alert("Pendaftaran kursus berjaya dihantar kepada admin.");
-
-        // optional redirect
-        window.location.href = "landingMyemt.html";
-
-    }, 500);
+    tbody.innerHTML = sessions.map(s => {
+      const isOpen = s.status === 'Dibuka' || s.status === 'Hampir Penuh';
+      const badgeClass = s.status === 'Dibuka' ? 'bg-success' : s.status === 'Hampir Penuh' ? 'bg-warning text-dark' : 'bg-secondary';
+      const btn = isOpen
+        ? `<button onclick="daftarKursus('${s.id}','${s.name}')" class="btn btn-sm btn-outline-primary">Daftar</button>`
+        : `<button class="btn btn-sm btn-outline-secondary" disabled>Tidak Tersedia</button>`;
+      return `<tr>
+        <td>${s.name}</td>
+        <td>${fmtDateRange(s.startDate, s.endDate)}</td>
+        <td>${s.location}</td>
+        <td>${s.level}</td>
+        <td><span class="badge ${badgeClass}">${s.status}</span></td>
+        <td class="text-end">${btn}</td>
+      </tr>`;
+    }).join('');
+  } catch (err) {
+    console.error('Gagal muatkan sesi:', err);
+  }
 }
+
+function fmtDateRange(start, end) {
+  if (!start) return '-';
+  const opts = { day: 'numeric', month: 'short', year: 'numeric' };
+  const s = new Date(start).toLocaleDateString('ms-MY', opts);
+  const e = end ? new Date(end).toLocaleDateString('ms-MY', opts) : '';
+  return e ? `${s} – ${e}` : s;
+}
+
+async function loadMyApplicationStatus() {
+  if (!MEMBER_ID) return;
+  try {
+    const res = await fetch(`${API}/api/course-applications?memberId=${MEMBER_ID}`);
+    const { data } = await res.json();
+    if (!data || !data.length) return;
+
+    const latest = data[data.length - 1];
+    const statusMap = { pending: 'bg-warning text-dark', approved: 'bg-success', rejected: 'bg-danger' };
+    const labelMap  = { pending: 'Menunggu Kelulusan', approved: 'Diluluskan', rejected: 'Ditolak' };
+
+    document.getElementById('app-session-name').textContent = latest.sessionName || '-';
+    document.getElementById('app-status-badge').className   = `badge fs-6 ${statusMap[latest.status] || 'bg-secondary'}`;
+    document.getElementById('app-status-badge').textContent = labelMap[latest.status] || latest.status;
+
+    if (latest.remark) {
+      const remarkEl = document.getElementById('app-remark');
+      if (remarkEl) remarkEl.textContent = latest.remark;
+    }
+  } catch (err) {
+    console.error('Gagal muatkan status permohonan:', err);
+  }
+}
+
+async function daftarKursus(sessionId, sessionName) {
+  if (!MEMBER_ID) {
+    alert('Sila daftar sebagai ahli MyEMT terlebih dahulu melalui emt_form.html');
+    return;
+  }
+
+  const memberName = localStorage.getItem('myemt_memberName') || '';
+  if (!confirm(`Sahkan pendaftaran untuk ${sessionName}?`)) return;
+
+  try {
+    const res = await fetch(`${API}/api/course-applications`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ memberId: MEMBER_ID, memberName, sessionId, sessionName })
+    });
+    const result = await res.json();
+
+    if (result.success) {
+      alert('✅ ' + result.message);
+      loadMyApplicationStatus();
+    } else {
+      alert('❌ ' + result.message);
+    }
+  } catch (err) {
+    alert('❌ Gagal menghubungi pelayan.');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadSessions();
+  loadMyApplicationStatus();
+});
 </script>
 
 </body>

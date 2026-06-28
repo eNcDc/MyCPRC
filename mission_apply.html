@@ -98,15 +98,15 @@
 
             <div>
                 <small class="text-muted">Status Kelayakan Anda</small><br>
-                <span class="badge bg-success px-3 py-2">
-                    Layak Menyertai Misi
+                <span class="badge bg-secondary px-3 py-2" id="eligibility-badge">
+                    Memeriksa...
                 </span>
             </div>
 
             <div class="text-end">
                 <small class="text-muted">Kursus</small><br>
-                <span class="badge bg-primary">B-Course ✓</span>
-                <span class="badge bg-primary">C-Course ✓</span>
+                <span class="badge bg-secondary" id="bcourse-badge">B-Course</span>
+                <span class="badge bg-secondary" id="ccourse-badge">C-Course</span>
             </div>
 
         </div>
@@ -125,7 +125,7 @@
 
         <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
             <span>Maklumat Misi</span>
-            <span class="badge bg-primary">Perancangan</span>
+            <span class="badge bg-secondary" id="mission-status-badge">-</span>
         </div>
 
         <div class="card-body">
@@ -134,30 +134,27 @@
 
                 <div class="col-md-6">
                     <small class="text-muted">Nama Misi</small>
-                    <div class="fw-semibold">EMT Operasi Banjir Sabah</div>
+                    <div class="fw-semibold" id="ma-name">-</div>
                 </div>
 
                 <div class="col-md-6">
                     <small class="text-muted">Lokasi</small>
-                    <div class="fw-semibold">Sabah</div>
+                    <div class="fw-semibold" id="ma-location">-</div>
                 </div>
 
                 <div class="col-md-6">
-                    <small class="text-muted">Tarikh</small>
-                    <div class="fw-semibold">20 - 25 Jun 2026</div>
+                    <small class="text-muted">Tarikh Mula</small>
+                    <div class="fw-semibold" id="ma-start">-</div>
                 </div>
 
                 <div class="col-md-6">
-                    <small class="text-muted">Tempoh</small>
-                    <div class="fw-semibold">5 Hari Operasi</div>
+                    <small class="text-muted">Anggaran Tamat</small>
+                    <div class="fw-semibold" id="ma-end">-</div>
                 </div>
 
                 <div class="col-12">
                     <small class="text-muted">Ringkasan Misi</small>
-                    <p class="mb-0">
-                        Operasi bantuan banjir melibatkan rawatan kecemasan, sokongan kesihatan,
-                        dan koordinasi lapangan bersama agensi berkaitan.
-                    </p>
+                    <p class="mb-0" id="ma-notes">-</p>
                 </div>
 
             </div>
@@ -210,8 +207,7 @@
                     Batal
                 </button>
 
-                <button type="button" class="btn btn-success"
-                    onclick="alert('Permohonan berjaya dihantar')">
+                <button type="button" class="btn btn-success" id="btn-confirm-join">
                     Ya, Saya Setuju
                 </button>
 
@@ -242,5 +238,99 @@ fetch("sidebar.html")
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const MISSION_ID  = new URLSearchParams(window.location.search).get('id');
+const MEMBER_ID   = localStorage.getItem('myemt_memberId') || '';
+const STATUS_CLS  = { 'Selesai': 'bg-success', 'Sedang Dijalankan': 'bg-primary', 'Perancangan': 'bg-warning text-dark' };
+
+function maSet(id, val) { const el = document.getElementById(id); if (el) el.textContent = val || '-'; }
+
+async function loadMissionApply() {
+  // Load mission details
+  if (MISSION_ID) {
+    try {
+      const res  = await fetch('/api/missions/' + MISSION_ID);
+      const json = await res.json();
+      if (json.success && json.data) {
+        const m = json.data;
+        maSet('ma-name',     m.name);
+        maSet('ma-location', m.location || m.state);
+        maSet('ma-start',    m.startDate);
+        maSet('ma-end',      m.estimatedEnd);
+        maSet('ma-notes',    m.notes);
+        const badge = document.getElementById('mission-status-badge');
+        if (badge) { badge.textContent = m.status || '-'; badge.className = 'badge ' + (STATUS_CLS[m.status] || 'bg-secondary'); }
+      }
+    } catch (e) { console.error('Gagal muatkan misi:', e); }
+  }
+
+  // Load member eligibility
+  if (!MEMBER_ID) {
+    document.getElementById('eligibility-badge').className = 'badge bg-warning text-dark px-3 py-2';
+    document.getElementById('eligibility-badge').textContent = 'Belum Mendaftar MyEMT';
+    return;
+  }
+  try {
+    const [mRes, cRes] = await Promise.all([
+      fetch('/api/members/' + MEMBER_ID),
+      fetch('/api/course-applications?memberId=' + MEMBER_ID)
+    ]);
+    const mJson = await mRes.json();
+    const cJson = await cRes.json();
+    const member     = mJson.data;
+    const courseApps = cJson.data || [];
+    const courseApp  = courseApps.length ? courseApps[0] : null;
+    const emtOk      = member && member.status === 'approved';
+    const courseOk   = courseApp && courseApp.status === 'approved';
+
+    const elBadge = document.getElementById('eligibility-badge');
+    if (emtOk && courseOk) {
+      elBadge.className   = 'badge bg-success px-3 py-2';
+      elBadge.textContent = 'Layak Menyertai Misi';
+    } else {
+      elBadge.className   = 'badge bg-danger px-3 py-2';
+      elBadge.textContent = 'Tidak Layak';
+      document.getElementById('btn-confirm-join').disabled = true;
+    }
+    const bcBadge = document.getElementById('bcourse-badge');
+    bcBadge.className   = courseOk ? 'badge bg-success' : 'badge bg-secondary';
+    bcBadge.textContent = courseOk ? 'B-Course ✓' : 'B-Course ✗';
+    const ccBadge = document.getElementById('ccourse-badge');
+    ccBadge.className   = courseOk ? 'badge bg-success' : 'badge bg-secondary';
+    ccBadge.textContent = courseOk ? 'C-Course ✓' : 'C-Course ✗';
+  } catch (e) { console.error('Gagal semak kelayakan:', e); }
+}
+
+document.getElementById('btn-confirm-join').addEventListener('click', async function () {
+  if (!MEMBER_ID) return alert('Sila log masuk terlebih dahulu.');
+  if (!MISSION_ID) return alert('ID misi tidak ditemui.');
+  this.disabled = true;
+  this.textContent = 'Menghantar...';
+  try {
+    const res  = await fetch('/api/mission-applications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ memberId: MEMBER_ID, missionId: MISSION_ID })
+    });
+    const json = await res.json();
+    if (json.success) {
+      bootstrap.Modal.getInstance(document.getElementById('confirmMissionModal')).hide();
+      alert('✅ ' + json.message);
+      window.location.href = 'user_misidaftar.html';
+    } else {
+      alert('⚠️ ' + json.message);
+      this.disabled = false;
+      this.textContent = 'Ya, Saya Setuju';
+    }
+  } catch (e) {
+    alert('Ralat rangkaian. Sila cuba lagi.');
+    this.disabled = false;
+    this.textContent = 'Ya, Saya Setuju';
+  }
+});
+
+document.addEventListener('DOMContentLoaded', loadMissionApply);
+</script>
 </body>
 </html>

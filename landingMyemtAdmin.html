@@ -129,7 +129,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <small class="text-muted d-block">Semua</small>
-                            <h4 class="fw-bold mb-0">117</h4>
+                            <h4 class="fw-bold mb-0" id="cnt-semua">...</h4>
                         </div>
                         <i class="bi bi-heart-pulse-fill fs-3 text-secondary"></i>
                         </div>
@@ -156,7 +156,7 @@
                                 <div class="border rounded p-3">
                                 <div class="d-flex justify-content-between">
                                     <span>Doktor</span>
-                                    <strong>45</strong>
+                                    <strong id="analytics-cnt-doktor">...</strong>
                                 </div>
                                 </div>
                             </div>
@@ -165,7 +165,7 @@
                                 <div class="border rounded p-3">
                                 <div class="d-flex justify-content-between">
                                     <span>Jururawat</span>
-                                    <strong>72</strong>
+                                    <strong id="analytics-cnt-jururawat">...</strong>
                                 </div>
                                 </div>
                             </div>
@@ -174,7 +174,7 @@
                                 <div class="border rounded p-3">
                                 <div class="d-flex justify-content-between">
                                     <span>Paramedik</span>
-                                    <strong>38</strong>
+                                    <strong id="analytics-cnt-paramedik">...</strong>
                                 </div>
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
                                 <div class="border rounded p-3">
                                 <div class="d-flex justify-content-between">
                                     <span>Pegawai Farmasi</span>
-                                    <strong>24</strong>
+                                    <strong id="analytics-cnt-farmasi">...</strong>
                                 </div>
                                 </div>
                             </div>
@@ -192,7 +192,7 @@
                                 <div class="border rounded p-3">
                                 <div class="d-flex justify-content-between">
                                     <span>Pegawai Kesihatan Awam</span>
-                                    <strong>19</strong>
+                                    <strong id="analytics-cnt-kesihatan">...</strong>
                                 </div>
                                 </div>
                             </div>
@@ -201,7 +201,7 @@
                                 <div class="border rounded p-3">
                                 <div class="d-flex justify-content-between">
                                     <span>Staf Sokongan</span>
-                                    <strong>56</strong>
+                                    <strong id="analytics-cnt-staf">...</strong>
                                 </div>
                                 </div>
                             </div>
@@ -235,7 +235,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <small class="text-muted d-block">Doktor</small>
-                            <h4 class="fw-bold mb-0">45</h4>
+                            <h4 class="fw-bold mb-0" id="cnt-doktor">...</h4>
                         </div>
                         <i class="bi bi-heart-pulse-fill fs-3 text-secondary"></i>
                         </div>
@@ -270,47 +270,8 @@
                                 </tr>
                                 </thead>
 
-                                <tbody>
-
-                                <tr>
-                                    <td>12/01/2026</td>
-                                    <td>Siti Khadijah</td>
-                                    <td>Doktor</td>
-                                    <td>Klinik Kesihatan Kuala Lumpur</td>
-                                    <td>WP Kuala Lumpur</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10/01/2026</td>
-                                    <td>Nur Huda</td>
-                                    <td>Doktor</td>
-                                    <td>Hospital Melaka</td>
-                                    <td>Melaka</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>08/01/2026</td>
-                                    <td>Ahmad Faiz</td>
-                                    <td>Doktor</td>
-                                    <td>Klinik Kesihatan Johor Bahru</td>
-                                    <td>Johor</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
+                                <tbody id="tbody-doktor">
+                                <!-- populated by loadMemberData() -->
                                 </tbody>
 
                             </table>
@@ -332,7 +293,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <small class="text-muted d-block">Jururawat</small>
-                            <h4 class="fw-bold mb-0">72</h4>
+                            <h4 class="fw-bold mb-0" id="cnt-jururawat">...</h4>
                         </div>
                         <i class="bi bi-hospital-fill fs-3 text-secondary"></i>
                         </div>
@@ -367,47 +328,8 @@
                                 </tr>
                                 </thead>
 
-                                <tbody>
-
-                                <tr>
-                                    <td>15/01/2026</td>
-                                    <td>Nur Aisyah</td>
-                                    <td>Jururawat</td>
-                                    <td>Hospital Sultanah Bahiyah</td>
-                                    <td>Kedah</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>12/01/2026</td>
-                                    <td>Siti Aminah</td>
-                                    <td>Jururawat</td>
-                                    <td>Klinik Kesihatan Kota Bharu</td>
-                                    <td>Kelantan</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10/01/2026</td>
-                                    <td>Farah Nadia</td>
-                                    <td>Jururawat</td>
-                                    <td>Hospital Melaka</td>
-                                    <td>Melaka</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
+                                <tbody id="tbody-jururawat">
+                                <!-- populated by loadMemberData() -->
                                 </tbody>
 
                             </table>
@@ -429,7 +351,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <small class="text-muted d-block">Paramedik</small>
-                            <h4 class="fw-bold mb-0">38</h4>
+                            <h4 class="fw-bold mb-0" id="cnt-paramedik">...</h4>
                         </div>
                         <i class="bi bi-truck-front-fill fs-3 text-secondary"></i>
                         </div>
@@ -464,47 +386,8 @@
                                 </tr>
                                 </thead>
 
-                                <tbody>
-
-                                <tr>
-                                    <td>14/01/2026</td>
-                                    <td>Mohd Azhar</td>
-                                    <td>Paramedik</td>
-                                    <td>Ambulans EMS Kota Bharu</td>
-                                    <td>Kelantan</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>11/01/2026</td>
-                                    <td>Nur Syuhada</td>
-                                    <td>Paramedik</td>
-                                    <td>Hospital Sultanah Aminah</td>
-                                    <td>Johor</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>09/01/2026</td>
-                                    <td>Hafiz Rahman</td>
-                                    <td>Paramedik</td>
-                                    <td>Unit EMS Melaka</td>
-                                    <td>Melaka</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
+                                <tbody id="tbody-paramedik">
+                                <!-- populated by loadMemberData() -->
                                 </tbody>
 
                             </table>
@@ -526,7 +409,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <small class="text-muted d-block">Pegawai Farmasi</small>
-                            <h4 class="fw-bold mb-0">24</h4>
+                            <h4 class="fw-bold mb-0" id="cnt-farmasi">...</h4>
                         </div>
                         <i class="bi bi-capsule-pill fs-3 text-secondary"></i>
                         </div>
@@ -561,47 +444,8 @@
                                 </tr>
                                 </thead>
 
-                                <tbody>
-
-                                <tr>
-                                    <td>13/01/2026</td>
-                                    <td>Dr Nur Amalina</td>
-                                    <td>Pegawai Farmasi</td>
-                                    <td>Hospital Kuala Lumpur</td>
-                                    <td>WP Kuala Lumpur</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10/01/2026</td>
-                                    <td>Farah Hanani</td>
-                                    <td>Pegawai Farmasi</td>
-                                    <td>Klinik Kesihatan Kota Bharu</td>
-                                    <td>Kelantan</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>08/01/2026</td>
-                                    <td>Ahmad Syafiq</td>
-                                    <td>Pegawai Farmasi</td>
-                                    <td>Hospital Melaka</td>
-                                    <td>Melaka</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
+                                <tbody id="tbody-farmasi">
+                                <!-- populated by loadMemberData() -->
                                 </tbody>
 
                             </table>
@@ -623,7 +467,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <small class="text-muted d-block">Pegawai Kesihatan Awam</small>
-                            <h4 class="fw-bold mb-0">19</h4>
+                            <h4 class="fw-bold mb-0" id="cnt-kesihatan">...</h4>
                         </div>
                         <i class="bi bi-shield-check fs-3 text-secondary"></i>
                         </div>
@@ -658,47 +502,8 @@
                                 </tr>
                                 </thead>
 
-                                <tbody>
-
-                                <tr>
-                                    <td>12/01/2026</td>
-                                    <td>Dr Siti Rahmah</td>
-                                    <td>Pegawai Kesihatan Awam</td>
-                                    <td>Pejabat Kesihatan Daerah Kota Bharu</td>
-                                    <td>Kelantan</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>09/01/2026</td>
-                                    <td>Nur Hidayah</td>
-                                    <td>Pegawai Kesihatan Awam</td>
-                                    <td>KKM Putrajaya</td>
-                                    <td>WP Putrajaya</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>05/01/2026</td>
-                                    <td>Ahmad Zaki</td>
-                                    <td>Pegawai Kesihatan Awam</td>
-                                    <td>Pejabat Kesihatan Johor Bahru</td>
-                                    <td>Johor</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
+                                <tbody id="tbody-kesihatan">
+                                <!-- populated by loadMemberData() -->
                                 </tbody>
 
                             </table>
@@ -720,7 +525,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <small class="text-muted d-block">Staf Sokongan</small>
-                            <h4 class="fw-bold mb-0">56</h4>
+                            <h4 class="fw-bold mb-0" id="cnt-staf">...</h4>
                         </div>
                         <i class="bi bi-people-fill fs-3 text-secondary"></i>
                         </div>
@@ -755,47 +560,8 @@
                                 </tr>
                                 </thead>
 
-                                <tbody>
-
-                                <tr>
-                                    <td>15/01/2026</td>
-                                    <td>Abdul Rahman</td>
-                                    <td>Staf Sokongan</td>
-                                    <td>Hospital Sultan Ismail</td>
-                                    <td>Johor</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>11/01/2026</td>
-                                    <td>Siti Aishah</td>
-                                    <td>Staf Sokongan</td>
-                                    <td>Klinik Kesihatan Kota Bharu</td>
-                                    <td>Kelantan</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>07/01/2026</td>
-                                    <td>Mohd Firdaus</td>
-                                    <td>Staf Sokongan</td>  
-                                    <td>Hospital Kuala Lumpur</td>
-                                    <td>WP Kuala Lumpur</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
+                                <tbody id="tbody-staf">
+                                <!-- populated by loadMemberData() -->
                                 </tbody>
 
                             </table>
@@ -1007,13 +773,102 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
-<!--chart analisis-->
+<!-- ══════════════════════════════════════════════════
+     LIVE DATA — fetched from /api/members & /api/members/summary
+     All counts and modal tables are populated dynamically.
+══════════════════════════════════════════════════ -->
 <script>
 
-    // DATA AHLI
+
+// Helper: format date string "YYYY-MM-DD" → "DD/MM/YYYY"
+function fmtDate(d) {
+  if (!d) return '-';
+  const p = d.split('-');
+  return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
+}
+
+// Helper: render rows into a modal tbody
+function renderRows(tbodyId, members) {
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+  if (!members.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Tiada rekod.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = members.map(m => `
+    <tr>
+      <td>${fmtDate(m.submittedAt)}</td>
+      <td>${m.name || '-'}</td>
+      <td>${m.designation || '-'}</td>
+      <td>${m.facility || '-'}</td>
+      <td>${m.state || '-'}</td>
+      <td class="text-end">
+        <a href="emt_deployform.html?id=${m.id}" class="btn btn-sm btn-outline-primary">Papar</a>
+      </td>
+    </tr>`).join('');
+}
+
+// Designation → { countEl, tbodyId, modalId }
+const DESIGNATIONS = [
+  { label: 'Doktor',                  countEl: 'cnt-doktor',      tbodyId: 'tbody-doktor',      filterKey: 'Doktor' },
+  { label: 'Jururawat',               countEl: 'cnt-jururawat',   tbodyId: 'tbody-jururawat',   filterKey: 'Jururawat' },
+  { label: 'Paramedik',               countEl: 'cnt-paramedik',   tbodyId: 'tbody-paramedik',   filterKey: 'Paramedik' },
+  { label: 'Pegawai Farmasi',         countEl: 'cnt-farmasi',     tbodyId: 'tbody-farmasi',     filterKey: 'Pegawai Farmasi' },
+  { label: 'Pegawai Kesihatan Awam',  countEl: 'cnt-kesihatan',   tbodyId: 'tbody-kesihatan',   filterKey: 'Pegawai Kesihatan Awam' },
+  { label: 'Staf Sokongan',           countEl: 'cnt-staf',        tbodyId: 'tbody-staf',        filterKey: 'Staf Sokongan' },
+];
+
+let allMembers = [];
+
+async function loadMemberData() {
+  try {
+    const [summaryRes, membersRes] = await Promise.all([
+      fetch(`${API}/api/members/summary`),
+      fetch(`${API}/api/members`)
+    ]);
+    const summary = await summaryRes.json();
+    const membersData = await membersRes.json();
+    allMembers = membersData.data || [];
+
+    // Update total count
+    const totalEl = document.getElementById('cnt-semua');
+    if (totalEl) totalEl.textContent = summary.total || 0;
+
+    // Update per-designation counts
+    DESIGNATIONS.forEach(d => {
+      const el = document.getElementById(d.countEl);
+      if (el) el.textContent = (summary.byDesignation || {})[d.filterKey] || 0;
+
+      // Populate modal tbody
+      renderRows(d.tbodyId, allMembers.filter(m => m.designation === d.filterKey));
+    });
+
+    // Update analytics modal breakdown
+    DESIGNATIONS.forEach(d => {
+      const el = document.getElementById(`analytics-${d.countEl}`);
+      if (el) el.textContent = (summary.byDesignation || {})[d.filterKey] || 0;
+    });
+
+    // Update charts
+    updateCharts(summary.byDesignation || {});
+
+  } catch (err) {
+    console.error('Gagal muatkan data ahli:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadMemberData);
+</script>
+
+<!--chart analisis-->
+<script>
+let barChart, donutChart;
+
+function updateCharts(byDesignation) {
     const labels = [
         'Doktor',
         'Jururawat',
@@ -1021,67 +876,39 @@ fetch("sidebar.html")
         'Pegawai Farmasi',
         'Pegawai Kesihatan Awam',
         'Staf Sokongan',
-        //'Lain-lain'
     ];
 
-    const dataValues = [
-        45, // Doktor
-        72, // Jururawat
-        38, // Paramedik
-        24, // Pegawai Farmasi
-        19, // Pegawai Kesihatan Awam
-        56, // Staf Sokongan
-        //31  // Lain-lain
-    ];
+    const dataValues = labels.map(l => byDesignation[l] || 0);
 
     // BAR CHART
-    new Chart(document.getElementById('ahliBarChart'), {
+    if (barChart) barChart.destroy();
+    barChart = new Chart(document.getElementById('ahliBarChart'), {
         type: 'bar',
         data: {
             labels: labels,
-            datasets: [{
-                label: 'Bilangan Ahli',
-                data: dataValues,
-                borderWidth: 1
-            }]
+            datasets: [{ label: 'Bilangan Ahli', data: dataValues, borderWidth: 1 }]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    ticks: {
-                        precision: 0
-                    }
-                }
-            }
+            plugins: { legend: { display: false } },
+            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
         }
     });
 
     // DONUT CHART
-    new Chart(document.getElementById('ahliDonutChart'), {
+    if (donutChart) donutChart.destroy();
+    donutChart = new Chart(document.getElementById('ahliDonutChart'), {
         type: 'doughnut',
         data: {
             labels: labels,
-            datasets: [{
-                data: dataValues
-            }]
+            datasets: [{ data: dataValues }]
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: {
-                    position: 'bottom'
-                }
-            }
+            plugins: { legend: { position: 'bottom' } }
         }
     });
-
+}
 </script>
 
 
@@ -1122,88 +949,25 @@ fetch("sidebar.html")
                 'W.P. Labuan',
                 'W.P. Putrajaya'
             ],
-            data: [35, 22, 25, 18, 20, 21, 28, 10, 20, 30, 26, 40, 17, 24, 8, 12]
+            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         },
 
-        johor: {
-            labels: kategoriAhli,
-            data: [12, 10, 8, 4, 3, 5, 2]
-        },
-
-        kedah: {
-            labels: kategoriAhli,
-            data: [8, 7, 5, 2, 2, 4, 1]
-        },
-
-        kelantan: {
-            labels: kategoriAhli,
-            data: [8, 9, 6, 3, 2, 5, 2]
-        },
-
-        melaka: {
-            labels: kategoriAhli,
-            data: [5, 4, 3, 1, 1, 3, 1]
-        },
-
-        negeri_sembilan: {
-            labels: kategoriAhli,
-            data: [6, 5, 3, 2, 1, 2, 1]
-        },
-
-        pahang: {
-            labels: kategoriAhli,
-            data: [6, 6, 3, 2, 1, 2, 1]
-        },
-
-        perak: {
-            labels: kategoriAhli,
-            data: [8, 7, 4, 2, 2, 4, 1]
-        },
-
-        perlis: {
-            labels: kategoriAhli,
-            data: [2, 2, 1, 1, 1, 2, 1]
-        },
-
-        pulau_pinang: {
-            labels: kategoriAhli,
-            data: [5, 7, 4, 1, 1, 1, 1]
-        },
-
-        sabah: {
-            labels: kategoriAhli,
-            data: [10, 12, 5, 1, 1, 1, 0]
-        },
-
-        sarawak: {
-            labels: kategoriAhli,
-            data: [8, 8, 4, 2, 1, 2, 1]
-        },
-
-        selangor: {
-            labels: kategoriAhli,
-            data: [15, 18, 10, 5, 4, 7, 3]
-        },
-
-        terengganu: {
-            labels: kategoriAhli,
-            data: [4, 5, 3, 1, 1, 2, 1]
-        },
-
-        wp_kuala_lumpur: {
-            labels: kategoriAhli,
-            data: [8, 6, 3, 2, 1, 3, 1]
-        },
-
-        wp_labuan: {
-            labels: kategoriAhli,
-            data: [2, 2, 1, 1, 0, 1, 1]
-        },
-
-        wp_putrajaya: {
-            labels: kategoriAhli,
-            data: [3, 3, 2, 1, 1, 1, 1]
-        }
+        johor:           { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        kedah:           { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        kelantan:        { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        melaka:          { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        negeri_sembilan: { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        pahang:          { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        perak:           { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        perlis:          { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        pulau_pinang:    { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        sabah:           { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        sarawak:         { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        selangor:        { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        terengganu:      { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        wp_kuala_lumpur: { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        wp_labuan:       { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
+        wp_putrajaya:    { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] }
     };
 
     const ctx = document.getElementById('negeriChart');

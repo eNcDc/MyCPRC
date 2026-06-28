@@ -668,6 +668,7 @@
 <div id="footer"></div>
 
 <!-- JS -->
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/common.js"></script>
 
@@ -723,6 +724,60 @@ document.addEventListener("DOMContentLoaded", function () {
   .then(res => res.text())
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
   .catch(err => console.error("Sidebar load failed:", err));
+</script>
+
+<!-- ══ SUBMIT FORM TO API ══ -->
+<script>
+document.getElementById('myemtForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const data = {};
+
+  // Collect all named inputs
+  new FormData(form).forEach((value, key) => { data[key] = value; });
+
+  // Also grab un-named fields by label order (full_name, age, gender, grade, service_period, workplace, home_address, office_email, personal_email, phone)
+  const inputs = form.querySelectorAll('input[type=text], input[type=number], input[type=email], input[type=tel], textarea, select');
+  const unnamedLabels = ['full_name','age','gender','grade','service_period','workplace','home_address','office_email','personal_email','phone'];
+  let unnamedIdx = 0;
+  inputs.forEach(el => {
+    if (!el.name && unnamedIdx < unnamedLabels.length) {
+      data[unnamedLabels[unnamedIdx++]] = el.value;
+    }
+  });
+
+  // Store member ID in localStorage so landingMyemt.html can read it
+  const submitBtn = form.querySelector('[type=submit]');
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Menghantar...';
+
+  try {
+    const res = await fetch(`${API}/api/members`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    const result = await res.json();
+
+    if (result.success) {
+      // Save this user's member ID locally so other pages can identify them
+      localStorage.setItem('myemt_memberId', result.data.id);
+      localStorage.setItem('myemt_memberName', result.data.full_name || result.data.name || '');
+      alert('✅ Permohonan berjaya dihantar! ID anda: ' + result.data.id);
+      window.location.href = 'landingMyemt.html';
+    } else {
+      alert('❌ Ralat: ' + result.message);
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Hantar';
+    }
+  } catch (err) {
+    console.error(err);
+    alert('❌ Gagal menghubungi pelayan. Pastikan server berjalan.');
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Hantar';
+  }
+});
 </script>
 </body>
 </html>

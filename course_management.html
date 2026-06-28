@@ -124,70 +124,8 @@
         </tr>
     </thead>
 
-    <tbody>
-
-        <tr>
-            <td>Sesi 1 / 2026</td>
-            <td>Kuala Lumpur</td>
-            <td>15 - 19 Jan 2026</td>
-            <td>5 Hari</td>
-            <td><span class="badge bg-success">Dibuka</span></td>
-            <td class="text-end">
-                
-                <a href="course_application.html?sesi=1"
-                   class="btn btn-sm btn-outline-primary me-1">
-                    Semakan Pemohon
-                </a>
-
-                <a href="course_sessionedit.html?sesi=1"
-                   class="btn btn-sm btn-outline-dark">
-                    Kemaskini
-                </a>
-
-            </td>
-        </tr>
-
-        <tr>
-            <td>Sesi 2 / 2026</td>
-            <td>Sabah</td>
-            <td>10 - 14 Jun 2026</td>
-            <td>5 Hari</td>
-            <td><span class="badge bg-warning text-dark">Dalam Semakan</span></td>
-            <td class="text-end">
-
-                <a href="course_application.html"
-                   class="btn btn-sm btn-outline-primary me-1">
-                    Semakan Pemohon
-                </a>
-
-                <a href="course_sessionedit.html?sesi=2"
-                   class="btn btn-sm btn-outline-dark">
-                    Kemaskini
-                </a>
-
-            </td>
-        </tr>
-
-        <tr>
-            <td>Sesi 3 / 2026</td>
-            <td>Selangor</td>
-            <td>05 - 09 Nov 2026</td>
-            <td>5 Hari</td>
-            <td><span class="badge bg-secondary">Belum Dibuka</span></td>
-            <td class="text-end">
-
-                <button class="btn btn-sm btn-outline-secondary" disabled>
-                    Semakan Pemohon
-                </button>
-
-                <a href="course_sessionedit.html?sesi=3"
-                   class="btn btn-sm btn-outline-dark ms-1">
-                    Kemaskini
-                </a>
-
-            </td>
-        </tr>
-
+    <tbody id="tbody-sessions">
+        <tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr>
     </tbody>
 
 </table>
@@ -332,6 +270,55 @@ fetch("sidebar.html")
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+const SESSION_STATUS_BADGE = {
+  'Dibuka':       'bg-success',
+  'Hampir Penuh': 'bg-warning text-dark',
+  'Belum Dibuka': 'bg-secondary'
+};
+
+async function loadSessions() {
+  try {
+    const res  = await fetch('/api/sessions');
+    const json = await res.json();
+    const sessions = json.data || [];
+    const tbody = document.getElementById('tbody-sessions');
+    if (!sessions.length) {
+      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">Tiada sesi kursus</td></tr>';
+      return;
+    }
+    tbody.innerHTML = sessions.map(s => {
+      const badgeCls = SESSION_STATUS_BADGE[s.status] || 'bg-secondary';
+      const canReview = s.status !== 'Belum Dibuka';
+      const reviewBtn = canReview
+        ? `<a href="course_application.html?sesiId=${s.id}" class="btn btn-sm btn-outline-primary me-1">Semakan Pemohon</a>`
+        : `<button class="btn btn-sm btn-outline-secondary me-1" disabled>Semakan Pemohon</button>`;
+      const duration = (s.startDate && s.endDate)
+        ? (() => { const d = Math.round((new Date(s.endDate) - new Date(s.startDate)) / 86400000) + 1; return d + ' Hari'; })()
+        : '-';
+      const dateRange = (s.startDate && s.endDate)
+        ? `${s.startDate} - ${s.endDate}`
+        : (s.startDate || '-');
+      return `<tr>
+        <td>${s.name || s.id}</td>
+        <td>${s.location || '-'}</td>
+        <td>${dateRange}</td>
+        <td>${duration}</td>
+        <td><span class="badge ${badgeCls}">${s.status || '-'}</span></td>
+        <td class="text-end">
+          ${reviewBtn}
+          <a href="course_sessionedit.html?id=${s.id}" class="btn btn-sm btn-outline-dark">Kemaskini</a>
+        </td>
+      </tr>`;
+    }).join('');
+  } catch (e) {
+    document.getElementById('tbody-sessions').innerHTML = '<tr><td colspan="6" class="text-center text-danger py-3">Gagal memuatkan sesi.</td></tr>';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', loadSessions);
+</script>
 
 </body>
 </html>

@@ -55,7 +55,7 @@
 
               <div>
                 <h6 class="text-muted mb-1">Jumlah Pendaftaran</h6>
-                <h3 class="mb-0 fw-bold">155</h3>
+                <h3 class="mb-0 fw-bold" id="countTotal">0</h3>
               </div>
 
               <div class="text-primary fs-3">
@@ -99,80 +99,10 @@
                       </tr>
                     </thead>
 
-                    <tbody>
-
+                    <tbody id="tbodyAll">
                       <tr>
-                        <td>Muhammad Bin Abdullah</td>
-                        <td>Pegawai Perubatan</td>
-                        <td>Klinik Kesihatan Kuala Lumpur</td>
-                        <td>WP Kuala Lumpur</td>
-                        <td>
-                          <span class="badge bg-warning text-dark">
-                            Dalam Semakan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
+                        <td colspan="6" class="text-center text-muted py-3">Tiada rekod pendaftaran</td>
                       </tr>
-
-                      <tr>
-                        <td>Nur Huda</td>
-                        <td>Jururawat</td>
-                        <td>Hospital Melaka</td>
-                        <td>Melaka</td>
-                        <td>
-                          <span class="badge bg-success">
-                            Diluluskan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>Ahmad Faiz</td>
-                        <td>Paramedik</td>
-                        <td>Klinik Kesihatan Johor Bahru</td>
-                        <td>Johor</td>
-                        <td>
-                          <span class="badge bg-success">
-                            Diluluskan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>Siti Khadijah</td>
-                        <td>Doktor</td>
-                        <td>Hospital Putrajaya</td>
-                        <td>WP Putrajaya</td>
-                        <td>
-                          <span class="badge bg-secondary">
-                            Tidak Aktif
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
                     </tbody>
 
                   </table>
@@ -202,7 +132,7 @@
 
               <div>
                 <h6 class="text-muted mb-1">Dalam Semakan</h6>
-                <h3 class="mb-0 fw-bold">33</h3>
+                <h3 class="mb-0 fw-bold" id="countPending">0</h3>
               </div>
 
               <div class="text-warning fs-3">
@@ -233,7 +163,7 @@
 
                 <!-- Ringkasan -->
                 <div class="alert alert-warning border mb-4">
-                  <strong>33 Permohonan</strong> sedang menunggu semakan dan kelulusan admin MyEMT.
+                  <strong id="alertPending">0 Permohonan</strong> sedang menunggu semakan dan kelulusan admin MyEMT.
                 </div>
 
                 <div class="table-responsive">
@@ -252,84 +182,10 @@
                       </tr>
                     </thead>
 
-                    <tbody>
-
-                      <tr>
-                        <td>15/06/2026</td>
-                        <td>Muhammad Bin Abdullah</td>
-                        <td>Pegawai Perubatan</td>
-                        <td>Klinik Kesihatan Kuala Lumpur</td>
-                        <td>WP Kuala Lumpur</td>
-                        <td>
-                          <span class="badge bg-warning text-dark">
-                            Dalam Semakan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
+                    <tbody id="tbodyPending">
+                      <tr id="tbodyPendingPlaceholder">
+                        <td colspan="7" class="text-center text-muted py-3">Tiada permohonan dalam semakan</td>
                       </tr>
-
-                      <tr>
-                        <td>14/06/2026</td>
-                        <td>Nur Huda</td>
-                        <td>Jururawat</td>
-                        <td>Hospital Melaka</td>
-                        <td>Melaka</td>
-                        <td>
-                          <span class="badge bg-warning text-dark">
-                            Dalam Semakan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>13/06/2026</td>
-                        <td>Ahmad Faiz</td>
-                        <td>Paramedik</td>
-                        <td>Klinik Kesihatan Johor Bahru</td>
-                        <td>Johor</td>
-                        <td>
-                          <span class="badge bg-warning text-dark">
-                            Dalam Semakan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>12/06/2026</td>
-                        <td>Siti Khadijah</td>
-                        <td>Doktor</td>
-                        <td>Hospital Putrajaya</td>
-                        <td>WP Putrajaya</td>
-                        <td>
-                          <span class="badge bg-warning text-dark">
-                            Dalam Semakan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
                     </tbody>
 
                   </table>
@@ -359,7 +215,7 @@
 
               <div>
                 <h6 class="text-muted mb-1">Diluluskan</h6>
-                <h3 class="mb-0 fw-bold">87</h3>
+                <h3 class="mb-0 fw-bold" id="countApproved">0</h3>
               </div>
 
               <div class="text-success fs-3">
@@ -389,7 +245,7 @@
               <div class="modal-body">
 
                 <div class="alert alert-success border mb-4">
-                  <strong>87 Permohonan</strong> telah diluluskan dan layak menyertai MyEMT.
+                  <strong id="alertApproved">0 Permohonan</strong> telah diluluskan dan layak menyertai MyEMT.
                 </div>
 
                 <div class="table-responsive">
@@ -408,84 +264,10 @@
                       </tr>
                     </thead>
 
-                    <tbody>
-
+                    <tbody id="tbodyApproved">
                       <tr>
-                        <td>18/06/2026</td>
-                        <td>Muhammad Bin Abdullah</td>
-                        <td>Pegawai Perubatan</td>
-                        <td>Klinik Kesihatan Kuala Lumpur</td>
-                        <td>WP Kuala Lumpur</td>
-                        <td>
-                          <span class="badge bg-success">
-                            Diluluskan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
+                        <td colspan="7" class="text-center text-muted py-3">Tiada permohonan diluluskan</td>
                       </tr>
-
-                      <tr>
-                        <td>17/06/2026</td>
-                        <td>Nur Huda</td>
-                        <td>Jururawat</td>
-                        <td>Hospital Melaka</td>
-                        <td>Melaka</td>
-                        <td>
-                          <span class="badge bg-success">
-                            Diluluskan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>16/06/2026</td>
-                        <td>Ahmad Faiz</td>
-                        <td>Paramedik</td>
-                        <td>Klinik Kesihatan Johor Bahru</td>
-                        <td>Johor</td>
-                        <td>
-                          <span class="badge bg-success">
-                            Diluluskan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>15/06/2026</td>
-                        <td>Siti Khadijah</td>
-                        <td>Doktor</td>
-                        <td>Hospital Putrajaya</td>
-                        <td>WP Putrajaya</td>
-                        <td>
-                          <span class="badge bg-success">
-                            Diluluskan
-                          </span>
-                        </td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
                     </tbody>
 
                   </table>
@@ -515,7 +297,7 @@
 
               <div>
                 <h6 class="text-muted mb-1">Ditolak</h6>
-                <h3 class="mb-0 fw-bold">35</h3>
+                <h3 class="mb-0 fw-bold" id="countRejected">0</h3>
               </div>
 
               <div class="text-danger fs-3">
@@ -545,7 +327,7 @@
               <div class="modal-body">
 
                 <div class="alert alert-danger border mb-4">
-                  <strong>35 Permohonan</strong> telah ditolak selepas proses semakan.
+                  <strong id="alertRejected">0 Permohonan</strong> telah ditolak selepas proses semakan.
                 </div>
 
                 <div class="table-responsive">
@@ -564,68 +346,10 @@
                       </tr>
                     </thead>
 
-                    <tbody>
-
+                    <tbody id="tbodyRejected">
                       <tr>
-                        <td>18/06/2026</td>
-                        <td>Mohd Hafiz</td>
-                        <td>Paramedik</td>
-                        <td>Hospital Sultanah Aminah</td>
-                        <td>Johor</td>
-                        <td>Dokumen tidak lengkap</td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
+                        <td colspan="7" class="text-center text-muted py-3">Tiada permohonan ditolak</td>
                       </tr>
-
-                      <tr>
-                        <td>17/06/2026</td>
-                        <td>Nurul Izzah</td>
-                        <td>Jururawat</td>
-                        <td>Hospital Melaka</td>
-                        <td>Melaka</td>
-                        <td>Tidak memenuhi syarat pengalaman</td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>16/06/2026</td>
-                        <td>Ahmad Syakir</td>
-                        <td>Pegawai Farmasi</td>
-                        <td>Hospital Tengku Ampuan Rahimah</td>
-                        <td>Selangor</td>
-                        <td>Maklumat permohonan tidak sah</td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
-                      <tr>
-                        <td>15/06/2026</td>
-                        <td>Siti Aminah</td>
-                        <td>Doktor</td>
-                        <td>Hospital Kuala Lumpur</td>
-                        <td>WP Kuala Lumpur</td>
-                        <td>Tidak lulus penilaian kesihatan</td>
-                        <td class="text-end">
-                          <a href="emt_deployform.html"
-                            class="btn btn-sm btn-outline-secondary">
-                            Papar
-                          </a>
-                        </td>
-                      </tr>
-
                     </tbody>
 
                   </table>
@@ -674,68 +398,9 @@
           </tr>
         </thead>
 
-        <tbody>
-
-          <!-- CONTOH 1 -->
+        <tbody id="tbodyMain">
           <tr>
-            <td>12/01/2026</td>
-            <td>Muhammad Bin Abdullah</td>
-            <td>Pegawai Perubatan</td>
-            <td>Klinik Kesihatan Kuala Lumpur</td>
-            <td>WP Kuala Lumpur</td>
-
-            <td class="status">
-              <span class="badge rounded-pill bg-warning text-dark px-3 py-2 status-text">
-                Dalam Semakan
-              </span>
-            </td>
-
-            <td class="text-end">
-              <a href="emt_deployform.html?id=2" class="btn btn-sm btn-outline-primary">
-                Papar
-              </a>
-            </td>
-
-          <!-- CONTOH 2 -->
-          <tr>
-            <td>10/01/2026</td>
-            <td>Nur Huda</td>
-            <td>Jururawat</td>
-            <td>Hospital Melaka</td>
-            <td>Melaka</td>
-
-            <td class="status">
-              <span class="badge rounded-pill bg-success px-3 py-2 status-text">
-                Diluluskan
-              </span>
-            </td>
-
-            <td class="text-end">
-              <a href="emt_deployform.html?id=2" class="btn btn-sm btn-outline-primary">
-                Papar
-              </a>
-            </td>
-          </tr>
-
-          <!-- CONTOH 3 -->
-          <tr>
-            <td>08/01/2026</td>
-            <td>Ahmad Faiz</td>
-            <td>Paramedik</td>
-            <td>Klinik Kesihatan Johor Bahru</td>
-            <td>Johor</td>
-
-            <td class="status">
-              <span class="badge rounded-pill bg-danger px-3 py-2 status-text">
-                Ditolak
-              </span>
-            </td>
-
-            <td class="text-end">
-              <a href="emt_deployform.html?id=3" class="btn btn-sm btn-outline-primary">
-                Papar
-              </a>
-            </td>
+            <td colspan="7" class="text-center text-muted py-3">Tiada rekod permohonan</td>
           </tr>
         </tbody>
       </table>
@@ -771,75 +436,179 @@
   .catch(err => console.error("Sidebar load failed:", err));
 </script>
 
-<!--status permohonan user-->
+<!-- API integration -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+const STATUS_MAP = {
+  pending:  { label: 'Dalam Semakan', badge: 'bg-warning text-dark' },
+  approved: { label: 'Diluluskan',    badge: 'bg-success' },
+  rejected: { label: 'Ditolak',       badge: 'bg-danger' }
+};
 
-  document.querySelectorAll("tbody tr").forEach(row => {
+function statusBadge(status) {
+  const s = STATUS_MAP[status] || { label: status, badge: 'bg-secondary' };
+  return `<span class="badge ${s.badge}">${s.label}</span>`;
+}
 
-    const statusCell = row.querySelector(".status");
-    const approveBtn = row.querySelector(".btn-approve");
-    const rejectBtn = row.querySelector(".btn-reject");
+function actionBtns(id, status) {
+  const dis = (status === 'approved' || status === 'rejected') ? 'disabled' : '';
+  return `
+    <button class="btn btn-sm btn-success me-1 btn-approve" data-id="${id}" ${dis}>Lulus</button>
+    <button class="btn btn-sm btn-danger btn-reject" data-id="${id}" ${dis}>Tolak</button>`;
+}
 
-    function disableButtons() {
-      approveBtn.disabled = true;
-      rejectBtn.disabled = true;
-    }
-
-    // Disable jika sudah diproses
-    const currentStatus = statusCell.innerText.trim();
-
-    if (
-      currentStatus === "Diluluskan" ||
-      currentStatus === "Ditolak"
-    ) {
-      disableButtons();
-    }
-
-    // Lulus
-    approveBtn.addEventListener("click", function () {
-
-      statusCell.innerHTML =
-        '<span class="badge bg-success">Diluluskan</span>';
-
-      disableButtons();
-    });
-
-    // Gagal
-    rejectBtn.addEventListener("click", function () {
-
-      statusCell.innerHTML =
-        '<span class="badge bg-danger">Ditolak</span>';
-
-      disableButtons();
-    });
-
+async function patchStatus(id, status) {
+  const res = await fetch(`/api/members/${id}/status`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status })
   });
+  return res.json();
+}
 
-});
-</script>
+function bindActionBtns(tbody) {
+  tbody.querySelectorAll('.btn-approve').forEach(btn => {
+    btn.addEventListener('click', async function () {
+      const id = this.dataset.id;
+      await patchStatus(id, 'approved');
+      loadMembers();
+    });
+  });
+  tbody.querySelectorAll('.btn-reject').forEach(btn => {
+    btn.addEventListener('click', async function () {
+      const id = this.dataset.id;
+      await patchStatus(id, 'rejected');
+      loadMembers();
+    });
+  });
+}
 
-<!--FILTER LULUS GAGAL-->
-<script>
-document.getElementById("statusFilter").addEventListener("change", function () {
+async function loadMembers() {
+  const res = await fetch('/api/members');
+  const json = await res.json();
+  const members = json.data || json;
 
-  const filter = this.value;
-  const rows = document.querySelectorAll("table tbody tr");
+  const pending  = members.filter(m => m.status === 'pending');
+  const approved = members.filter(m => m.status === 'approved');
+  const rejected = members.filter(m => m.status === 'rejected');
 
-  rows.forEach(row => {
+  // Update counters
+  document.getElementById('countTotal').textContent    = members.length;
+  document.getElementById('countPending').textContent  = pending.length;
+  document.getElementById('countApproved').textContent = approved.length;
+  document.getElementById('countRejected').textContent = rejected.length;
 
-    const statusElement = row.querySelector(".status-text");
-    const status = statusElement ? statusElement.textContent.trim() : "";
+  // Update modal alert text
+  document.getElementById('alertPending').textContent  = `${pending.length} Permohonan`;
+  document.getElementById('alertApproved').textContent = `${approved.length} Permohonan`;
+  document.getElementById('alertRejected').textContent = `${rejected.length} Permohonan`;
 
-    if (filter === "all" || status === filter) {
-      row.style.display = "";
+  // Main table (all members)
+  const tbodyMain = document.getElementById('tbodyMain');
+  if (members.length === 0) {
+    tbodyMain.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod permohonan</td></tr>';
+  } else {
+    tbodyMain.innerHTML = members.map(m => `
+      <tr data-status="${STATUS_MAP[m.status]?.label || m.status}">
+        <td>${m.submittedAt || '-'}</td>
+        <td>${m.full_name || m.name || '-'}</td>
+        <td>${m.designation || '-'}</td>
+        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
+        <td>${m.state || '-'}</td>
+        <td class="status">${statusBadge(m.status)}</td>
+        <td class="text-end">${actionBtns(m.id, m.status)}</td>
+      </tr>`).join('');
+    bindActionBtns(tbodyMain);
+  }
+
+  // Modal All
+  const tbodyAll = document.getElementById('tbodyAll');
+  if (members.length === 0) {
+    tbodyAll.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">Tiada rekod pendaftaran</td></tr>';
+  } else {
+    tbodyAll.innerHTML = members.map(m => `
+      <tr>
+        <td>${m.full_name || m.name || '-'}</td>
+        <td>${m.designation || '-'}</td>
+        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
+        <td>${m.state || '-'}</td>
+        <td>${statusBadge(m.status)}</td>
+        <td class="text-end">${actionBtns(m.id, m.status)}</td>
+      </tr>`).join('');
+    bindActionBtns(tbodyAll);
+  }
+
+  // Modal Pending
+  const tbodyPending = document.getElementById('tbodyPending');
+  if (pending.length === 0) {
+    tbodyPending.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">Tiada permohonan dalam semakan</td></tr>';
+  } else {
+    tbodyPending.innerHTML = pending.map(m => `
+      <tr>
+        <td>${m.submittedAt || '-'}</td>
+        <td>${m.full_name || m.name || '-'}</td>
+        <td>${m.designation || '-'}</td>
+        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
+        <td>${m.state || '-'}</td>
+        <td>${statusBadge(m.status)}</td>
+        <td class="text-end">${actionBtns(m.id, m.status)}</td>
+      </tr>`).join('');
+    bindActionBtns(tbodyPending);
+  }
+
+  // Modal Approved
+  const tbodyApproved = document.getElementById('tbodyApproved');
+  if (approved.length === 0) {
+    tbodyApproved.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">Tiada permohonan diluluskan</td></tr>';
+  } else {
+    tbodyApproved.innerHTML = approved.map(m => `
+      <tr>
+        <td>${m.submittedAt || '-'}</td>
+        <td>${m.full_name || m.name || '-'}</td>
+        <td>${m.designation || '-'}</td>
+        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
+        <td>${m.state || '-'}</td>
+        <td>${statusBadge(m.status)}</td>
+        <td class="text-end">${actionBtns(m.id, m.status)}</td>
+      </tr>`).join('');
+    bindActionBtns(tbodyApproved);
+  }
+
+  // Modal Rejected
+  const tbodyRejected = document.getElementById('tbodyRejected');
+  if (rejected.length === 0) {
+    tbodyRejected.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">Tiada permohonan ditolak</td></tr>';
+  } else {
+    tbodyRejected.innerHTML = rejected.map(m => `
+      <tr>
+        <td>${m.submittedAt || '-'}</td>
+        <td>${m.full_name || m.name || '-'}</td>
+        <td>${m.designation || '-'}</td>
+        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
+        <td>${m.state || '-'}</td>
+        <td>${statusBadge(m.status)}</td>
+        <td class="text-end">${actionBtns(m.id, m.status)}</td>
+      </tr>`).join('');
+    bindActionBtns(tbodyRejected);
+  }
+
+  // Reapply filter
+  applyFilter();
+}
+
+function applyFilter() {
+  const filter = document.getElementById('statusFilter').value;
+  document.querySelectorAll('#tbodyMain tr').forEach(row => {
+    if (filter === 'all' || row.dataset.status === filter) {
+      row.style.display = '';
     } else {
-      row.style.display = "none";
+      row.style.display = 'none';
     }
-
   });
+}
 
-});
+document.getElementById('statusFilter').addEventListener('change', applyFilter);
+
+document.addEventListener('DOMContentLoaded', loadMembers);
 </script>
 
 </body>
