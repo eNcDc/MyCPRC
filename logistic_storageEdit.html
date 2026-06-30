@@ -250,6 +250,77 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function fillByLabel(labelText, value) {
+  if (value === undefined || value === null) return;
+  for (const lbl of document.querySelectorAll('.form-label')) {
+    if (lbl.textContent.trim() === labelText) {
+      const parent = lbl.closest('[class*="col-"], .mb-3');
+      const input = parent?.querySelector('input, select, textarea');
+      if (input) { input.value = String(value); return; }
+    }
+  }
+}
+function getByLabel(labelText) {
+  for (const lbl of document.querySelectorAll('.form-label')) {
+    if (lbl.textContent.trim() === labelText) {
+      const parent = lbl.closest('[class*="col-"], .mb-3');
+      const input = parent?.querySelector('input:not([readonly]), select, textarea');
+      return input ? input.value : null;
+    }
+  }
+  return null;
+}
+
+const id = new URLSearchParams(location.search).get('id');
+if (id) {
+  fetch(`${API}/api/storage/${encodeURIComponent(id)}`)
+    .then(r => r.json())
+    .then(({ data: s }) => {
+      if (!s) return;
+      fillByLabel('Kod Penyimpanan', s.id);
+      fillByLabel('Nama Penyimpanan', s.name);
+      fillByLabel('Jenis Penyimpanan', s.type);
+      fillByLabel('Kategori Aset', s.category);
+      fillByLabel('Kapasiti', s.capacity);
+      fillByLabel('Lokasi Penyimpanan', s.location);
+      fillByLabel('Status', s.status);
+      fillByLabel('Tarikh Didaftarkan', s.registrationDate);
+      fillByLabel('Tarikh Pemeriksaan Terakhir', s.lastInspection);
+      fillByLabel('Pegawai Bertanggungjawab', s.responsibleOfficer);
+      fillByLabel('Catatan', s.notes);
+    })
+    .catch(() => {});
+
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        name:              getByLabel('Nama Penyimpanan'),
+        type:              getByLabel('Jenis Penyimpanan'),
+        category:          getByLabel('Kategori Aset'),
+        capacity:          getByLabel('Kapasiti'),
+        location:          getByLabel('Lokasi Penyimpanan'),
+        status:            getByLabel('Status'),
+        registrationDate:  getByLabel('Tarikh Didaftarkan'),
+        lastInspection:    getByLabel('Tarikh Pemeriksaan Terakhir'),
+        responsibleOfficer:getByLabel('Pegawai Bertanggungjawab'),
+        notes:             getByLabel('Catatan'),
+      };
+      try {
+        const res = await fetch(`${API}/api/storage/${encodeURIComponent(id)}`, {
+          method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success) { alert('Stor berjaya dikemaskini!'); history.back(); }
+        else alert('Ralat: ' + (json.message || 'Kemaskini gagal.'));
+      } catch { alert('Ralat rangkaian.'); }
+    });
+  }
+}
+</script>
 </body>
 </html>

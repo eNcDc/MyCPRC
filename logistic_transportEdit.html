@@ -289,5 +289,82 @@ function toggleOtherVehicle() {
 }
 </script>
 
+<script src="assets/js/config.js"></script>
+<script>
+function fillByLabel(labelText, value) {
+  if (value === undefined || value === null) return;
+  for (const lbl of document.querySelectorAll('.form-label')) {
+    if (lbl.textContent.trim() === labelText) {
+      const parent = lbl.closest('[class*="col-"], .mb-3');
+      const input = parent?.querySelector('input, select, textarea');
+      if (input) { input.value = String(value); return; }
+    }
+  }
+}
+function getByLabel(labelText) {
+  for (const lbl of document.querySelectorAll('.form-label')) {
+    if (lbl.textContent.trim() === labelText) {
+      const parent = lbl.closest('[class*="col-"], .mb-3');
+      const input = parent?.querySelector('input:not([readonly]), select, textarea');
+      return input ? input.value : null;
+    }
+  }
+  return null;
+}
+
+const id = new URLSearchParams(location.search).get('id');
+if (id) {
+  fetch(`${API}/api/transport/${encodeURIComponent(id)}`)
+    .then(r => r.json())
+    .then(({ data: v }) => {
+      if (!v) return;
+      fillByLabel('ID Kenderaan', v.id);
+      fillByLabel('Jenis Kenderaan', v.type);
+      fillByLabel('No. Pendaftaran', v.plate);
+      fillByLabel('Jenis Bahan Api', v.fuelType);
+      fillByLabel('Kapasiti Penumpang', v.passengerCapacity);
+      fillByLabel('Kapasiti Muatan (kg)', v.loadCapacity);
+      fillByLabel('Nota Kapasiti', v.capacityNote);
+      fillByLabel('Status Operasi', v.status);
+      fillByLabel('Unit Bertanggungjawab', v.responsibleUnit);
+      fillByLabel('Pemandu Tetap', v.driver);
+      fillByLabel('Servis Terakhir', v.lastServiceDate);
+      fillByLabel('Servis Seterusnya', v.nextServiceDate);
+      fillByLabel('Lokasi Semasa', v.currentLocation);
+      fillByLabel('Catatan', v.notes);
+    })
+    .catch(() => {});
+
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        type:              getByLabel('Jenis Kenderaan'),
+        plate:             getByLabel('No. Pendaftaran'),
+        fuelType:          getByLabel('Jenis Bahan Api'),
+        passengerCapacity: Number(getByLabel('Kapasiti Penumpang')),
+        loadCapacity:      Number(getByLabel('Kapasiti Muatan (kg)')),
+        capacityNote:      getByLabel('Nota Kapasiti'),
+        status:            getByLabel('Status Operasi'),
+        responsibleUnit:   getByLabel('Unit Bertanggungjawab'),
+        driver:            getByLabel('Pemandu Tetap'),
+        lastServiceDate:   getByLabel('Servis Terakhir'),
+        nextServiceDate:   getByLabel('Servis Seterusnya'),
+        currentLocation:   getByLabel('Lokasi Semasa'),
+        notes:             getByLabel('Catatan'),
+      };
+      try {
+        const res = await fetch(`${API}/api/transport/${encodeURIComponent(id)}`, {
+          method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
+        });
+        const json = await res.json();
+        if (json.success) { alert('Kenderaan berjaya dikemaskini!'); history.back(); }
+        else alert('Ralat: ' + (json.message || 'Kemaskini gagal.'));
+      } catch { alert('Ralat rangkaian.'); }
+    });
+  }
+}
+</script>
 </body>
 </html>

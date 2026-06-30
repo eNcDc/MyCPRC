@@ -231,5 +231,59 @@ function toggleOtherVehicle() {
 }
 </script>
 
+<script src="assets/js/config.js"></script>
+<script>
+function setByLabel(labelText, value) {
+  const v = (value !== undefined && value !== null && value !== '') ? String(value) : '-';
+  for (const el of document.querySelectorAll('small.text-muted')) {
+    if (el.textContent.trim() === labelText) {
+      const parent = el.parentElement;
+      const fw = parent?.querySelector('.fw-semibold, .fw-bold');
+      if (fw) { fw.textContent = v; return; }
+      const next = el.nextElementSibling;
+      if (next) { next.textContent = v; return; }
+    }
+  }
+}
+
+const id = new URLSearchParams(location.search).get('id');
+if (id) {
+  fetch(`${API}/api/transport/${encodeURIComponent(id)}`)
+    .then(r => r.json())
+    .then(({ data: v }) => {
+      if (!v) return;
+      // Header
+      const h5 = document.querySelector('h5.fw-bold.mb-1');
+      if (h5) h5.textContent = v.name || '-';
+      const subEl = document.querySelector('.d-flex.justify-content-between small.text-muted');
+      if (subEl) subEl.textContent = `ID: ${v.id} | No. Plat: ${v.plate || '-'}`;
+      // Status badge
+      const badge = document.querySelector('.d-flex.justify-content-between .badge');
+      if (badge) {
+        const cls = { 'Tersedia':'bg-success','Digunakan':'bg-primary','Standby':'bg-secondary','Penyelenggaraan':'bg-warning text-dark','Rosak':'bg-danger' };
+        badge.className = 'badge px-3 py-2 ' + (cls[v.status] || 'bg-secondary');
+        badge.textContent = v.status || '-';
+      }
+      // Detail fields
+      setByLabel('Jenis Kenderaan', v.type);
+      setByLabel('Bahan Api', v.fuelType);
+      setByLabel('Kapasiti Penumpang', v.passengerCapacity ? v.passengerCapacity + ' Orang' : '-');
+      setByLabel('Kapasiti Muatan', v.loadCapacity ? v.loadCapacity + ' kg' : '-');
+      setByLabel('Jenis Penggunaan', v.capacityNote);
+      setByLabel('Unit Bertanggungjawab', v.responsibleUnit);
+      setByLabel('Pemandu Tetap', v.driver);
+      setByLabel('Lokasi Semasa', v.currentLocation);
+      setByLabel('Servis Terakhir', v.lastServiceDate);
+      setByLabel('Servis Seterusnya', v.nextServiceDate);
+      // Notes
+      const notesP = document.querySelector('.card-body p.text-muted.mb-0');
+      if (notesP) notesP.textContent = v.notes || '-';
+      // Kemaskini link
+      const kLink = document.querySelector('a[href="logistic_transportEdit.html"]');
+      if (kLink) kLink.href = `logistic_transportEdit.html?id=${v.id}`;
+    })
+    .catch(() => {});
+}
+</script>
 </body>
 </html>

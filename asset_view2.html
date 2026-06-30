@@ -292,6 +292,73 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+function setByLabel(labelText, value) {
+  const v = (value !== undefined && value !== null && value !== '') ? String(value) : '-';
+  for (const el of document.querySelectorAll('small.text-muted')) {
+    if (el.textContent.trim() === labelText) {
+      const parent = el.parentElement;
+      const fw = parent?.querySelector('.fw-semibold, .fw-bold');
+      if (fw) { fw.textContent = v; return; }
+      const badge = parent?.querySelector('.badge');
+      if (badge) { badge.textContent = v; return; }
+    }
+  }
+  for (const td of document.querySelectorAll('td.text-muted')) {
+    if (td.textContent.trim() === labelText) {
+      const next = td.nextElementSibling;
+      if (next) { next.textContent = v; return; }
+    }
+  }
+}
+
+const id = new URLSearchParams(location.search).get('id');
+if (id) {
+  fetch(`${API}/api/assets/${encodeURIComponent(id)}`)
+    .then(r => r.json())
+    .then(({ data: a }) => {
+      if (!a) return;
+      // Summary top
+      setByLabel('Nama Aset', a.name);
+      setByLabel('Tahap Kritikal', a.priority);
+      // Status badge with color
+      const statusEl = Array.from(document.querySelectorAll('small.text-muted'))
+        .find(el => el.textContent.trim() === 'Status Aset');
+      if (statusEl) {
+        const badge = statusEl.parentElement?.querySelector('.badge');
+        if (badge) {
+          const cls = { 'Aktif':'bg-success','Penyelenggaraan':'bg-warning text-dark','Rosak':'bg-danger','Servis Diperlukan':'bg-warning text-dark','Dalam Penggunaan':'bg-primary' };
+          badge.className = 'badge ' + (cls[a.status] || 'bg-secondary');
+          badge.textContent = a.status || '-';
+        }
+      }
+      // Table details
+      setByLabel('No Siri', a.serial);
+      setByLabel('Kuantiti Aset', a.quantity);
+      setByLabel('Kategori', a.category);
+      setByLabel('Sub Kategori', a.subCategory);
+      setByLabel('Jenis Aset', a.assetType);
+      setByLabel('Lokasi Semasa', a.location);
+      setByLabel('Pegawai Bertanggungjawab', a.responsibleOfficer);
+      // Procurement cards
+      setByLabel('Tarikh Perolehan', a.procurementDate);
+      setByLabel('Kos', a.cost ? 'RM ' + a.cost : '-');
+      setByLabel('Pembekal', a.supplier);
+      // Maintenance cards
+      setByLabel('Servis Terakhir', a.lastServiceDate);
+      setByLabel('Servis Seterusnya', a.nextServiceDate);
+      setByLabel('Warranty Tamat', a.warrantyEnd);
+      // Notes
+      const notesDiv = document.querySelector('.bg-warning-subtle .fw-semibold');
+      if (notesDiv) notesDiv.textContent = a.notes || '-';
+      // Kemaskini link
+      const kLink = document.querySelector('a[href="asset_edit2.html"]');
+      if (kLink) kLink.href = `asset_edit2.html?id=${a.id}`;
+    })
+    .catch(() => {});
+}
+</script>
 </body>
 </html>
