@@ -1,26 +1,27 @@
 // lambda/handler.js  — single Lambda that handles all /api/* routes
 // Replaces server.js. Reads/writes JSON files in S3 for persistence.
 
-const AWS = require('aws-sdk');
-const s3   = new AWS.S3();
+const { S3Client, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
+const s3     = new S3Client({ region: process.env.AWS_REGION || 'ap-southeast-1' });
 const BUCKET = process.env.S3_BUCKET || 'poc-mycprc-myemt';
 
 // ── S3 helpers ────────────────────────────────────────────────────────────────
 async function s3Get(key) {
   try {
-    const res = await s3.getObject({ Bucket: BUCKET, Key: key }).promise();
-    return JSON.parse(res.Body.toString());
+    const res  = await s3.send(new GetObjectCommand({ Bucket: BUCKET, Key: key }));
+    const body = await res.Body.transformToString();
+    return JSON.parse(body);
   } catch (err) {
-    if (err.code === 'NoSuchKey') return null;
+    if (err.name === 'NoSuchKey') return null;
     throw err;
   }
 }
 async function s3Put(key, data) {
-  await s3.putObject({
+  await s3.send(new PutObjectCommand({
     Bucket: BUCKET, Key: key,
     Body: JSON.stringify(data, null, 2),
     ContentType: 'application/json'
-  }).promise();
+  }));
 }
 
 // ── Seed data ─────────────────────────────────────────────────────────────────
