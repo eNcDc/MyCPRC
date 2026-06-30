@@ -2,7 +2,7 @@
 // Replaces server.js. Reads/writes JSON files in S3 for persistence.
 
 const { S3Client, GetObjectCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
-const s3     = new S3Client({ region: process.env.AWS_REGION || 'ap-southeast-1' });
+const s3     = new S3Client({ region: process.env.S3_REGION || 'us-east-1' });
 const BUCKET = process.env.S3_BUCKET || 'poc-mycprc-myemt';
 
 // ── S3 helpers ────────────────────────────────────────────────────────────────
