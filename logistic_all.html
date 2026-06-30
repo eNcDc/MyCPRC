@@ -134,32 +134,26 @@
             <div class="col-md-6">
 
                 <ul class="list-group list-group-flush">
-
                 <li class="list-group-item d-flex justify-content-between">
                     <span><span class="badge bg-success me-2">&nbsp;</span>Aktif</span>
-                    <strong>3</strong>
+                    <strong id="stor-aktif">-</strong>
                 </li>
-
                 <li class="list-group-item d-flex justify-content-between">
                     <span><span class="badge bg-primary me-2">&nbsp;</span>Dalam Penggunaan</span>
-                    <strong>2</strong>
+                    <strong id="stor-guna">-</strong>
                 </li>
-
                 <li class="list-group-item d-flex justify-content-between">
                     <span><span class="badge bg-warning me-2">&nbsp;</span>Standby</span>
-                    <strong>1</strong>
+                    <strong id="stor-standby">-</strong>
                 </li>
-
                 <li class="list-group-item d-flex justify-content-between">
                     <span><span class="badge bg-orange me-2" style="background:#fd7e14;">&nbsp;</span>Penyelenggaraan</span>
-                    <strong>1</strong>
+                    <strong id="stor-maintenance">-</strong>
                 </li>
-
                 <li class="list-group-item d-flex justify-content-between">
                     <span><span class="badge bg-secondary me-2">&nbsp;</span>Ditutup</span>
-                    <strong>0</strong>
+                    <strong id="stor-ditutup">-</strong>
                 </li>
-
                 </ul>
 
             </div>
@@ -205,78 +199,8 @@
                 </tr>
             </thead>
 
-            <tbody>
-
-                <tr>
-                <td class="fw-semibold">CRT001</td>
-                <td>Crates Bekalan Perubatan</td>
-                <td>Gudang</td>
-                <td>Sabah HQ</td>
-                <td><span class="badge bg-success">Aktif</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_storageview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_storageEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
-                <tr>
-                <td class="fw-semibold">CRT002</td>
-                <td>Crates Peralatan Kecemasan</td>
-                <td>Stor Sementara</td>
-                <td>Base Camp EMT</td>                
-                <td><span class="badge bg-warning">Standby</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_storageview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_storageEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
-                <tr>
-                <td class="fw-semibold">CRT003</td>
-                <td>Bekalan Oksigen</td>
-                <td>Gudang</td>
-                <td>Hospital HQ</td>
-                <td><span class="badge bg-primary">Digunakan</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_storageview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_storageEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
-                <tr>
-                <td class="fw-semibold">STO004</td>
-                <td>Kontena Logistik A</td>
-                <td>Kontena 20 Kaki</td>
-                <td>Sabah Field Base</td>
-                <td><span class="badge bg-success">Aktif</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_storageview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_storageEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
-                <tr>
-                <td class="fw-semibold">STO005</td>
-                <td>Mobile Medical Store</td>
-                <td>Kontena 40 Kaki</td>
-                <td>Kota Kinabalu Base</td>
-                <td><span class="badge bg-danger">Penyelenggaraan</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_storageview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_storageEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
+            <tbody id="tbody-storage">
+                <tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr>
             </tbody>
 
             </table>
@@ -312,33 +236,26 @@
                 <div class="col-md-6">
 
                 <ul class="list-group list-group-flush">
-
                     <li class="list-group-item d-flex justify-content-between">
-                    <span><span class="badge bg-success me-2">&nbsp;</span>Tersedia</span>
-                    <strong>2</strong>
+                        <span><span class="badge bg-success me-2">&nbsp;</span>Tersedia</span>
+                        <strong id="veh-tersedia">-</strong>
                     </li>
-
                     <li class="list-group-item d-flex justify-content-between">
-                    <span><span class="badge bg-primary me-2">&nbsp;</span>Digunakan</span>
-                    <strong>1</strong>
+                        <span><span class="badge bg-primary me-2">&nbsp;</span>Digunakan</span>
+                        <strong id="veh-guna">-</strong>
                     </li>
-
                     <li class="list-group-item d-flex justify-content-between">
-                    <span><span class="badge bg-warning me-2">&nbsp;</span>Standby</span>
-                    <strong>1</strong>
+                        <span><span class="badge bg-warning me-2">&nbsp;</span>Standby</span>
+                        <strong id="veh-standby">-</strong>
                     </li>
-
                     <li class="list-group-item d-flex justify-content-between">
-                    <span><span class="badge bg-danger me-2">&nbsp;</span>Penyelenggaraan</span>
-                    <strong>1</strong>
+                        <span><span class="badge bg-danger me-2">&nbsp;</span>Penyelenggaraan</span>
+                        <strong id="veh-maintenance">-</strong>
                     </li>
-
-                    <!-- ✅ NEW -->
                     <li class="list-group-item d-flex justify-content-between">
-                    <span><span class="badge bg-dark me-2">&nbsp;</span>Rosak</span>
-                    <strong>0</strong>
+                        <span><span class="badge bg-dark me-2">&nbsp;</span>Rosak</span>
+                        <strong id="veh-rosak">-</strong>
                     </li>
-
                 </ul>
 
                 </div>
@@ -395,78 +312,8 @@
                 </tr>
             </thead>
 
-            <tbody>
-
-                <tr>
-                <td class="fw-semibold">VEH-001</td>
-                <td>Ambulans</td>
-                <td>WXY1234</td>
-                <td>Ahmad</td>
-                <td><span class="badge bg-success">Tersedia</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_transportview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_transportEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
-                <tr>
-                <td class="fw-semibold">VEH-002</td>
-                <td>Lori Logistik</td>
-                <td>JKT5521</td>
-                <td>Rizal</td>
-                <td><span class="badge bg-primary">Digunakan</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_transportview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_transportEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
-                <tr>
-                <td class="fw-semibold">VEH-003</td>
-                <td>Kenderaan 4x4</td>
-                <td>SAB7789</td>
-                <td>Hafiz</td>
-                <td><span class="badge bg-warning">Standby</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_transportview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_transportEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
-                <tr>
-                <td class="fw-semibold">VEH-004</td>
-                <td>Van Perubatan</td>
-                <td>WQV9911</td>
-                <td>Siti</td>
-                <td><span class="badge bg-success">Tersedia</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_transportview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_transportEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
-                <tr>
-                <td class="fw-semibold">VEH-005</td>
-                <td>Bas EMT</td>
-                <td>SBP4422</td>
-                <td>Farid</td>
-                <td><span class="badge bg-danger">Penyelenggaraan</span></td>
-                <td class="text-end">
-                    <div class="btn-group btn-group-sm">
-                    <a href="logistic_transportview.html" class="btn btn-outline-primary">Papar</a>
-                    <a href="logistic_transportEdit.html" class="btn btn-outline-secondary">Kemaskini</a>
-                    </div>
-                </td>
-                </tr>
-
+            <tbody id="tbody-transport">
+                <tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr>
             </tbody>
 
             </table>
@@ -499,135 +346,104 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-
-<!-- CHART JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
 <script>
+const STOR_STATUS_BADGE = { 'Aktif':'bg-success', 'Dalam Penggunaan':'bg-primary', 'Standby':'bg-warning text-dark', 'Penyelenggaraan':'bg-danger', 'Ditutup':'bg-secondary' };
+const VEH_STATUS_BADGE  = { 'Tersedia':'bg-success', 'Digunakan':'bg-primary', 'Standby':'bg-warning text-dark', 'Penyelenggaraan':'bg-danger', 'Rosak':'bg-dark' };
 
-new Chart(document.getElementById('chartTransportStatus'), {
-  type: 'pie',
-  data: {
-    labels: [
-      'Tersedia',
-      'Digunakan',
-      'Standby',
-      'Penyelenggaraan',
-      'Rosak'
-    ],
-    datasets: [{
-      data: [2, 1, 1, 1, 0],
-      backgroundColor: [
-        '#198754', // Tersedia
-        '#0d6efd', // Digunakan
-        '#ffc107', // Standby
-        '#dc3545', // Penyelenggaraan
-        '#212529'  // Rosak (black/dark)
-      ]
-    }]
-  },
-  options: {
-    plugins: {
-      legend: {
-        display: false
-      }
-    }
-  }
-});
+function count(list, field, val) { return list.filter(x => x[field] === val).length; }
+
+async function loadLogistics() {
+  const [storRes, vehRes] = await Promise.all([
+    fetch(`${API}/api/storage`),
+    fetch(`${API}/api/transport`)
+  ]);
+  const storage   = (await storRes.json()).data || [];
+  const transport = (await vehRes.json()).data  || [];
+
+  // ── Storage table ───────────────────────────────────────────────────────
+  document.getElementById('tbody-storage').innerHTML = storage.length
+    ? storage.map(s => `<tr>
+        <td class="fw-semibold">${s.id}</td>
+        <td>${s.name}</td>
+        <td>${s.type}</td>
+        <td>${s.location}</td>
+        <td><span class="badge ${STOR_STATUS_BADGE[s.status]||'bg-secondary'}">${s.status}</span></td>
+        <td class="text-end"><div class="btn-group btn-group-sm">
+          <a href="logistic_storageview.html?id=${s.id}" class="btn btn-outline-primary">Papar</a>
+          <a href="logistic_storageEdit.html?id=${s.id}" class="btn btn-outline-secondary">Kemaskini</a>
+        </div></td></tr>`).join('')
+    : '<tr><td colspan="6" class="text-center text-muted py-3">Tiada rekod.</td></tr>';
+
+  // ── Storage legend counts ────────────────────────────────────────────────
+  document.getElementById('stor-aktif').textContent       = count(storage,'status','Aktif');
+  document.getElementById('stor-guna').textContent        = count(storage,'status','Dalam Penggunaan');
+  document.getElementById('stor-standby').textContent     = count(storage,'status','Standby');
+  document.getElementById('stor-maintenance').textContent = count(storage,'status','Penyelenggaraan');
+  document.getElementById('stor-ditutup').textContent     = count(storage,'status','Ditutup');
+
+  // ── Storage type bar chart ───────────────────────────────────────────────
+  const storTypes = {}; storage.forEach(s => { storTypes[s.type] = (storTypes[s.type]||0)+1; });
+  new Chart(document.getElementById('chartStorage'), {
+    type:'bar',
+    data:{ labels: Object.keys(storTypes), datasets:[{ label:'Bilangan', data: Object.values(storTypes), backgroundColor:'#0d6efd' }] },
+    options:{ scales:{ y:{ beginAtZero:true, ticks:{ stepSize:1 } } } }
+  });
+
+  // ── Storage status doughnut ──────────────────────────────────────────────
+  const storStatuses = ['Aktif','Dalam Penggunaan','Standby','Penyelenggaraan','Ditutup'];
+  new Chart(document.getElementById('chartStorageStatus'), {
+    type:'doughnut',
+    data:{ labels: storStatuses,
+      datasets:[{ data: storStatuses.map(s => count(storage,'status',s)),
+        backgroundColor:['#198754','#0d6efd','#ffc107','#fd7e14','#6c757d'] }] },
+    options:{ plugins:{ legend:{ display:false } }, cutout:'65%' }
+  });
+
+  // ── Transport table ──────────────────────────────────────────────────────
+  document.getElementById('tbody-transport').innerHTML = transport.length
+    ? transport.map(v => `<tr>
+        <td class="fw-semibold">${v.id}</td>
+        <td>${v.type}</td>
+        <td>${v.plate}</td>
+        <td>${v.driver}</td>
+        <td><span class="badge ${VEH_STATUS_BADGE[v.status]||'bg-secondary'}">${v.status}</span></td>
+        <td class="text-end"><div class="btn-group btn-group-sm">
+          <a href="logistic_transportview.html?id=${v.id}" class="btn btn-outline-primary">Papar</a>
+          <a href="logistic_transportEdit.html?id=${v.id}" class="btn btn-outline-secondary">Kemaskini</a>
+        </div></td></tr>`).join('')
+    : '<tr><td colspan="6" class="text-center text-muted py-3">Tiada rekod.</td></tr>';
+
+  // ── Transport legend counts ──────────────────────────────────────────────
+  document.getElementById('veh-tersedia').textContent    = count(transport,'status','Tersedia');
+  document.getElementById('veh-guna').textContent        = count(transport,'status','Digunakan');
+  document.getElementById('veh-standby').textContent     = count(transport,'status','Standby');
+  document.getElementById('veh-maintenance').textContent = count(transport,'status','Penyelenggaraan');
+  document.getElementById('veh-rosak').textContent       = count(transport,'status','Rosak');
+
+  // ── Transport status pie ─────────────────────────────────────────────────
+  const vehStatuses = ['Tersedia','Digunakan','Standby','Penyelenggaraan','Rosak'];
+  new Chart(document.getElementById('chartTransportStatus'), {
+    type:'pie',
+    data:{ labels: vehStatuses,
+      datasets:[{ data: vehStatuses.map(s => count(transport,'status',s)),
+        backgroundColor:['#198754','#0d6efd','#ffc107','#dc3545','#212529'] }] },
+    options:{ plugins:{ legend:{ display:false } } }
+  });
+
+  // ── Transport type bar chart ─────────────────────────────────────────────
+  const vehTypes = {}; transport.forEach(v => { vehTypes[v.type] = (vehTypes[v.type]||0)+1; });
+  new Chart(document.getElementById('chartTransportType'), {
+    type:'bar',
+    data:{ labels: Object.keys(vehTypes), datasets:[{ label:'Bilangan', data: Object.values(vehTypes), backgroundColor:'#198754' }] },
+    options:{ scales:{ y:{ beginAtZero:true, ticks:{ stepSize:1 } } } }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', loadLogistics);
 </script>
-<script>
-
-/* ================= STORAGE TYPE ================= */
-new Chart(document.getElementById('chartStorage'), {
-  type: 'bar',
-  data: {
-    labels: [
-      'Stor EMT Kekal',
-      'Stor Sementara Lapangan',
-      'Kontena 20 Kaki',
-      'Kontena 40 Kaki',
-      'Gudang Hospital',
-      'Mobile Storage Unit'
-    ],
-    datasets: [{
-      label: 'Bilangan',
-      data: [1, 1, 1, 1, 2, 1],
-      backgroundColor: '#0d6efd'
-    }]
-  },
-  options: {
-    scales: {
-      y: { beginAtZero: true, ticks: { stepSize: 1 } }
-    }
-  }
-});
-
-</script>
-<script>
-
-/* ================= TRANSPORT TYPE (NEW BAR CHART) ================= */
-new Chart(document.getElementById('chartTransportType'), {
-  type: 'bar',
-  data: {
-    labels: [
-      'Ambulans',
-      'Lori Logistik',
-      'Kenderaan 4x4',
-      'Van Perubatan',
-      'Bas'
-    ],
-    datasets: [{
-      label: 'Bilangan',
-      data: [2, 1, 1, 1, 1],
-      backgroundColor: '#198754'
-    }]
-  },
-  options: {
-    scales: {
-      y: { beginAtZero: true, ticks: { stepSize: 1 } }
-    }
-  }
-});
-
-</script>
-<script>
-new Chart(document.getElementById('chartStorageStatus'), {
-  type: 'doughnut',
-  data: {
-    labels: [
-      'Aktif',
-      'Dalam Penggunaan',
-      'Standby',
-      'Penyelenggaraan',
-      'Ditutup'
-    ],
-    datasets: [{
-      data: [3, 2, 1, 1, 0],
-      backgroundColor: [
-        '#198754',
-        '#0d6efd',
-        '#ffc107',
-        '#fd7e14',
-        '#6c757d'
-      ]
-    }]
-  },
-  options: {
-    plugins: {
-      legend: {
-        display: false   // IMPORTANT: hide default legend
-      }
-    },
-    cutout: '65%' // donut lebih cantik
-  }
-});
-
-</script>
-
-
-
 </body>
 </html>

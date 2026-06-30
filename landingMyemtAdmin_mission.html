@@ -374,7 +374,7 @@
                                         <small class="text-muted d-block">
                                             Jumlah Asset EMT
                                         </small>
-                                        <h3 class="fw-bold mb-0">0</h3>
+                                        <h3 class="fw-bold mb-0" id="cnt-assets">...</h3>
                                     </div>
 
                                     <div class="border rounded-circle p-3 bg-light">
@@ -401,7 +401,7 @@
                         <small class="text-muted d-block">
                             Jumlah Logistik
                         </small>
-                        <h3 class="fw-bold mb-0">0</h3>
+                        <h3 class="fw-bold mb-0" id="cnt-logistics">...</h3>
                         </div>
 
                         <div class="border rounded-circle p-3 bg-light">
@@ -429,7 +429,7 @@
                                         <small class="text-muted d-block">
                                             Lokasi Penyimpanan
                                         </small>
-                                        <h3 class="fw-bold mb-0 text-dark">0</h3>
+                                        <h3 class="fw-bold mb-0 text-dark" id="cnt-stores">...</h3>
                                     </div>
 
                                     <div class="border rounded-circle p-3 bg-light">
@@ -455,7 +455,7 @@
                                         <small class="text-muted d-block">
                                             Laporan MDS EMT
                                         </small>
-                                        <h3 class="fw-bold mb-0">0</h3>
+                                        <h3 class="fw-bold mb-0" id="cnt-mds">...</h3>
                                     </div>
 
                                     <div class="border rounded-circle p-3 bg-light">
@@ -623,6 +623,30 @@ function fmtDate(d) {
   return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
 }
 
+async function loadSupportCounts() {
+  try {
+    const [assetRes, storageRes, transportRes, storesRes, mdsRes] = await Promise.all([
+      fetch(`${API}/api/assets/summary`),
+      fetch(`${API}/api/storage`),
+      fetch(`${API}/api/transport`),
+      fetch(`${API}/api/stores`),
+      fetch(`${API}/api/mds`)
+    ]);
+    const assets    = await assetRes.json();
+    const storage   = await storageRes.json();
+    const transport = await transportRes.json();
+    const stores    = await storesRes.json();
+    const mds       = await mdsRes.json();
+
+    document.getElementById('cnt-assets').textContent   = assets.total || 0;
+    document.getElementById('cnt-logistics').textContent = ((storage.total || 0) + (transport.total || 0));
+    document.getElementById('cnt-stores').textContent   = stores.total || 0;
+    document.getElementById('cnt-mds').textContent      = mds.total    || 0;
+  } catch (e) {
+    console.error('Gagal muatkan kiraan sokongan:', e);
+  }
+}
+
 async function loadMissionData() {
   try {
     const [summaryRes, missionsRes] = await Promise.all([
@@ -711,7 +735,10 @@ function updateMissionChart(active, completed, planning) {
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadMissionData);
+document.addEventListener('DOMContentLoaded', () => {
+  loadMissionData();
+  loadSupportCounts();
+});
 </script>
 
 </body>

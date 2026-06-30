@@ -275,66 +275,8 @@
               </tr>
             </thead>
 
-            <tbody>
-              <tr>
-                <td>05/06/2026</td>
-                <td>
-                  <div>Muhammad Bin Abdullah</div>
-                </td>
-                <td>29 Tahun</td>
-                <td>Lelaki</td>
-                <td>
-                  Trauma<br>
-                </td>
-                <td>Discaj tanpa susulan</td>
-                <td>Berkaitan secara langsung dengan kejadian</td>
-                <td class="text-end">
-                  <a href="emt_mdsdailyview.html?id=1"
-                    class="btn btn-sm btn-outline-primary">
-                    Lihat
-                  </a>
-                </td>
-              </tr>
-
-              <tr>
-                <td>05/06/2026</td>
-                <td>
-                  <div>Siti Nur</div>
-                </td>
-                <td>27 Tahun</td>
-                <td>Perempuan (Hamil)</td>
-                <td>
-                  Penyakit Berjangkit<br>
-                </td>
-                <td>Rujukan</td>
-                <td>Berkaitan secara tidak langsung dengan kejadian</td>
-                <td class="text-end">
-                  <a href="emt_mdsview.html?id=2"
-                    class="btn btn-sm btn-outline-primary">
-                    Lihat
-                  </a>
-                </td>
-              </tr>
-
-              <tr>
-                <td>05/06/2026</td>
-                <td>
-                  <div>John Lee</div>
-                </td>
-                <td>51 Tahun</td>
-                <td>Lelaki</td>
-                <td>
-                  Kecemasan<br>
-                </td>
-                <td>Kemasukan ke wad</td>
-                <td>Tidak berkaitan dengan kejadian</td>
-                <td class="text-end">
-                  <a href="emt_mdsview.html?id=3"
-                    class="btn btn-sm btn-outline-primary">
-                    Lihat
-                  </a>
-                </td>
-              </tr>
+            <tbody id="tbody-mds">
+              <tr><td colspan="8" class="text-center text-muted py-3">Memuatkan...</td></tr>
             </tbody>
           </table>
           
@@ -362,6 +304,60 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+let allMds = [];
+
+function renderTable(list) {
+  const tbody = document.getElementById('tbody-mds');
+  tbody.innerHTML = list.length ? list.map(r => `
+    <tr>
+      <td>${r.date || '-'}</td>
+      <td>${r.patientName || '-'}</td>
+      <td>${r.age ? r.age + ' Tahun' : '-'}</td>
+      <td>${r.gender || '-'}</td>
+      <td>${r.clinicalClass || '-'}</td>
+      <td>${r.outcome || '-'}</td>
+      <td>${r.context || '-'}</td>
+      <td class="text-end">
+        <a href="emt_mdsview.html?id=${r.id}" class="btn btn-sm btn-outline-primary">Lihat</a>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="8" class="text-center text-muted py-3">Tiada rekod ditemui.</td></tr>';
+}
+
+async function loadMds() {
+  const res = await fetch(`${API}/api/mds`);
+  allMds = (await res.json()).data || [];
+  renderTable(allMds);
+}
+
+// Wire filter button
+document.querySelector('button.btn-primary').addEventListener('click', () => {
+  const date     = document.querySelector('input[type=date]').value;
+  const selects  = document.querySelectorAll('select');
+  const clinical = selects[0].value;
+  const outcome  = selects[1].value;
+  const gender   = selects[2].value;
+
+  let filtered = allMds;
+  if (date)                      filtered = filtered.filter(r => r.date          === date);
+  if (clinical && clinical !== 'Semua') filtered = filtered.filter(r => r.clinicalClass === clinical);
+  if (outcome  && outcome  !== 'Semua') filtered = filtered.filter(r => r.outcome       === outcome);
+  if (gender   && gender   !== 'Semua') filtered = filtered.filter(r => r.gender        === gender);
+  renderTable(filtered);
+});
+
+// Wire reset button
+document.querySelector('button.btn-outline-secondary').addEventListener('click', () => {
+  document.querySelector('input[type=date]').value = '';
+  document.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  renderTable(allMds);
+});
+
+document.addEventListener('DOMContentLoaded', loadMds);
+</script>
 </body>
 </html>

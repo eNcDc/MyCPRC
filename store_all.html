@@ -149,45 +149,24 @@
         <div class="card-body">
 
             <div class="progress" style="height:35px;">
-
-                <div class="progress-bar bg-success"
-                    style="width:75%">
-                    75%
-                </div>
-
-                <div class="progress-bar bg-warning text-dark"
-                    style="width:16.7%">
-                    16.7%
-                </div>
-
-                <div class="progress-bar bg-danger"
-                    style="width:8.3%">
-                    8.3%
-                </div>
-
+                <div class="progress-bar bg-success"    id="bar-aktif"       style="width:0%">0%</div>
+                <div class="progress-bar bg-warning text-dark" id="bar-maintenance" style="width:0%">0%</div>
+                <div class="progress-bar bg-danger"     id="bar-inactive"    style="width:0%">0%</div>
             </div>
 
             <div class="row text-center mt-4">
-
                 <div class="col-md-4">
                     <span class="badge bg-success">Aktif</span>
-                    <div class="fw-bold mt-1">9 Lokasi</div>
+                    <div class="fw-bold mt-1"><span id="cnt-aktif">-</span> Lokasi</div>
                 </div>
-
                 <div class="col-md-4">
-                    <span class="badge bg-warning text-dark">
-                        Penyelenggaraan
-                    </span>
-                    <div class="fw-bold mt-1">2 Lokasi</div>
+                    <span class="badge bg-warning text-dark">Penyelenggaraan</span>
+                    <div class="fw-bold mt-1"><span id="cnt-maintenance">-</span> Lokasi</div>
                 </div>
-
                 <div class="col-md-4">
-                    <span class="badge bg-danger">
-                        Tidak Aktif
-                    </span>
-                    <div class="fw-bold mt-1">1 Lokasi</div>
+                    <span class="badge bg-danger">Tidak Aktif</span>
+                    <div class="fw-bold mt-1"><span id="cnt-inactive">-</span> Lokasi</div>
                 </div>
-
             </div>
 
         </div>
@@ -260,47 +239,8 @@
                 </tr>
             </thead>
 
-            <tbody>
-
-                <tr>
-                <td>LOC-001</td>
-                <td class="fw-semibold">Warehouse EMT Sabah</td>
-                <td>Stor Lapangan</td>
-                <td>Sabah</td>
-                <td>150</td>
-                <td><span class="badge bg-success">Aktif</span></td>
-                <td class="text-end">
-                    <a href="store_view.html" class="btn btn-sm btn-outline-dark">Papar</a>
-                    <a href="store_edit.html" class="btn btn-sm btn-outline-secondary">Kemaskini</a>
-                </td>
-                </tr>
-
-                <tr>
-                <td>LOC-002</td>
-                <td class="fw-semibold">Hospital Kuala Lumpur Store</td>
-                <td>Stor Hospital</td>
-                <td>WP Kuala Lumpur</td>
-                <td>80</td>
-                <td><span class="badge bg-warning text-dark">Dalam Penyelenggaraan</span></td>
-                <td class="text-end">
-                    <a href="store_view.html" class="btn btn-sm btn-outline-dark">Papar</a>
-                    <a href="store_edit.html" class="btn btn-sm btn-outline-secondary">Kemaskini</a>
-                </td>
-                </tr>
-
-                <tr>
-                <td>LOC-003</td>
-                <td class="fw-semibold">Unit Logistik Johor</td>
-                <td>Unit Logistik</td>
-                <td>Johor</td>
-                <td>60</td>
-                <td><span class="badge bg-danger">Tidak Aktif</span></td>
-                <td class="text-end">
-                    <a href="store_view.html" class="btn btn-sm btn-outline-dark">Papar</a>
-                    <a href="store_edit.html" class="btn btn-sm btn-outline-secondary">Kemaskini</a>
-                </td>
-                </tr>
-
+            <tbody id="tbody-stores">
+                <tr><td colspan="7" class="text-center text-muted py-3">Memuatkan...</td></tr>
             </tbody>
 
             </table>
@@ -335,153 +275,76 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
+const STORE_STATUS_BADGE = {
+  'Aktif': 'bg-success',
+  'Dalam Penyelenggaraan': 'bg-warning text-dark',
+  'Tidak Aktif': 'bg-danger'
+};
 
-/* ==========================
-   DONUT CHART
-========================== */
+async function loadStores() {
+  const res   = await fetch(`${API}/api/stores`);
+  const list  = (await res.json()).data || [];
+  const total = list.length;
 
-new Chart(
-document.getElementById('ringkasanLokasiChart'),
-{
-    type: 'doughnut',
-    data: {
-        labels: [
-            'Aktif',
-            'Dalam Penyelenggaraan',
-            'Tidak Aktif'
-        ],
-        datasets: [{
-            data: [9,2,1],
-            backgroundColor: [
-                '#198754',
-                '#ffc107',
-                '#dc3545'
-            ],
-            borderWidth: 0
-        }]
-    },
-    options: {
-        maintainAspectRatio:false,
-        plugins:{
-            legend:{
-                position:'right'
-            }
-        }
-    }
-});
+  const aktif       = list.filter(s => s.status === 'Aktif').length;
+  const maintenance = list.filter(s => s.status === 'Dalam Penyelenggaraan').length;
+  const inactive    = list.filter(s => s.status === 'Tidak Aktif').length;
 
-</script>
+  // Progress bar
+  const pct = v => total ? ((v / total) * 100).toFixed(1) : 0;
+  const setBar = (id, val) => {
+    const el = document.getElementById(id);
+    const p = pct(val);
+    el.style.width = p + '%';
+    el.textContent = p > 5 ? p + '%' : '';
+  };
+  setBar('bar-aktif', aktif);
+  setBar('bar-maintenance', maintenance);
+  setBar('bar-inactive', inactive);
 
-<script>
+  // Legend counts
+  document.getElementById('cnt-aktif').textContent       = aktif;
+  document.getElementById('cnt-maintenance').textContent = maintenance;
+  document.getElementById('cnt-inactive').textContent    = inactive;
 
-/* ==========================
-   STATUS BAR CHART
-========================== */
-
-new Chart(
-document.getElementById('statusLokasiChart'),
-{
+  // State distribution chart
+  const byState = {};
+  list.forEach(s => { byState[s.state] = (byState[s.state] || 0) + 1; });
+  new Chart(document.getElementById('negeriLokasiChart'), {
     type: 'bar',
     data: {
-        labels: [
-            'Jumlah Lokasi',
-            'Aktif',
-            'Penyelenggaraan',
-            'Tidak Aktif'
-        ],
-        datasets: [{
-            data: [12,9,2,1],
-            backgroundColor: [
-                '#0d6efd',
-                '#198754',
-                '#ffc107',
-                '#dc3545'
-            ],
-            borderRadius: 8
-        }]
+      labels: Object.keys(byState),
+      datasets: [{ label: 'Bilangan Lokasi', data: Object.values(byState), backgroundColor: '#0d6efd', borderRadius: 6 }]
     },
-    options:{
-        maintainAspectRatio:false,
-        plugins:{
-            legend:{
-                display:false
-            }
-        },
-        scales:{
-            y:{
-                beginAtZero:true
-            }
-        }
+    options: {
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
     }
-});
+  });
 
+  // Table
+  document.getElementById('tbody-stores').innerHTML = list.length
+    ? list.map(s => `<tr>
+        <td>${s.id}</td>
+        <td class="fw-semibold">${s.name}</td>
+        <td>${s.type}</td>
+        <td>${s.state}</td>
+        <td>${s.capacity || '-'}</td>
+        <td><span class="badge ${STORE_STATUS_BADGE[s.status] || 'bg-secondary'}">${s.status}</span></td>
+        <td class="text-end">
+          <a href="store_view.html?id=${s.id}" class="btn btn-sm btn-outline-dark">Papar</a>
+          <a href="store_edit.html?id=${s.id}" class="btn btn-sm btn-outline-secondary">Kemaskini</a>
+        </td></tr>`).join('')
+    : '<tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod.</td></tr>';
+}
+
+document.addEventListener('DOMContentLoaded', loadStores);
 </script>
-
-<script>
-
-/* ==========================
-   TABURAN NEGERI
-========================== */
-
-new Chart(
-document.getElementById('negeriLokasiChart'),
-{
-    type:'bar',
-    data:{
-        labels:[
-            'Johor',
-            'Kedah',
-            'Kelantan',
-            'Melaka',
-            'N. Sembilan',
-            'Pahang',
-            'Perak',
-            'Pulau Pinang',
-            'Sabah',
-            'Sarawak',
-            'Selangor',
-            'Terengganu',
-            'WP KL',
-            'Putrajaya'
-        ],
-        datasets:[{
-            label:'Bilangan Lokasi',
-            data:[
-                1,1,1,1,
-                1,1,2,1,
-                3,2,2,1,
-                1,1
-            ],
-            backgroundColor:'#0d6efd',
-            borderRadius:6
-        }]
-    },
-    options:{
-        maintainAspectRatio:false,
-        plugins:{
-            legend:{
-                display:false
-            }
-        },
-        scales:{
-            y:{
-                beginAtZero:true,
-                ticks:{
-                    stepSize:1
-                }
-            }
-        }
-    }
-});
-
-</script>
-
-
 </body>
 </html>

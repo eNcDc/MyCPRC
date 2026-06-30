@@ -78,12 +78,74 @@ const getSessions    = () => getList('myemt/sessions.json',     SEED_SESSIONS);
 const getCourseApps  = () => getList('myemt/course-apps.json',  SEED_COURSE_APPS);
 const getMissionApps = () => getList('myemt/mission-apps.json', []);
 
+// ── New seed data ─────────────────────────────────────────────────────────────
+const SEED_ASSETS = [
+  { id:'AST001', name:'Ubat & Dadah',           category:'Perubatan',    status:'Servis Diperlukan', priority:'Tinggi',    location:'Kuala Lumpur' },
+  { id:'AST002', name:'Generator',              category:'Elektrik',     status:'Rosak',             priority:'Kritikal',  location:'Sabah Ops' },
+  { id:'AST003', name:'Tangki Oksigen',         category:'Perubatan',    status:'Aktif',             priority:'Sederhana', location:'Warehouse' },
+  { id:'AST004', name:'Defibrillator',          category:'Perubatan',    status:'Aktif',             priority:'Rendah',    location:'KL Base' },
+  { id:'AST005', name:'Radio Komunikasi',       category:'Komunikasi',   status:'Aktif',             priority:'Rendah',    location:'Sabah HQ' },
+  { id:'AST006', name:'Laptop Lapangan',        category:'ICT / Sistem', status:'Aktif',             priority:'Rendah',    location:'KL Base' },
+  { id:'AST007', name:'Kenderaan 4x4',          category:'Logistik',     status:'Penyelenggaraan',   priority:'Sederhana', location:'Johor' },
+  { id:'AST008', name:'Ambulans',               category:'Logistik',     status:'Aktif',             priority:'Rendah',    location:'Sabah Ops' },
+  { id:'AST009', name:'Stretcher',              category:'Perubatan',    status:'Aktif',             priority:'Rendah',    location:'Warehouse' },
+  { id:'AST010', name:'Antena Satelit',         category:'Komunikasi',   status:'Penyelenggaraan',   priority:'Sederhana', location:'KL Base' },
+  { id:'AST011', name:'Penjana Solar',          category:'Elektrik',     status:'Aktif',             priority:'Rendah',    location:'Sabah HQ' },
+  { id:'AST012', name:'Server Lapangan',        category:'ICT / Sistem', status:'Aktif',             priority:'Rendah',    location:'KL Base' },
+];
+
+const SEED_STORAGE = [
+  { id:'CRT001', name:'Crates Bekalan Perubatan',   type:'Gudang',               location:'Sabah HQ',        status:'Aktif' },
+  { id:'CRT002', name:'Crates Peralatan Kecemasan', type:'Stor Sementara',       location:'Base Camp EMT',   status:'Standby' },
+  { id:'CRT003', name:'Bekalan Oksigen',            type:'Gudang',               location:'Hospital HQ',     status:'Dalam Penggunaan' },
+  { id:'STO004', name:'Kontena Logistik A',         type:'Kontena 20 Kaki',      location:'Sabah Field Base',status:'Aktif' },
+  { id:'STO005', name:'Mobile Medical Store',       type:'Kontena 40 Kaki',      location:'Kota Kinabalu Base', status:'Penyelenggaraan' },
+  { id:'STO006', name:'Stor Perubatan B',           type:'Stor EMT Kekal',       location:'KL Depot',        status:'Aktif' },
+  { id:'STO007', name:'Unit Simpanan Lapangan',     type:'Mobile Storage Unit',  location:'Pahang Ops',      status:'Aktif' },
+];
+
+const SEED_TRANSPORT = [
+  { id:'VEH-001', type:'Ambulans',        plate:'WXY1234', driver:'Ahmad',  status:'Tersedia' },
+  { id:'VEH-002', type:'Lori Logistik',   plate:'JKT5521', driver:'Rizal',  status:'Digunakan' },
+  { id:'VEH-003', type:'Kenderaan 4x4',   plate:'SAB7789', driver:'Hafiz',  status:'Standby' },
+  { id:'VEH-004', type:'Van Perubatan',   plate:'WQV9911', driver:'Siti',   status:'Tersedia' },
+  { id:'VEH-005', type:'Bas EMT',         plate:'SBP4422', driver:'Farid',  status:'Penyelenggaraan' },
+];
+
+const SEED_STORES = [
+  { id:'LOC-001', name:'Warehouse EMT Sabah',       type:'Stor Lapangan',  state:'Sabah',             capacity:150, status:'Aktif' },
+  { id:'LOC-002', name:'Hospital Kuala Lumpur Store',type:'Stor Hospital',  state:'WP Kuala Lumpur',   capacity:80,  status:'Dalam Penyelenggaraan' },
+  { id:'LOC-003', name:'Unit Logistik Johor',        type:'Unit Logistik',  state:'Johor',             capacity:60,  status:'Tidak Aktif' },
+  { id:'LOC-004', name:'Stor EMT Kelantan',          type:'Stor Lapangan',  state:'Kelantan',          capacity:100, status:'Aktif' },
+  { id:'LOC-005', name:'Depot Perubatan Selangor',   type:'Stor Hospital',  state:'Selangor',          capacity:120, status:'Aktif' },
+  { id:'LOC-006', name:'Pusat Logistik Pahang',      type:'Unit Logistik',  state:'Pahang',            capacity:90,  status:'Aktif' },
+];
+
+const SEED_MDS = [
+  { id:'MDS001', date:'2026-06-05', patientName:'Muhammad Bin Abdullah', age:29, gender:'Lelaki',                 clinicalClass:'Trauma',              outcome:'Discaj tanpa susulan',  context:'Berkaitan secara langsung dengan kejadian',          missionId:'MSN001' },
+  { id:'MDS002', date:'2026-06-05', patientName:'Siti Nur',              age:27, gender:'Perempuan (Hamil)',      clinicalClass:'Penyakit Berjangkit',  outcome:'Rujukan',               context:'Berkaitan secara tidak langsung dengan kejadian',    missionId:'MSN001' },
+  { id:'MDS003', date:'2026-06-05', patientName:'John Lee',              age:51, gender:'Lelaki',                 clinicalClass:'Kecemasan',            outcome:'Kemasukan ke wad',      context:'Tidak berkaitan dengan kejadian',                    missionId:'MSN001' },
+  { id:'MDS004', date:'2026-06-06', patientName:'Aminah Bt Yusof',       age:35, gender:'Perempuan (Tidak hamil)',clinicalClass:'Penyakit Berjangkit',  outcome:'Discaj dengan susulan', context:'Berkaitan secara langsung dengan kejadian',          missionId:'MSN001' },
+  { id:'MDS005', date:'2026-06-07', patientName:'Razif Bin Hamid',       age:8,  gender:'Lelaki',                 clinicalClass:'Trauma',              outcome:'Discaj tanpa susulan',  context:'Berkaitan secara langsung dengan kejadian',          missionId:'MSN001' },
+];
+
 const saveList = (key, data) => s3Put(key, data);
 const saveMembers     = d => saveList('myemt/members.json',      d);
 const saveMissions    = d => saveList('myemt/missions.json',     d);
 const saveSessions    = d => saveList('myemt/sessions.json',     d);
 const saveCourseApps  = d => saveList('myemt/course-apps.json',  d);
 const saveMissionApps = d => saveList('myemt/mission-apps.json', d);
+const saveAssets      = d => saveList('myemt/assets.json',       d);
+const saveStorage     = d => saveList('myemt/storage.json',      d);
+const saveTransport   = d => saveList('myemt/transport.json',    d);
+const saveStores      = d => saveList('myemt/stores.json',       d);
+const saveMds         = d => saveList('myemt/mds.json',          d);
+
+const getAssets    = () => getList('myemt/assets.json',    SEED_ASSETS);
+const getStorage   = () => getList('myemt/storage.json',   SEED_STORAGE);
+const getTransport = () => getList('myemt/transport.json', SEED_TRANSPORT);
+const getStores    = () => getList('myemt/stores.json',    SEED_STORES);
+const getMds       = () => getList('myemt/mds.json',       SEED_MDS);
 
 // ── Response helper ───────────────────────────────────────────────────────────
 const CORS = {
@@ -279,6 +341,111 @@ exports.handler = async (event) => {
       list.push(a);
       await saveMissionApps(list);
       return ok({ success: true, message: 'Pendaftaran misi berjaya dihantar!', data: a });
+    }
+
+    // ── ASSETS ───────────────────────────────────────────────────────────────
+
+    if (method === 'GET' && path === '/api/assets/summary') {
+      const list = await getAssets();
+      const byCategory = {}, byStatus = {};
+      list.forEach(a => {
+        byCategory[a.category] = (byCategory[a.category] || 0) + 1;
+        byStatus[a.status]     = (byStatus[a.status]     || 0) + 1;
+      });
+      return ok({ success: true, total: list.length, byCategory, byStatus,
+        active:      list.filter(a => a.status === 'Aktif').length,
+        maintenance: list.filter(a => a.status === 'Penyelenggaraan').length,
+        critical:    list.filter(a => ['Rosak','Servis Diperlukan'].includes(a.status)).length,
+      });
+    }
+
+    if (method === 'GET' && path === '/api/assets') {
+      const list = await getAssets();
+      return ok({ success: true, data: list, total: list.length });
+    }
+
+    // ── LOGISTICS STORAGE ────────────────────────────────────────────────────
+
+    if (method === 'GET' && path === '/api/storage') {
+      const list = await getStorage();
+      return ok({ success: true, data: list, total: list.length });
+    }
+
+    if (method === 'POST' && path === '/api/storage') {
+      const list = await getStorage();
+      const item = { id: 'STO' + String(Date.now()).slice(-6), createdAt: today(), ...body };
+      list.push(item);
+      await saveStorage(list);
+      return ok({ success: true, data: item });
+    }
+
+    // ── LOGISTICS TRANSPORT ──────────────────────────────────────────────────
+
+    if (method === 'GET' && path === '/api/transport') {
+      const list = await getTransport();
+      return ok({ success: true, data: list, total: list.length });
+    }
+
+    if (method === 'POST' && path === '/api/transport') {
+      const list = await getTransport();
+      const item = { id: 'VEH-' + String(Date.now()).slice(-6), createdAt: today(), ...body };
+      list.push(item);
+      await saveTransport(list);
+      return ok({ success: true, data: item });
+    }
+
+    // ── STORES (warehouses / permanent locations) ─────────────────────────────
+
+    if (method === 'GET' && path === '/api/stores/summary') {
+      const list = await getStores();
+      const byState = {};
+      list.forEach(s => { byState[s.state] = (byState[s.state] || 0) + 1; });
+      return ok({ success: true, total: list.length, byState,
+        active:      list.filter(s => s.status === 'Aktif').length,
+        maintenance: list.filter(s => s.status === 'Dalam Penyelenggaraan').length,
+        inactive:    list.filter(s => s.status === 'Tidak Aktif').length,
+      });
+    }
+
+    if (method === 'GET' && path === '/api/stores') {
+      const list = await getStores();
+      return ok({ success: true, data: list, total: list.length });
+    }
+
+    if (method === 'POST' && path === '/api/stores') {
+      const list = await getStores();
+      const item = { id: 'LOC-' + String(Date.now()).slice(-6), createdAt: today(), ...body };
+      list.push(item);
+      await saveStores(list);
+      return ok({ success: true, data: item });
+    }
+
+    // ── MDS (Minimum Data Set daily records) ────────────────────────────────
+
+    if (method === 'GET' && path === '/api/mds') {
+      let list = await getMds();
+      if (qs.date)          list = list.filter(r => r.date          === qs.date);
+      if (qs.clinicalClass) list = list.filter(r => r.clinicalClass === qs.clinicalClass);
+      if (qs.outcome)       list = list.filter(r => r.outcome       === qs.outcome);
+      if (qs.gender)        list = list.filter(r => r.gender        === qs.gender);
+      if (qs.missionId)     list = list.filter(r => r.missionId     === qs.missionId);
+      return ok({ success: true, data: list, total: list.length });
+    }
+
+    if (method === 'POST' && path === '/api/mds') {
+      const list = await getMds();
+      const item = { id: 'MDS' + String(Date.now()).slice(-6), createdAt: today(), ...body };
+      list.push(item);
+      await saveMds(list);
+      return ok({ success: true, data: item });
+    }
+
+    const mdsIdM = path.match(/^\/api\/mds\/([^/]+)$/);
+    if (method === 'GET' && mdsIdM) {
+      const list = await getMds();
+      const item = list.find(r => r.id === mdsIdM[1]);
+      if (!item) return err(404, 'Rekod tidak dijumpai.');
+      return ok({ success: true, data: item });
     }
 
     // Generic form submit — stores payload as JSON in S3
