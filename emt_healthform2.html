@@ -606,6 +606,133 @@ fetch("sidebar.html")
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
+<script src="assets/js/config.js"></script>
+
+<!-- MDS FORM SUBMIT HANDLER -->
+<script>
+(function () {
+  const missionId = new URLSearchParams(location.search).get('missionId') || '';
+
+  function getByLabel(labelText) {
+    for (const lbl of document.querySelectorAll('.form-label')) {
+      if (lbl.textContent.trim() === labelText) {
+        const parent = lbl.closest('[class*="col-"], .mb-3, .card-body');
+        const input = parent?.querySelector('input:not([type=radio]):not([type=checkbox]):not([name="nama_ubat[]"]):not([name="dos[]"]):not([name="kekerapan[]"]):not([name="nota[]"]), select, textarea');
+        return input ? input.value.trim() : '';
+      }
+    }
+    return '';
+  }
+
+  function getByPlaceholder(ph) {
+    const el = document.querySelector(`input[placeholder="${ph}"]`);
+    return el ? el.value.trim() : '';
+  }
+
+  function getRadioLabel(name) {
+    const checked = document.querySelector(`input[name="${name}"]:checked`);
+    if (!checked) return '';
+    if (checked.id) {
+      const lbl = document.querySelector(`label[for="${checked.id}"]`);
+      if (lbl) return lbl.textContent.trim();
+    }
+    return checked.parentElement.textContent.trim();
+  }
+
+  function getCheckedByH6(h6Text) {
+    for (const h6 of document.querySelectorAll('h6')) {
+      if (h6.textContent.trim() === h6Text) {
+        const parent = h6.parentElement;
+        const results = [];
+        parent.querySelectorAll('.form-check').forEach(div => {
+          const cb = div.querySelector('input[type="checkbox"]');
+          if (cb && cb.checked) results.push(div.textContent.trim());
+        });
+        return results;
+      }
+    }
+    return [];
+  }
+
+  const form = document.querySelector('form');
+  if (!form) return;
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    // Clinical classification
+    const traumaChecked    = getCheckedByH6('Trauma');
+    const penyakitChecked  = getCheckedByH6('Penyakit Berjangkit');
+    const kecemasanVal     = getRadioLabel('emergency');
+    const kesTambahan      = getCheckedByH6('Kes Tambahan');
+    const penyakitLain     = getCheckedByH6('Penyakit Penting Lain');
+
+    let clinicalClass = 'Lain-lain', traumaType = '-', diseaseType = '-';
+    if (traumaChecked.length)    { clinicalClass = 'Trauma';              traumaType   = traumaChecked[0]; }
+    else if (penyakitChecked.length) { clinicalClass = 'Penyakit Berjangkit'; diseaseType  = penyakitChecked[0]; }
+    else if (kecemasanVal)       { clinicalClass = 'Kecemasan'; }
+    else if (kesTambahan.length) { clinicalClass = 'Kes Tambahan'; }
+    else if (penyakitLain.length){ clinicalClass = 'Penyakit Penting Lain'; }
+
+    const hasilChecked   = getCheckedByH6('Hasil');
+    const konteksChecked = getCheckedByH6('Konteks');
+
+    const patientName = getByLabel('Nama Penuh') || getByLabel('Nama (Nama Panggilan)');
+    const addr1 = getByLabel('Baris Alamat 1');
+    const addr2 = getByLabel('Baris Alamat 2');
+    const patientAddress = [addr1, addr2].filter(Boolean).join(', ');
+
+    const payload = {
+      missionId,
+      date:              getByLabel('Tarikh'),
+      patientName,
+      age:               Number(getByLabel('Nilai Umur')) || null,
+      ageGroup:          getRadioLabel('age_group'),
+      gender:            getRadioLabel('sex'),
+      clinicalClass,
+      traumaType,
+      diseaseType,
+      outcome:           hasilChecked[0] || '-',
+      context:           konteksChecked[0] || '-',
+      patientAddress,
+      postcode:          getByLabel('Poskod'),
+      bt:                getByPlaceholder('Suhu Badan ℃'),
+      bp:                getByPlaceholder('Tekanan Darah / mmHg'),
+      pr:                getByPlaceholder('Nadi / minit'),
+      rr:                getByPlaceholder('Kadar Pernafasan / minit'),
+      weight:            getByPlaceholder('Berat (kg)'),
+      height:            getByPlaceholder('Tinggi (cm)'),
+      clinicalNotes:     getByLabel('Diagnosis') || getByLabel('Sejarah Penyakit Semasa'),
+      responsibleOfficer:getByLabel('Nama Pegawai Penulis Rekod'),
+      officerPosition:   getByLabel('Jawatan'),
+    };
+
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) { btn.disabled = true; btn.textContent = 'Menghantar...'; }
+
+    try {
+      const res  = await fetch(`${API}/api/mds`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const json = await res.json();
+      if (json.success) {
+        alert('Rekod MDS berjaya dihantar!');
+        const back = missionId ? `emt_mdsdaily.html` : 'emt_mdsdaily.html';
+        window.location.href = back;
+      } else {
+        alert('Ralat: ' + (json.message || 'Hantar gagal.'));
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-send me-1"></i> Hantar'; }
+      }
+    } catch {
+      alert('Ralat rangkaian. Sila cuba semula.');
+      if (btn) { btn.disabled = false; btn.innerHTML = '<i class="bi bi-send me-1"></i> Hantar'; }
+    }
+  });
+})();
+</script>
+
 <!--ubat-->
 
 <script>

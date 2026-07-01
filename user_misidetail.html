@@ -436,6 +436,9 @@ fetch("sidebar.html")
     document.getElementById('ud-leader').textContent   = m.leader   || '-';
     document.getElementById('ud-location').textContent = m.location || m.state    || '-';
     document.getElementById('ud-notes').textContent    = m.notes    || '-';
+    // Pass mission ID to the MDS form link
+    const mdsLink = document.querySelector('a[href="emt_healthform2.html"]');
+    if (mdsLink) mdsLink.href = `emt_healthform2.html?missionId=${id}`;
   } catch (e) { console.error('Gagal muatkan misi:', e); }
 })();
 </script>
