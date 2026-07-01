@@ -204,9 +204,9 @@
                         </tr>
                     </thead>
 
-                    <tbody>
+                    <tbody id="tbody-mds-detail">
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-3">Tiada rekod MDS</td>
+                            <td colspan="7" class="text-center text-muted py-3">Memuatkan...</td>
                         </tr>
                     </tbody>
 
@@ -439,6 +439,30 @@ fetch("sidebar.html")
     // Pass mission ID to the MDS form link
     const mdsLink = document.querySelector('a[href="emt_healthform2.html"]');
     if (mdsLink) mdsLink.href = `emt_healthform2.html?missionId=${id}`;
+
+    // Load MDS records for this mission
+    try {
+      const mdsRes  = await fetch(`${API}/api/mds?missionId=${encodeURIComponent(id)}`);
+      const mdsJson = await mdsRes.json();
+      const mdsList = mdsJson.data || [];
+      const tbody   = document.getElementById('tbody-mds-detail');
+      if (tbody) {
+        tbody.innerHTML = mdsList.length
+          ? mdsList.map(r => `<tr>
+              <td>${r.date || '-'}</td>
+              <td>${r.patientName || '-'}</td>
+              <td>${r.age ? r.age + ' Thn' : '-'}</td>
+              <td>${r.gender || '-'}</td>
+              <td>${r.clinicalClass || '-'}</td>
+              <td>${r.outcome || '-'}</td>
+              <td class="text-center">
+                <a href="emt_mdsview.html?id=${r.id}" class="btn btn-sm btn-outline-primary">Lihat</a>
+              </td>
+            </tr>`).join('')
+          : '<tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod MDS</td></tr>';
+      }
+    } catch (e) { console.error('Gagal muatkan MDS:', e); }
+
   } catch (e) { console.error('Gagal muatkan misi:', e); }
 })();
 </script>
