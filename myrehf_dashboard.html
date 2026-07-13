@@ -1,0 +1,314 @@
+<!-- ===== WRAPPER UTAMA DASHBOARD myrehf ===== -->
+<div id="myrehfDashboard">
+
+  <!-- ===== TAJUK DAN BUTANG BORANG ===== -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+      <h4 class="mb-1">Facilities Management Dashboard</h4>
+      <small class="text-muted">Paparan ringkasan, peta, analitik dan senarai fasiliti.</small>
+    </div>
+
+    <a href="myrehf_form.html" class="btn btn-primary">
+      <i class="bi bi-plus-circle me-1"></i> Isi Laporan Banjir
+    </a>
+  </div>
+
+  <!-- ===== FILTER DASHBOARD ===== -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+      <strong>Filter Dashboard</strong>
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="myrehfStateFilter" class="form-label">Negeri</label>
+          <select id="myrehfStateFilter" class="form-select">
+            <option value="">Semua Negeri</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="myrehfDistrictFilter" class="form-label">Daerah</label>
+          <select id="myrehfDistrictFilter" class="form-select">
+            <option value="">Semua Daerah</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="myrehfOperationFilter" class="form-label">Status Operasi</label>
+          <select id="myrehfOperationFilter" class="form-select">
+            <option value="">Semua Operasi</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB SUMMARY/TABLE DAN MAP ===== -->
+  <ul class="nav myrehf-segment-tabs mb-4" id="myrehfDashboardTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#myrehfSummaryTablePanel" type="button">
+        <i class="bi bi-table me-2"></i> Summary & Table
+      </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#myrehfMapPanel" type="button">
+        <i class="bi bi-map me-2"></i> Map Malaysia
+      </button>
+    </li>
+  </ul>
+
+  <!-- ===== KANDUNGAN TAB ===== -->
+  <div class="tab-content mb-4">
+
+    <!-- ===== TAB SUMMARY & TABLE ===== -->
+    <div class="tab-pane fade show active" id="myrehfSummaryTablePanel">
+
+      <!-- ===== SUMMARY CARDS ===== -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <div class="card shadow-sm myrehf-summary-card purple h-100">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Fasiliti Terjejas</h6>
+              <h3 class="mb-0 myrehf-text-purple" id="myrehfAffectedFacilities">0</h3>
+              <small class="text-muted">Fasiliti ada laporan tahun ini</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm myrehf-summary-card blue h-100">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Tidak Operasi</h6>
+              <h3 class="mb-0 myrehf-text-blue" id="myrehfNotOperating">0</h3>
+              <small class="text-muted">Fasiliti tidak beroperasi</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm myrehf-summary-card teal h-100">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Pindah Operasi</h6>
+              <h3 class="mb-0 myrehf-text-teal" id="myrehfMovedOperation">0</h3>
+              <small class="text-muted">Operasi dipindahkan sementara</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm myrehf-summary-card green h-100">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Mangsa ke Hospital</h6>
+              <h3 class="mb-0 myrehf-text-green" id="myrehfTotalVictims">0</h3>
+              <small class="text-muted"><span id="myrehfActivePps">0</span> PPS aktif</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TABLE LAPORAN myrehf ===== -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Senarai Laporan myrehf</strong>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfTableData()">
+              <i class="bi bi-download"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-myrehf" type="button" data-bs-toggle="modal" data-bs-target="#myrehfTableModal">
+              <i class="bi bi-arrows-fullscreen"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive myrehf-table-container">
+          <table class="table table-bordered table-hover mb-0 myrehf-register-table">
+            <thead>
+              <tr>
+                <th>Tarikh</th>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Fasiliti</th>
+                <th>Status Operasi</th>
+                <th>Mangsa ke Hospital</th>
+              </tr>
+            </thead>
+            <tbody id="myrehfTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB MAP MALAYSIA ===== -->
+    <div class="tab-pane fade" id="myrehfMapPanel">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Map Malaysia</strong>
+          <button class="btn btn-sm btn-outline-myrehf" type="button" data-bs-toggle="modal" data-bs-target="#myrehfMapModal">
+            <i class="bi bi-arrows-fullscreen"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div id="myrehfMap" class="myrehf-map"></div>
+          <small class="text-muted d-block mt-2">
+            Marker ungu: tidak operasi, biru: pindah operasi, hijau/turquoise: beroperasi.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHART UTAMA ===== -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Status Operasi Fasiliti</strong>
+          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('operationStatus')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body myrehf-chart-box">
+          <canvas id="myrehfOperationStatusChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Mangsa ke Hospital Mengikut Daerah</strong>
+          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('victimsByDistrict')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body myrehf-chart-box">
+          <canvas id="myrehfVictimsDistrictChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>PPS Aktif Mengikut Daerah</strong>
+          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('ppsByDistrict')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body myrehf-chart-box">
+          <canvas id="myrehfPpsDistrictChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHART ANALITIK TAMBAHAN ===== -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Trend Mangsa ke Hospital Mengikut Tarikh</strong>
+          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('victimTrend')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body myrehf-chart-box">
+          <canvas id="myrehfVictimTrendChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Fasiliti Terjejas Mengikut Daerah</strong>
+          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('affectedFacilities')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body myrehf-chart-box">
+          <canvas id="myrehfAffectedFacilityChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHART PENYAKIT DAN KATEGORI PESAKIT ===== -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Jumlah Penyakit Berjangkit</strong>
+          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('infectiousDiseases')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body myrehf-chart-box">
+          <canvas id="myrehfInfectiousDiseaseChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Kategori Pesakit</strong>
+          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('patientCategories')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body myrehf-chart-box">
+          <canvas id="myrehfPatientCategoryChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL PETA BESAR ===== -->
+<div class="modal fade" id="myrehfMapModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Map Malaysia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="myrehfMapFull" class="myrehf-map-full"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL TABLE BESAR ===== -->
+<div class="modal fade" id="myrehfTableModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Senarai Laporan myrehf</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive myrehf-table-container" style="max-height: 78vh;">
+          <table class="table table-bordered table-hover mb-0 myrehf-register-table">
+            <thead>
+              <tr>
+                <th>Tarikh</th>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Fasiliti</th>
+                <th>Status Operasi</th>
+                <th>Mangsa ke Hospital</th>
+              </tr>
+            </thead>
+            <tbody id="myrehfTableBodyFull"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
