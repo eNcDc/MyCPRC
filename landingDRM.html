@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Disaster Risk Management</title>
+  <title>Disaster Resource Management</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
@@ -10,6 +10,9 @@
 
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 
   <!-- Main CSS -->
   <link href="assets/css/main.css" rel="stylesheet">
@@ -24,7 +27,6 @@
   <div class="row">
 
     <!-- LEFT PANEL -->
-    <!-- LEFT PANEL -->
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
       <!-- Sidebar will be loaded here -->
     </aside>
@@ -33,89 +35,135 @@
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0">Dashboard Disaster Resource Management (DRM)</h4>
-
+        <h4 class="mb-0">Disaster Resource Management (DRM)</h4>
       </div>
 
-      <div class="row g-3 mb-4">
-        <div class="col d-flex justify-content-end">
-          <a href="drmho_form.html" class="btn btn-primary me-2">
-            <i class="bi bi-plus-circle me-1"></i> DISTRICT HEALTH OFFICE FORM
-          </a>
+      <!-- TAB BAR -->
+      <ul class="nav nav-tabs mb-4" id="drmTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="dashboard-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#dashboard-pane"
+            type="button"
+            role="tab">
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+          </button>
+        </li>
 
-          <a href="drmhsp_form.html" class="btn btn-primary">
-            <i class="bi bi-plus-circle me-1"></i> HOSPITAL FORM
-          </a>
-        </div>
-      </div>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="drm-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#drm-pane"
+            type="button"
+            role="tab">
+            <i class="bi bi-file-earmark-text me-1"></i> DRM Reports
+          </button>
+        </li>
+      </ul>
 
-      <!-- SUMMARY CARDS -->
-      <div class="row g-3 mb-4">
+      <!-- TAB CONTENT -->
+      <div class="tab-content" id="drmTabsContent">
 
-        <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="text-muted">Jumlah Laporan</h6>
-              <h3 class="mb-0">12</h3>
-            </div>
+        <!-- DASHBOARD TAB -->
+        <div class="tab-pane fade show active" id="dashboard-pane" role="tabpanel">
+          <div id="drm-dashboard-content">
+            <!-- drm_dashboard.html will load here -->
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="text-muted">Draft</h6>
-              <h3 class="mb-0">3</h3>
+        <!-- DRM REPORTS TAB -->
+        <div class="tab-pane fade" id="drm-pane" role="tabpanel">
+
+          <div class="row g-3 mb-4">
+            <div class="col d-flex justify-content-end">
+              <a href="drmho_form.html" class="btn btn-primary me-2">
+                <i class="bi bi-plus-circle me-1"></i> DISTRICT HEALTH OFFICE FORM
+              </a>
+
+              <a href="drmhsp_form.html" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-1"></i> HOSPITAL FORM
+              </a>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-4">
+          <!-- SUMMARY CARDS -->
+          <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Jumlah Laporan</h6>
+                  <h3 class="mb-0">12</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Draft</h6>
+                  <h3 class="mb-0">3</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Submitted</h6>
+                  <h3 class="mb-0">9</h3>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RECENT REPORTS -->
           <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="text-muted">Submitted</h6>
-              <h3 class="mb-0">9</h3>
+            <div class="card-header bg-white">
+              <strong>Laporan Terkini</strong>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-striped mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Tarikh</th>
+                    <th>Jenis Bencana</th>
+                    <th>Status</th>
+                    <th class="text-end">Tindakan</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>12/01/2026</td>
+                    <td>Banjir</td>
+                    <td><span class="badge bg-success">Submitted</span></td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-outline-primary">View</button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>10/01/2026</td>
+                    <td>Tanah Runtuh</td>
+                    <td><span class="badge bg-warning text-dark">Draft</span></td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-outline-secondary">Edit</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
+
         </div>
 
-      </div>
-
-      <!-- RECENT REPORTS -->
-      <div class="card shadow-sm">
-        <div class="card-header bg-white">
-          <strong>Laporan Terkini</strong>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-striped mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Tarikh</th>
-                <th>Jenis Bencana</th>
-                <th>Status</th>
-                <th class="text-end">Tindakan</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>12/01/2026</td>
-                <td>Banjir</td>
-                <td><span class="badge bg-success">Submitted</span></td>
-                <td class="text-end">
-                  <button class="btn btn-sm btn-outline-primary">View</button>
-                </td>
-              </tr>
-              <tr>
-                <td>10/01/2026</td>
-                <td>Tanah Runtuh</td>
-                <td><span class="badge bg-warning text-dark">Draft</span></td>
-                <td class="text-end">
-                  <button class="btn btn-sm btn-outline-secondary">Edit</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
 
     </main>
@@ -129,16 +177,42 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Load Header & Footer -->
+<!-- Layout -->
 <script>
   fetch("header.html")
     .then(res => res.text())
     .then(data => document.getElementById("header").innerHTML = data);
 
+  fetch("sidebar.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
+
   fetch("footer.html")
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
 </script>
+
+<!-- Dashboard Libraries -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="assets/js/drm_dashboard2.js"></script>
+
+<!-- Load DRM Dashboard -->
+<script>
+  fetch("drm_dashboard2.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("drm-dashboard-content").innerHTML = data;
+
+      if (typeof initDrmDashboard === "function") {
+        initDrmDashboard();
+      }
+    })
+    .catch(err => console.error("Failed to load DRM dashboard:", err));
+</script>
+
 <script src="assets/js/wizard-form.js"></script>
+
 </body>
 </html>

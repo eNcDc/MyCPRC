@@ -1,0 +1,314 @@
+<!-- ===== WRAPPER UTAMA DASHBOARD FLOOD ===== -->
+<div id="floodDashboard">
+
+  <!-- ===== TAJUK DAN BUTANG BORANG ===== -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+      <h4 class="mb-1">Flood Management Dashboard</h4>
+      <small class="text-muted">Paparan ringkasan, peta, analitik dan senarai laporan banjir tahun semasa.</small>
+    </div>
+
+    <a href="flood_form3.html" class="btn btn-primary">
+      <i class="bi bi-plus-circle me-1"></i> Isi Laporan Banjir
+    </a>
+  </div>
+
+  <!-- ===== FILTER DASHBOARD ===== -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+      <strong>Filter Dashboard</strong>
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label for="floodStateFilter" class="form-label">Negeri</label>
+          <select id="floodStateFilter" class="form-select">
+            <option value="">Semua Negeri</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="floodDistrictFilter" class="form-label">Daerah</label>
+          <select id="floodDistrictFilter" class="form-select">
+            <option value="">Semua Daerah</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label for="floodOperationFilter" class="form-label">Status Operasi</label>
+          <select id="floodOperationFilter" class="form-select">
+            <option value="">Semua Operasi</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TAB SUMMARY/TABLE DAN MAP ===== -->
+  <ul class="nav flood-segment-tabs mb-4" id="floodDashboardTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#floodSummaryTablePanel" type="button">
+        <i class="bi bi-table me-2"></i> Summary & Table
+      </button>
+    </li>
+
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#floodMapPanel" type="button">
+        <i class="bi bi-map me-2"></i> Map Malaysia
+      </button>
+    </li>
+  </ul>
+
+  <!-- ===== KANDUNGAN TAB ===== -->
+  <div class="tab-content mb-4">
+
+    <!-- ===== TAB SUMMARY & TABLE ===== -->
+    <div class="tab-pane fade show active" id="floodSummaryTablePanel">
+
+      <!-- ===== SUMMARY CARDS ===== -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <div class="card shadow-sm flood-summary-card purple h-100">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Fasiliti Terjejas</h6>
+              <h3 class="mb-0 flood-text-purple" id="floodAffectedFacilities">0</h3>
+              <small class="text-muted">Fasiliti ada laporan tahun ini</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm flood-summary-card blue h-100">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Tidak Operasi</h6>
+              <h3 class="mb-0 flood-text-blue" id="floodNotOperating">0</h3>
+              <small class="text-muted">Fasiliti tidak beroperasi</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm flood-summary-card teal h-100">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Pindah Operasi</h6>
+              <h3 class="mb-0 flood-text-teal" id="floodMovedOperation">0</h3>
+              <small class="text-muted">Operasi dipindahkan sementara</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm flood-summary-card green h-100">
+            <div class="card-body">
+              <h6 class="text-muted mb-2">Mangsa ke Hospital</h6>
+              <h3 class="mb-0 flood-text-green" id="floodTotalVictims">0</h3>
+              <small class="text-muted"><span id="floodActivePps">0</span> PPS aktif</small>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TABLE LAPORAN FLOOD ===== -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Senarai Laporan Flood</strong>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-flood" type="button" onclick="downloadFloodTableData()">
+              <i class="bi bi-download"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-flood" type="button" data-bs-toggle="modal" data-bs-target="#floodTableModal">
+              <i class="bi bi-arrows-fullscreen"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive flood-table-container">
+          <table class="table table-bordered table-hover mb-0 flood-register-table">
+            <thead>
+              <tr>
+                <th>Tarikh</th>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Fasiliti</th>
+                <th>Status Operasi</th>
+                <th>Mangsa ke Hospital</th>
+              </tr>
+            </thead>
+            <tbody id="floodTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB MAP MALAYSIA ===== -->
+    <div class="tab-pane fade" id="floodMapPanel">
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Map Malaysia</strong>
+          <button class="btn btn-sm btn-outline-flood" type="button" data-bs-toggle="modal" data-bs-target="#floodMapModal">
+            <i class="bi bi-arrows-fullscreen"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div id="floodMap" class="flood-map"></div>
+          <small class="text-muted d-block mt-2">
+            Marker ungu: tidak operasi, biru: pindah operasi, hijau/turquoise: beroperasi.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHART UTAMA ===== -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Status Operasi Fasiliti</strong>
+          <button class="btn btn-sm btn-outline-flood" type="button" onclick="downloadFloodChartData('operationStatus')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body flood-chart-box">
+          <canvas id="floodOperationStatusChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Mangsa ke Hospital Mengikut Daerah</strong>
+          <button class="btn btn-sm btn-outline-flood" type="button" onclick="downloadFloodChartData('victimsByDistrict')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body flood-chart-box">
+          <canvas id="floodVictimsDistrictChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>PPS Aktif Mengikut Daerah</strong>
+          <button class="btn btn-sm btn-outline-flood" type="button" onclick="downloadFloodChartData('ppsByDistrict')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body flood-chart-box">
+          <canvas id="floodPpsDistrictChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHART ANALITIK TAMBAHAN ===== -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Trend Mangsa ke Hospital Mengikut Tarikh</strong>
+          <button class="btn btn-sm btn-outline-flood" type="button" onclick="downloadFloodChartData('victimTrend')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body flood-chart-box">
+          <canvas id="floodVictimTrendChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Fasiliti Terjejas Mengikut Daerah</strong>
+          <button class="btn btn-sm btn-outline-flood" type="button" onclick="downloadFloodChartData('affectedFacilities')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body flood-chart-box">
+          <canvas id="floodAffectedFacilityChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHART PENYAKIT DAN KATEGORI PESAKIT ===== -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Jumlah Penyakit Berjangkit</strong>
+          <button class="btn btn-sm btn-outline-flood" type="button" onclick="downloadFloodChartData('infectiousDiseases')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body flood-chart-box">
+          <canvas id="floodInfectiousDiseaseChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Kategori Pesakit</strong>
+          <button class="btn btn-sm btn-outline-flood" type="button" onclick="downloadFloodChartData('patientCategories')">
+            <i class="bi bi-download"></i>
+          </button>
+        </div>
+        <div class="card-body flood-chart-box">
+          <canvas id="floodPatientCategoryChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL PETA BESAR ===== -->
+<div class="modal fade" id="floodMapModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Map Malaysia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="floodMapFull" class="flood-map-full"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL TABLE BESAR ===== -->
+<div class="modal fade" id="floodTableModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Senarai Laporan Flood</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive flood-table-container" style="max-height: 78vh;">
+          <table class="table table-bordered table-hover mb-0 flood-register-table">
+            <thead>
+              <tr>
+                <th>Tarikh</th>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Fasiliti</th>
+                <th>Status Operasi</th>
+                <th>Mangsa ke Hospital</th>
+              </tr>
+            </thead>
+            <tbody id="floodTableBodyFull"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

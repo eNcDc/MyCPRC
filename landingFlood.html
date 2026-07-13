@@ -11,6 +11,9 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+
   <!-- Main CSS -->
   <link href="assets/css/main.css" rel="stylesheet">
 </head>
@@ -24,7 +27,6 @@
   <div class="row">
 
     <!-- LEFT PANEL -->
-    <!-- LEFT PANEL -->
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
       <!-- Sidebar will be loaded here -->
     </aside>
@@ -33,103 +35,129 @@
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
       <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0">Dashboard Banjir</h4>
+        <h4 class="mb-0">Flood Management</h4>
       </div>
 
-      <div class="main-cards">
-      <div class="card surveillance">
-        <div class="card-body">
-              <h2 class="text-center">AMARAN HUJAN BERTERUSAN</h2>
-              <img class="alert" src="https://www.met.gov.my/data/AmaranHujanLebat.jpg" alt="Amaran Hujan">
-            </div>
-      </div>
-      
-      <div class="card surveillance">
-        <div class="card-body test">
-              <h2 class="text-center">AMARAN RIBUT PETIR</h2>
-              <img src="https://www.met.gov.my/data/AmaranRibutPetir.jpg" alt="Amaran Ribut">
-            </div>
-      </div>
-      </div>
+      <!-- TAB BAR -->
+      <ul class="nav nav-tabs mb-4" id="floodTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="flood-dashboard-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#flood-dashboard-pane"
+            type="button"
+            role="tab">
+            <i class="bi bi-speedometer2 me-1"></i> Dashboard
+          </button>
+        </li>
 
-      <br>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="flood-reports-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#flood-reports-pane"
+            type="button"
+            role="tab">
+            <i class="bi bi-file-earmark-text me-1"></i> Flood Reports
+          </button>
+        </li>
+      </ul>
 
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0">Dashboard Pengurusan Banjir</h4>
+      <!-- TAB CONTENT -->
+      <div class="tab-content" id="floodTabsContent">
 
-        <!-- BUTTON ISI FORM -->
-        <a href="flood_form3.html" class="btn btn-primary">
-          <i class="bi bi-plus-circle me-1"></i> Isi Borang Baharu
-        </a>
-      </div>
-
-      <!-- SUMMARY CARDS -->
-      <div class="row g-3 mb-4">
-
-        <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="text-muted">Jumlah Laporan</h6>
-              <h3 class="mb-0">12</h3>
-            </div>
+        <!-- DASHBOARD TAB -->
+        <div class="tab-pane fade show active" id="flood-dashboard-pane" role="tabpanel">
+          <div id="flood-dashboard-content">
+            <!-- flood_dashboard.html will load here -->
           </div>
         </div>
 
-        <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="text-muted">Draft</h6>
-              <h3 class="mb-0">3</h3>
+        <!-- REPORTS TAB -->
+        <div class="tab-pane fade" id="flood-reports-pane" role="tabpanel">
+
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="mb-0">Dashboard Pengurusan Banjir</h4>
+
+            <a href="flood_form3.html" class="btn btn-primary">
+              <i class="bi bi-plus-circle me-1"></i> Isi Borang Baharu
+            </a>
+          </div>
+
+          <!-- SUMMARY CARDS -->
+          <div class="row g-3 mb-4">
+            <div class="col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Jumlah Laporan</h6>
+                  <h3 class="mb-0">12</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Draft</h6>
+                  <h3 class="mb-0">3</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Submitted</h6>
+                  <h3 class="mb-0">9</h3>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-4">
+          <!-- RECENT REPORTS -->
           <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="text-muted">Submitted</h6>
-              <h3 class="mb-0">9</h3>
+            <div class="card-header bg-white">
+              <strong>Laporan Terkini</strong>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-striped mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Tarikh</th>
+                    <th>Borang</th>
+                    <th>Status</th>
+                    <th class="text-end">Tindakan</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr>
+                    <td>12/01/2026</td>
+                    <td>Borang 4</td>
+                    <td><span class="badge bg-success">Submitted</span></td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-outline-primary">View</button>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <td>10/01/2026</td>
+                    <td>Borang 5</td>
+                    <td><span class="badge bg-warning text-dark">Draft</span></td>
+                    <td class="text-end">
+                      <button class="btn btn-sm btn-outline-secondary">Edit</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
+
         </div>
 
-      </div>
-
-      <!-- RECENT REPORTS -->
-      <div class="card shadow-sm">
-        <div class="card-header bg-white">
-          <strong>Laporan Terkini</strong>
-        </div>
-        <div class="table-responsive">
-          <table class="table table-striped mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Tarikh</th>
-                <th>Borang</th>
-                <th>Status</th>
-                <th class="text-end">Tindakan</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>12/01/2026</td>
-                <td>Borang 4</td>
-                <td><span class="badge bg-success">Submitted</span></td>
-                <td class="text-end">
-                  <button class="btn btn-sm btn-outline-primary">View</button>
-                </td>
-              </tr>
-              <tr>
-                <td>10/01/2026</td>
-                <td>Borang 5</td>
-                <td><span class="badge bg-warning text-dark">Draft</span></td>
-                <td class="text-end">
-                  <button class="btn btn-sm btn-outline-secondary">Edit</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
       </div>
 
     </main>
@@ -143,23 +171,41 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Load Header & Footer -->
+<!-- Layout -->
 <script>
   fetch("header.html")
     .then(res => res.text())
     .then(data => document.getElementById("header").innerHTML = data);
 
+  fetch("sidebar.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
+
   fetch("footer.html")
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
 </script>
-<style>
-  .card-body img{
-  max-width: 100%; /* Ensures the image doesn't exceed the container's width */
-  max-height: 100%;    /* Maintains the image's aspect ratio */
-  display: block;  /* Helps with alignment and margin issues */
-  }
-</style>
+
+<!-- Dashboard Libraries -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="assets/js/flood_dashboard2.js"></script>
+
+<!-- Load Flood Dashboard -->
+<script>
+  fetch("flood_dashboard2.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("flood-dashboard-content").innerHTML = data;
+
+      if (typeof initFloodDashboard === "function") {
+        initFloodDashboard();
+      }
+    })
+    .catch(err => console.error("Failed to load Flood dashboard:", err));
+</script>
+
 <script src="assets/js/wizard-form.js"></script>
 
 </body>

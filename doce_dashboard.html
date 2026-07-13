@@ -1,0 +1,534 @@
+<!-- ===== WRAPPER UTAMA DOCE DASHBOARD ===== -->
+<div id="doceDashboard">
+
+  <!-- ===== TAJUK DASHBOARD ===== -->
+  <div class="mb-4">
+    <small class="text-muted">Paparan ringkasan laporan DOCE berdasarkan data borang.</small>
+  </div>
+
+  <!-- ===== TAB UTAMA DASHBOARD ===== -->
+  <ul class="nav doce-tab-nav mb-4" id="doceDashboardTabs" role="tablist">
+    <li class="nav-item">
+      <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#doceReportingPanel" type="button">
+        Pelaporan
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#doceComparePanel" type="button">
+        Perbandingan
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#doceDailyTrendPanel" type="button">
+        Tren Harian
+      </button>
+    </li>
+    <li class="nav-item">
+      <button class="nav-link" data-bs-toggle="pill" data-bs-target="#doceSearchPanel" type="button">
+        Carian
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+
+    <!-- ===== TAB PELAPORAN ===== -->
+    <div class="tab-pane fade show active" id="doceReportingPanel">
+
+      <!-- ===== FILTER PELAPORAN ===== -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+          <strong>Filter Pelaporan</strong>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-2">
+              <label class="form-label">Tahun</label>
+              <select id="doceYearFilter" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Jenis Laporan</label>
+              <select id="doceCategoryFilter" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Wabak/Kejadian</label>
+              <select id="doceEventFilter" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Negeri</label>
+              <select id="doceStateFilter" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Daerah</label>
+              <select id="doceDistrictFilter" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Minggu Epidemiologi</label>
+              <select id="doceEwFilter" class="form-select"></select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SUMMARY PELAPORAN ===== -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-3">
+          <div class="card shadow-sm doce-summary-card blue h-100">
+            <div class="card-body">
+              <h6 class="text-muted">Jumlah Laporan</h6>
+              <h3 id="doceTotalReports" class="mb-0">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm doce-summary-card teal h-100">
+            <div class="card-body">
+              <h6 class="text-muted">Jumlah Kes</h6>
+              <h3 id="doceTotalCases" class="mb-0">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm doce-summary-card orange h-100">
+            <div class="card-body">
+              <h6 class="text-muted">Masuk Wad / ICU</h6>
+              <h3 id="doceWardIcuTotal" class="mb-0">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-3">
+          <div class="card shadow-sm doce-summary-card red h-100">
+            <div class="card-body">
+              <h6 class="text-muted">Kematian</h6>
+              <h3 id="doceDeathTotal" class="mb-0">0</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ROW 1: MAP DAN DOCE EVENTS ===== -->
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+              <strong>Map Malaysia</strong>
+              <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#doceMapModal" type="button">
+                <i class="bi bi-arrows-fullscreen"></i>
+              </button>
+            </div>
+            <div class="card-body">
+              <div id="doceMap" class="doce-map"></div>
+              <div id="doceMapLegend" class="doce-map-legend mt-3 d-flex flex-wrap gap-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong>DOCE Events</strong>
+            </div>
+            <div class="card-body doce-chart-box">
+              <canvas id="doceEventPieChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ROW 2: TOP WABAK DAN REPORT BY EW ===== -->
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong>Top Wabak/Kejadian</strong>
+            </div>
+            <div class="table-responsive doce-table-container-sm">
+              <table class="table table-hover doce-compact-table">
+                <thead>
+                  <tr>
+                    <th>Wabak/Kejadian</th>
+                    <th class="text-end">Laporan</th>
+                    <th class="text-end">Kes</th>
+                  </tr>
+                </thead>
+                <tbody id="doceTopEventBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong>Report Received by Minggu Epidemiologi</strong>
+            </div>
+            <div class="card-body doce-chart-box">
+              <canvas id="doceEwChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== ROW 3: REPORT BY STATE DAN DISTRICT ===== -->
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong>Report Received by State</strong>
+            </div>
+            <div class="card-body doce-chart-box">
+              <canvas id="doceStateChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong>Report Received by District</strong>
+            </div>
+            <div class="card-body doce-chart-box">
+              <canvas id="doceDistrictChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB PERBANDINGAN ===== -->
+    <div class="tab-pane fade" id="doceComparePanel">
+
+      <!-- ===== FILTER PERBANDINGAN ===== -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+          <strong>Filter Perbandingan</strong>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label">Tahun Pertama</label>
+              <select id="doceCompareYearA" class="form-select"></select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Tahun Kedua</label>
+              <select id="doceCompareYearB" class="form-select"></select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Jenis Laporan</label>
+              <select id="doceCompareCategory" class="form-select"></select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Negeri</label>
+              <select id="doceCompareState" class="form-select"></select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== SUMMARY PERBANDINGAN ===== -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h6 class="text-muted" id="doceCompareLabelA">Jumlah Laporan</h6>
+              <h2 id="doceCompareTotalA" class="mb-0">0</h2>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="card shadow-sm">
+            <div class="card-body text-center">
+              <h6 class="text-muted" id="doceCompareLabelB">Jumlah Laporan</h6>
+              <h2 id="doceCompareTotalB" class="mb-0">0</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TOP EVENT PERBANDINGAN ===== -->
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong id="doceCompareTopTitleA">Top Events</strong>
+            </div>
+            <div class="table-responsive doce-table-container-sm">
+              <table class="table table-hover doce-compact-table">
+                <thead>
+                  <tr>
+                    <th>Wabak/Kejadian</th>
+                    <th class="text-end">Laporan</th>
+                  </tr>
+                </thead>
+                <tbody id="doceCompareTopA"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong id="doceCompareTopTitleB">Top Events</strong>
+            </div>
+            <div class="table-responsive doce-table-container-sm">
+              <table class="table table-hover doce-compact-table">
+                <thead>
+                  <tr>
+                    <th>Wabak/Kejadian</th>
+                    <th class="text-end">Laporan</th>
+                  </tr>
+                </thead>
+                <tbody id="doceCompareTopB"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== GRAPH PERBANDINGAN ===== -->
+      <div class="row g-3 mb-4">
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong>Report Received by State</strong>
+            </div>
+            <div class="card-body doce-chart-box">
+              <canvas id="doceCompareStateChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+              <strong>Report Received by Minggu Epidemiologi</strong>
+            </div>
+            <div class="card-body doce-chart-box">
+              <canvas id="doceCompareEwChart"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB TREN HARIAN ===== -->
+    <div class="tab-pane fade" id="doceDailyTrendPanel">
+
+      <!-- ===== FILTER TREN HARIAN ===== -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+          <strong>Filter Tren Harian</strong>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label class="form-label">Wabak/Kejadian</label>
+              <select id="doceTrendEvent" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Negeri</label>
+              <select id="doceTrendState" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Daerah</label>
+              <select id="doceTrendDistrict" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Minggu Epidemiologi</label>
+              <select id="doceTrendEw" class="form-select"></select>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">Tarikh Lapor Wabak</label>
+              <input id="doceTrendDate" type="date" class="form-control">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== GRAPH TREN HARIAN ===== -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+          <strong>Tren Harian</strong>
+        </div>
+        <div class="card-body doce-chart-box">
+          <canvas id="doceDailyTrendChart"></canvas>
+        </div>
+      </div>
+
+      <!-- ===== TABLE TREN HARIAN ===== -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Senarai Harian</strong>
+          <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#doceDailyTableModal" type="button">
+            <i class="bi bi-arrows-fullscreen"></i>
+          </button>
+        </div>
+        <div class="table-responsive doce-table-container">
+          <table class="table table-hover doce-data-table">
+            <thead>
+              <tr>
+                <th>Tarikh</th>
+                <th>Wabak/Kejadian</th>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Minggu Epidemiologi</th>
+                <th class="text-end">Bil. Kes</th>
+              </tr>
+            </thead>
+            <tbody id="doceDailyTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== TAB CARIAN ===== -->
+    <div class="tab-pane fade" id="doceSearchPanel">
+
+      <!-- ===== FILTER CARIAN ===== -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white">
+          <strong>Carian</strong>
+        </div>
+        <div class="card-body">
+          <div class="row g-3">
+            <div class="col-md-2">
+              <label class="form-label">Tarikh Lapor Wabak</label>
+              <input id="doceSearchDate" type="date" class="form-control">
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Wabak/Kejadian</label>
+              <select id="doceSearchEvent" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Negeri</label>
+              <select id="doceSearchState" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Daerah</label>
+              <select id="doceSearchDistrict" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Minggu Epidemiologi</label>
+              <select id="doceSearchEw" class="form-select"></select>
+            </div>
+            <div class="col-md-2">
+              <label class="form-label">Search</label>
+              <input id="doceSearchText" type="text" class="form-control" placeholder="Cari...">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== TABLE CARIAN ===== -->
+      <div class="card shadow-sm">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Senarai Rekod DOCE</strong>
+          <div>
+            <button class="btn btn-sm btn-outline-success me-1" type="button" onclick="downloadDoceSearchTable()">
+              <i class="bi bi-download"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#doceSearchTableModal" type="button">
+              <i class="bi bi-arrows-fullscreen"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive doce-table-container">
+          <table class="table table-hover doce-data-table">
+            <thead>
+              <tr>
+                <th>Tarikh Lapor</th>
+                <th>Wabak/Kejadian</th>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Minggu Epidemiologi</th>
+                <th>Tempat Berlaku</th>
+                <th class="text-end">Bil. Kes</th>
+              </tr>
+            </thead>
+            <tbody id="doceSearchTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL MAP BESAR ===== -->
+<div class="modal fade" id="doceMapModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Map Malaysia - DOCE</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="doceMapFull" class="doce-map-full"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL TABLE TREN HARIAN BESAR ===== -->
+<div class="modal fade" id="doceDailyTableModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Senarai Harian</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-hover doce-data-table">
+            <thead>
+              <tr>
+                <th>Tarikh</th>
+                <th>Wabak/Kejadian</th>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Minggu Epidemiologi</th>
+                <th class="text-end">Bil. Kes</th>
+              </tr>
+            </thead>
+            <tbody id="doceDailyTableBodyFull"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL TABLE CARIAN BESAR ===== -->
+<div class="modal fade" id="doceSearchTableModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Senarai Rekod DOCE</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-hover doce-data-table">
+            <thead>
+              <tr>
+                <th>Tarikh Lapor</th>
+                <th>Wabak/Kejadian</th>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Minggu Epidemiologi</th>
+                <th>Tempat Berlaku</th>
+                <th class="text-end">Bil. Kes</th>
+              </tr>
+            </thead>
+            <tbody id="doceSearchTableBodyFull"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

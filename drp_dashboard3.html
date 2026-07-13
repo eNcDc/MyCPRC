@@ -1,0 +1,224 @@
+<!-- ===== DRP DASHBOARD ===== -->
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="mb-0">District Risk Profile Dashboard</h4>
+</div>
+
+<!-- FILTERS -->
+<div class="card shadow-sm mb-4">
+  <div class="card-header bg-white">
+    <strong>Filters</strong>
+  </div>
+
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-3">
+        <label class="form-label">Negeri</label>
+        <select id="filterState" class="form-select">
+          <option value="">Semua Negeri</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Daerah</label>
+        <select id="filterDistrict" class="form-select">
+          <option value="">Semua Daerah</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Kategori Bencana</label>
+        <select id="filterCategory" class="form-select">
+          <option value="">Semua Kategori</option>
+        </select>
+      </div>
+
+      <div class="col-md-3">
+        <label class="form-label">Jenis Bencana</label>
+        <select id="filterRisk" class="form-select">
+          <option value="">Semua Jenis Bencana</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIEW BUTTONS -->
+<div class="btn-group mb-4" role="group">
+  <button id="showSummaryBtn" type="button" class="btn btn-primary">
+    <i class="bi bi-table me-1"></i> Summary & Table
+  </button>
+
+  <button id="showMapBtn" type="button" class="btn btn-outline-primary">
+    <i class="bi bi-map me-1"></i> Map Malaysia
+  </button>
+</div>
+
+<!-- SUMMARY + TABLE VIEW -->
+<div id="summaryView">
+
+<!-- SUMMARY CARDS -->
+<div class="row g-3 mb-4">
+
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body text-center">
+        <h2 class="text-danger mb-3">Risks</h2>
+        <div class="d-flex justify-content-center align-items-center gap-3">
+          <i class="bi bi-exclamation-triangle-fill" style="font-size: 2.2rem;"></i>
+          <h3 id="totalRiskScore" class="mb-0" style="font-size: 2.4rem;">0</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="text-muted">Jumlah Laporan</h6>
+        <h3 id="totalReports" class="mb-0 text-primary">0</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="text-muted">Jumlah Daerah Terlibat</h6>
+        <h3 id="totalDistricts" class="mb-0 text-info">0</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h6 class="text-muted">Risiko Tinggi</h6>
+        <h3 id="highRiskReports" class="mb-0 text-danger">0</h3>
+      </div>
+    </div>
+  </div>
+
+</div>
+  <!-- RISK REGISTER TABLE -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <strong>Risk Register Table</strong>
+
+      <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#riskTableModal">
+        <i class="bi bi-arrows-fullscreen"></i>
+      </button>
+    </div>
+
+    <div class="table-responsive drp-table-container">
+      <table class="table table-striped table-sm table-bordered drp-risk-table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>State</th>
+            <th>Risk Category</th>
+            <th>Address</th>
+            <th>District</th>
+            <th>Subdistrict</th>
+            <th>Risk</th>
+            <th>Likelihood</th>
+            <th>Mortality</th>
+            <th>Morbidity</th>
+            <th>Economic</th>
+            <th>Healthcare</th>
+            <th>Social</th>
+            <th>Average Impact</th>
+            <th>Risk Score</th>
+          </tr>
+        </thead>
+
+        <tbody id="topRiskTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- FULL TABLE MODAL -->
+<div class="modal fade" id="riskTableModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Risk Register Table</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-sm table-bordered drp-risk-table mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>State</th>
+                <th>Risk Category</th>
+                <th>Address</th>
+                <th>District</th>
+                <th>Subdistrict</th>
+                <th>Risk</th>
+                <th>Likelihood</th>
+                <th>Mortality</th>
+                <th>Morbidity</th>
+                <th>Economic</th>
+                <th>Healthcare</th>
+                <th>Social</th>
+                <th>Average Impact</th>
+                <th>Risk Score</th>
+              </tr>
+            </thead>
+
+            <tbody id="fullRiskTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MAP VIEW -->
+<div id="mapView" class="d-none">
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+      <strong>Malaysia Risk Map</strong>
+    </div>
+
+    <div class="card-body">
+      <div id="malaysiaMap" style="height: 480px; border-radius: 6px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- CHART + GRAPH -->
+<div class="row g-3">
+  <div class="col-md-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <strong>Risk Category by Score</strong>
+        <button class="btn btn-sm btn-outline-success" onclick="downloadChartData('riskCategory')">
+          <i class="bi bi-download"></i>
+        </button>
+      </div>
+      <div class="card-body" style="height: 320px;">
+        <canvas id="riskCategoryScoreChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card shadow-sm h-100">
+      <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <strong>Risk by Score</strong>
+        <button class="btn btn-sm btn-outline-success" onclick="downloadChartData('risk')">
+          <i class="bi bi-download"></i>
+        </button>
+      </div>
+      <div class="card-body" style="height: 320px;">
+        <canvas id="riskScoreChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

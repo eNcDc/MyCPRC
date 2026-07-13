@@ -11,11 +11,15 @@
   <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 
+  <!-- Leaflet CSS untuk map dashboard -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
   <!-- Main CSS -->
   <link href="assets/css/main.css" rel="stylesheet">
 </head>
 
 <body>
+
 <!-- HEADER -->
 <div id="header"></div>
 
@@ -23,92 +27,126 @@
   <div class="row">
 
     <!-- LEFT PANEL -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
+      <!-- Sidebar will be loaded here -->
+    </aside>
 
     <!-- MAIN CONTENT -->
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
-      <!-- TITLE + BUTTON -->
-      <div class="d-flex justify-content-between align-items-center mb-4">
+      <!-- ===== TAJUK UTAMA PAGE ===== -->
+      <div class="mb-4">
         <h4 class="mb-0">Dashboard Pelaporan Harian Bencana, Wabak, Krisis & Kecemasan</h4>
-
-        <div>
-          <!--form.html?type=hre cek link balik-->
-          <a href="doce_hre.html" class="btn btn-primary me-2">     
-            <i class="bi bi-plus-circle me-1"></i> Isi Borang HRE
-          </a>
-          <a href="doce_awal.html" class="btn btn-success">
-            <i class="bi bi-plus-circle me-1"></i> Isi Borang DOCE
-          </a>
-        </div>
       </div>
 
-      <!-- SUMMARY CARDS -->
-      <div class="row g-3 mb-4">
-        <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="text-muted">Jumlah Borang</h6>
-              <h3 class="mb-0" id="totalForm">0</h3>
+      <!-- ===== TAB LANDING DOCE ===== -->
+      <!-- Tab ini tukar paparan antara dashboard baru dan senarai laporan asal -->
+      <ul class="nav doce-landing-tabs mb-4" id="doceLandingTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="doceDashboardTab" data-bs-toggle="tab" data-bs-target="#doceDashboardPane" type="button" role="tab">
+            <i class="bi bi-speedometer2"></i> Dashboard
+          </button>
+        </li>
+
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="doceReportTab" data-bs-toggle="tab" data-bs-target="#doceReportPane" type="button" role="tab">
+            <i class="bi bi-file-earmark-text"></i> Senarai Laporan
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+
+        <!-- ===== TAB DASHBOARD BARU ===== -->
+        <div class="tab-pane fade show active" id="doceDashboardPane" role="tabpanel">
+          <div id="doce-dashboard-content"></div>
+        </div>
+
+        <!-- ===== TAB SENARAI LAPORAN ASAL ===== -->
+        <div class="tab-pane fade" id="doceReportPane" role="tabpanel">
+
+          <!-- ===== BUTTON BORANG ===== -->
+          <div class="d-flex justify-content-end mb-4">
+            <a href="doce_hre.html" class="btn btn-primary me-2">
+              <i class="bi bi-plus-circle me-1"></i> Isi Borang HRE
+            </a>
+
+            <a href="doce_awal.html" class="btn btn-success">
+              <i class="bi bi-plus-circle me-1"></i> Isi Borang DOCE
+            </a>
+          </div>
+
+          <!-- ===== SUMMARY CARDS ASAL ===== -->
+          <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Jumlah Borang</h6>
+                  <h3 class="mb-0" id="totalForm">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Draf</h6>
+                  <h3 class="mb-0" id="draftForm">0</h3>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Selesai</h6>
+                  <h3 class="mb-0" id="submittedForm">0</h3>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- ===== SEARCH & FILTER ASAL ===== -->
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <input type="text" id="searchInput" class="form-control" placeholder="Cari nama borang...">
+            </div>
+
+            <div class="col-md-3">
+              <select id="filterFormType" class="form-select">
+                <option value="all">Semua Borang</option>
+                <option value="HRE">HRE</option>
+                <option value="DOCE">DOCE</option>
+              </select>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-4">
+          <!-- ===== TABLE SENARAI LAPORAN ASAL ===== -->
           <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="text-muted">Draf</h6>
-              <h3 class="mb-0" id="draftForm">0</h3>
+            <div class="card-header bg-white">
+              <strong>Senarai Semua Laporan</strong>
+            </div>
+
+            <div class="table-responsive">
+              <table class="table table-bordered table-hover mb-0 align-middle">
+                <thead class="table-light">
+                  <tr class="text-center">
+                    <th>ID</th>
+                    <th>Tajuk Laporan</th>
+                    <th>Tarikh</th>
+                    <th>Laporan Awal</th>
+                    <th>Laporan Semasa</th>
+                    <th>Laporan Akhir</th>
+                    <th>Tindakan</th>
+                  </tr>
+                </thead>
+                <tbody id="formTable"></tbody>
+              </table>
             </div>
           </div>
-        </div>
 
-        <div class="col-md-4">
-          <div class="card shadow-sm">
-            <div class="card-body">
-              <h6 class="text-muted">Selesai</h6>
-              <h3 class="mb-0" id="submittedForm">0</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SEARCH & FILTER -->
-      <div class="row mb-3">
-        <div class="col-md-4">
-          <input type="text" id="searchInput" class="form-control" placeholder="Cari nama borang...">
-        </div>
-
-        <div class="col-md-3">
-          <select id="filterFormType" class="form-select">
-            <option value="all">Semua Borang</option>
-            <option value="HRE">HRE</option>
-            <option value="DOCE">DOCE</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- ALL FORMS TABLE -->
-      <div class="card shadow-sm">
-        <div class="card-header bg-white">
-          <strong>Senarai Semua Laporan</strong>
-        </div>
-
-        <div class="table-responsive">
-          <table class="table table-bordered table-hover mb-0 align-middle">
-            <thead class="table-light">
-              <tr class="text-center">
-                <th>ID</th>
-                <th>Tajuk Laporan</th>
-                <th>Tarikh</th>
-                <th>Laporan Awal</th>
-                <th>Laporan Semasa</th>
-                <th>Laporan Akhir</th>
-                <th>Tindakan</th>
-              </tr>
-            </thead>
-            <tbody id="formTable"></tbody>
-          </table>
         </div>
       </div>
 
@@ -116,14 +154,16 @@
   </div>
 </div>
 
-<!-- Modal for Laporan Semasa -->
+<!-- ===== MODAL LAPORAN SEMASA ===== -->
 <div class="modal fade" id="semanaModal" tabindex="-1" aria-labelledby="semanaModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+
       <div class="modal-header">
         <h5 class="modal-title" id="semanaModalLabel">Laporan Semasa</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
         <p>Adakah Laporan Semasa diperlukan?</p>
 
@@ -132,18 +172,21 @@
           <button id="noSemasa" class="btn btn-secondary">Tidak Diperlukan</button>
         </div>
       </div>
+
     </div>
   </div>
 </div>
 
-<!-- Modal for Laporan Akhir -->
+<!-- ===== MODAL LAPORAN AKHIR ===== -->
 <div class="modal fade" id="akhirModal" tabindex="-1" aria-labelledby="akhirModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+
       <div class="modal-header">
         <h5 class="modal-title" id="akhirModalLabel">Laporan Akhir</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+
       <div class="modal-body">
         <p>Adakah anda mahu isi Laporan Akhir sekarang?</p>
 
@@ -152,6 +195,7 @@
           <button id="laterAkhir" class="btn btn-secondary">Nanti</button>
         </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -162,7 +206,16 @@
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Load Header & Footer -->
+<!-- Chart.js untuk dashboard -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- XLSX untuk download Excel -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+
+<!-- Leaflet JS untuk map dashboard -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<!-- ===== LOAD HEADER, FOOTER & SIDEBAR ===== -->
 <script>
   fetch("header.html")
     .then(res => res.text())
@@ -171,9 +224,29 @@
   fetch("footer.html")
     .then(res => res.text())
     .then(data => document.getElementById("footer").innerHTML = data);
+
+  fetch("sidebar.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
+    .catch(err => console.error("Failed to load sidebar:", err));
 </script>
 
-<!-- Dashboard JS -->
+<!-- ===== LOAD DOCE DASHBOARD ===== -->
+<!-- Dashboard HTML dimasukkan dulu, selepas itu baru JS dashboard dijalankan -->
+<script>
+  fetch("doce_dashboard.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("doce-dashboard-content").innerHTML = data;
+
+      const script = document.createElement("script");
+      script.src = "assets/js/doce_dashboard.js";
+      document.body.appendChild(script);
+    })
+    .catch(err => console.error("Failed to load DOCE dashboard:", err));
+</script>
+
+<!-- ===== JS SENARAI LAPORAN ASAL ===== -->
 <script>
   const forms = [
     {
@@ -197,8 +270,9 @@
   ];
 
   let selectedFormId = null;
-  const semasaModal = new bootstrap.Modal(document.getElementById('semanaModal'));
-  const akhirModal = new bootstrap.Modal(document.getElementById('akhirModal'));
+
+  const semasaModal = new bootstrap.Modal(document.getElementById("semanaModal"));
+  const akhirModal = new bootstrap.Modal(document.getElementById("akhirModal"));
 
   function badge(status) {
     if (status === "submitted") return `<span class="badge bg-success">Submitted</span>`;
@@ -210,6 +284,10 @@
   }
 
   function renderTable() {
+    const searchInput = document.getElementById("searchInput");
+    const filterFormType = document.getElementById("filterFormType");
+    const formTable = document.getElementById("formTable");
+
     const search = searchInput.value.toLowerCase();
     const filter = filterFormType.value;
 
@@ -218,13 +296,16 @@
       f.name.toLowerCase().includes(search)
     );
 
-    totalForm.innerText = filtered.length;
-    draftForm.innerText = filtered.filter(f =>
+    const draftCount = filtered.filter(f =>
       f.awal === "draft" || f.semasa === "draft" || f.akhir === "draft"
     ).length;
-    submittedForm.innerText = filtered.length - draftForm.innerText;
+
+    document.getElementById("totalForm").innerText = filtered.length;
+    document.getElementById("draftForm").innerText = draftCount;
+    document.getElementById("submittedForm").innerText = filtered.length - draftCount;
 
     formTable.innerHTML = "";
+
     filtered.forEach(f => {
       formTable.innerHTML += `
         <tr class="text-center">
@@ -233,10 +314,14 @@
           <td>${f.lastEdit}</td>
           <td>${badge(f.awal)}</td>
           <td>
-            ${f.semasa === "not_started" ? `<button class="btn btn-sm btn-outline-primary" onclick="openSemasa('${f.id}')"><i class="bi bi-plus"></i></button>` : badge(f.semasa)}
+            ${f.semasa === "not_started"
+              ? `<button class="btn btn-sm btn-outline-primary" onclick="openSemasa('${f.id}')"><i class="bi bi-plus"></i></button>`
+              : badge(f.semasa)}
           </td>
           <td>
-            ${f.akhir === "not_started" ? `<button class="btn btn-sm btn-outline-primary" onclick="openAkhir('${f.id}')"><i class="bi bi-plus"></i></button>` : badge(f.akhir)}
+            ${f.akhir === "not_started"
+              ? `<button class="btn btn-sm btn-outline-primary" onclick="openAkhir('${f.id}')"><i class="bi bi-plus"></i></button>`
+              : badge(f.akhir)}
           </td>
           <td>
             <button class="btn btn-sm btn-outline-primary">View</button>
@@ -256,8 +341,7 @@
     akhirModal.show();
   }
 
-  // Modal actions
-  needSemasa.addEventListener("click", () => {
+  document.getElementById("needSemasa").addEventListener("click", () => {
     const form = forms.find(f => f.id === selectedFormId);
     form.semasa = "draft";
     form.akhir = "locked";
@@ -265,31 +349,32 @@
     renderTable();
   });
 
-  noSemasa.addEventListener("click", () => {
+  document.getElementById("noSemasa").addEventListener("click", () => {
     const form = forms.find(f => f.id === selectedFormId);
     form.semasa = "not_required";
-    form.akhir = "not_started"; // unlock akhir
+    form.akhir = "not_started";
     semasaModal.hide();
     renderTable();
   });
 
-  fillAkhir.addEventListener("click", () => {
+  document.getElementById("fillAkhir").addEventListener("click", () => {
     const form = forms.find(f => f.id === selectedFormId);
     form.akhir = "draft";
     akhirModal.hide();
     renderTable();
   });
 
-  laterAkhir.addEventListener("click", () => {
+  document.getElementById("laterAkhir").addEventListener("click", () => {
     akhirModal.hide();
   });
 
-  // Search + Filter
-  searchInput.addEventListener("input", renderTable);
-  filterFormType.addEventListener("change", renderTable);
+  document.getElementById("searchInput").addEventListener("input", renderTable);
+  document.getElementById("filterFormType").addEventListener("change", renderTable);
 
   renderTable();
 </script>
+
 <script src="assets/js/wizard-form.js"></script>
+
 </body>
 </html>
