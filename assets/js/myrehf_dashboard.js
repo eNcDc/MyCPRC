@@ -282,63 +282,63 @@ function renderOperationStatusChart(data) {
 
 // ===== CHART MANGSA KE HOSPITAL MENGIKUT DAERAH =====
 // Chart ini jumlahkan mangsa ke hospital mengikut daerah.
-function renderVictimsDistrictChart(data) {
-  const rows = groupHospitalVictimsByDistrict(data);
+// function renderVictimsDistrictChart(data) {
+//   const rows = groupHospitalVictimsByDistrict(data);
 
-  createmyrehfChart("myrehfVictimsDistrictChart", "victimsByDistrict", {
-    type: "bar",
-    data: {
-      labels: rows.map(row => row.label),
-      datasets: [{
-        label: "Mangsa ke Hospital",
-        data: rows.map(row => row.value),
-        backgroundColor: "#2563eb"
-      }]
-    },
-    options: getBarOptions()
-  });
-}
+//   createmyrehfChart("myrehfVictimsDistrictChart", "victimsByDistrict", {
+//     type: "bar",
+//     data: {
+//       labels: rows.map(row => row.label),
+//       datasets: [{
+//         label: "Mangsa ke Hospital",
+//         data: rows.map(row => row.value),
+//         backgroundColor: "#2563eb"
+//       }]
+//     },
+//     options: getBarOptions()
+//   });
+// }
 
 // ===== CHART PPS AKTIF MENGIKUT DAERAH =====
 // Chart ini kira bilangan PPS unik mengikut daerah.
-function renderPpsDistrictChart(data) {
-  const rows = groupPpsByDistrict(data);
+// function renderPpsDistrictChart(data) {
+//   const rows = groupPpsByDistrict(data);
 
-  createmyrehfChart("myrehfPpsDistrictChart", "ppsByDistrict", {
-    type: "bar",
-    data: {
-      labels: rows.map(row => row.label),
-      datasets: [{
-        label: "PPS Aktif",
-        data: rows.map(row => row.value),
-        backgroundColor: "#16a34a"
-      }]
-    },
-    options: getBarOptions()
-  });
-}
+//   createmyrehfChart("myrehfPpsDistrictChart", "ppsByDistrict", {
+//     type: "bar",
+//     data: {
+//       labels: rows.map(row => row.label),
+//       datasets: [{
+//         label: "PPS Aktif",
+//         data: rows.map(row => row.value),
+//         backgroundColor: "#16a34a"
+//       }]
+//     },
+//     options: getBarOptions()
+//   });
+// }
 
 // ===== CHART TREND MANGSA KE HOSPITAL =====
 // Chart ini guna semua rekod supaya nampak perubahan mangsa ke hospital mengikut tarikh.
-function renderVictimTrendChart(data) {
-  const rows = groupVictimTrendByDate(data);
+// function renderVictimTrendChart(data) {
+//   const rows = groupVictimTrendByDate(data);
 
-  createmyrehfChart("myrehfVictimTrendChart", "victimTrend", {
-    type: "line",
-    data: {
-      labels: rows.map(row => formatDate(row.label)),
-      datasets: [{
-        label: "Mangsa ke Hospital",
-        data: rows.map(row => row.value),
-        borderColor: "#0d9488",
-        backgroundColor: "rgba(20, 184, 166, 0.18)",
-        fill: true,
-        tension: 0.35
-      }]
-    },
-    options: getLineOptions()
-  });
-}
+//   createmyrehfChart("myrehfVictimTrendChart", "victimTrend", {
+//     type: "line",
+//     data: {
+//       labels: rows.map(row => formatDate(row.label)),
+//       datasets: [{
+//         label: "Mangsa ke Hospital",
+//         data: rows.map(row => row.value),
+//         borderColor: "#0d9488",
+//         backgroundColor: "rgba(20, 184, 166, 0.18)",
+//         fill: true,
+//         tension: 0.35
+//       }]
+//     },
+//     options: getLineOptions()
+//   });
+// }
 
 // ===== CHART FASILITI TERJEJAS =====
 // Chart ini kira jumlah fasiliti terjejas mengikut daerah.
@@ -361,41 +361,41 @@ function renderAffectedFacilityChart(data) {
 
 // ===== CHART PENYAKIT BERJANGKIT =====
 // Chart ini jumlahkan kes penyakit berjangkit seperti chicken pox, dengue dan lain-lain.
-function renderInfectiousDiseaseChart(data) {
-  const rows = groupNestedSum(data, "infectiousDiseases");
+// function renderInfectiousDiseaseChart(data) {
+//   const rows = groupNestedSum(data, "infectiousDiseases");
 
-  createmyrehfChart("myrehfInfectiousDiseaseChart", "infectiousDiseases", {
-    type: "bar",
-    data: {
-      labels: rows.map(row => row.label),
-      datasets: [{
-        label: "Jumlah Kes",
-        data: rows.map(row => row.value),
-        backgroundColor: "#0d9488"
-      }]
-    },
-    options: getBarOptions()
-  });
-}
+//   createmyrehfChart("myrehfInfectiousDiseaseChart", "infectiousDiseases", {
+//     type: "bar",
+//     data: {
+//       labels: rows.map(row => row.label),
+//       datasets: [{
+//         label: "Jumlah Kes",
+//         data: rows.map(row => row.value),
+//         backgroundColor: "#0d9488"
+//       }]
+//     },
+//     options: getBarOptions()
+//   });
+// }
 
 // ===== CHART KATEGORI PESAKIT =====
 // Chart ini jumlahkan kategori pesakit seperti antenatal, postnatal, haemodialysis dan palliative.
-function renderPatientCategoryChart(data) {
-  const rows = groupNestedSum(data, "patientCategories");
+// function renderPatientCategoryChart(data) {
+//   const rows = groupNestedSum(data, "patientCategories");
 
-  createmyrehfChart("myrehfPatientCategoryChart", "patientCategories", {
-    type: "bar",
-    data: {
-      labels: rows.map(row => row.label),
-      datasets: [{
-        label: "Jumlah Pesakit",
-        data: rows.map(row => row.value),
-        backgroundColor: "#6d28d9"
-      }]
-    },
-    options: getBarOptions()
-  });
-}
+//   createmyrehfChart("myrehfPatientCategoryChart", "patientCategories", {
+//     type: "bar",
+//     data: {
+//       labels: rows.map(row => row.label),
+//       datasets: [{
+//         label: "Jumlah Pesakit",
+//         data: rows.map(row => row.value),
+//         backgroundColor: "#6d28d9"
+//       }]
+//     },
+//     options: getBarOptions()
+//   });
+// }
 
 // ===== CREATE CHART =====
 // Function reusable untuk create chart dan destroy chart lama sebelum render baru.
@@ -681,21 +681,21 @@ function downloadmyrehfChartData(type) {
     filename = "myrehf_fasiliti_terjejas.xlsx";
   }
 
-  if (type === "infectiousDiseases") {
-    rows = groupNestedSum(latestData, "infectiousDiseases").map(row => ({
-      "Penyakit Berjangkit": row.label,
-      "Jumlah Kes": row.value
-    }));
-    filename = "myrehf_penyakit_berjangkit.xlsx";
-  }
+//   if (type === "infectiousDiseases") {
+//     rows = groupNestedSum(latestData, "infectiousDiseases").map(row => ({
+//       "Penyakit Berjangkit": row.label,
+//       "Jumlah Kes": row.value
+//     }));
+//     filename = "myrehf_penyakit_berjangkit.xlsx";
+//   }
 
-  if (type === "patientCategories") {
-    rows = groupNestedSum(latestData, "patientCategories").map(row => ({
-      "Kategori Pesakit": row.label,
-      "Jumlah Pesakit": row.value
-    }));
-    filename = "myrehf_kategori_pesakit.xlsx";
-  }
+//   if (type === "patientCategories") {
+//     rows = groupNestedSum(latestData, "patientCategories").map(row => ({
+//       "Kategori Pesakit": row.label,
+//       "Jumlah Pesakit": row.value
+//     }));
+//     filename = "myrehf_kategori_pesakit.xlsx";
+//   }
 
   downloadExcel(rows, filename, "Data");
 }
