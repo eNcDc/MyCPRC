@@ -188,9 +188,13 @@
               <td class="date">12/01/2026</td>
               <td class="hospital">Kuala Lumpur Hospital, Pathology</td>
               <td>Influenza A</td>
-              <td class="status">Disahkan</td>
+              <td>
+                <span class="badge status-badge">Disahkan</span>
+              </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary">Papar</button>
+                  <a href="sari_view.html" class="btn btn-sm btn-outline-primary">
+                      Papar
+                  </a>
               </td>
             </tr>
 
@@ -198,9 +202,13 @@
               <td class="date">10/01/2026</td>
               <td class="hospital">Melaka Hospital, Nephrology</td>
               <td>COVID-19</td>
-              <td class="status">Dalam Proses</td>
+              <td>
+                <span class="badge status-badge">Dalam Proses</span>
+              </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary">Papar</button>
+                  <a href="sari_view.html" class="btn btn-sm btn-outline-primary">
+                      Papar
+                  </a>
               </td>
             </tr>
 
@@ -208,9 +216,13 @@
               <td class="date">08/01/2026</td>
               <td class="hospital">Raja Permaisuri Bainun Hospital (Ipoh), Pathology</td>
               <td>Pneumonia Severe</td>
-              <td class="status">Disahkan</td>
+              <td>
+                <span class="badge status-badge">Disahkan</span>
+              </td>
               <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary">Papar</button>
+                  <a href="sari_view.html" class="btn btn-sm btn-outline-primary">
+                      Papar
+                  </a>
               </td>
             </tr>
 
@@ -314,66 +326,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-<!--EDIT AND VIEW-->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
 
-  document.querySelectorAll("#sariTable tr").forEach(row => {
-
-    const statusText = row.querySelector(".status").innerText.trim();
-    const actionCell = row.querySelector("td:last-child");
-
-    if (statusText === "Disahkan") {
-      actionCell.innerHTML = `
-        <button class="btn btn-sm btn-outline-primary">Papar</button>
-      `;
-    }
-
-    if (statusText === "Dalam Proses") {
-      actionCell.innerHTML = `
-        <button class="btn btn-sm btn-outline-secondary">Papar</button>
-      `;
-    }
-
-  });
-
-});
-</script>
-
-<!--BUTTON COLOUR-->
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-  document.querySelectorAll("tr").forEach(row => {
-
-    const statusCell = row.querySelector(".status");
-    if (!statusCell) return;
-
-    const status = statusCell.innerText.trim();
-    const actionCell = row.querySelector("td:last-child");
-
-    let badgeClass = "";
-
-    if (status === "Disahkan") {
-      badgeClass = "badge bg-success";
-      actionCell.innerHTML = `
-        <button class="btn btn-sm btn-outline-primary">Papar</button>
-      `;
-    }
-
-    else if (status === "Dalam Proses") {
-      badgeClass = "badge bg-warning text-dark";
-      actionCell.innerHTML = `
-        <button class="btn btn-sm btn-outline-secondary">Papar</button>
-      `;
-    }
-
-    statusCell.innerHTML = `<span class="${badgeClass}">${status}</span>`;
-
-  });
-
-});
-</script>
 
 
 <!--CHART-->
@@ -408,6 +361,31 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 </script>
+
+
+<!-- COLOUR BUTTON -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  document.querySelectorAll(".status-badge").forEach(function (badge) {
+
+    const text = badge.textContent.trim().toLowerCase();
+
+    if (text === "disahkan") {
+      badge.classList.add("bg-success");
+    } 
+    else if (text === "dalam proses") {
+      badge.classList.add("bg-warning", "text-dark");
+    } 
+    else {
+      badge.classList.add("bg-secondary");
+    }
+
+  });
+
+});
+</script>
+
 
 </body>
 </html>

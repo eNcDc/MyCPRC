@@ -171,21 +171,33 @@
       <div class="card shadow-sm">
         <div class="card-body">
 
-          <!-- ROW 1: TARIKH + BUTTON -->
+          <!-- ROW 1: SEARCH + TARIKH + BUTTON -->
           <div class="row g-3 mb-2">
 
+            <!-- SEARCH BAR -->
             <div class="col-md-4">
+              <label class="form-label fw-semibold">Carian</label>
+              <input type="text"
+                    class="form-control"
+                    id="searchInput"
+                    placeholder="Cari nama misi / ID pesakit (EMTMDS?)">
+            </div>
+
+            <!-- TARIKH -->
+            <div class="col-md-3">
               <label class="form-label fw-semibold">Tarikh</label>
               <input type="date" class="form-control">
             </div>
 
-            <div class="col-md-4 d-flex align-items-end">
+            <!-- BUTTON TAPIS -->
+            <div class="col-md-2 d-flex align-items-end">
               <button class="btn btn-primary w-100">
                 <i class="bi bi-funnel me-1"></i> Tapis
               </button>
             </div>
 
-            <div class="col-md-4 d-flex align-items-end">
+            <!-- RESET -->
+            <div class="col-md-3 d-flex align-items-end">
               <button class="btn btn-outline-secondary w-100">
                 Reset
               </button>
@@ -264,6 +276,8 @@
           <table class="table align-middle mb-0">
             <thead class="table-light">
               <tr>
+                <th>Misi</th>
+                <th>Unique ID</th>
                 <th>Tarikh</th>
                 <th>Pesakit</th>
                 <th>Umur</th>
@@ -276,7 +290,7 @@
             </thead>
 
             <tbody id="tbody-mds">
-              <tr><td colspan="8" class="text-center text-muted py-3">Memuatkan...</td></tr>
+              <tr><td colspan="10" class="text-center text-muted py-3">Memuatkan...</td></tr>
             </tbody>
           </table>
           
@@ -307,6 +321,7 @@ fetch("sidebar.html")
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+
 <script>
 let allMds = [];
 
@@ -325,7 +340,7 @@ function renderTable(list) {
         <a href="emt_mdsview.html?id=${r.id}" class="btn btn-sm btn-outline-primary">Lihat</a>
       </td>
     </tr>`).join('')
-  : '<tr><td colspan="8" class="text-center text-muted py-3">Tiada rekod ditemui.</td></tr>';
+  : '<tr><td colspan="10" class="text-center text-muted py-3">Tiada rekod ditemui.</td></tr>';
 }
 
 async function loadMds() {
@@ -359,5 +374,20 @@ document.querySelector('button.btn-outline-secondary').addEventListener('click',
 
 document.addEventListener('DOMContentLoaded', loadMds);
 </script>
+
+
+
+
+<!--TO UPDATE XTREMAX
+
+1. SEARCH BAR 
+- SEARCH BY MISSION NAME / PATIENT UNIQUE ID 
+
+2. TABLE
+- TAMBAH COLUMN MISI
+- TAMBAH COLUMN PATIENT UNIQUE ID 
+-->
+
+
 </body>
 </html>

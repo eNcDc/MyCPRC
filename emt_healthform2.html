@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EMT MDS+</title>
+    <title>EMT MDS+ AHLI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
@@ -13,6 +13,9 @@
 
     <!-- Main CSS -->
     <link href="assets/css/main.css" rel="stylesheet">
+
+    <!-- MAPS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
     <style>
     .mds-card{
@@ -81,7 +84,7 @@
       <!-- PAGE HEADER -->
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
-          <h4 class="mb-0">EMT MDS+</h4>
+          <h4 class="mb-0">Borang EMT MDS+</h4>
           <small class="text-muted">
             Rekod Perubatan Pasukan Perubatan Kecemasan (Set Data Minimum Plus - MDS+)
           </small>
@@ -122,7 +125,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Nama (Nama Panggilan)</label>
+                            <label class="form-label">Nama Penuh</label>
                             <input type="text" class="form-control">
                         </div>
 
@@ -152,47 +155,49 @@
 
                     </div>
 
-                    <div cl ass="mb-3">
-                        <label class="form-label">Kumpulan Umur</label>
+                    <div class="mb-3">
+                        <label class="form-label">Kumpulan Umur (Auto Sistem)</label>
 
                         <div class="row">
 
                             <div class="col-md-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="age_group" id="g1">
+                                    <input class="form-check-input" type="radio" name="age_group" id="g1" disabled>
                                     <label class="form-check-label" for="g1">&lt;1</label>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="age_group" id="g2">
+                                    <input class="form-check-input" type="radio" name="age_group" id="g2" disabled>
                                     <label class="form-check-label" for="g2">1-4</label>
                                 </div>
                             </div>
 
                             <div class="col-md-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="age_group" id="g3">
+                                    <input class="form-check-input" type="radio" name="age_group" id="g3" disabled>
                                     <label class="form-check-label" for="g3">5-17</label>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="age_group" id="g4">
+                                    <input class="form-check-input" type="radio" name="age_group" id="g4" disabled>
                                     <label class="form-check-label" for="g4">18-64</label>
                                 </div>
                             </div>
 
                             <div class="col-md-3">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="age_group" id="g5">
+                                    <input class="form-check-input" type="radio" name="age_group" id="g5" disabled>
                                     <label class="form-check-label" for="g5">65+</label>
                                 </div>
                             </div>
 
                         </div>
+
+                        <small class="text-muted">Dijana secara automatik berdasarkan umur.</small>
                     </div>
 
                     <div class="mb-4">
@@ -404,20 +409,36 @@
                         <div class="card-body">
                             <div class="row mb-3">
 
+                                <!-- ID EMT MDS -->
                                 <div class="col-md-6">
-                                    <label class="form-label">No IC</label>
-                                    <input type="text" class="form-control">
+                                    <label class="form-label">ID EMT MDS</label>
+                                    <input type="text"
+                                        class="form-control bg-light"
+                                        value="EMTMDS0001"
+                                        readonly>
+                                    <small class="text-muted">
+                                        ID dijana secara automatik oleh sistem dan tidak boleh diubah.
+                                    </small>
                                 </div>
 
+                                <!-- NAMA MISI EMT -->
                                 <div class="col-md-6">
-                                    <label class="form-label">Nama Penuh</label>
-                                    <input type="text" class="form-control">
+                                    <label class="form-label">Nama Misi EMT</label>
+                                    <input type="text"
+                                        class="form-control bg-light"
+                                        value="EMT Sabah Flood Response"
+                                        readonly>
+                                    <small class="text-muted">
+                                        Nama misi tidak boleh diubah.
+                                    </small>
                                 </div>
+
                             </div>
 
 
 
                             <!-- ALAMAT -->
+                            <!--
                             <div class="card border-0 bg-light mb-3">
                                 <div class="card-body">
 
@@ -479,6 +500,41 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            -->
+
+                            <!-- LOCATION (MAP BASED) -->
+                            <div class="card border-0 bg-light mb-3">
+                            <div class="card-body">
+
+                                <h6 class="fw-bold mb-3">
+                                <i class="bi bi-geo-alt me-2"></i>
+                                Lokasi Pesakit (GPS)
+                                </h6>
+
+                                <!-- MAP -->
+                                <div id="map" style="height: 250px; border-radius: 10px;" class="mb-3"></div>
+
+                                <!-- COORDINATES -->
+                                <div class="row g-3">
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Latitude</label>
+                                    <input type="text" id="lat" class="form-control" readonly>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Longitude</label>
+                                    <input type="text" id="lng" class="form-control" readonly>
+                                </div>
+
+                                </div>
+
+                                <small class="text-muted d-block mt-2">
+                                Klik pada peta untuk pilih lokasi pesakit.
+                                </small>
+
+                            </div>
                             </div>
 
                             <hr>
@@ -577,6 +633,7 @@
                             <i class="bi bi-send me-1"></i> Hantar
                         </button>
                     </div>
+                    
                 </div>
             </form>
         </div>
@@ -771,5 +828,109 @@ function tambahUbat() {
     container.insertAdjacentHTML("beforeend", html);
 }
 </script>
+
+
+<!--CALCULATE AGE GROUP-->
+<script>
+    function updateAgeGroup() {
+    const ageValue = parseInt(document.querySelector('input[type="number"]').value || 0);
+    const unit = document.querySelector('input[name="age_unit"]:checked')?.id;
+
+    let ageInYears = ageValue;
+
+    // convert bulan → tahun
+    if (unit === "month") {
+        ageInYears = ageValue / 12;
+    }
+
+    // reset semua
+    document.querySelectorAll('input[name="age_group"]').forEach(r => r.checked = false);
+
+    let selectedId = null;
+
+    if (ageInYears < 1) selectedId = "g1";
+    else if (ageInYears <= 4) selectedId = "g2";
+    else if (ageInYears <= 17) selectedId = "g3";
+    else if (ageInYears <= 64) selectedId = "g4";
+    else selectedId = "g5";
+
+    if (selectedId) {
+        document.getElementById(selectedId).checked = true;
+    }
+}
+</script>
+
+<!--CALCULATE AGE GROUP-->
+<script>
+document.querySelector('input[type="number"]').addEventListener('input', updateAgeGroup);
+
+document.querySelectorAll('input[name="age_unit"]').forEach(radio => {
+    radio.addEventListener('change', updateAgeGroup);
+});
+</script>
+
+<!--KOORDINAT LOKASI-->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+let map = L.map('map').setView([4.2105, 101.9758], 7); // Malaysia default
+
+// Tile layer
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap'
+}).addTo(map);
+
+let marker;
+
+// Auto detect user location
+navigator.geolocation.getCurrentPosition(function (pos) {
+  let lat = pos.coords.latitude;
+  let lng = pos.coords.longitude;
+
+  map.setView([lat, lng], 15);
+
+  marker = L.marker([lat, lng]).addTo(map);
+
+  document.getElementById("lat").value = lat;
+  document.getElementById("lng").value = lng;
+});
+
+// Click to change location
+map.on('click', function (e) {
+  let lat = e.latlng.lat;
+  let lng = e.latlng.lng;
+
+  if (marker) {
+    marker.setLatLng([lat, lng]);
+  } else {
+    marker = L.marker([lat, lng]).addTo(map);
+  }
+
+  document.getElementById("lat").value = lat;
+  document.getElementById("lng").value = lng;
+});
+</script>
+
+
+
+
+
+<!--
+TO UPDATE XTREMAX
+
+1. SET DATA MINIMUM (MDS)
+- NAMA PANGGILAN TUKAR NAMA PENUH
+- KUMPULAN UMUR AUTO SISTEM
+
+2. LAPORAN KES PESAKIT 
+- NO IC TUKAR ID EMT MDS
+- ADDRESS GUNA MAPS  
+
+*/
+
+-->>
+
+
+
 </body>
 </html>
