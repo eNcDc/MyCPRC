@@ -4,12 +4,16 @@
   <!-- ===== TAJUK DAN BUTANG BORANG ===== -->
   <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
     <div>
-      <h4 class="mb-1">Facilities Management Dashboard</h4>
-      <small class="text-muted">Paparan ringkasan, peta, analitik dan senarai fasiliti.</small>
+      <h4 class="mb-1">Dashboard Malaysia Resilient Healthcare Facilities (MyReHF)</h4>
+      <small class="text-muted">To support countries in strengthening health facility resilience, WHO, in collaboration with 
+        partners and stakeholders, has developed a consolidated tool: the Climate and Emergency Adapted for Readiness (CLEAR+)
+        toolkit—a practical, health systems-oriented approach that assesses readiness across emergency preparedness, climate 
+        adaptation and structural safety. In Malaysia, the CLEAR+ toolkit has been adapted and implemented as the Malaysia 
+        Resilient Healthcare Facilities (MyReHF) initiative.</small>
     </div>
 
     <a href="myrehf_form.html" class="btn btn-primary">
-      <i class="bi bi-plus-circle me-1"></i> Isi Laporan Banjir
+      <i class="bi bi-plus-circle me-1"></i> Isi Borang MyReHF
     </a>
   </div>
 
@@ -36,9 +40,11 @@
         </div>
 
         <div class="col-md-4">
-          <label for="myrehfOperationFilter" class="form-label">Status Operasi</label>
-          <select id="myrehfOperationFilter" class="form-select">
-            <option value="">Semua Operasi</option>
+          <label for="myrehfStatusFilter" class="form-label">Status</label>
+          <select id="myrehfStatusFilter" class="form-select">
+            <option value="">Semua Status</option>
+            <option value="">Selesai</option>
+            <option value="">Belum Selesai</option>
           </select>
         </div>
       </div>
@@ -49,13 +55,13 @@
   <ul class="nav myrehf-segment-tabs mb-4" id="myrehfDashboardTabs" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#myrehfSummaryTablePanel" type="button">
-        <i class="bi bi-table me-2"></i> Summary & Table
+        <i class="bi bi-table me-2"></i> Rumusan & Jadual
       </button>
     </li>
 
     <li class="nav-item" role="presentation">
       <button class="nav-link" data-bs-toggle="pill" data-bs-target="#myrehfMapPanel" type="button">
-        <i class="bi bi-map me-2"></i> Map Malaysia
+        <i class="bi bi-map me-2"></i> Peta Malaysia
       </button>
     </li>
   </ul>
@@ -71,9 +77,9 @@
         <div class="col-md-3">
           <div class="card shadow-sm myrehf-summary-card purple h-100">
             <div class="card-body">
-              <h6 class="text-muted mb-2">Fasiliti Terjejas</h6>
-              <h3 class="mb-0 myrehf-text-purple" id="myrehfAffectedFacilities">0</h3>
-              <small class="text-muted">Fasiliti ada laporan tahun ini</small>
+              <h6 class="text-muted mb-2">Fasiliti Selesai</h6>
+              <h3 class="mb-0 myrehf-text-purple" id="myrehfCompletedFacilities">0</h3>
+              <small class="text-muted">Fasiliti selesai penilaian</small>
             </div>
           </div>
         </div>
@@ -81,24 +87,24 @@
         <div class="col-md-3">
           <div class="card shadow-sm myrehf-summary-card blue h-100">
             <div class="card-body">
-              <h6 class="text-muted mb-2">Tidak Operasi</h6>
-              <h3 class="mb-0 myrehf-text-blue" id="myrehfNotOperating">0</h3>
-              <small class="text-muted">Fasiliti tidak beroperasi</small>
+              <h6 class="text-muted mb-2">Fasiliti Belum Selesai</h6>
+              <h3 class="mb-0 myrehf-text-blue" id="myrehfUncomplete">0</h3>
+              <small class="text-muted">Fasiliti belum selesai penilaian</small>
             </div>
           </div>
         </div>
 
-        <div class="col-md-3">
+        <!-- <div class="col-md-3">
           <div class="card shadow-sm myrehf-summary-card teal h-100">
             <div class="card-body">
-              <h6 class="text-muted mb-2">Pindah Operasi</h6>
-              <h3 class="mb-0 myrehf-text-teal" id="myrehfMovedOperation">0</h3>
+              <h6 class="text-muted mb-2">Fa</h6>
+              <h3 class="mb-0 myrehf-text-teal" id="myrehfMovedStatus">0</h3>
               <small class="text-muted">Operasi dipindahkan sementara</small>
             </div>
           </div>
-        </div>
+        </div> -->
 
-        <div class="col-md-3">
+        <!-- <div class="col-md-3">
           <div class="card shadow-sm myrehf-summary-card green h-100">
             <div class="card-body">
               <h6 class="text-muted mb-2">Mangsa ke Hospital</h6>
@@ -106,13 +112,13 @@
               <small class="text-muted"><span id="myrehfActivePps">0</span> PPS aktif</small>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <!-- ===== TABLE LAPORAN myrehf ===== -->
       <div class="card shadow-sm mb-4">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
-          <strong>Senarai Laporan myrehf</strong>
+          <strong>Senarai Laporan MyReHF</strong>
           <div class="d-flex gap-2">
             <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfTableData()">
               <i class="bi bi-download"></i>
@@ -131,7 +137,7 @@
                 <th>Negeri</th>
                 <th>Daerah</th>
                 <th>Fasiliti</th>
-                <th>Status Operasi</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody id="myrehfTableBody"></tbody>
@@ -144,7 +150,7 @@
     <div class="tab-pane fade" id="myrehfMapPanel">
       <div class="card shadow-sm mb-4">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
-          <strong>Map Malaysia</strong>
+          <strong>Peta MyReHF</strong>
           <button class="btn btn-sm btn-outline-myrehf" type="button" data-bs-toggle="modal" data-bs-target="#myrehfMapModal">
             <i class="bi bi-arrows-fullscreen"></i>
           </button>
@@ -153,7 +159,7 @@
         <div class="card-body">
           <div id="myrehfMap" class="myrehf-map"></div>
           <small class="text-muted d-block mt-2">
-            Marker ungu: tidak operasi, biru: pindah operasi, hijau/turquoise: beroperasi.
+            - Dalam proses pengemaskinian -
           </small>
         </div>
       </div>
@@ -165,13 +171,13 @@
     <div class="col-lg-4">
       <div class="card shadow-sm h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
-          <strong>Status Operasi Fasiliti</strong>
-          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('operationStatus')">
+          <strong>Status Penilaian</strong>
+          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('StatusStatus')">
             <i class="bi bi-download"></i>
           </button>
         </div>
         <div class="card-body myrehf-chart-box">
-          <canvas id="myrehfOperationStatusChart"></canvas>
+          <canvas id="myrehfStatusStatusChart"></canvas>
         </div>
       </div>
     </div>
@@ -225,12 +231,12 @@
       <div class="card shadow-sm h-100">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
           <strong>Fasiliti Selesai Mengikut Daerah</strong>
-          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('affectedFacilities')">
+          <button class="btn btn-sm btn-outline-myrehf" type="button" onclick="downloadmyrehfChartData('CompletedFacilities')">
             <i class="bi bi-download"></i>
           </button>
         </div>
         <div class="card-body myrehf-chart-box">
-          <canvas id="myrehfAffectedFacilityChart"></canvas>
+          <canvas id="myrehfCompletedFacilityChart"></canvas>
         </div>
       </div>
     </div>
@@ -273,7 +279,7 @@
   <div class="modal-dialog modal-fullscreen">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Map Malaysia</h5>
+        <h5 class="modal-title">Peta MyReHF</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -288,7 +294,7 @@
   <div class="modal-dialog modal-fullscreen">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Senarai Laporan myrehf</h5>
+        <h5 class="modal-title">Senarai Laporan MyReHF</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body">
@@ -300,7 +306,7 @@
                 <th>Negeri</th>
                 <th>Daerah</th>
                 <th>Fasiliti</th>
-                <th>Status Operasi</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody id="myrehfTableBodyFull"></tbody>

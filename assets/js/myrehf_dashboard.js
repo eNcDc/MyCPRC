@@ -8,7 +8,7 @@ const myrehfData = [
     facilityName: "KK Sri Medan",
     latitude: 1.9302,
     longitude: 103.0547,
-    operationStatus: "Selesai",
+    StatusStatus: "Selesai",
   },
   {
     date: "2026-01-15",
@@ -17,7 +17,7 @@ const myrehfData = [
     facilityName: "KK Sri Medan",
     latitude: 1.9302,
     longitude: 103.0547,
-    operationStatus: "Selesai",
+    StatusStatus: "Selesai",
   },
   {
     date: "2026-01-14",
@@ -26,7 +26,7 @@ const myrehfData = [
     facilityName: "KK Batu Pahat",
     latitude: 1.8548,
     longitude: 102.9325,
-    operationStatus: "Belum Selesai",
+    StatusStatus: "Belum Selesai",
   },
   {
     date: "2026-01-12",
@@ -35,7 +35,7 @@ const myrehfData = [
     facilityName: "KK Pengkalan Chepa",
     latitude: 6.1667,
     longitude: 102.2833,
-    operationStatus: "Belum Selesai",
+    StatusStatus: "Belum Selesai",
   },
   {
     date: "2026-01-16",
@@ -44,7 +44,7 @@ const myrehfData = [
     facilityName: "Klinik Desa Kubang Kerian",
     latitude: 6.1000,
     longitude: 102.2833,
-    operationStatus: "Belum Selesai",
+    StatusStatus: "Belum Selesai",
   },
   {
     date: "2026-01-11",
@@ -53,7 +53,7 @@ const myrehfData = [
     facilityName: "KK Beserah",
     latitude: 3.8167,
     longitude: 103.3667,
-    operationStatus: "Belum Selesai",
+    StatusStatus: "Belum Selesai",
   },
   {
     date: "2026-01-20",
@@ -62,7 +62,7 @@ const myrehfData = [
     facilityName: "KK Bakri",
     latitude: 2.0442,
     longitude: 102.6511,
-    operationStatus: "Belum Selesai",
+    StatusStatus: "Belum Selesai",
   },
   {
     date: "2026-01-21",
@@ -71,7 +71,7 @@ const myrehfData = [
     facilityName: "KK Simpang Renggam",
     latitude: 1.8278,
     longitude: 103.3007,
-    operationStatus: "Belum Selesai",
+    StatusStatus: "Belum Selesai",
   }
 ];
 
@@ -139,7 +139,7 @@ async function loadmyrehfData() {
     state: row.state,
     district: row.district,
     facilityName: row.facility_name,
-    operationStatus: row.operation_status,
+    StatusStatus: row.Status_status,
     ppsName: row.pps_name,
     hospitalVictimCount: Number(row.hospital_victim_count || 0),
     latitude: Number(row.latitude),
@@ -164,7 +164,7 @@ async function loadmyrehfData() {
 // Bahagian ini isi pilihan filter berdasarkan data tahun semasa.
 function populatemyrehfFilters(data) {
   fillSelect("myrehfStateFilter", getUniqueValues(data, "state"), "Semua Negeri");
-  fillSelect("myrehfOperationFilter", getUniqueValues(data, "operationStatus"), "Selesai");
+  fillSelect("myrehfStatusFilter", getUniqueValues(data, "StatusStatus"), "Selesai");
   updatemyrehfDistrictOptions();
 }
 
@@ -185,7 +185,7 @@ function updatemyrehfDistrictOptions() {
 function bindmyrehfFilterEvents() {
   const stateFilter = document.getElementById("myrehfStateFilter");
   const districtFilter = document.getElementById("myrehfDistrictFilter");
-  const operationFilter = document.getElementById("myrehfOperationFilter");
+  const StatusFilter = document.getElementById("myrehfStatusFilter");
 
   if (stateFilter && stateFilter.dataset.bound !== "true") {
     stateFilter.addEventListener("change", () => {
@@ -195,7 +195,7 @@ function bindmyrehfFilterEvents() {
     stateFilter.dataset.bound = "true";
   }
 
-  [districtFilter, operationFilter].forEach(filter => {
+  [districtFilter, StatusFilter].forEach(filter => {
     if (filter && filter.dataset.bound !== "true") {
       filter.addEventListener("change", applymyrehfFilters);
       filter.dataset.bound = "true";
@@ -208,14 +208,14 @@ function bindmyrehfFilterEvents() {
 function applymyrehfFilters() {
   const selectedState = getValue("myrehfStateFilter");
   const selectedDistrict = getValue("myrehfDistrictFilter");
-  const selectedOperation = getValue("myrehfOperationFilter");
+  const selectedStatus = getValue("myrehfStatusFilter");
 
   currentmyrehfData = myrehfBaseData.filter(item => {
     const matchState = !selectedState || item.state === selectedState;
     const matchDistrict = !selectedDistrict || item.district === selectedDistrict;
-    const matchOperation = !selectedOperation || item.operationStatus === selectedOperation;
+    const matchStatus = !selectedStatus || item.StatusStatus === selectedStatus;
 
-    return matchState && matchDistrict && matchOperation;
+    return matchState && matchDistrict && matchStatus;
   });
 
   rendermyrehfDashboard(currentmyrehfData);
@@ -235,12 +235,12 @@ function rendermyrehfDashboard(data) {
 // ===== SUMMARY CARDS =====
 // Summary menggunakan laporan terkini setiap fasiliti supaya tidak double count fasiliti yang sama.
 function updatemyrehfSummaryCards(latestData) {
-  const affectedFacilities = latestData.length;
-  const notOperating = latestData.filter(item => item.operationStatus === "Belum Selesai").length;
+  const CompletedFacilities = latestData.length;
+  const Uncomplete = latestData.filter(item => item.StatusStatus === "Belum Selesai").length;
 
-  setText("myrehfAffectedFacilities", formatNumber(affectedFacilities));
-  setText("myrehfNotOperating", formatNumber(notOperating));
-//   setText("myrehfMovedOperation", formatNumber(movedOperation));
+  setText("myrehfCompletedFacilities", formatNumber(CompletedFacilities));
+  setText("myrehfUncomplete", formatNumber(Uncomplete));
+//   setText("myrehfMovedStatus", formatNumber(movedStatus));
 //   setText("myrehfTotalVictims", formatNumber(totalVictims));
 //   setText("myrehfActivePps", formatNumber(activePps));
 }
@@ -253,21 +253,21 @@ function rendermyrehfCharts(allData, latestData) {
     return;
   }
 
-  renderOperationStatusChart(latestData);
+  renderStatusStatusChart(latestData);
   renderVictimsDistrictChart(latestData);
   renderPpsDistrictChart(latestData);
   renderVictimTrendChart(allData);
-  renderAffectedFacilityChart(latestData);
+  renderCompletedFacilityChart(latestData);
   renderInfectiousDiseaseChart(latestData);
   renderPatientCategoryChart(latestData);
 }
 
 // ===== CHART STATUS OPERASI =====
 // Chart ini kira status operasi fasiliti berdasarkan rekod terkini.
-function renderOperationStatusChart(data) {
-  const rows = groupCountByField(data, "operationStatus");
+function renderStatusStatusChart(data) {
+  const rows = groupCountByField(data, "StatusStatus");
 
-  createmyrehfChart("myrehfOperationStatusChart", "operationStatus", {
+  createmyrehfChart("myrehfStatusStatusChart", "StatusStatus", {
     type: "doughnut",
     data: {
       labels: rows.map(row => row.label),
@@ -342,10 +342,10 @@ function renderOperationStatusChart(data) {
 
 // ===== CHART FASILITI TERJEJAS =====
 // Chart ini kira jumlah fasiliti terjejas mengikut daerah.
-function renderAffectedFacilityChart(data) {
-  const rows = groupAffectedFacilitiesByDistrict(data);
+function renderCompletedFacilityChart(data) {
+  const rows = groupCompletedFacilitiesByDistrict(data);
 
-  createmyrehfChart("myrehfAffectedFacilityChart", "affectedFacilities", {
+  createmyrehfChart("myrehfCompletedFacilityChart", "CompletedFacilities", {
     type: "bar",
     data: {
       labels: rows.map(row => row.label),
@@ -526,7 +526,7 @@ function rendermyrehfMapInstance(mapId, isFullMap, data) {
     );
 
     const marker = L.marker(offsetCoordinate, {
-      icon: createmyrehfMarkerIcon(getOperationMarkerColor(latest.operationStatus))
+      icon: createmyrehfMarkerIcon(getStatusMarkerColor(latest.StatusStatus))
     }).bindPopup(createmyrehfPopup(group), { maxWidth: 360 });
 
     marker.addTo(markerLayer);
@@ -545,7 +545,7 @@ function createmyrehfPopup(group) {
   const historyRows = group.reports.map(item => `
     <div class="border-top pt-2 mt-2">
       <strong>${formatDate(item.date)}</strong><br>
-      Operasi: ${safeText(item.operationStatus)}<br>
+      Operasi: ${safeText(item.StatusStatus)}<br>
       PPS: ${safeText(item.ppsName || "Tiada")}<br>
       Mangsa ke Hospital: ${formatNumber(getHospitalVictimCount(item))}
     </div>
@@ -558,7 +558,7 @@ function createmyrehfPopup(group) {
       <hr class="my-2">
       <div>
         <strong>Status Terkini</strong><br>
-        Operasi: ${safeText(latest.operationStatus)}<br>
+        Operasi: ${safeText(latest.StatusStatus)}<br>
         PPS: ${safeText(latest.ppsName || "Tiada")}<br>
         Mangsa ke Hospital: ${formatNumber(getHospitalVictimCount(latest))}
       </div>
@@ -598,8 +598,7 @@ function createmyrehfTableRows(data) {
       <td>${safeText(item.state)}</td>
       <td>${safeText(item.district)}</td>
       <td><strong>${safeText(item.facilityName)}</strong></td>
-      <td><span class="badge ${getOperationBadge(item.operationStatus)}">${safeText(item.operationStatus)}</span></td>
-      <td>${formatNumber(getHospitalVictimCount(item))}</td>
+      <td><span class="badge ${getStatusBadge(item.StatusStatus)}">${safeText(item.StatusStatus)}</span></td>
     </tr>
   `).join("");
 }
@@ -641,8 +640,8 @@ function downloadmyrehfChartData(type) {
   let rows = [];
   let filename = "myrehf_chart.xlsx";
 
-  if (type === "operationStatus") {
-    rows = groupCountByField(latestData, "operationStatus").map(row => ({
+  if (type === "StatusStatus") {
+    rows = groupCountByField(latestData, "StatusStatus").map(row => ({
       "Status Operasi": row.label,
       "Jumlah Fasiliti": row.value
     }));
@@ -673,8 +672,8 @@ function downloadmyrehfChartData(type) {
     filename = "myrehf_trend_mangsa_ke_hospital.xlsx";
   }
 
-  if (type === "affectedFacilities") {
-    rows = groupAffectedFacilitiesByDistrict(latestData).map(row => ({
+  if (type === "CompletedFacilities") {
+    rows = groupCompletedFacilitiesByDistrict(latestData).map(row => ({
       "Daerah": row.label,
       "Fasiliti Terjejas": row.value
     }));
@@ -708,7 +707,7 @@ function downloadmyrehfTableData() {
     "Negeri": item.state,
     "Daerah": item.district,
     "Fasiliti": item.facilityName,
-    "Status Operasi": item.operationStatus,
+    "Status Operasi": item.StatusStatus,
     // "Mangsa ke Hospital": getHospitalVictimCount(item)
   }));
 
@@ -845,7 +844,7 @@ function groupVictimTrendByDate(data) {
 
 // ===== GROUP FASILITI HELPER =====
 // Function ini kira fasiliti unik yang terjejas mengikut daerah.
-function groupAffectedFacilitiesByDistrict(data) {
+function groupCompletedFacilitiesByDistrict(data) {
   const grouped = {};
 
   data.forEach(item => {
@@ -932,7 +931,7 @@ function createmyrehfMarkerIcon(color) {
 
 // ===== WARNA MARKER =====
 // Warna marker ikut status operasi fasiliti.
-function getOperationMarkerColor(status) {
+function getStatusMarkerColor(status) {
   if (status === "Belum Selesai") return "#6d28d9";
 //   if (status === "Masih Pindah Operasi") return "#2563eb";
   return "#0d9488";
@@ -954,7 +953,7 @@ function getOffsetCoordinates(latitude, longitude, index, total) {
 
 // ===== BADGE STATUS OPERASI =====
 // Function ini tentukan warna badge status operasi.
-function getOperationBadge(status) {
+function getStatusBadge(status) {
   if (status === "Belum Selesai") return "bg-myrehf-purple";
 //   if (status === "Masih Pindah Operasi") return "bg-myrehf-blue";
   if (status === "Selesai") return "bg-myrehf-teal";
