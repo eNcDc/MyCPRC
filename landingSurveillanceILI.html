@@ -14,6 +14,8 @@
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
+  
+
   <link href="assets/css/main.css" rel="stylesheet">
 </head>
 
@@ -28,204 +30,607 @@
 
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <h4 class="mb-0">Dashboard Pengawasan ILI</h4>
-          <small class="text-muted">Sistem pemantauan kes ILI (Influenza-Like Illness)</small>
+      <!-- ================= PAGE TITLE ================= -->
+      <div class="mb-4">
+          <h4 class="mb-1">
+              Dashboard Pengawasan Influenza-Like Illness (ILI)
+          </h4>
+
+          <small class="text-muted">
+              Sistem pengawasan dan pelaporan kes ILI berdasarkan laporan fasiliti kesihatan.
+          </small>
+      </div>
+
+
+
+      <!-- ================= TAB NAVIGATION ================= -->
+
+      <ul class="nav doce-landing-tabs mb-4"
+          id="iliLandingTabs"
+          role="tablist">
+
+        <li class="nav-item">
+
+        <button
+        class="nav-link active"
+        data-bs-toggle="tab"
+        data-bs-target="#iliDashboardPane"
+        type="button">
+
+        <i class="bi bi-speedometer2 me-1"></i>
+        Dashboard
+
+        </button>
+
+        </li>
+
+        <li class="nav-item">
+
+          <button
+          class="nav-link"
+          data-bs-toggle="tab"
+          data-bs-target="#iliReportPane"
+          type="button">
+
+          <i class="bi bi-file-earmark-text me-1"></i>
+          Senarai Laporan
+
+          </button>
+        </li>
+      </ul>
+
+
+      <div class="tab-content">
+
+      <!-- =====================================================
+          DASHBOARD TAB
+      ===================================================== -->
+
+      <div class="tab-pane fade show active"
+          id="iliDashboardPane">
+
+        <div id="ili-dashboard-content">
+
+        </div>
+      </div>
+
+
+
+
+
+
+      <!-- =====================================================
+          REPORT TAB
+      ===================================================== -->
+      <div class="tab-pane fade"
+          id="iliReportPane">
+
+          <!-- BUTTON -->
+
+        <div class="d-flex justify-content-end mb-4">
+
+          <a href="ili_form.html"
+            class="btn btn-primary">
+
+          <i class="bi bi-plus-circle me-1"></i>
+
+          Isi Borang ILI
+
+          </a>
+
         </div>
 
-        <a href="ili_form.html" class="btn btn-primary">
-          <i class="bi bi-plus-circle me-1"></i> Isi Borang Baharu
-        </a>
-      </div>
+<!-- ================= SUMMARY CARD ================= -->
+
+<div class="row g-3 mb-4">
+
+
+<!-- JUMLAH BORANG -->
+
+<div class="col-md-4">
+
+    <div class="card shadow-sm border-0 h-100">
+
+        <div class="card-body d-flex align-items-center">
+
+
+            <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+
+                <i class="bi bi-file-earmark-text text-primary fs-3"></i>
+
+            </div>
+
+
+            <div>
+
+                <h6 class="text-muted mb-1">
+                    Jumlah Borang
+                </h6>
+
+
+                <h2 class="fw-bold mb-0 text-primary"
+                    id="totalForm">
+
+                    152
+
+                </h2>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+<!-- DALAM PROSES -->
+
+<div class="col-md-4">
+
+    <div class="card shadow-sm border-0 h-100">
+
+
+        <div class="card-body d-flex align-items-center">
+
+
+            <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
+
+                <i class="bi bi-hourglass-split text-warning fs-3"></i>
+
+            </div>
+
+
+
+            <div>
+
+                <h6 class="text-muted mb-1">
+                    Dalam Proses
+                </h6>
+
+
+                <h2 class="fw-bold mb-0 text-warning"
+                    id="pendingForm">
+
+                    32
+
+                </h2>
+
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+<!-- DISAHKAN -->
+
+<div class="col-md-4">
+
+
+    <div class="card shadow-sm border-0 h-100">
+
+
+        <div class="card-body d-flex align-items-center">
+
+
+            <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+
+
+                <i class="bi bi-check-circle text-success fs-3"></i>
+
+
+            </div>
+
+
+
+
+            <div>
+
+
+                <h6 class="text-muted mb-1">
+                    Disahkan
+                </h6>
+
+
+                <h2 class="fw-bold mb-0 text-success"
+                    id="confirmedForm">
+
+                    111
+
+                </h2>
+
+
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+</div>
 
       <!-- FILTER -->
-      <div class="row g-3 mb-4">
 
-        <!-- FILTER (LEFT SIDE) -->
-        <div class="col-md-4">
-          <div class="card shadow-sm h-100">
-            <div class="card-body">
+      <div class="card shadow-sm mb-4">
 
-              <h6 class="mb-3">Filter</h6>
 
-              <!-- Hospital Dropdown -->
-              <label>Cari Hospital/Klinik</label>
-              <select id="hospitalFilter" class="form-control mb-3">
-                <option value="">Semua Hospital</option>
-                <option>Hospital Kuala Lumpur, Pathology</option>
-                <option>Hospital Melaka, Nephrology</option>
-                <option>Hospital Melaka, Pathology</option>
-                <option>Hospital Pulau Pinang, Pathology</option>
-                <option>Hospital Queen Elizabeth, Pathology</option>
-                <option>Hospital Raja Perempuan Zainab II (Kelantan), Pathology</option>
-                <option>Hospital Raja Permaisuri Bainun (Ipoh), Pathology</option>
-                <option>Hospital Sultanah Aminah (Johor Bahru), Pathology</option>
-                <option>Hospital Sultanah Bahiyah (Alor Setar), Pathology</option>
-                <option>Hospital Sultanah Nur Zahirah (Kuala Terengganu), Pathology</option>
-                <option>Hospital Tengku Ampuan Afzan (Pahang), Pathology</option>
-                <option>Hospital Tengku Ampuan Rahimah (Klang), Pathology</option>
-                <option>Hospital Tuanku Fauziah (Perlis), Pathology</option>
-                <option>Hospital Tuanku Jaafar (Seremban), Pathology</option>
-                <option>Hospital Umum Sarawak, Pathology</option>
-                <option>Hospital Wanita & Kanak Kanak (Hospital Kuala Lumpur), Pathology Diagnostic</option>
-                <option>Hospital Wanita & Kanak-Kanak Sabah (Likas), Pathology</option>
-              </select>
+      <div class="card-body">
 
-              <!-- Date Filter -->
-              <label>Filter Tarikh</label>
-              <input type="date" id="filterDate" class="form-control mb-3">
 
-              <!-- Reset Button -->
-              <button class="btn btn-secondary w-100" onclick="resetFilter()">Reset</button>
+      <div class="row g-3">
+        <div class="col-md-5">
 
-            </div>
-          </div>
+          <label class="form-label">
+
+          Carian
+
+          </label>
+
+          <input type="text"
+                id="iliSearchInput"
+                class="form-control"
+                placeholder="Cari hospital / diagnosis / status">
+
         </div>
 
-        <!-- CHART (RIGHT SIDE) -->
-        <div class="col-md-8">
-          <div class="card shadow-sm h-100">
-            <div class="card-body">
+      <div class="col-md-3">
+        <label class="form-label">
 
-              <h6 class="mb-3">Trend Terkini Kes ILI</h6>
+        Tarikh
 
-              <!-- SMALLER CHART AREA -->
-              <div style="height: 260px;">
-                <canvas id="iliChart"></canvas>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-      </div>  
+        </label>
 
 
-      <!-- SUMMARY -->
-      <div class="row g-3 mb-4">
-
-        <!-- TOTAL CASES -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0">
-            <div class="card-body d-flex align-items-center">
-
-              <div class="me-3 text-primary fs-3">
-                <i class="bi bi-activity"></i>
-              </div>
-
-              <div>
-                <small class="text-muted">Jumlah Kes ILI</small>
-                <h4 class="fw-bold mb-0">152</h4>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- IN PROGRESS -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0">
-            <div class="card-body d-flex align-items-center">
-
-              <div class="me-3 text-warning fs-3">
-                <i class="bi bi-hourglass-split"></i>
-              </div>
-
-              <div>
-                <small class="text-muted">Dalam Proses</small>
-                <h4 class="fw-bold mb-0">32</h4>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- CONFIRMED -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0">
-            <div class="card-body d-flex align-items-center">
-
-              <div class="me-3 text-success fs-3">
-                <i class="bi bi-check-circle"></i>
-              </div>
-
-              <div>
-                <small class="text-muted">Disahkan</small>
-                <h4 class="fw-bold mb-0">111</h4>
-              </div>
-
-            </div>
-          </div>
-        </div>
+        <input type="date"
+              id="iliReportDateFilter"
+              class="form-control">
 
       </div>
 
-      <!-- TABLE -->
+      <div class="col-md-4">
+
+        <label class="form-label">
+
+        Hospital
+
+        </label>
+
+
+        <select id="iliReportHospitalFilter"
+                class="form-select">
+
+
+          <option value="">
+          Semua Hospital
+          </option>
+
+
+          <option>
+          Hospital Kuala Lumpur
+          </option>
+
+
+          <option>
+          Hospital Melaka
+          </option>
+
+
+          <option>
+          Hospital Pulau Pinang
+          </option>
+
+
+          <option>
+          Hospital Queen Elizabeth
+          </option>
+
+
+          <option>
+          Hospital Raja Permaisuri Bainun
+          </option>
+
+
+          <option>
+          Hospital Sultanah Aminah
+          </option>
+
+
+          <option>
+          Hospital Sultanah Bahiyah
+          </option>
+
+
+          <option>
+          Hospital Tuanku Jaafar
+          </option>
+
+
+          <option>
+          Hospital Umum Sarawak
+          </option>
+
+        </select>
+
+
+      </div>
+
+
+      </div>
+
+
+      </div>
+
+
+      </div>
+
+
+      <!-- REPORT TABLE -->
+
+
       <div class="card shadow-sm">
+
         <div class="card-header bg-white">
-          <strong>Rekod ILI Terkini</strong>
+          <strong>
+          Senarai Semua Laporan ILI
+          </strong>
         </div>
 
         <div class="table-responsive">
-          <table class="table table-striped mb-0" id="iliTable">
+          <table class="table table-bordered table-hover mb-0">
             <thead class="table-light">
-              <tr>
-                <th>Tarikh</th>
-                <th>Tempat</th>
-                <th>Diagnosis</th>
-                <th>Status</th>
-                <th class="text-end">Tindakan</th>
+              <tr class="text-center">
+                <th>
+                Tarikh
+                </th>
+
+                <th>
+                Hospital / Klinik
+                </th>
+
+                <th>
+                Diagnosis
+                </th>
+
+                <th>
+                Status
+                </th>
+
+                <th>
+                Tindakan
+                </th>
+
               </tr>
             </thead>
 
-            <tbody>
-
+            <tbody id="iliReportTable">
               <tr>
-                <td class="date">2026-01-12</td>
-                <td class="hospital">Klinik Kesihatan Sultan Ismail</td>
-                <td>Virus Influenza A H1N1</td>
-                <td>
-                  <span class="badge status-badge">Disahkan</span>
-                </td>
-                <td class="text-end">
-                  <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
-                      Papar
-                  </a>
-                </td>
+              <td class="ili-date">2026-01-12</td>
+              <td class="ili-hospital">Klinik Kesihatan Sultan Ismail</td>
+              <td class="ili-diagnosis">Virus Influenza A H1N1</td>
+              <td class="text-center">
+              <span class="badge bg-success ili-status">Disahkan</span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
               </tr>
 
               <tr>
-                <td class="date">2026-01-10</td>
-                <td class="hospital">Klinik Kesihatan Taman Universiti</td>
-                <td>Koronavirus (COVID-19) Dikesan</td>
-                <td>
-                  <span class="badge status-badge">Dalam Proses</span>
-                </td>
-                <td class="text-end">
-                  <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
-                      Papar
-                  </a>
-                </td>
+              <td class="ili-date">2026-01-10</td>
+              <td class="ili-hospital">Klinik Kesihatan Taman Universiti</td>
+              <td class="ili-diagnosis">COVID-19</td>
+              <td class="text-center">
+              <span class="badge bg-warning text-dark ili-status">
+              Dalam Proses
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
               </tr>
 
               <tr>
-                <td class="date">2026-01-08</td>
-                <td class="hospital">Klinik Kesihatan Presint 9</td>
-                <td>Virus Sinsitium Pernafasan</td>
-                <td>
-                  <span class="badge status-badge">Disahkan</span>  
-                </td>
-                <td class="text-end">
-                  <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
-                      Papar
-                  </a>
-                </td>
+              <td class="ili-date">2026-01-15</td>
+              <td class="ili-hospital">Hospital Kuala Lumpur</td>
+              <td class="ili-diagnosis">Influenza A H3N2</td>
+              <td class="text-center">
+              <span class="badge bg-success ili-status">
+              Disahkan
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
+              </tr>
+
+              <tr>
+              <td class="ili-date">2026-01-18</td>
+              <td class="ili-hospital">Hospital Melaka</td>
+              <td class="ili-diagnosis">Influenza B</td>
+              <td class="text-center">
+              <span class="badge bg-success ili-status">
+              Disahkan
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
+              </tr>
+
+              <tr>
+              <td class="ili-date">2026-01-20</td>
+              <td class="ili-hospital">Hospital Pulau Pinang</td>
+              <td class="ili-diagnosis">COVID-19 Variant</td>
+              <td class="text-center">
+              <span class="badge bg-warning text-dark ili-status">
+              Dalam Proses
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
+              </tr>
+
+              <tr>
+              <td class="ili-date">2026-01-22</td>
+              <td class="ili-hospital">Hospital Queen Elizabeth</td>
+              <td class="ili-diagnosis">Respiratory Syncytial Virus (RSV)</td>
+              <td class="text-center">
+              <span class="badge bg-success ili-status">
+              Disahkan
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
+              </tr>
+
+              <tr>
+              <td class="ili-date">2026-01-24</td>
+              <td class="ili-hospital">Hospital Sultanah Aminah</td>
+              <td class="ili-diagnosis">Influenza A H1N1</td>
+              <td class="text-center">
+              <span class="badge bg-success ili-status">
+              Disahkan
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
+              </tr>
+
+              <tr>
+              <td class="ili-date">2026-01-25</td>
+              <td class="ili-hospital">Hospital Sultanah Bahiyah</td>
+              <td class="ili-diagnosis">Influenza Like Illness</td>
+              <td class="text-center">
+              <span class="badge bg-warning text-dark ili-status">
+              Dalam Proses
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
+              </tr>
+
+              <tr>
+              <td class="ili-date">2026-01-27</td>
+              <td class="ili-hospital">Hospital Tuanku Jaafar</td>
+              <td class="ili-diagnosis">Influenza A H3N2</td>
+              <td class="text-center">
+              <span class="badge bg-success ili-status">
+              Disahkan
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
+              </tr>
+
+              <tr>
+              <td class="ili-date">2026-01-29</td>
+              <td class="ili-hospital">Hospital Umum Sarawak</td>
+              <td class="ili-diagnosis">COVID-19</td>
+              <td class="text-center">
+              <span class="badge bg-success ili-status">
+              Disahkan
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
+              </tr>
+
+              <tr>
+              <td class="ili-date">2026-02-02</td>
+              <td class="ili-hospital">Hospital Tengku Ampuan Rahimah</td>
+              <td class="ili-diagnosis">Influenza B</td>
+              <td class="text-center">
+              <span class="badge bg-warning text-dark ili-status">
+              Dalam Proses
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
+              </tr>
+
+              <tr>
+              <td class="ili-date">2026-02-05</td>
+              <td class="ili-hospital">Hospital Raja Permaisuri Bainun</td>
+              <td class="ili-diagnosis">Respiratory Syncytial Virus (RSV)</td>
+              <td class="text-center">
+              <span class="badge bg-success ili-status">
+              Disahkan
+              </span>
+              </td>
+              <td class="text-center">
+              <a href="ili_view.html" class="btn btn-sm btn-outline-primary">
+              Papar
+              </a>
+              </td>
               </tr>
 
             </tbody>
           </table>
         </div>
+
+      </div>
+
+
+
+
+
+      </div>
+
+
+
       </div>
 
     </main>
@@ -285,30 +690,6 @@ function resetFilter() {
 }
 </script>
 
-<!-- CHART -->
-<script>
-const ctx = document.getElementById('iliChart');
-
-new Chart(ctx, {
-  type: 'line',
-  data: {
-    labels: ['Bulan 1', 'Bulan 2', 'Bulan 3', 'Bulan 4'],
-    datasets: [{
-      label: 'Kes ILI',
-      //DATA KENA TUKAR
-      data: [5, 9, 7, 12],
-      borderWidth: 2,
-      tension: 0.3
-    }]
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: { display: true }
-    }
-  }
-});
 
 </script>
 
@@ -334,6 +715,192 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
+
+
+<!-- ===== LOAD ILI DASHBOARD ===== -->
+<script>
+  fetch("ili_dashboard.html")
+    .then(res => res.text())
+    .then(data => {
+      document.getElementById("ili-dashboard-content").innerHTML = data;
+
+      const script = document.createElement("script");
+      script.src = "assets/js/ili_dashboard.js";
+      document.body.appendChild(script);
+    })
+    .catch(err => console.error("Failed to load ILI dashboard:", err));
+</script>
+
+
+
+<!-- ILI Table Filtering -->
+<script>
+
+document.addEventListener("DOMContentLoaded", function(){
+
+
+const searchInput =
+document.getElementById("iliSearchInput");
+
+
+const dateFilter =
+document.getElementById("iliReportDateFilter");
+
+
+const hospitalFilter =
+document.getElementById("iliReportHospitalFilter");
+
+
+
+function filterILITable(){
+
+
+let searchValue =
+searchInput.value.toLowerCase();
+
+
+let dateValue =
+dateFilter.value;
+
+
+let hospitalValue =
+hospitalFilter.value.toLowerCase();
+
+
+
+let rows =
+document.querySelectorAll(
+"#iliReportTable tr"
+);
+
+
+
+rows.forEach(row=>{
+
+
+let date =
+row.querySelector(".ili-date")
+.textContent.trim();
+
+
+
+let hospital =
+row.querySelector(".ili-hospital")
+.textContent.trim()
+.toLowerCase();
+
+
+
+let diagnosis =
+row.querySelector(".ili-diagnosis")
+.textContent.trim()
+.toLowerCase();
+
+
+
+let status =
+row.querySelector(".ili-status")
+.textContent.trim()
+.toLowerCase();
+
+
+
+
+
+let matchSearch =
+
+searchValue === "" ||
+
+hospital.includes(searchValue) ||
+
+diagnosis.includes(searchValue) ||
+
+status.includes(searchValue);
+
+
+
+
+
+
+let matchDate =
+
+dateValue === "" ||
+
+date === dateValue;
+
+
+
+
+
+
+let matchHospital =
+
+hospitalValue === "" ||
+
+hospital.includes(hospitalValue);
+
+
+
+
+
+
+if(
+matchSearch &&
+matchDate &&
+matchHospital
+)
+
+{
+
+row.style.display="";
+
+}
+
+else
+
+{
+
+row.style.display="none";
+
+}
+
+
+
+});
+
+
+}
+
+
+
+
+
+searchInput.addEventListener(
+"keyup",
+filterILITable
+);
+
+
+
+dateFilter.addEventListener(
+"change",
+filterILITable
+);
+
+
+
+hospitalFilter.addEventListener(
+"change",
+filterILITable
+);
+
+
+
+});
+
+
+</script>
+
 
 </body>
 </html>
