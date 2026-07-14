@@ -19,221 +19,749 @@
 
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-    <main class="col-md-9 col-lg-10 px-4 py-4">
-
-      <!-- HEADER -->
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <h4 class="mb-0">Dashboard Pengawasan SARI</h4>
-          <small class="text-muted">Sistem pemantauan kes SARI (Severe Acute Respiratory) hospital dan makmal</small>
-        </div>
-
-        <a href="sari_form.html" class="btn btn-primary">
-          <i class="bi bi-plus-circle me-1"></i> Isi Borang Baharu
-        </a>
-      </div>
-
-      <!--CHART-->
-      <div style="display:flex; gap:16px; width:100%;">
-
-        <!-- LINE CHART CARD -->
-        <div style="flex:1; padding:16px; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-          <h3>Trend Terkini Kes SARI</h3>
-          <canvas id="sariLineChart"></canvas>
-        </div>
-
-        <!-- BAR CHART CARD -->
-        <div style="flex:1; padding:16px; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.1);">
-          <h3>Kes SARI mengikut Hospital</h3>
-          <canvas id="sariBarChart"></canvas>
-        </div>
-
-      </div>
-      <br>
+<main class="col-md-9 col-lg-10 px-4 py-4">
 
 
-      <!-- FILTER -->
-      <div class="card shadow-sm mb-4">
-        <div class="card-body">
+<!-- ================= PAGE HEADER ================= -->
 
-          <h6 class="mb-3">Filter Laporan</h6>
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-          <div class="row g-3">
+    <div>
 
-            <div class="col-md-5">
-              <label class="form-label">Hospital</label>
-              <select id="filterHospital" class="form-select">
-                <option value="">Semua Hospital</option>
-                  <option>Kuala Lumpur Hospital, Pathology</option>
-                  <option>Melaka Hospital, Nephrology</option>
-                  <option>Melaka Hospital, Pathology</option>
-                  <option>Pulau Pinang Hospital, Pathology</option>
-                  <option>Queen Elizabeth Hospital, Pathology</option>
-                  <option>Raja Perempuan Zainab II Hospital (Kelantan), Pathology</option>
-                  <option>Raja Permaisuri Bainun Hospital (Ipoh), Pathology</option>
-                  <option>Sultanah Aminah Hospital (Johor Bahru), Pathology</option>
-                  <option>Sultanah Bahiyah Hospital (Alor Setar), Pathology</option>
-                  <option>Sultanah Nur Zahirah Hospital (Kuala Terengganu), Pathology</option>
-                  <option>Tengku Ampuan Afzan Hospital (Pahang), Pathology</option>
-                  <option>Tengku Ampuan Rahimah Hospital (Klang), Pathology</option>
-                  <option>Tuanku Fauziah Hospital (Perlis), Pathology</option>
-                  <option>Tuanku Jaafar Hospital (Seremban), Pathology</option>
-                  <option>Umum Sarawak Hospital, Pathology</option>
-                  <option>Wanita & Kanak Kanak (Hospital Kuala Lumpur) Pathology Diagnostic</option>
-                  <option>Wanita & Kanak-Kanak Sabah Hospital (Likas), Pathology</option>
-              </select>
-            </div>
+        <h4 class="mb-1">
+            Dashboard Pengawasan SARI
+        </h4>
 
-            <div class="col-md-4">
-              <label class="form-label">Tarikh (Dari)</label>
-              <input id="filterFrom" type="date" class="form-control">
-            </div>
+        <small class="text-muted">
+            Sistem pemantauan kes Severe Acute Respiratory Infection (SARI)
+            berdasarkan laporan hospital dan makmal.
+        </small>
 
-            <div class="col-md-3">
-              <label class="form-label">Tarikh (Hingga)</label>
-              <input id="filterTo" type="date" class="form-control">
-            </div>
+    </div>
 
-          </div>
 
-          <div class="mt-3 d-flex justify-content-end">
-            <button class="btn btn-outline-secondary btn-sm" onclick="resetFilter()">Reset</button>
-          </div>
+    <a href="sari_form.html"
+       class="btn btn-primary">
 
-        </div>
-      </div>
+        <i class="bi bi-plus-circle me-1"></i>
+        Isi Borang SARI
 
-      <!-- SUMMARY -->
-      <div class="row g-3 mb-4">
+    </a>
 
-        <!-- TOTAL CASES -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0">
-            <div class="card-body d-flex align-items-center">
 
-              <div class="me-3 text-primary fs-3">
-                <i class="bi bi-activity"></i>
-              </div>
+</div>
 
-              <div>
-                <small class="text-muted">Jumlah Kes SARI</small>
-                <h4 class="fw-bold mb-0">152</h4>
-              </div>
 
-            </div>
-          </div>
-        </div>
 
-        <!-- IN PROGRESS -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0">
-            <div class="card-body d-flex align-items-center">
 
-              <div class="me-3 text-warning fs-3">
-                <i class="bi bi-hourglass-split"></i>
-              </div>
 
-              <div>
-                <small class="text-muted">Dalam Proses</small>
-                <h4 class="fw-bold mb-0">32</h4>
-              </div>
+<!-- ================= TAB ================= -->
 
-            </div>
-          </div>
-        </div>
+<ul class="nav doce-landing-tabs mb-4"
+    role="tablist">
 
-        <!-- CONFIRMED -->
-        <div class="col-md-4">
-          <div class="card shadow-sm border-0">
-            <div class="card-body d-flex align-items-center">
 
-              <div class="me-3 text-success fs-3">
-                <i class="bi bi-check-circle"></i>
-              </div>
+<li class="nav-item">
 
-              <div>
-                <small class="text-muted">Disahkan</small>
-                <h4 class="fw-bold mb-0">111</h4>
-              </div>
+<button class="nav-link active"
+        data-bs-toggle="tab"
+        data-bs-target="#sariDashboardPane">
 
-            </div>
-          </div>
-        </div>
+<i class="bi bi-speedometer2 me-1"></i>
 
-      </div>
+Dashboard
 
-      <!-- TABLE -->
-      <div class="card shadow-sm">
+</button>
 
-        <div class="card-header bg-white">
-          <strong>Laporan Terkini</strong>
-        </div>
+</li>
 
-        <div class="table-responsive">
-          <table class="table table-striped mb-0">
 
-            <thead class="table-light">
-              <tr>
-                <th>Tarikh</th>
-                <th>Hospital</th>
-                <th>Diagnosis</th>
-                <th>Status</th>
-                <th class="text-end">Tindakan</th>
-              </tr>
-            </thead>
 
-            <tbody id="sariTable">
 
-            <tr>
-              <td class="date">12/01/2026</td>
-              <td class="hospital">Kuala Lumpur Hospital, Pathology</td>
-              <td>Influenza A</td>
-              <td>
-                <span class="badge status-badge">Disahkan</span>
-              </td>
-              <td class="text-end">
-                  <a href="sari_view.html" class="btn btn-sm btn-outline-primary">
-                      Papar
-                  </a>
-              </td>
-            </tr>
 
-            <tr>
-              <td class="date">10/01/2026</td>
-              <td class="hospital">Melaka Hospital, Nephrology</td>
-              <td>COVID-19</td>
-              <td>
-                <span class="badge status-badge">Dalam Proses</span>
-              </td>
-              <td class="text-end">
-                  <a href="sari_view.html" class="btn btn-sm btn-outline-primary">
-                      Papar
-                  </a>
-              </td>
-            </tr>
+<li class="nav-item">
 
-            <tr>
-              <td class="date">08/01/2026</td>
-              <td class="hospital">Raja Permaisuri Bainun Hospital (Ipoh), Pathology</td>
-              <td>Pneumonia Severe</td>
-              <td>
-                <span class="badge status-badge">Disahkan</span>
-              </td>
-              <td class="text-end">
-                  <a href="sari_view.html" class="btn btn-sm btn-outline-primary">
-                      Papar
-                  </a>
-              </td>
-            </tr>
+<button class="nav-link"
+        data-bs-toggle="tab"
+        data-bs-target="#sariReportPane">
 
-            </tbody>
+<i class="bi bi-file-earmark-text me-1"></i>
 
-          </table>
-        </div>
+Senarai Laporan
 
-      </div>
+</button>
 
-    </main>
+</li>
+
+
+
+</ul>
+
+
+
+
+
+
+
+
+
+<div class="tab-content">
+
+
+
+
+
+
+
+<!-- =================================================
+     DASHBOARD
+================================================= -->
+
+
+<div class="tab-pane fade show active"
+     id="sariDashboardPane">
+
+
+<div id="sari-dashboard-content">
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- =================================================
+     REPORT
+================================================= -->
+
+
+<div class="tab-pane fade"
+     id="sariReportPane">
+
+
+
+
+
+
+
+<!-- ================= BUTTON ================= -->
+
+
+<div class="d-flex justify-content-end mb-4">
+
+
+<a href="sari_form.html"
+class="btn btn-primary">
+
+
+<i class="bi bi-plus-circle me-1"></i>
+
+Isi Borang Baharu
+
+
+</a>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ================= FILTER ================= -->
+
+
+<div class="card shadow-sm border-0 mb-4">
+
+
+<div class="card-body">
+
+
+<div class="row g-3">
+
+
+
+
+
+<!-- SEARCH -->
+
+<div class="col-md-4">
+
+
+<label class="form-label fw-bold">
+
+Carian
+
+</label>
+
+
+<input type="text"
+       id="sariSearchInput"
+       class="form-control"
+       placeholder="Cari No SARI / nama pesakit / hospital">
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- TARIKH -->
+
+<div class="col-md-3">
+
+
+<label class="form-label fw-bold">
+
+Tarikh Sampel Diterima
+
+</label>
+
+
+<input type="date"
+       id="sariReportDateFilter"
+       class="form-control">
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- HOSPITAL -->
+
+
+<div class="col-md-5">
+
+
+<label class="form-label fw-bold">
+
+Hospital
+
+</label>
+
+
+<select id="sariReportHospitalFilter"
+        class="form-select">
+
+
+<option value="">
+
+Semua Hospital
+
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- PCR INFLUENZA -->
+
+
+<div class="col-md-4">
+
+
+<label class="form-label fw-bold">
+
+PCR Influenza
+
+</label>
+
+
+<select id="sariInfluenzaFilter"
+        class="form-select">
+
+
+<option value="">
+
+Semua Keputusan
+
+</option>
+
+
+<option>
+INFLUENZA A/H1pdm09 DIKESAN
+</option>
+
+
+<option>
+INFLUENZA A/H3 DIKESAN
+</option>
+
+
+<option>
+INFLUENZA B DIKESAN
+</option>
+
+
+<option>
+TIDAK DIKESAN
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- PCR COVID -->
+
+
+<div class="col-md-4">
+
+
+<label class="form-label fw-bold">
+
+PCR COVID-19
+
+</label>
+
+
+<select id="sariCovidFilter"
+        class="form-select">
+
+
+<option value="">
+
+Semua Keputusan
+
+</option>
+
+
+<option>
+SARS-CoV-2 DIKESAN
+</option>
+
+
+<option>
+TIDAK DIKESAN
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- WGS -->
+
+
+<div class="col-md-4">
+
+
+<label class="form-label fw-bold">
+
+Status Ujian WGS
+
+</label>
+
+
+<select id="sariWgsFilter"
+        class="form-select">
+
+
+<option value="">
+
+Semua Status
+
+</option>
+
+
+<option>
+N/A
+</option>
+
+
+<option>
+PENDING
+</option>
+
+
+<option>
+COMPLETED
+</option>
+
+
+</select>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ================= SUMMARY ================= -->
+
+
+<div class="row g-3 mb-4">
+
+
+
+
+
+<!-- JUMLAH -->
+
+<div class="col-md-4">
+
+
+<div class="card shadow-sm border-0">
+
+
+<div class="card-body d-flex align-items-center">
+
+
+<div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+
+<i class="bi bi-file-earmark-text text-primary fs-3"></i>
+
+</div>
+
+
+<div>
+
+<h6 class="text-muted mb-1">
+
+Jumlah Borang Dipaparkan
+
+</h6>
+
+
+<h3 id="totalSariForm"
+class="fw-bold text-primary mb-0">
+
+0
+
+</h3>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- LAYAK WGS -->
+
+
+<div class="col-md-4">
+
+
+<div class="card shadow-sm border-0">
+
+
+<div class="card-body d-flex align-items-center">
+
+
+<div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+
+<i class="bi bi-dna text-success fs-3"></i>
+
+</div>
+
+
+<div>
+
+<h6 class="text-muted mb-1">
+
+Layak WGS
+
+</h6>
+
+
+<h3 id="eligibleSariWGS"
+class="fw-bold text-success mb-0">
+
+0
+
+</h3>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- PENDING -->
+
+
+<div class="col-md-4">
+
+
+<div class="card shadow-sm border-0">
+
+
+<div class="card-body d-flex align-items-center">
+
+
+<div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
+
+<i class="bi bi-hourglass-split text-warning fs-3"></i>
+
+</div>
+
+
+<div>
+
+<h6 class="text-muted mb-1">
+
+WGS Pending
+
+</h6>
+
+
+<h3 id="pendingSariWGS"
+class="fw-bold text-warning mb-0">
+
+0
+
+</h3>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ================= TABLE ================= -->
+
+
+<div class="card shadow-sm border-0">
+
+
+<div class="card-header bg-white fw-bold">
+
+
+<i class="bi bi-table me-2"></i>
+
+Senarai Semua Laporan SARI
+
+
+</div>
+
+
+
+
+
+<div class="table-responsive">
+
+
+<table class="table table-hover mb-0">
+
+
+<thead class="table-light">
+
+
+<tr>
+
+
+<th>
+No SARI
+</th>
+
+
+<th>
+Tarikh Sampel
+</th>
+
+
+<th>
+Hospital
+</th>
+
+
+<th>
+PCR Influenza
+</th>
+
+
+<th>
+PCR COVID-19
+</th>
+
+
+<th>
+Status WGS
+</th>
+
+
+<th>
+Tindakan
+</th>
+
+
+</tr>
+
+
+</thead>
+
+
+
+
+
+<tbody id="sariReportTable">
+
+
+<!-- DATA DARI sari_report.js -->
+
+
+</tbody>
+
+
+
+</table>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+</main>
+
+
+
+
   </div>
 </div>
 
@@ -268,62 +796,208 @@
   .catch(err => console.error("Sidebar load failed:", err));
 </script>
 
-<!-- FILTER SCRIPT -->
+
+
+
+
+<!--search filter-->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
 
-  const hospitalFilter = document.getElementById("filterHospital");
-  const fromFilter = document.getElementById("filterFrom");
-  const toFilter = document.getElementById("filterTo");
-  const rows = document.querySelectorAll("#sariTable tr");
+document.addEventListener("DOMContentLoaded",()=>{
 
-  function parseDate(str) {
-    const parts = str.split("/");
-    return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
-  }
 
-  function filterTable() {
+const search =
+document.getElementById("sariSearchInput");
 
-    const hospitalValue = hospitalFilter.value.toLowerCase();
-    const fromDate = fromFilter.value ? new Date(fromFilter.value) : null;
-    const toDate = toFilter.value ? new Date(toFilter.value) : null;
 
-    rows.forEach(row => {
+const date =
+document.getElementById("sariReportDateFilter");
 
-      const hospital = row.querySelector(".hospital").textContent.toLowerCase();
-      const dateText = row.querySelector(".date").textContent;
-      const rowDate = parseDate(dateText);
 
-      let show = true;
+const hospital =
+document.getElementById("sariReportHospitalFilter");
 
-      if (hospitalValue && !hospital.includes(hospitalValue)) {
-        show = false;
-      }
 
-      if (fromDate && rowDate < fromDate) {
-        show = false;
-      }
+const influenza =
+document.getElementById("sariInfluenzaFilter");
 
-      if (toDate && rowDate > toDate) {
-        show = false;
-      }
 
-      row.style.display = show ? "" : "none";
-    });
-  }
+const covid =
+document.getElementById("sariCovidFilter");
 
-  hospitalFilter.addEventListener("change", filterTable);
-  fromFilter.addEventListener("input", filterTable);
-  toFilter.addEventListener("input", filterTable);
 
-  window.resetFilter = function () {
-    hospitalFilter.value = "";
-    fromFilter.value = "";
-    toFilter.value = "";
-    filterTable();
-  };
+const wgs =
+document.getElementById("sariWgsFilter");
+
+
+
+function filterSari(){
+
+
+document
+.querySelectorAll("#sariReportTable tr")
+.forEach(row=>{
+
+
+let text =
+row.innerText.toLowerCase();
+
+
+
+let show=true;
+
+
+
+if(
+search.value &&
+!text.includes(
+search.value.toLowerCase()
+)
+)
+{
+show=false;
+}
+
+
+
+
+if(
+hospital.value &&
+!text.includes(
+hospital.value.toLowerCase()
+)
+)
+{
+show=false;
+}
+
+
+
+
+if(
+influenza.value &&
+!text.includes(
+influenza.value.toLowerCase()
+)
+)
+{
+show=false;
+}
+
+
+
+
+
+if(
+covid.value &&
+!text.includes(
+covid.value.toLowerCase()
+)
+)
+{
+show=false;
+}
+
+
+
+
+
+if(
+wgs.value &&
+!text.includes(
+wgs.value.toLowerCase()
+)
+)
+{
+show=false;
+}
+
+
+
+
+
+row.style.display =
+show ? "" : "none";
+
 
 });
+
+
+updateSariCount();
+
+
+}
+
+
+
+
+
+function updateSariCount(){
+
+
+let count=0;
+
+
+document
+.querySelectorAll("#sariReportTable tr")
+.forEach(row=>{
+
+
+if(row.style.display!=="none")
+{
+count++;
+}
+
+
+});
+
+
+
+document.getElementById(
+"totalSariForm"
+).innerHTML=count;
+
+
+}
+
+
+
+
+
+[
+search,
+date,
+hospital,
+influenza,
+covid,
+wgs
+
+].forEach(el=>{
+
+
+if(el)
+el.addEventListener(
+"input",
+filterSari
+);
+
+
+if(el)
+el.addEventListener(
+"change",
+filterSari
+);
+
+
+});
+
+
+
+updateSariCount();
+
+
+});
+
 </script>
 
 
@@ -386,6 +1060,59 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
+
+<!-- ===== LOAD SARI DASHBOARD ===== -->
+<script>
+
+fetch("sari_dashboard.html")
+
+.then(res=>res.text())
+
+.then(data=>{
+
+
+document.getElementById(
+"sari-dashboard-content"
+).innerHTML=data;
+
+
+
+const script =
+document.createElement("script");
+
+
+script.src =
+"assets/js/sari_dashboard.js";
+
+
+script.onload=function(){
+
+    loadSariDashboard();
+
+};
+
+
+document.body.appendChild(script);
+
+
+
+})
+
+.catch(err=>{
+
+console.error(
+"Failed load SARI dashboard",
+err
+);
+
+});
+
+
+</script>
+
+<!--dummy data testing-->
+<script src="assets/js/sari_report.js"></script>
 
 </body>
 </html>

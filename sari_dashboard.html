@@ -1,0 +1,533 @@
+<!-- =====================================================
+     SARI DASHBOARD CONTENT
+===================================================== -->
+
+
+<div id="sariDashboard"
+data-loaded="true">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ================= FILTER + TREND ================= -->
+
+
+<div class="row g-3 mb-4">
+
+
+
+<!-- FILTER -->
+
+<div class="col-md-4">
+
+
+<div class="card shadow-sm border-0 h-100">
+
+
+<div class="card-body">
+
+
+<h6 class="fw-bold mb-3">
+
+<i class="bi bi-funnel me-2"></i>
+Filter
+
+</h6>
+
+
+
+
+
+<label class="form-label">
+Hospital
+</label>
+
+
+<select
+id="sariHospitalFilter"
+class="form-select mb-3">
+
+
+<option value="">
+Semua Hospital
+</option>
+
+
+<option>
+Kuala Lumpur Hospital, Pathology
+</option>
+
+
+<option>
+Melaka Hospital, Pathology
+</option>
+
+
+<option>
+Pulau Pinang Hospital, Pathology
+</option>
+
+
+<option>
+Queen Elizabeth Hospital, Pathology
+</option>
+
+
+<option>
+Raja Perempuan Zainab II Hospital (Kelantan), Pathology
+</option>
+
+
+<option>
+Raja Permaisuri Bainun Hospital (Ipoh), Pathology
+</option>
+
+
+<option>
+Sultanah Aminah Hospital (Johor Bahru), Pathology
+</option>
+
+
+<option>
+Sultanah Bahiyah Hospital (Alor Setar), Pathology
+</option>
+
+
+<option>
+Sultanah Nur Zahirah Hospital (Kuala Terengganu), Pathology
+</option>
+
+
+<option>
+Tuanku Jaafar Hospital (Seremban), Pathology
+</option>
+
+
+<option>
+Umum Sarawak Hospital, Pathology
+</option>
+
+
+</select>
+
+
+
+
+
+
+
+
+<label class="form-label">
+
+Tarikh Dari
+
+</label>
+
+
+<input
+type="date"
+id="sariDateFrom"
+class="form-control mb-3">
+
+
+
+
+
+
+
+<label class="form-label">
+
+Tarikh Hingga
+
+</label>
+
+
+<input
+type="date"
+id="sariDateTo"
+class="form-control mb-3">
+
+
+
+
+
+
+
+<label class="form-label">
+
+Status Ujian WGS
+
+</label>
+
+
+<select
+id="sariWgsFilter"
+class="form-select mb-3">
+
+
+<option value="">
+Semua Status
+</option>
+
+
+<option>
+PENDING
+</option>
+
+
+<option>
+N/A
+</option>
+
+
+</select>
+
+
+
+
+
+
+
+<button
+onclick="resetSariFilter()"
+class="btn btn-secondary w-100">
+
+
+<i class="bi bi-arrow-clockwise me-1"></i>
+
+Reset Filter
+
+
+</button>
+
+
+
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+<!-- ================= SUMMARY ================= -->
+
+<div class="row g-3">
+
+
+
+
+
+<!-- TOTAL -->
+
+<div class="col-md-4">
+
+
+<div class="card shadow-sm border-0">
+
+
+<div class="card-body d-flex align-items-center">
+
+
+<div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+
+
+<i class="bi bi-activity text-primary fs-3"></i>
+
+
+</div>
+
+
+
+<div>
+
+
+<h6 class="text-muted mb-1">
+
+Jumlah Kes SARI
+
+</h6>
+
+
+
+<h2
+id="sariTotalCases"
+class="fw-bold text-primary mb-0">
+
+0
+
+</h2>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- WGS ELIGIBLE -->
+
+
+<div class="col-md-4">
+
+
+<div class="card shadow-sm border-0">
+
+
+<div class="card-body d-flex align-items-center">
+
+
+<div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+
+
+<i class="bi bi-check-circle text-success fs-3"></i>
+
+
+</div>
+
+
+
+
+<div>
+
+
+<h6 class="text-muted mb-1">
+
+Layak Untuk WGS
+
+</h6>
+
+
+<h2
+id="sariWgsEligible"
+class="fw-bold text-success mb-0">
+
+0
+
+</h2>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+<!-- PENDING -->
+
+
+<div class="col-md-4">
+
+
+<div class="card shadow-sm border-0">
+
+
+<div class="card-body d-flex align-items-center">
+
+
+<div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
+
+
+<i class="bi bi-hourglass-split text-warning fs-3"></i>
+
+
+</div>
+
+
+
+
+<div>
+
+
+<h6 class="text-muted mb-1">
+
+WGS Pending
+
+</h6>
+
+
+<h2
+id="sariWgsPending"
+class="fw-bold text-warning mb-0">
+
+0
+
+</h2>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- TREND -->
+
+<div class="col-md-8">
+
+
+<div class="card shadow-sm border-0 h-100">
+
+
+<div class="card-body">
+
+
+<h6 class="fw-bold mb-3">
+
+<i class="bi bi-graph-up me-2"></i>
+
+Trend Kes SARI
+
+</h6>
+
+
+
+
+<div style="height:300px;">
+
+
+<canvas id="sariTrendChart"></canvas>
+
+
+</div>
+
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- ================= HOSPITAL CHART ================= -->
+
+
+<div class="card shadow-sm border-0 mb-4">
+
+
+<div class="card-header bg-white fw-bold">
+
+
+<i class="bi bi-bar-chart me-2"></i>
+
+Kes Mengikut Hospital
+
+
+</div>
+
+
+
+
+<div class="card-body">
+
+
+<div style="height:350px;">
+
+
+<canvas id="sariHospitalChart"></canvas>
+
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+</div>
