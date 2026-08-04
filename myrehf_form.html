@@ -63,25 +63,25 @@
         <div class="mb-4">
             <ul class="nav nav-pills justify-content-center" id="stepIndicator">
                 <li class="nav-item">
-                    <button type="button" class="nav-link active" >1</button>
+                    <button type="button" class="nav-link active" >About Facility</button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link" >2</button>
+                    <button type="button" class="nav-link" >Emergency Management</button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link">3</button>
+                    <button type="button" class="nav-link">Health Workforce</button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link">4</button>
+                    <button type="button" class="nav-link">Health Services</button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link">5</button>
+                    <button type="button" class="nav-link">Water Supply</button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link">6</button>
+                    <button type="button" class="nav-link">Energy</button>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="nav-link">7</button>
+                    <button type="button" class="nav-link">Infrastructure</button>
                 </li>
             </ul>
         </div>
@@ -92,24 +92,24 @@
 
             <div class="row g-3">
                 <div class="col-md-6">
-                <label class="form-label">Negeri</label>
+                <label class="form-label">State</label>
                 <select class="form-select" id="negeri_fasiliti" name="negeri_fasiliti" required>
-                <option value="">-- Sila Pilih Negeri --</option>
+                <option value="">-- Select State --</option>
                 </select>
                 </div>
             </div>
 
             <div class="row g-3">
                 <div class="col-md-6">
-                <label class="form-label">Daerah</label>
+                <label class="form-label">District</label>
                 <select class="form-select" id="daerah_fasiliti" name="daerah_fasiliti" required>
-                    <option value="">-- Sila Pilih Daerah --</option>
-                    <option value="Lain-Lain">Lain-lain</option>
+                    <option value="">-- Select District --</option>
+                    <option value="Lain-Lain">Other</option>
                 </select>
                 </div>
             
                 <div class="col-md-6 d-none" id="daerahLainWrapperFasiliti">
-                <label class="form-label">Sila Nyatakan Daerah</label>
+                <label class="form-label">District Name</label>
                 <input
                     type="text"
                     class="form-control"
@@ -129,18 +129,18 @@
 
             <div class="mb-3">
                 <div class="col-md-6">
-                    <label class="form-label required">Nama Fasiliti</label>
+                    <label class="form-label required">Facility Name</label>
                     <textarea id="namaFasiliti" class="form-control" rows="2" placeholder="Contoh: Hospital Putrajaya"></textarea>
                 </div>
             </div>
 
             <div class="mb-3">
                 <div class="col-md-6">
-                    <label class="form-label">Alamat Penuh</label>
-                    <textarea id="alamatFasiliti" class="form-control" rows="2" placeholder="Contoh: Hospital Putrajaya, Pusat Pentadbiran Kerajaan Persekutuan, Presint 7, 62250 Putrajaya"></textarea>
+                    <label class="form-label">Full Address</label>
+                    <textarea id="alamatFasiliti" class="form-control" rows="2" placeholder="E.g. Hospital Putrajaya, Pusat Pentadbiran Kerajaan Persekutuan, Presint 7, 62250 Putrajaya"></textarea>
                 </div>
             </div>
-            <button type="button" class="btn btn-outline-primary btn-sm mb-3" id="lokasiFasiliti">Cari Lokasi Berdasarkan Alamat</button>
+            <button type="button" class="btn btn-outline-primary btn-sm mb-3" id="lokasiFasiliti">Find Location</button>
 
             <div id="map_fasiliti" style="height:350px;"></div>
 
