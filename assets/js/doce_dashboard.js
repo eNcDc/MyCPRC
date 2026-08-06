@@ -411,6 +411,11 @@ function initDoceDashboard() {
   renderDoceComparison();
   renderDoceTrend();
   renderDoceSearch();
+
+  // Paksa Leaflet resize selepas layout GitHub Pages siap render.
+  setTimeout(() => refreshDoceMapSize(), 300);
+  setTimeout(() => refreshDoceMapSize(), 800);
+  setTimeout(() => refreshDoceMapSize(), 1500);
 }
 
 // ===== WAIT HTML =====
@@ -617,8 +622,28 @@ function updateDoceMap(data) {
   renderDoceMapInstance("doceMap", false, data);
   updateDoceMapLegend(data);
 
+  setTimeout(() => refreshDoceMapSize(), 300);
+  setTimeout(() => refreshDoceMapSize(), 900);
+}
+
+// ===== REFRESH MAP SIZE =====
+// GitHub Pages kadang render layout lambat, jadi Leaflet perlu invalidate size beberapa kali.
+function refreshDoceMapSize() {
   if (doceMap) {
-    setTimeout(() => doceMap.invalidateSize(), 450);
+    doceMap.invalidateSize();
+
+    if (doceReportingData.length > 0) {
+      const validData = doceReportingData.filter(item => isValidCoordinate(item.latitude, item.longitude));
+      const bounds = validData.map(item => [Number(item.latitude), Number(item.longitude)]);
+
+      if (bounds.length === 1) {
+        doceMap.setView(bounds[0], 9);
+      }
+
+      if (bounds.length > 1) {
+        doceMap.fitBounds(bounds, { padding: [35, 35] });
+      }
+    }
   }
 }
 

@@ -1,0 +1,145 @@
+<!-- ===== RAMALAN RISIKO DRP ===== -->
+<div id="drpForecasting">
+
+  <!-- Tajuk ramalan risiko -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="mb-0">Ramalan Risiko DRP</h4>
+      <small class="text-muted">Paparan daerah yang perlu dipantau berdasarkan skor risiko semasa.</small>
+    </div>
+
+    <div class="text-end">
+      <small class="text-muted d-block">Tarikh Kemaskini</small>
+      <strong id="outlookLastUpdated">-</strong>
+    </div>
+  </div>
+
+  <!-- Bahagian filter -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+      <strong>Tapisan Ramalan Risiko</strong>
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label">Negeri</label>
+          <select id="outlookState" class="form-select">
+            <option value="">Semua Negeri</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Daerah</label>
+          <select id="outlookDistrict" class="form-select">
+            <option value="">Semua Daerah</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Kategori Bencana</label>
+          <select id="outlookCategory" class="form-select">
+            <option value="">Semua Kategori</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Jenis Bencana</label>
+          <select id="outlookRisk" class="form-select">
+            <option value="">Semua Jenis Bencana</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Kad daerah risiko tinggi dan dua daerah pantauan -->
+  <div class="row g-3 mb-4 align-items-stretch">
+
+    <div class="col-lg-3 col-md-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-body py-3">
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center"
+                 style="width: 44px; height: 44px; flex: 0 0 44px;">
+              <i class="bi bi-exclamation-triangle-fill" style="font-size: 1.25rem;"></i>
+            </div>
+
+            <div>
+              <h6 class="text-muted fw-bold mb-1">Daerah Risiko Tinggi</h6>
+              <h3 id="outlookHighDistricts" class="mb-0 text-danger fw-bold">0</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="outlookWatchDistricts" class="col-lg-9">
+      <div class="row g-3"></div>
+    </div>
+
+  </div>
+
+  <!-- Jadual keutamaan risiko -->
+  <div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <div>
+        <strong>Jadual Keutamaan Risiko</strong>
+        <div class="small text-muted">Cadangan tindakan dijana berdasarkan skor risiko.</div>
+      </div>
+
+      <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#outlookTableModal">
+        <i class="bi bi-arrows-fullscreen"></i>
+      </button>
+    </div>
+
+    <div class="table-responsive drp-table-container">
+      <table class="table table-striped table-bordered drp-risk-table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Negeri</th>
+            <th>Daerah</th>
+            <th>Kategori</th>
+            <th>Jenis Bencana</th>
+            <th>Keutamaan</th>
+            <th>Cadangan Tindakan</th>
+          </tr>
+        </thead>
+
+        <tbody id="outlookTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal jadual besar ramalan risiko -->
+<div class="modal fade" id="outlookTableModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Jadual Keutamaan Risiko</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered drp-risk-table mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Kategori</th>
+                <th>Jenis Bencana</th>
+                <th>Keutamaan</th>
+                <th>Cadangan Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="outlookFullTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

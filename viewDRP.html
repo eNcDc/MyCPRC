@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Paparan Laporan DRP</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Ikon Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- CSS utama sistem -->
+  <link href="assets/css/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<div id="header"></div>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
+      <!-- Sidebar akan dimuatkan di sini -->
+    </aside>
+
+    <!-- ===== KANDUNGAN UTAMA ===== -->
+    <main class="col-md-9 col-lg-10 px-4 py-4">
+
+      <!-- Tajuk paparan laporan -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h3 class="mb-0">Paparan Laporan DRP</h3>
+          <small class="text-muted">Maklumat ini dipaparkan berdasarkan isian borang.</small>
+        </div>
+
+        <div class="d-flex gap-2">
+          <a href="landingDRP.html" class="btn btn-primary">
+            <i class="bi bi-arrow-left me-1"></i> Kembali
+          </a>
+        </div>
+      </div>
+
+      <!-- Mesej jika laporan tidak dijumpai -->
+      <div id="reportNotFound" class="alert alert-warning d-none">
+        Laporan tidak dijumpai.
+      </div>
+
+      <!-- Kandungan laporan -->
+      <div id="reportContent">
+
+        <!-- Maklumat laporan -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-white">
+            <strong>Maklumat Laporan</strong>
+          </div>
+
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <small class="text-muted">No. Rujukan</small>
+                <div class="fw-bold" id="viewReportId">-</div>
+              </div>
+
+              <div class="col-md-4">
+                <small class="text-muted">Tarikh Dihantar</small>
+                <div class="fw-bold" id="viewCreatedAt">-</div>
+              </div>
+
+              <div class="col-md-4">
+                <small class="text-muted">Status</small>
+                <div id="viewStatus">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Maklumat lokasi -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-white">
+            <strong>Maklumat Lokasi</strong>
+          </div>
+
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <small class="text-muted">Negeri</small>
+                <div class="fw-bold" id="viewNegeri">-</div>
+              </div>
+
+              <div class="col-md-4">
+                <small class="text-muted">Daerah</small>
+                <div class="fw-bold" id="viewDaerah">-</div>
+              </div>
+
+              <div class="col-md-4">
+                <small class="text-muted">Mukim</small>
+                <div class="fw-bold" id="viewMukim">-</div>
+              </div>
+
+              <div class="col-md-12">
+                <small class="text-muted">Alamat Lokasi</small>
+                <div class="fw-bold" id="viewAlamat">-</div>
+              </div>
+
+              <div class="col-md-6">
+                <small class="text-muted">Latitud</small>
+                <div class="fw-bold" id="viewLatitude">-</div>
+              </div>
+
+              <div class="col-md-6">
+                <small class="text-muted">Longitud</small>
+                <div class="fw-bold" id="viewLongitude">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Maklumat bencana -->
+        <div class="card shadow-sm mb-4">
+          <div class="card-header bg-white">
+            <strong>Maklumat Bencana</strong>
+          </div>
+
+          <div class="card-body">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <small class="text-muted">Kategori Bencana</small>
+                <div class="fw-bold" id="viewKategori">-</div>
+              </div>
+
+              <div class="col-md-6">
+                <small class="text-muted">Jenis Bencana</small>
+                <div class="fw-bold" id="viewDisasterType">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Penilaian skor risiko -->
+        <div class="card shadow-sm">
+          <div class="card-header bg-white">
+            <strong>Penilaian Skor Risiko</strong>
+          </div>
+
+          <div class="table-responsive">
+            <table class="table table-bordered mb-0">
+              <tbody>
+                <tr>
+                  <th>Kebarangkalian</th>
+                  <td id="viewLikelihood">-</td>
+                </tr>
+
+                <tr>
+                  <th>Kematian</th>
+                  <td id="viewMortality">-</td>
+                </tr>
+
+                <tr>
+                  <th>Morbiditi</th>
+                  <td id="viewMorbidity">-</td>
+                </tr>
+
+                <tr>
+                  <th>Beban Ekonomi</th>
+                  <td id="viewEconomicBurden">-</td>
+                </tr>
+
+                <tr>
+                  <th>Kesan Kepada Sistem Kesihatan</th>
+                  <td id="viewHealthcareImpact">-</td>
+                </tr>
+
+                <tr>
+                  <th>Gangguan Sosial</th>
+                  <td id="viewSocialDisruption">-</td>
+                </tr>
+
+                <tr>
+                  <th>Purata Skor Impak</th>
+                  <td id="viewAverageImpactScore">-</td>
+                </tr>
+
+                <tr>
+                  <th>Jumlah Skor Risiko</th>
+                  <td>
+                    <span class="badge bg-primary fs-6" id="viewTotalScore">-</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div id="footer"></div>
+
+<!-- JS Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  // ===== MUATKAN HEADER =====
+  fetch("header.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("header").innerHTML = data);
+
+  // ===== MUATKAN SIDEBAR =====
+  fetch("sidebar.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
+
+  // ===== MUATKAN FOOTER =====
+  fetch("footer.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("footer").innerHTML = data);
+
+  // ===== DATA CONTOH LAPORAN DRP =====
+  // Data ini mesti sama dengan data contoh dalam reportDRP.js supaya button Lihat boleh dibuka.
+  const defaultDrpReports = [
+    {
+      id: "DRP-CONTOH-001",
+      createdAt: "2026-01-12T08:00:00",
+      status: "Dihantar",
+
+      kategori: "Semula Jadi",
+      negeri: "Kelantan",
+      daerah: "Kota Bharu",
+      mukim: "Pengkalan Chepa",
+      alamat: "Kampung Pulau Gajah, Kota Bharu, Kelantan",
+      latitude: "6.1254",
+      longitude: "102.2381",
+
+      disasterType: "Banjir",
+      likelihood: "4",
+      mortality: "2",
+      morbidity: "3",
+      economicBurden: "4",
+      healthcareImpact: "3",
+      socialDisruption: "4",
+      averageImpactScore: "3",
+      totalScore: "7"
+    },
+    {
+      id: "DRP-CONTOH-002",
+      createdAt: "2026-01-10T08:00:00",
+      status: "Draf",
+
+      kategori: "Semula Jadi",
+      negeri: "Pahang",
+      daerah: "Bentong",
+      mukim: "Janda Baik",
+      alamat: "Kampung Janda Baik, Bentong, Pahang",
+      latitude: "3.3318",
+      longitude: "101.8624",
+
+      disasterType: "Tanah Runtuh",
+      likelihood: "3",
+      mortality: "3",
+      morbidity: "2",
+      economicBurden: "4",
+      healthcareImpact: "2",
+      socialDisruption: "3",
+      averageImpactScore: "3",
+      totalScore: "6"
+    }
+  ];
+
+  // ===== AMBIL ID LAPORAN DARIPADA URL =====
+  const params = new URLSearchParams(window.location.search);
+  const reportId = params.get("id");
+
+  // ===== AMBIL DATA DARIPADA LOCALSTORAGE =====
+  const savedReports = JSON.parse(localStorage.getItem("mycprc_drp_reports") || "[]");
+
+  // ===== GABUNG DATA CONTOH DAN DATA SEBENAR =====
+  // Ini elak page jadi kosong bila user tekan Lihat untuk data contoh.
+  const reports = [...defaultDrpReports, ...savedReports];
+
+  // ===== CARI LAPORAN BERDASARKAN ID =====
+  const report = reports.find(item => item.id === reportId);
+
+  if (!report) {
+    document.getElementById("reportContent").classList.add("d-none");
+    document.getElementById("reportNotFound").classList.remove("d-none");
+  } else {
+    displayDrpReport(report);
+  }
+
+  // ===== PAPARKAN DATA LAPORAN =====
+  function displayDrpReport(report) {
+    setText("viewReportId", report.id);
+    setText("viewCreatedAt", formatDateTime(report.createdAt));
+    document.getElementById("viewStatus").innerHTML = getStatusBadge(report.status);
+
+    setText("viewNegeri", report.negeri);
+    setText("viewDaerah", report.daerah);
+    setText("viewMukim", report.mukim);
+    setText("viewAlamat", report.alamat);
+    setText("viewLatitude", report.latitude);
+    setText("viewLongitude", report.longitude);
+
+    setText("viewKategori", report.kategori);
+    setText("viewDisasterType", report.disasterType);
+
+    setText("viewLikelihood", report.likelihood);
+    setText("viewMortality", report.mortality);
+    setText("viewMorbidity", report.morbidity);
+    setText("viewEconomicBurden", report.economicBurden);
+    setText("viewHealthcareImpact", report.healthcareImpact);
+    setText("viewSocialDisruption", report.socialDisruption);
+    setText("viewAverageImpactScore", formatWholeNumber(report.averageImpactScore));
+    setText("viewTotalScore", formatWholeNumber(report.totalScore));
+  }
+
+  // ===== SET TEXT SELAMAT =====
+  function setText(id, value) {
+    const element = document.getElementById(id);
+    if (element) element.textContent = value || "-";
+  }
+
+  // ===== STATUS DALAM BAHASA MELAYU =====
+  function getStatusBadge(status) {
+    if (status === "Dihantar" || status === "Submitted") {
+      return `<span class="badge bg-success">Dihantar</span>`;
+    }
+
+    if (status === "Draf" || status === "Draft") {
+      return `<span class="badge bg-warning text-dark">Draf</span>`;
+    }
+
+    return `<span class="badge bg-secondary">${status || "-"}</span>`;
+  }
+
+  // ===== FORMAT TARIKH DAN MASA =====
+  function formatDateTime(value) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return "-";
+
+    return date.toLocaleString("ms-MY", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+  // ===== FORMAT NOMBOR TANPA PERPULUHAN =====
+  function formatWholeNumber(value) {
+    const number = Number(value || 0);
+    return Math.round(number).toLocaleString("ms-MY");
+  }
+</script>
+
+</body>
+</html>

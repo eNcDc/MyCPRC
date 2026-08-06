@@ -244,6 +244,176 @@ const drmData = [
       rapidAssessmentTeam: 6,
       rapidResponseTeam: 9
     }
+  },
+  {
+    state: "PAHANG",
+    district: "ROMPIN",
+    facilityCategory: "Pejabat Kesihatan",
+    facilityName: "PKD Rompin",
+    latitude: 2.7945,
+    longitude: 103.4897,
+
+    humanResources: {
+      fms: 1,
+      phms: 1,
+      entomologist: 1,
+      foodTechnologist: 0,
+      nutritionist: 1,
+      dietitian: 0,
+      psychologist: 0
+    },
+
+    medicalDevices: {
+      portableVentilator: 0,
+      portableTransportMonitor: 1,
+      manualDefibrillator: 0,
+      aed: 1,
+      syringePump: 1,
+      infusionPump: 1,
+      automatedCprMachine: 0,
+      spinalBoard: 1,
+      foldableStretcher: 2,
+      basketStretcher: 0
+    },
+
+    nonMedicalDevices: {
+      disasterTent: 1,
+      inflatableDisasterTent: 0,
+      campingTent: 1,
+      portableLightingSystem: 1,
+      portableEmergencyLamp: 2,
+      canvasBeds: 5,
+      medicalColdChainBox: 1,
+      portableGenset: 0
+    },
+
+    facilities: {
+      designatedDisasterKk: 1,
+      emergencyUnit: 0,
+      wasteDisposalAfterDecon: 0,
+      helipad: 0,
+      alternativeBirthingCentres: 0,
+      waterTankStorageCapacity: 2,
+      dialysisUnit: 0,
+      foodSupply: 10,
+      dryRation: 8
+    },
+
+    communication: {
+      girnHandheld: 1,
+      girnVehicular: 0,
+      girnDesktop: 0,
+      satellitePhone: 0,
+      fullDuplexCommunicationSystem: 0,
+      amateurRadio: 0,
+      walkieTalkie: 2
+    },
+
+    transportation: {
+      lorry: 0,
+      bus: 0,
+      coaster: 0,
+      utilityVehicles: 1,
+      motorcycle: 1,
+      ambulanceTypeA: 0,
+      ambulanceTypeB: 1,
+      waterAmbulance: 0,
+      rapidResponseVehicle: 0,
+      fourWheelDrive: 1,
+      numberOfBoat: 0
+    },
+
+    specialUnits: {
+      mhpss: 3,
+      rapidAssessmentTeam: 2,
+      rapidResponseTeam: 1
+    }
+  },
+  {
+    state: "KELANTAN",
+    district: "GUA MUSANG",
+    facilityCategory: "Hospital",
+    facilityName: "Hospital Gua Musang",
+    latitude: 4.8844,
+    longitude: 101.9686,
+
+    humanResources: {
+      emergencyPhysician: 1,
+      internalMedicine: 1,
+      traumaSurgeon: 0,
+      generalSurgeon: 1,
+      neurosurgeon: 0,
+      orthopaedicSurgeon: 1,
+      anaesthesiologist: 1,
+      paediatrician: 1,
+      psychiatrist: 0
+    },
+
+    medicalDevices: {
+      portableVentilator: 1,
+      portableTransportMonitor: 2,
+      manualDefibrillator: 1,
+      aed: 1,
+      syringePump: 4,
+      infusionPump: 4,
+      automatedCprMachine: 0,
+      spinalBoard: 2,
+      foldableStretcher: 3,
+      basketStretcher: 1
+    },
+
+    nonMedicalDevices: {
+      disasterTent: 1,
+      inflatableDisasterTent: 0,
+      campingTent: 2,
+      portableLightingSystem: 2,
+      portableEmergencyLamp: 4,
+      canvasBeds: 10,
+      medicalColdChainBox: 2,
+      portableGenset: 1
+    },
+
+    facilities: {
+      redZoneBays: 1,
+      yellowZoneBays: 2,
+      observationBays: 3,
+      decontaminationBays: 0,
+      icu: 2,
+      operationTheater: 1,
+      ctScan: 0,
+      mortuary: 1,
+      dialysisUnit: 2
+    },
+
+    communication: {
+      girnHandheld: 2,
+      girnVehicular: 0,
+      girnDesktop: 1,
+      satellitePhone: 0,
+      fullDuplexCommunicationSystem: 0,
+      amateurRadio: 1,
+      walkieTalkie: 3
+    },
+
+    transportation: {
+      lorry: 0,
+      bus: 0,
+      ambulanceTypeA: 1,
+      ambulanceTypeB: 1,
+      rapidResponseVehicle: 0,
+      fourWheelDrive: 1,
+      numberOfBoat: 0
+    },
+
+    specialUnits: {
+      disasterResponseUnit: 0,
+      disasterResponseTeamNoVehicle: 0,
+      cbrneSpecialTeam: 0,
+      mhpss: 4,
+      mert: 1,
+      rapidAssessmentTeam: 2,
+      rapidResponseTeam: 2
+    }
   }
 ];
 

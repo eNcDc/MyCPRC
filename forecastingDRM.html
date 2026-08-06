@@ -1,0 +1,192 @@
+<!-- ===== RAMALAN KESIAPSIAGAAN SUMBER DRM ===== -->
+<!-- Paparan ini guna data DRM sedia ada sahaja. Tiada API dan tiada field baru ditambah. -->
+
+<div id="drmForecasting">
+
+  <!-- Tajuk ramalan -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="mb-0">Ramalan Kesiapsiagaan Sumber</h4>
+      <small class="text-muted">Paparan fasiliti yang perlu diberi perhatian berdasarkan jumlah sumber semasa.</small>
+    </div>
+
+    <div class="text-end">
+      <small class="text-muted d-block">Tarikh Kemaskini</small>
+      <strong id="drmForecastUpdatedAt">-</strong>
+    </div>
+  </div>
+
+  <!-- Filter ramalan -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+      <strong>Tapisan Ramalan Kesiapsiagaan</strong>
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3">
+
+        <div class="col-md-3">
+          <label class="form-label">Negeri</label>
+          <select id="drmForecastState" class="form-select">
+            <option value="">Semua Negeri</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Daerah</label>
+          <select id="drmForecastDistrict" class="form-select">
+            <option value="">Semua Daerah</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Kategori Fasiliti</label>
+          <select id="drmForecastFacilityCategory" class="form-select">
+            <option value="">Semua Kategori Fasiliti</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">Nama Fasiliti</label>
+          <select id="drmForecastFacilityName" class="form-select">
+            <option value="">Semua Fasiliti</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Kad ringkasan -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+      <div class="card shadow-sm drm-forecast-card danger h-100">
+        <div class="card-body">
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-danger-subtle text-danger d-flex align-items-center justify-content-center"
+                 style="width: 44px; height: 44px; flex: 0 0 44px;">
+              <i class="bi bi-exclamation-triangle-fill"></i>
+            </div>
+
+            <div>
+              <h6 class="text-muted fw-bold mb-1">Fasiliti Perlu Dipantau</h6>
+              <h3 class="mb-0 text-danger fw-bold" id="drmForecastWatchFacilities">0</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm drm-forecast-card purple h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Daerah Perlu Perhatian</h6>
+          <h3 class="mb-0 text-primary" id="drmForecastWatchDistricts">0</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm drm-forecast-card teal h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Jumlah Sumber Kritikal</h6>
+          <h3 class="mb-0 text-success" id="drmForecastCriticalResources">0</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm drm-forecast-card blue h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Jumlah Unit Khas</h6>
+          <h3 class="mb-0 text-info" id="drmForecastSpecialUnits">0</h3>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Fasiliti priority -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+      <strong>Fasiliti Perlu Dipantau</strong>
+      <div class="small text-muted">Top 2 berdasarkan jumlah sumber kritikal paling rendah.</div>
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3" id="drmForecastPriorityFacilities">
+        <!-- Kad priority akan dijana oleh JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Jadual ramalan -->
+  <div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <div>
+        <strong>Jadual Keutamaan Kesiapsiagaan</strong>
+        <div class="small text-muted">Cadangan tindakan dijana berdasarkan jumlah sumber kritikal.</div>
+      </div>
+
+      <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#drmForecastTableModal">
+        <i class="bi bi-arrows-fullscreen"></i>
+      </button>
+    </div>
+
+    <div class="table-responsive drm-forecast-table-container">
+      <table class="table table-striped table-bordered drm-forecast-table mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Negeri</th>
+            <th>Daerah</th>
+            <th>Kategori Fasiliti</th>
+            <th>Nama Fasiliti</th>
+            <th>Jumlah Sumber Kritikal</th>
+            <th>Jumlah Unit Khas</th>
+            <th>Keutamaan</th>
+            <th>Cadangan Tindakan</th>
+          </tr>
+        </thead>
+
+        <tbody id="drmForecastTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal jadual besar -->
+<div class="modal fade" id="drmForecastTableModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Jadual Keutamaan Kesiapsiagaan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered drm-forecast-table mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Negeri</th>
+                <th>Daerah</th>
+                <th>Kategori Fasiliti</th>
+                <th>Nama Fasiliti</th>
+                <th>Jumlah Sumber Kritikal</th>
+                <th>Jumlah Unit Khas</th>
+                <th>Keutamaan</th>
+                <th>Cadangan Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="drmForecastFullTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

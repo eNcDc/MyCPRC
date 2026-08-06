@@ -235,12 +235,22 @@
 <!-- Dashboard HTML dimasukkan dulu, selepas itu baru JS dashboard dijalankan -->
 <script>
   fetch("doce_dashboard.html")
-    .then(res => res.text())
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("doce_dashboard.html not found. Check uppercase/lowercase filename.");
+      }
+      return res.text();
+    })
     .then(data => {
       document.getElementById("doce-dashboard-content").innerHTML = data;
 
       const script = document.createElement("script");
       script.src = "assets/js/doce_dashboard.js";
+      script.onload = () => {
+        if (typeof initDoceDashboard === "function") {
+          initDoceDashboard();
+        }
+      };
       document.body.appendChild(script);
     })
     .catch(err => console.error("Failed to load DOCE dashboard:", err));

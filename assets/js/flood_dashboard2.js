@@ -566,10 +566,19 @@ function getDoughnutOptions() {
 }
 
 // ===== MAP DASHBOARD =====
-// Bahagian ini render map biasa dan map fullscreen.
+// Map biasa hanya render bila tab Map Malaysia sedang aktif.
+// elak masalah Leaflet blank bila map berada dalam hidden tab.
 function updateFloodMap(data) {
-  renderFloodMapInstance("floodMap", false, data);
-  renderFloodMapInstance("floodMapFull", true, data);
+  const mapPanel = document.getElementById("floodMapPanel");
+
+  if (mapPanel && mapPanel.classList.contains("active")) {
+    renderFloodMapInstance("floodMap", false, data);
+
+    if (floodMap) {
+      setTimeout(() => floodMap.invalidateSize(), 200);
+      setTimeout(() => floodMap.invalidateSize(), 600);
+    }
+  }
 }
 
 // ===== MAP INSTANCE =====
@@ -720,13 +729,23 @@ function createFloodTableRows(data) {
 }
 
 // ===== TAB EVENT =====
-// Bila user buka tab map, map akan resize supaya marker display elok.
+// Bila user buka tab map, map baru render dan resize supaya tidak blank.
 function bindFloodTabEvents() {
   document.querySelectorAll("#floodDashboardTabs button[data-bs-toggle='pill']").forEach(tab => {
     if (tab.dataset.bound === "true") return;
 
-    tab.addEventListener("shown.bs.tab", () => {
-      if (floodMap) setTimeout(() => floodMap.invalidateSize(), 150);
+    tab.addEventListener("shown.bs.tab", event => {
+      const target = event.target.getAttribute("data-bs-target");
+
+      if (target === "#floodMapPanel") {
+        renderFloodMapInstance("floodMap", false, currentFloodData);
+
+        if (floodMap) {
+          setTimeout(() => floodMap.invalidateSize(), 200);
+          setTimeout(() => floodMap.invalidateSize(), 600);
+        }
+      }
+
       Object.values(floodCharts).forEach(chart => chart.resize());
     });
 

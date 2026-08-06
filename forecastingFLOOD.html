@@ -1,0 +1,215 @@
+<!-- ===== WRAPPER ALERT & FORECASTING ===== -->
+<div id="floodAlertForecasting">
+
+  <!-- ===== HEADER ===== -->
+  <!-- Bahagian tajuk dan button refresh untuk panggil semula API -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+      <h4 class="mb-1">Alert & Forecasting</h4>
+      <small class="text-muted">
+        Paparan amaran cuaca dan ramalan risiko banjir berdasarkan data MET Malaysia.
+      </small>
+    </div>
+
+    <button class="btn btn-primary" type="button" onclick="loadMetMalaysiaDashboard()">
+      <i class="bi bi-arrow-clockwise me-1"></i> Refresh API
+    </button>
+  </div>
+
+  <!-- ===== STATUS API ===== -->
+  <!-- Paparan sumber data dan masa kemaskini terakhir -->
+  <div class="alert alert-info d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div>
+      <strong>Sumber Data:</strong> MET Malaysia via data.gov.my Weather API
+    </div>
+    <div>
+      <small>Kemaskini: <span id="metLastUpdated">-</span></small>
+    </div>
+  </div>
+
+  <!-- ===== SUMMARY CARDS ===== -->
+  <!-- Kad ringkasan utama untuk amaran dan ramalan risiko -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-3">
+      <div class="card shadow-sm met-summary-card red h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Amaran Aktif</h6>
+          <h3 id="metActiveWarnings" class="mb-0 text-danger">0</h3>
+          <small class="text-muted">Daripada API amaran cuaca</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm met-summary-card purple h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Risiko Tinggi</h6>
+          <h3 id="metHighRiskCount" class="mb-0 text-purple">0</h3>
+          <small class="text-muted">Ribut petir / hujan lebat</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm met-summary-card blue h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Ribut Petir</h6>
+          <h3 id="metThunderstormCount" class="mb-0 text-primary">0</h3>
+          <small class="text-muted">Lokasi dalam forecast</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card shadow-sm met-summary-card teal h-100">
+        <div class="card-body">
+          <h6 class="text-muted">Hujan</h6>
+          <h3 id="metRainRiskCount" class="mb-0 text-success">0</h3>
+          <small class="text-muted">Lokasi dalam forecast</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FILTER ===== -->
+  <!-- Filter ini akan ubah summary, map, chart dan table -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-white">
+      <strong>Filter Alert & Forecasting</strong>
+    </div>
+
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Negeri / Lokasi</label>
+          <select id="metLocationFilter" class="form-select">
+            <option value="">Semua Lokasi</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Tahap Risiko</label>
+          <select id="metRiskFilter" class="form-select">
+            <option value="">Semua Risiko</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label">Carian</label>
+          <input id="metSearchInput" type="text" class="form-control" placeholder="Cari lokasi / ramalan...">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== MAP DAN WARNING ===== -->
+  <!-- Layout dashboard seperti METMalaysia: map di kiri, amaran aktif di kanan -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-7">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+          <strong>Map Risiko Cuaca</strong>
+          <button class="btn btn-sm btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#metMapModal">
+            <i class="bi bi-arrows-fullscreen"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+          <div id="metMalaysiaMap" class="met-map"></div>
+
+          <!-- Legend warna risiko -->
+          <div class="mt-2 d-flex flex-wrap gap-2">
+            <span class="badge bg-danger">High</span>
+            <span class="badge bg-warning text-dark">Medium</span>
+            <span class="badge bg-success">Low</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white">
+          <strong>Amaran Cuaca Aktif</strong>
+        </div>
+
+        <div class="card-body met-warning-list" id="metWarningList">
+          <div class="text-muted">Loading warning data...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== CHART ===== -->
+  <!-- Chart untuk kategori risiko dan forecast mengikut tarikh -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white">
+          <strong>Risk Category</strong>
+        </div>
+        <div class="card-body met-chart-box">
+          <canvas id="metRiskCategoryChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card shadow-sm h-100">
+        <div class="card-header bg-white">
+          <strong>Forecast Mengikut Tarikh</strong>
+        </div>
+        <div class="card-body met-chart-box">
+          <canvas id="metForecastDateChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TABLE FORECAST ===== -->
+  <!-- Table utama forecast daripada API -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+      <strong>Senarai Forecast MET Malaysia</strong>
+      <button class="btn btn-sm btn-outline-success" type="button" onclick="downloadMetForecastTable()">
+        <i class="bi bi-download"></i>
+      </button>
+    </div>
+
+    <div class="table-responsive met-table-container">
+      <table class="table table-hover met-table mb-0">
+        <thead>
+          <tr>
+            <th>Tarikh</th>
+            <th>Lokasi</th>
+            <th>Pagi</th>
+            <th>Petang</th>
+            <th>Malam</th>
+            <th>Ringkasan</th>
+            <th>Tahap Risiko</th>
+            <th>Suhu</th>
+          </tr>
+        </thead>
+        <tbody id="metForecastTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===== MODAL MAP BESAR ===== -->
+<div class="modal fade" id="metMapModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-fullscreen">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Map Risiko Cuaca - MET Malaysia</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div id="metMalaysiaMapFull" class="met-map-full"></div>
+      </div>
+    </div>
+  </div>
+</div>
