@@ -77,6 +77,21 @@ Dashboard
 
 
 
+<li class="nav-item">
+
+<button class="nav-link"
+        data-bs-toggle="tab"
+        data-bs-target="#sariForecastPane">
+
+<i class="bi bi-graph-up me-1"></i>
+
+Forecast
+
+</button>
+
+</li>
+
+
 
 
 <li class="nav-item">
@@ -133,7 +148,22 @@ Senarai Laporan
 
 
 
+<!-- =================================================
+     FORECAST
+================================================= -->
 
+
+<div class="tab-pane fade"
+     id="sariForecastPane">
+
+
+<div id="sari-forecast-content">
+
+
+</div>
+
+
+</div>
 
 
 
@@ -1111,6 +1141,61 @@ err
 
 
 </script>
+
+
+
+
+
+<!-- ===== LOAD SARI FORECAST ===== -->
+<script>
+
+fetch("sari_forecast.html")
+
+.then(res=>res.text())
+
+.then(data=>{
+
+
+document.getElementById(
+"sari-forecast-content"
+).innerHTML=data;
+
+
+
+const script =
+document.createElement("script");
+
+
+script.src =
+"assets/js/sari_forecast.js";
+
+
+script.onload=function(){
+
+    loadSariForecast();
+
+};
+
+
+document.body.appendChild(script);
+
+
+
+})
+
+.catch(err=>{
+
+console.error(
+"Failed load SARI forecast",
+err
+);
+
+});
+
+
+</script>
+
+
 
 <!--dummy data testing-->
 <script src="assets/js/sari_report.js"></script>

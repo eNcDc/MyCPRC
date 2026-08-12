@@ -1,0 +1,750 @@
+<!-- =========================================================
+     ILI FORECAST TAB
+========================================================= -->
+
+<div class="container-fluid px-0">
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <div class="mb-4">
+
+        <h5 class="fw-bold mb-1">
+            <i class="bi bi-graph-up-arrow me-2"></i>
+            Forecast & Active Cases ILI
+        </h5>
+
+        <small class="text-muted">
+            Paparan kes ILI aktif berdasarkan lokasi dan maklumat
+            epidemiologi semasa.
+        </small>
+
+    </div>
+
+
+    <!-- =====================================================
+         FILTER
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white fw-bold">
+
+            <i class="bi bi-funnel me-2"></i>
+            Tapis Maklumat
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+
+                <!-- DATE FROM -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Tarikh Dari
+                    </label>
+
+                    <input
+                        type="date"
+                        id="iliForecastDateFrom"
+                        class="form-control">
+
+                </div>
+
+
+                <!-- DATE TO -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Tarikh Hingga
+                    </label>
+
+                    <input
+                        type="date"
+                        id="iliForecastDateTo"
+                        class="form-control">
+
+                </div>
+
+
+                <!-- STATE -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Negeri
+                    </label>
+
+                    <select
+                        id="iliForecastStateFilter"
+                        class="form-select">
+
+                        <option value="">
+                            Semua Negeri
+                        </option>
+
+                        <option value="Johor">
+                            Johor
+                        </option>
+
+                        <option value="Kedah">
+                            Kedah
+                        </option>
+
+                        <option value="Kelantan">
+                            Kelantan
+                        </option>
+
+                        <option value="Melaka">
+                            Melaka
+                        </option>
+
+                        <option value="Negeri Sembilan">
+                            Negeri Sembilan
+                        </option>
+
+                        <option value="Pulau Pinang">
+                            Pulau Pinang
+                        </option>
+
+                        <option value="Sabah">
+                            Sabah
+                        </option>
+
+                        <option value="Sarawak">
+                            Sarawak
+                        </option>
+
+                        <option value="Selangor">
+                            Selangor
+                        </option>
+
+                        <option value="Terengganu">
+                            Terengganu
+                        </option>
+
+                        <option value="W.P. Kuala Lumpur">
+                            W.P. Kuala Lumpur
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- STATUS -->
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Status Kes
+                    </label>
+
+                    <select
+                        id="iliForecastStatusFilter"
+                        class="form-select">
+
+                        <option value="">
+                            Semua Status
+                        </option>
+
+                        <option value="active">
+                            Active
+                        </option>
+
+                        <option value="confirmed">
+                            Disahkan
+                        </option>
+
+                        <option value="pending">
+                            Dalam Proses
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- LOCALITY -->
+
+                <div class="col-md-6">
+
+                    <label class="form-label">
+                        Locality / Fasiliti
+                    </label>
+
+                    <input
+                        type="text"
+                        id="iliForecastLocalityFilter"
+                        class="form-control"
+                        placeholder="Cari klinik / hospital / locality">
+
+                </div>
+
+
+                <!-- DIAGNOSIS -->
+
+                <div class="col-md-4">
+
+                    <label class="form-label">
+                        Diagnosis
+                    </label>
+
+                    <select
+                        id="iliForecastDiagnosisFilter"
+                        class="form-select">
+
+                        <option value="">
+                            Semua Diagnosis
+                        </option>
+
+                        <option value="Influenza A H1N1">
+                            Influenza A H1N1
+                        </option>
+
+                        <option value="Influenza A H3N2">
+                            Influenza A H3N2
+                        </option>
+
+                        <option value="Influenza B">
+                            Influenza B
+                        </option>
+
+                        <option value="COVID-19">
+                            COVID-19
+                        </option>
+
+                        <option value="RSV">
+                            RSV
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- RESET -->
+
+                <div class="col-md-2 d-flex align-items-end">
+
+                    <button
+                        type="button"
+                        id="iliForecastResetBtn"
+                        class="btn btn-outline-secondary w-100">
+
+                        <i class="bi bi-arrow-counterclockwise me-1"></i>
+                        Reset
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         SUMMARY CARDS
+    ====================================================== -->
+
+    <div class="row g-3 mb-4">
+
+
+        <!-- ACTIVE CASES -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body d-flex align-items-center">
+
+                    <div class="rounded-circle bg-danger bg-opacity-10 p-3 me-3">
+
+                        <i class="bi bi-virus text-danger fs-3"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h6 class="text-muted mb-1">
+                            Kes Aktif
+                        </h6>
+
+                        <h2
+                            id="iliActiveCasesCount"
+                            class="fw-bold mb-0 text-danger">
+
+                            0
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- STATES -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body d-flex align-items-center">
+
+                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
+
+                        <i class="bi bi-geo-alt text-primary fs-3"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h6 class="text-muted mb-1">
+                            Negeri Terlibat
+                        </h6>
+
+                        <h2
+                            id="iliActiveStateCount"
+                            class="fw-bold mb-0 text-primary">
+
+                            0
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- FACILITIES -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body d-flex align-items-center">
+
+                    <div class="rounded-circle bg-warning bg-opacity-10 p-3 me-3">
+
+                        <i class="bi bi-hospital text-warning fs-3"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h6 class="text-muted mb-1">
+                            Fasiliti Terlibat
+                        </h6>
+
+                        <h2
+                            id="iliActiveFacilityCount"
+                            class="fw-bold mb-0 text-warning">
+
+                            0
+
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- LATEST ONSET -->
+
+        <div class="col-md-3">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body d-flex align-items-center">
+
+                    <div class="rounded-circle bg-success bg-opacity-10 p-3 me-3">
+
+                        <i class="bi bi-calendar-event text-success fs-3"></i>
+
+                    </div>
+
+                    <div>
+
+                        <h6 class="text-muted mb-1">
+                            Kes Terkini
+                        </h6>
+
+                        <h6
+                            id="iliLatestCaseDate"
+                            class="fw-bold mb-0 text-success">
+
+                            -
+
+                        </h6>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         MAP + INFORMATION
+    ====================================================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- =================================================
+             MAP
+        ================================================== -->
+
+        <div class="col-lg-8">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-header bg-white">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+
+                            <strong>
+                                <i class="bi bi-map me-2"></i>
+                                Peta Kes Aktif ILI
+                            </strong>
+
+                            <div>
+                                <small class="text-muted">
+                                    Lokasi kes aktif berdasarkan locality / fasiliti
+                                </small>
+                            </div>
+
+                        </div>
+
+
+                        <span
+                            id="iliMapCaseBadge"
+                            class="badge bg-danger">
+
+                            0 Kes Aktif
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-body p-0">
+
+                    <!-- MAP CONTAINER -->
+
+                    <div
+                        id="iliActiveCasesMap"
+                        style="
+                            width:100%;
+                            height:520px;
+                            min-height:400px;
+                        ">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ACTIVE CASE INFORMATION
+        ================================================== -->
+
+        <div class="col-lg-4">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-header bg-white">
+
+                    <strong>
+
+                        <i class="bi bi-info-circle me-2"></i>
+
+                        Maklumat Kes Aktif
+
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="card-body"
+                    id="iliActiveCaseInformation">
+
+                    <!-- Dynamic content generated by JS -->
+
+                    <div class="text-center text-muted py-5">
+
+                        <i class="bi bi-clipboard-data fs-1 d-block mb-3"></i>
+
+                        <div>
+                            Tiada maklumat kes aktif.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         CASE DISTRIBUTION
+    ====================================================== -->
+
+    <div class="row g-4 mb-4">
+
+
+        <!-- CASE BY STATE -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white fw-bold">
+
+                    <i class="bi bi-bar-chart me-2"></i>
+
+                    Taburan Kes Mengikut Negeri
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div
+                        style="
+                            position:relative;
+                            height:320px;
+                        ">
+
+                        <canvas
+                            id="iliCasesByStateChart">
+                        </canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- CASE BY DIAGNOSIS -->
+
+        <div class="col-lg-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-header bg-white fw-bold">
+
+                    <i class="bi bi-pie-chart me-2"></i>
+
+                    Taburan Kes Mengikut Diagnosis
+
+                </div>
+
+
+                <div class="card-body">
+
+                    <div
+                        style="
+                            position:relative;
+                            height:320px;
+                        ">
+
+                        <canvas
+                            id="iliCasesByDiagnosisChart">
+                        </canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         ACTIVE CASE LIST
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white">
+
+            <div class="d-flex justify-content-between align-items-center">
+
+                <strong>
+
+                    <i class="bi bi-list-ul me-2"></i>
+
+                    Senarai Kes Aktif
+
+                </strong>
+
+
+                <span
+                    id="iliActiveCaseListCount"
+                    class="text-muted small">
+
+                    0 rekod
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="table table-hover table-bordered mb-0">
+
+                <thead class="table-light">
+
+                    <tr class="text-center">
+
+                        <th>
+                            Tarikh Onset
+                        </th>
+
+                        <th>
+                            Tarikh Sampel
+                        </th>
+
+                        <th>
+                            Locality / Fasiliti
+                        </th>
+
+                        <th>
+                            Negeri
+                        </th>
+
+                        <th>
+                            Diagnosis
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Tindakan
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="iliActiveCasesTable">
+
+                    <!-- Dynamic data generated by JS -->
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="text-center text-muted py-4">
+
+                            Tiada kes aktif.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FORECAST INFORMATION
+    ====================================================== -->
+
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="card-header bg-white fw-bold">
+
+            <i class="bi bi-graph-up me-2"></i>
+
+            Trend / Forecast ILI
+
+        </div>
+
+
+        <div class="card-body">
+
+            <div
+                style="
+                    position:relative;
+                    height:350px;
+                ">
+
+                <canvas
+                    id="iliForecastTrendChart">
+                </canvas>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
