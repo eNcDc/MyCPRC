@@ -18,6 +18,204 @@ body{background:#f4f6f9}
 .info-box{border:1px solid #dee2e6;border-radius:10px;padding:.75rem;background:#f8f9fa;height:100%}
 .info-label{font-size:.78rem;color:#6c757d;margin-bottom:.2rem}
 .info-value{font-weight:700;word-break:break-word}
+
+/* =========================================================
+   MISSION OVERVIEW REDESIGN
+========================================================= */
+.mission-overview-card{
+  border:0!important;
+  border-radius:18px!important;
+  overflow:hidden;
+  box-shadow:0 .35rem 1rem rgba(31,41,55,.08)!important;
+}
+
+.mission-hero{
+  position:relative;
+  padding:1.25rem 1.4rem;
+  color:#fff;
+  background:
+    radial-gradient(circle at top right, rgba(255,255,255,.16), transparent 34%),
+    linear-gradient(135deg,#0b5ed7 0%,#0d6efd 55%,#3d8bfd 100%);
+}
+
+.mission-hero::after{
+  content:"";
+  position:absolute;
+  right:-40px;
+  bottom:-70px;
+  width:180px;
+  height:180px;
+  border-radius:50%;
+  background:rgba(255,255,255,.08);
+}
+
+.mission-hero-main{
+  position:relative;
+  z-index:2;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:1rem;
+}
+
+.mission-title-wrap{
+  display:flex;
+  align-items:flex-start;
+  gap:.9rem;
+  min-width:0;
+}
+
+.mission-title-icon{
+  width:52px;
+  height:52px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  flex:0 0 52px;
+  font-size:1.4rem;
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.22);
+  backdrop-filter:blur(4px);
+}
+
+.mission-title-text{
+  min-width:0;
+}
+
+.mission-title-text h5{
+  font-size:1.35rem;
+  margin:0 0 .3rem;
+  color:#fff;
+}
+
+.mission-id-line{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:.45rem;
+  font-size:.82rem;
+  color:rgba(255,255,255,.86);
+}
+
+.mission-id-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:.35rem;
+  padding:.3rem .55rem;
+  border-radius:999px;
+  background:rgba(255,255,255,.13);
+  border:1px solid rgba(255,255,255,.18);
+}
+
+#hdrStatus{
+  position:relative;
+  z-index:2;
+  padding:.55rem .85rem!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  color:#0d6efd!important;
+  border:0!important;
+  box-shadow:0 .2rem .5rem rgba(0,0,0,.08);
+  font-size:.9rem!important;
+}
+
+.mission-overview-body{
+  padding:1rem 1.15rem 1.15rem;
+  background:#fff;
+}
+
+.mission-overview-grid{
+  display:grid;
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  gap:.75rem;
+}
+
+.overview-item{
+  display:flex;
+  gap:.7rem;
+  align-items:flex-start;
+  min-width:0;
+  min-height:92px;
+  padding:.85rem;
+  border:1px solid #e4e9ef;
+  border-radius:12px;
+  background:#fafbfd;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.overview-item:hover{
+  transform:translateY(-1px);
+  border-color:#cfd8e3;
+  box-shadow:0 .2rem .55rem rgba(31,41,55,.06);
+}
+
+.overview-icon{
+  width:36px;
+  height:36px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  flex:0 0 36px;
+  background:#eaf2ff;
+  color:#0d6efd;
+  font-size:1rem;
+}
+
+.overview-content{
+  min-width:0;
+}
+
+.overview-label{
+  font-size:.72rem;
+  color:#7a8795;
+  margin-bottom:.18rem;
+}
+
+.overview-value{
+  font-size:.93rem;
+  font-weight:800;
+  color:#202833;
+  line-height:1.3;
+  word-break:break-word;
+}
+
+.overview-item.actual-end-empty{
+  background:#fcfcfd;
+}
+
+.overview-item.actual-end-empty .overview-value{
+  color:#adb5bd;
+  font-weight:700;
+}
+
+@media(max-width:1400px){
+  .mission-overview-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+
+@media(max-width:768px){
+  .mission-hero{
+    padding:1rem;
+  }
+
+  .mission-title-icon{
+    width:44px;
+    height:44px;
+    flex-basis:44px;
+  }
+
+  .mission-overview-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:520px){
+  .mission-overview-grid{
+    grid-template-columns:1fr;
+  }
+}
 #missionWizard{gap:.35rem;flex-wrap:wrap}
 #missionWizard .nav-link{white-space:nowrap}
 .hr-category-row{cursor:pointer;transition:background-color .15s ease}
@@ -35,6 +233,143 @@ body{background:#f4f6f9}
 .storage-warning{display:none}
 .storage-warning.show{display:block}
 textarea{resize:vertical}
+
+/* =========================================================
+   TABLE DESIGN
+========================================================= */
+.table-shell{
+  border:1px solid #e3e8ef;
+  border-radius:12px;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  -webkit-overflow-scrolling:touch;
+  background:#fff;
+  width:100%;
+  max-width:100%;
+}
+
+/* Scrollbar untuk jadual panjang */
+.table-shell::-webkit-scrollbar{
+  height:10px;
+}
+.table-shell::-webkit-scrollbar-track{
+  background:#f1f3f5;
+  border-radius:999px;
+}
+.table-shell::-webkit-scrollbar-thumb{
+  background:#adb5bd;
+  border-radius:999px;
+}
+.table-shell::-webkit-scrollbar-thumb:hover{
+  background:#868e96;
+}
+.mission-data-table{
+  margin-bottom:0!important;
+  --bs-table-hover-bg:#f7faff;
+  min-width:950px;
+  width:100%;
+}
+
+/* Jadual MDS lebih banyak column, jadi biarkan panjang ke kanan */
+.mds-table{
+  min-width:1450px !important;
+}
+
+/* Dispensari juga perlukan ruang untuk diagnosis + maklumat ubat */
+.dispensary-table{
+  min-width:1200px !important;
+}
+.mission-data-table thead th{
+  background:#f4f7fb!important;
+  color:#5f6f82;
+  font-size:.76rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.025em;
+  white-space:nowrap;
+  padding:.78rem .75rem;
+  border-bottom:1px solid #dfe5ec;
+  vertical-align:middle;
+}
+
+/* Elak column pendek squeeze terlalu kecil */
+.mission-data-table th,
+.mission-data-table td{
+  min-width:max-content;
+}
+
+.mds-table th:nth-child(1),
+.mds-table td:nth-child(1){min-width:120px;}
+
+.mds-table th:nth-child(2),
+.mds-table td:nth-child(2){min-width:125px;}
+
+.mds-table th:nth-child(3),
+.mds-table td:nth-child(3){min-width:190px;}
+
+.mds-table th:nth-child(4),
+.mds-table td:nth-child(4){min-width:120px;}
+
+.mds-table th:nth-child(5),
+.mds-table td:nth-child(5){min-width:155px;}
+
+.mds-table th:nth-child(6),
+.mds-table td:nth-child(6){min-width:230px;}
+
+.mds-table th:nth-child(7),
+.mds-table td:nth-child(7){min-width:220px;}
+
+.mds-table th:nth-child(8),
+.mds-table td:nth-child(8){min-width:210px;}
+
+.mds-table th:nth-child(9),
+.mds-table td:nth-child(9){min-width:120px;}
+
+.dispensary-table th:nth-child(1),
+.dispensary-table td:nth-child(1){min-width:120px;}
+
+.dispensary-table th:nth-child(2),
+.dispensary-table td:nth-child(2){min-width:125px;}
+
+.dispensary-table th:nth-child(3),
+.dispensary-table td:nth-child(3){min-width:190px;}
+
+.dispensary-table th:nth-child(4),
+.dispensary-table td:nth-child(4){min-width:170px;}
+
+.dispensary-table th:nth-child(5),
+.dispensary-table td:nth-child(5){min-width:230px;}
+
+.dispensary-table th:nth-child(6),
+.dispensary-table td:nth-child(6){min-width:300px;}
+
+.mission-data-table tbody td{
+  padding:.8rem .75rem;
+  vertical-align:middle;
+  border-color:#edf0f4;
+}
+.mission-data-table tbody tr:last-child td{border-bottom:0}
+.mission-data-table tbody tr:hover{background:#f7faff}
+.table-primary-text{font-weight:750;color:#1f2937}
+.table-secondary-text{font-size:.76rem;color:#7b8794;margin-top:.15rem}
+.table-id-badge{
+  display:inline-flex;align-items:center;padding:.3rem .55rem;border-radius:7px;
+  background:#f4f6f8;border:1px solid #dde2e7;color:#495057;
+  font-size:.78rem;font-weight:750;
+}
+.clinical-badge{
+  display:inline-block;margin:0 .2rem .2rem 0;padding:.3rem .5rem;
+  border-radius:999px;font-size:.72rem;font-weight:700;
+}
+.status-soft{
+  display:inline-flex;align-items:center;padding:.3rem .55rem;border-radius:999px;
+  background:#f3f5f7;border:1px solid #e1e5e9;font-size:.75rem;font-weight:700;
+}
+.mds-table .patient-cell{min-width:160px}
+.mds-table .clinical-cell{min-width:180px}
+.mds-table .diagnosis-cell{min-width:180px}
+.dispensary-table .medicine-cell{min-width:220px}
+
 @media(max-width:767px){
   .page-actions{width:100%}
   .page-actions .btn{width:100%}
@@ -70,61 +405,127 @@ textarea{resize:vertical}
   </div>
 
   <!-- MISSION OVERVIEW -->
-  <div class="card shadow-sm border-0 mb-4">
-    <div class="card-body">
-      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
-        <div>
-          <h5 class="fw-bold mb-1" id="hdrName">-</h5>
-          <small class="text-muted" id="hdrMissionId">ID Misi: -</small>
+  <div class="card mission-overview-card mb-4">
+
+    <div class="mission-hero">
+
+      <div class="mission-hero-main">
+
+        <div class="mission-title-wrap">
+
+          <div class="mission-title-icon">
+            <i class="bi bi-hospital"></i>
+          </div>
+
+          <div class="mission-title-text">
+
+            <h5 class="fw-bold" id="hdrName">-</h5>
+
+            <div class="mission-id-line">
+
+              <span class="mission-id-pill">
+                <i class="bi bi-hash"></i>
+                <span id="hdrMissionId">ID Misi: -</span>
+              </span>
+
+              <span>
+                Ringkasan operasi misi EMT
+              </span>
+
+            </div>
+
+          </div>
+
         </div>
-        <span class="badge bg-secondary fs-6" id="hdrStatus">-</span>
+
+        <span class="badge" id="hdrStatus">-</span>
+
       </div>
 
-      <div class="row g-3">
-        <div class="col-sm-6 col-xl-2">
-          <div class="info-box">
-            <div class="info-label">Tarikh Mula</div>
-            <div class="info-value" id="hdrStartDate">-</div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-2">
-          <div class="info-box">
-            <div class="info-label">Anggaran Tamat</div>
-            <div class="info-value" id="hdrEstimatedEnd">-</div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-2">
-          <div class="info-box">
-            <div class="info-label">Tarikh Sebenar Tamat</div>
-            <div class="info-value" id="hdrActualEnd">-</div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-2">
-          <div class="info-box">
-            <div class="info-label">PIC Misi</div>
-            <div class="info-value" id="hdrPic">-</div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-2">
-          <div class="info-box">
-            <div class="info-label">Jenis Misi</div>
-            <div class="info-value" id="hdrType">-</div>
-          </div>
-        </div>
-
-        <div class="col-sm-6 col-xl-2">
-          <div class="info-box">
-            <div class="info-label">Lokasi</div>
-            <div class="info-value" id="hdrLocation">-</div>
-          </div>
-        </div>
-      </div>
     </div>
+
+
+    <div class="mission-overview-body">
+
+      <div class="mission-overview-grid">
+
+        <div class="overview-item">
+          <div class="overview-icon">
+            <i class="bi bi-calendar-check"></i>
+          </div>
+
+          <div class="overview-content">
+            <div class="overview-label">Tarikh Mula</div>
+            <div class="overview-value" id="hdrStartDate">-</div>
+          </div>
+        </div>
+
+
+        <div class="overview-item">
+          <div class="overview-icon">
+            <i class="bi bi-calendar2-event"></i>
+          </div>
+
+          <div class="overview-content">
+            <div class="overview-label">Anggaran Tamat</div>
+            <div class="overview-value" id="hdrEstimatedEnd">-</div>
+          </div>
+        </div>
+
+
+        <div class="overview-item" id="actualEndOverviewItem">
+          <div class="overview-icon">
+            <i class="bi bi-calendar2-check"></i>
+          </div>
+
+          <div class="overview-content">
+            <div class="overview-label">Tarikh Sebenar Tamat</div>
+            <div class="overview-value" id="hdrActualEnd">-</div>
+          </div>
+        </div>
+
+
+        <div class="overview-item">
+          <div class="overview-icon">
+            <i class="bi bi-person-badge"></i>
+          </div>
+
+          <div class="overview-content">
+            <div class="overview-label">PIC Misi</div>
+            <div class="overview-value" id="hdrPic">-</div>
+          </div>
+        </div>
+
+
+        <div class="overview-item">
+          <div class="overview-icon">
+            <i class="bi bi-activity"></i>
+          </div>
+
+          <div class="overview-content">
+            <div class="overview-label">Jenis Misi</div>
+            <div class="overview-value" id="hdrType">-</div>
+          </div>
+        </div>
+
+
+        <div class="overview-item">
+          <div class="overview-icon">
+            <i class="bi bi-geo-alt"></i>
+          </div>
+
+          <div class="overview-content">
+            <div class="overview-label">Lokasi</div>
+            <div class="overview-value" id="hdrLocation">-</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
+
 
   <!-- WIZARD -->
   <div class="card shadow-sm border-0">
@@ -133,7 +534,7 @@ textarea{resize:vertical}
       <ul class="nav nav-pills mb-4" id="missionWizard" role="tablist">
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#step1" type="button">1. Misi</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step2" type="button">2. Aset</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step3" type="button">3. HR</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step3" type="button">3. Sumber Manusia</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step4" type="button">4. Logistik</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step5" type="button">5. MDS</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step6" type="button">6. Laporan Harian</button></li>
@@ -243,8 +644,8 @@ textarea{resize:vertical}
           </div>
 
           <div class="card shadow-sm border-0">
-            <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive table-shell">
+              <table class="table mission-data-table table-hover align-middle mb-0">
                 <thead class="table-light">
                   <tr>
                     <th>Aset</th>
@@ -270,23 +671,23 @@ textarea{resize:vertical}
         <section class="tab-pane fade" id="step3">
           <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
             <div>
-              <h5 class="fw-semibold mb-1">Human Resources</h5>
+              <h5 class="fw-semibold mb-1">Sumber Manusia</h5>
               <p class="text-muted mb-0">Anggota EMT yang diluluskan dan dipautkan kepada misi.</p>
             </div>
 
             <a class="btn btn-outline-secondary" href="hr_edit.html" id="btnEditHr">
-              <i class="bi bi-pencil-square me-1"></i>Urus HR
+              <i class="bi bi-pencil-square me-1"></i>Urus Sumber Manusia
             </a>
           </div>
 
           <div class="card shadow-sm border-0">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
-              <strong>Ringkasan Human Resource EMT</strong>
+              <strong>Ringkasan Sumber Manusia EMT</strong>
               <span class="badge bg-light text-dark border">Klik kategori untuk lihat anggota</span>
             </div>
 
-            <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive table-shell">
+              <table class="table mission-data-table table-hover align-middle mb-0">
                 <tbody id="missionHrTableBody">
                   <tr><td colspan="2" class="text-center text-muted py-3">Memuatkan...</td></tr>
                 </tbody>
@@ -313,8 +714,8 @@ textarea{resize:vertical}
               </a>
             </div>
 
-            <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive table-shell">
+              <table class="table mission-data-table table-hover align-middle mb-0">
                 <thead class="table-light">
                   <tr>
                     <th>Kenderaan</th>
@@ -340,8 +741,8 @@ textarea{resize:vertical}
               </a>
             </div>
 
-            <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive table-shell">
+              <table class="table mission-data-table table-hover align-middle mb-0">
                 <thead class="table-light">
                   <tr>
                     <th>ID Crate</th>
@@ -407,23 +808,24 @@ textarea{resize:vertical}
           </div>
 
           <div class="card shadow-sm border-0">
-            <div class="table-responsive">
-              <table class="table table-hover table-bordered align-middle mb-0">
-                <thead class="table-light">
+            <div class="table-responsive table-shell">
+              <table class="table mission-data-table mds-table table-hover align-middle mb-0">
+                <thead>
                   <tr>
                     <th>Tarikh</th>
                     <th>ID MDS</th>
-                    <th>Nama Pesakit</th>
+                    <th>Pesakit</th>
                     <th>Umur</th>
                     <th>Jantina</th>
-                    <th>Diagnosis / Nota Klinikal</th>
+                    <th>Pengelasan Klinikal</th>
+                    <th>Diagnosis</th>
                     <th>Hasil Rawatan</th>
                     <th class="text-end">Tindakan</th>
                   </tr>
                 </thead>
 
                 <tbody id="mdsWizardTableBody">
-                  <tr><td colspan="8" class="text-center text-muted py-4">Memuatkan rekod MDS...</td></tr>
+                  <tr><td colspan="9" class="text-center text-muted py-4">Memuatkan rekod MDS...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -437,7 +839,7 @@ textarea{resize:vertical}
         <section class="tab-pane fade" id="step6">
 
           <div class="mb-3">
-            <h5 class="fw-semibold mb-1">Basic / Team Daily Report</h5>
+            <h5 class="fw-semibold mb-1">Laporan Harian Pasukan</h5>
             <p class="text-muted mb-0">
               Laporan operasi harian yang dikemaskini oleh PIC Misi. Ia berasingan daripada rekod klinikal MDS.
             </p>
@@ -460,8 +862,8 @@ textarea{resize:vertical}
               <span class="badge bg-secondary" id="dailyHistoryCount">0 laporan</span>
             </div>
 
-            <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
+            <div class="table-responsive table-shell">
+              <table class="table mission-data-table table-hover align-middle mb-0">
                 <thead class="table-light">
                   <tr>
                     <th>Tarikh</th>
@@ -591,7 +993,7 @@ textarea{resize:vertical}
 
                 <div class="col-md-8 d-flex align-items-center">
                   <div class="text-muted small">
-                    Bilangan ini hanya sebagai rujukan. Basic / Team Daily Report tidak bergantung kepada
+                    Bilangan ini hanya sebagai rujukan. Laporan Harian Pasukan tidak bergantung kepada
                     team dalam rekod MDS dan tidak mengubah data klinikal pesakit.
                   </div>
                 </div>
@@ -607,11 +1009,11 @@ textarea{resize:vertical}
               </div>
 
               <div class="risk-grid">
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="51"><span class="risk-code">51.</span>Unexpected death</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="52"><span class="risk-code">52.</span>Notifiable disease</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="53"><span class="risk-code">53.</span>Protection issues</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="54"><span class="risk-code">54.</span>Critical incident to EMT and/or community</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="55"><span class="risk-code">55.</span>Any other issue requiring immediate reporting</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="51"><span class="risk-code">51.</span>Kematian tidak dijangka</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="52"><span class="risk-code">52.</span>Penyakit yang wajib dinotifikasi</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="53"><span class="risk-code">53.</span>Isu perlindungan</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="54"><span class="risk-code">54.</span>Insiden kritikal kepada EMT dan/atau komuniti</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="55"><span class="risk-code">55.</span>Isu lain yang memerlukan laporan segera</label>
               </div>
             </div>
 
@@ -625,10 +1027,10 @@ textarea{resize:vertical}
 
               <div class="risk-grid">
                 <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="56"><span class="risk-code">56.</span>WASH</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="57"><span class="risk-code">57.</span>Community / suspected infectious disease</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="58"><span class="risk-code">58.</span>Environmental risk / exposure</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="59"><span class="risk-code">59.</span>Shelter / Non-food items</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="60"><span class="risk-code">60.</span>Food insecurity</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="57"><span class="risk-code">57.</span>Komuniti / disyaki penyakit berjangkit</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="58"><span class="risk-code">58.</span>Risiko / pendedahan persekitaran</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="59"><span class="risk-code">59.</span>Tempat perlindungan / barangan bukan makanan</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="60"><span class="risk-code">60.</span>Ketidakjaminan makanan</label>
               </div>
             </div>
 
@@ -641,11 +1043,11 @@ textarea{resize:vertical}
               </div>
 
               <div class="risk-grid">
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="61"><span class="risk-code">61.</span>Logistics / operational support</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="62"><span class="risk-code">62.</span>Supply</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="63"><span class="risk-code">63.</span>Human resources</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="64"><span class="risk-code">64.</span>Finance</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="65"><span class="risk-code">65.</span>Others</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="61"><span class="risk-code">61.</span>Logistik / sokongan operasi</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="62"><span class="risk-code">62.</span>Bekalan</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="63"><span class="risk-code">63.</span>Sumber manusia</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="64"><span class="risk-code">64.</span>Kewangan</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="65"><span class="risk-code">65.</span>Lain-lain</label>
               </div>
 
               <div class="mt-3">
@@ -698,14 +1100,14 @@ textarea{resize:vertical}
           </div>
 
           <div class="card shadow-sm border-0">
-            <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
+            <div class="table-responsive table-shell">
+              <table class="table mission-data-table dispensary-table table-hover align-middle mb-0">
+                <thead>
                   <tr>
+                    <th>Tarikh</th>
                     <th>ID MDS</th>
-                    <th>Nama Pesakit</th>
-                    <th>Umur</th>
-                    <th>Jantina</th>
+                    <th>Pesakit</th>
+                    <th>Umur / Jantina</th>
                     <th>Diagnosis / Indikasi</th>
                     <th>Maklumat Ubat Dari MDS</th>
                   </tr>
@@ -727,7 +1129,7 @@ textarea{resize:vertical}
           <div class="mb-3">
             <h5 class="fw-semibold mb-1">Laporan Keseluruhan Misi EMT</h5>
             <p class="text-muted mb-0">
-              Ringkasan pentadbiran yang menggabungkan misi, HR, aset, logistik, MDS dan laporan operasi harian.
+              Ringkasan pentadbiran yang menggabungkan misi, sumber manusia, aset, logistik, MDS dan laporan operasi harian.
             </p>
           </div>
 
@@ -741,7 +1143,7 @@ textarea{resize:vertical}
 
             <div class="col-6 col-xl">
               <div class="report-summary-card">
-                <div class="small text-muted">Anggota HR</div>
+                <div class="small text-muted">Anggota Sumber Manusia</div>
                 <div class="report-summary-value" id="reportHrCount">0</div>
               </div>
             </div>
@@ -775,10 +1177,10 @@ textarea{resize:vertical}
               <div class="row g-2 small text-muted mb-3">
                 <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Maklumat dan status misi</div>
                 <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>PIC Misi</div>
-                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Human Resource</div>
+                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Sumber Manusia</div>
                 <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Aset dan logistik</div>
                 <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Rekod MDS</div>
-                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Basic / Team Daily Reports & Needs/Risks</div>
+                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Laporan Harian Pasukans & Needs/Risks</div>
               </div>
 
               <button class="btn btn-danger" id="btnGenerateMissionPdf" type="button">
@@ -831,21 +1233,21 @@ const STATUS_BADGE = {
 };
 
 const DAILY_RISK_LABELS = {
-  "51":"Unexpected death",
-  "52":"Notifiable disease",
-  "53":"Protection issues",
-  "54":"Critical incident to EMT and/or community",
-  "55":"Any other issue requiring immediate reporting",
+  "51":"Kematian tidak dijangka",
+  "52":"Penyakit yang wajib dinotifikasi",
+  "53":"Isu perlindungan",
+  "54":"Insiden kritikal kepada EMT dan/atau komuniti",
+  "55":"Isu lain yang memerlukan laporan segera",
   "56":"WASH",
-  "57":"Community / suspected infectious disease",
-  "58":"Environmental risk / exposure",
-  "59":"Shelter / Non-food items",
-  "60":"Food insecurity",
-  "61":"Logistics / operational support",
-  "62":"Supply",
-  "63":"Human resources",
-  "64":"Finance",
-  "65":"Others"
+  "57":"Komuniti / disyaki penyakit berjangkit",
+  "58":"Risiko / pendedahan persekitaran",
+  "59":"Tempat perlindungan / barangan bukan makanan",
+  "60":"Ketidakjaminan makanan",
+  "61":"Logistik / sokongan operasi",
+  "62":"Bekalan",
+  "63":"Sumber manusia",
+  "64":"Kewangan",
+  "65":"Lain-lain"
 };
 
 const DAILY_STORAGE_KEY = "myemt_daily_reports_v1";
@@ -881,9 +1283,41 @@ function formatDate(value){
   return p.length===3 ? `${p[2]}/${p[1]}/${p[0]}` : String(value);
 }
 
+const MDS_OUTCOME_BM = {
+  "Discharge without medical follow-up":"Discaj tanpa susulan perubatan",
+  "Discharge with medical follow-up":"Discaj dengan susulan perubatan",
+  "Discharge against medical advice":"Discaj bertentangan nasihat perubatan",
+  "Referral":"Rujukan",
+  "Admission":"Kemasukan ke wad",
+  "Dead on arrival":"Kematian semasa ketibaan",
+  "Death within facility *":"Kematian dalam fasiliti",
+  "Death within facility":"Kematian dalam fasiliti",
+  "Requiring long term rehabilitation *":"Memerlukan pemulihan jangka panjang",
+  "Requiring long term rehabilitation":"Memerlukan pemulihan jangka panjang"
+};
+
+
+function translateMdsOutcome(value){
+  const raw=String(value ?? "").trim();
+
+  if(!raw || raw==="-"){
+    return "-";
+  }
+
+  return MDS_OUTCOME_BM[raw] || raw;
+}
+
+
 function outcomeText(record){
-  if(Array.isArray(record.outcomes) && record.outcomes.length) return record.outcomes.join(", ");
-  return record.outcome || "-";
+  if(Array.isArray(record.outcomes) && record.outcomes.length){
+    return record.outcomes
+      .map(translateMdsOutcome)
+      .join(", ");
+  }
+
+  return translateMdsOutcome(
+    record.outcome
+  );
 }
 
 function getDiagnosisText(record){
@@ -904,6 +1338,71 @@ function medicationSummary(record){
   }
   return record.currentMedication || "-";
 }
+
+function genderDisplay(value){
+  const map={
+    "Male":"Lelaki",
+    "Female non-preg.":"Perempuan tidak hamil",
+    "Female pregnant":"Perempuan hamil"
+  };
+  return map[value] || value || "-";
+}
+
+function ageDisplay(record){
+  if(record.age===undefined || record.age===null || record.age==="") return "-";
+  const unit=record.ageUnit==="Month" ? "Bulan" : record.ageUnit==="Year" ? "Tahun" : "";
+  return `${record.age}${unit ? " "+unit : ""}`;
+}
+
+function normalizedArray(value){
+  if(Array.isArray(value)) return value.filter(Boolean);
+  if(value===undefined || value===null || value==="" || value==="-") return [];
+  if(typeof value==="string"){
+    const trimmed=value.trim();
+    try{
+      const parsed=JSON.parse(trimmed);
+      if(Array.isArray(parsed)) return parsed.filter(Boolean);
+    }catch(_){}
+    return trimmed ? [trimmed] : [];
+  }
+  return [value];
+}
+
+function clinicalCategories(record){
+  const categories=[];
+  if(normalizedArray(record.trauma).length) categories.push("Trauma");
+  if(normalizedArray(record.infectiousDiseases).length) categories.push("Penyakit Berjangkit");
+  if(normalizedArray(record.additionalCases).length) categories.push("Kes Tambahan");
+  if(record.emergency && String(record.emergency)!=="-") categories.push("Kecemasan");
+  if(normalizedArray(record.otherKeyDiseases).length) categories.push("Penyakit Penting Lain");
+  if(!categories.length && record.clinicalClass && record.clinicalClass!=="-"){
+    categories.push(record.clinicalClass);
+  }
+  return [...new Set(categories)];
+}
+
+function clinicalBadgeClass(label){
+  const map={
+    "Trauma":"bg-danger-subtle text-danger border border-danger-subtle",
+    "Penyakit Berjangkit":"bg-warning-subtle text-warning-emphasis border border-warning-subtle",
+    "Kes Tambahan":"bg-info-subtle text-info-emphasis border border-info-subtle",
+    "Kecemasan":"bg-primary-subtle text-primary border border-primary-subtle",
+    "Penyakit Penting Lain":"bg-secondary-subtle text-secondary border border-secondary-subtle",
+    "Lain-lain":"bg-light text-dark border"
+  };
+  return map[label] || "bg-light text-dark border";
+}
+
+function clinicalSummaryHtml(record){
+  const categories=clinicalCategories(record);
+  if(!categories.length) return '<span class="text-muted">-</span>';
+  return categories.map(label=>`
+    <span class="clinical-badge ${clinicalBadgeClass(label)}">
+      ${escHtml(label)}
+    </span>
+  `).join("");
+}
+
 
 function missionSpecific(list,id){
   return (list||[]).filter(item=>
@@ -992,13 +1491,24 @@ function renderMission(){
   document.getElementById("hdrStartDate").textContent=formatDate(m.startDate);
   document.getElementById("hdrEstimatedEnd").textContent=formatDate(m.estimatedEnd);
   document.getElementById("hdrActualEnd").textContent=formatDate(m.actualEnd);
+
+  const actualEndOverviewItem=
+    document.getElementById("actualEndOverviewItem");
+
+  if(actualEndOverviewItem){
+    actualEndOverviewItem.classList.toggle(
+      "actual-end-empty",
+      !m.actualEnd
+    );
+  }
+
   document.getElementById("hdrPic").textContent=picName;
   document.getElementById("hdrType").textContent=m.type || "-";
   document.getElementById("hdrLocation").textContent=m.location || "-";
 
   const hdrStatus=document.getElementById("hdrStatus");
   hdrStatus.textContent=m.status || "-";
-  hdrStatus.className=`badge fs-6 ${badgeCls}`;
+  hdrStatus.className="badge";
 
   document.getElementById("s1Name").textContent=m.name || "-";
   document.getElementById("s1Type").textContent=m.type || "-";
@@ -1087,30 +1597,66 @@ function renderMdsWizard(){
   document.getElementById("mdsReferralCount").textContent=list.filter(isReferral).length;
 
   if(!list.length){
-    body.innerHTML=`<tr><td colspan="8" class="text-center text-muted py-4">Tiada rekod MDS untuk misi ini.</td></tr>`;
+    body.innerHTML=`<tr><td colspan="9" class="text-center text-muted py-4">Tiada rekod MDS untuk misi ini.</td></tr>`;
     return;
   }
 
   body.innerHTML=list
     .slice()
-    .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
-    .map(r=>`
-      <tr>
-        <td>${escHtml(formatDate(r.date))}</td>
-        <td><span class="badge bg-light text-dark border">${escHtml(r.id||"-")}</span></td>
-        <td>${escHtml(r.patientName||"-")}</td>
-        <td>${escHtml(r.age ?? "-")}</td>
-        <td>${escHtml(r.gender||"-")}</td>
-        <td>${escHtml(getDiagnosisText(r))}</td>
-        <td>${escHtml(outcomeText(r))}</td>
-        <td class="text-end">
-          <a class="btn btn-sm btn-outline-primary"
-             href="emt_mdsview.html?id=${encodeURIComponent(r.id || "")}">
-             Lihat
-          </a>
-        </td>
-      </tr>
-    `).join("");
+    .sort((a,b)=>
+      String(b.date || b.createdAt || "").localeCompare(String(a.date || a.createdAt || ""))
+    )
+    .map(r=>{
+      const viewParams=new URLSearchParams();
+      viewParams.set("id",r.id || "");
+      viewParams.set("missionId",r.missionId || missionId || "");
+      viewParams.set("userType","admin");
+
+      return `
+        <tr>
+          <td><div class="table-primary-text">${escHtml(formatDate(r.date))}</div></td>
+
+          <td>
+            <span class="table-id-badge">${escHtml(r.id || "-")}</span>
+          </td>
+
+          <td class="patient-cell">
+            <div class="table-primary-text">${escHtml(r.patientName || "-")}</div>
+            ${
+              r.nickname
+                ? `<div class="table-secondary-text">Nama panggilan: ${escHtml(r.nickname)}</div>`
+                : ""
+            }
+          </td>
+
+          <td>
+            <div class="table-primary-text">${escHtml(ageDisplay(r))}</div>
+            ${
+              r.ageGroup
+                ? `<div class="table-secondary-text">${escHtml(r.ageGroup)}</div>`
+                : ""
+            }
+          </td>
+
+          <td>${escHtml(genderDisplay(r.gender))}</td>
+
+          <td class="clinical-cell">${clinicalSummaryHtml(r)}</td>
+
+          <td class="diagnosis-cell">${escHtml(getDiagnosisText(r))}</td>
+
+          <td>
+            <span class="status-soft">${escHtml(outcomeText(r))}</span>
+          </td>
+
+          <td class="text-end">
+            <a class="btn btn-sm btn-outline-primary"
+               href="emt_mdsview.html?${viewParams.toString()}">
+              <i class="bi bi-eye me-1"></i>Papar
+            </a>
+          </td>
+        </tr>
+      `;
+    }).join("");
 }
 
 
@@ -1119,7 +1665,12 @@ function renderMdsWizard(){
 ========================================================= */
 function renderDispensaryPreview(){
   const body=document.getElementById("dispensaryPreviewBody");
-  const list=missionReportData.mds;
+
+  const list=missionReportData.mds
+    .slice()
+    .sort((a,b)=>
+      String(b.date || b.createdAt || "").localeCompare(String(a.date || a.createdAt || ""))
+    );
 
   if(!list.length){
     body.innerHTML=`<tr><td colspan="6" class="text-center text-muted py-4">Tiada rekod MDS untuk dirujuk.</td></tr>`;
@@ -1128,12 +1679,31 @@ function renderDispensaryPreview(){
 
   body.innerHTML=list.map(r=>`
     <tr>
-      <td>${escHtml(r.id||"-")}</td>
-      <td>${escHtml(r.patientName||"-")}</td>
-      <td>${escHtml(r.age ?? "-")}</td>
-      <td>${escHtml(r.gender||"-")}</td>
+      <td>
+        <div class="table-primary-text">${escHtml(formatDate(r.date))}</div>
+      </td>
+
+      <td>
+        <span class="table-id-badge">${escHtml(r.id || "-")}</span>
+      </td>
+
+      <td>
+        <div class="table-primary-text">${escHtml(r.patientName || "-")}</div>
+        ${
+          r.nickname
+            ? `<div class="table-secondary-text">${escHtml(r.nickname)}</div>`
+            : ""
+        }
+      </td>
+
+      <td>
+        <div class="table-primary-text">${escHtml(ageDisplay(r))}</div>
+        <div class="table-secondary-text">${escHtml(genderDisplay(r.gender))}</div>
+      </td>
+
       <td>${escHtml(getDiagnosisText(r))}</td>
-      <td>${escHtml(medicationSummary(r))}</td>
+
+      <td class="medicine-cell">${escHtml(medicationSummary(r))}</td>
     </tr>
   `).join("");
 }
@@ -1194,8 +1764,8 @@ function renderHrWizard(){
           <div class="collapse" id="${collapseId}">
             <div class="bg-light border-top border-bottom px-4 py-2">
               ${people.length ? `
-                <div class="table-responsive">
-                  <table class="table table-sm table-borderless align-middle mb-0">
+                <div class="table-responsive table-shell">
+                  <table class="table mission-data-table table-sm table-borderless align-middle mb-0">
                     <thead>
                       <tr class="text-muted small">
                         <th>Nama</th>
@@ -1268,7 +1838,7 @@ function renderAssetWizard(){
       <td>${escHtml(a.name || a.id || "-")}</td>
       <td>${escHtml(a.category || "-")}</td>
       <td class="text-center">${escHtml(a.quantity ?? "-")}</td>
-      <td>${escHtml(a.status || "-")}</td>
+      <td><span class="status-soft">${escHtml(a.status || "-")}</span></td>
       <td>${escHtml(a.location || "-")}</td>
       <td class="text-end">-</td>
     </tr>
@@ -1291,7 +1861,7 @@ function renderLogisticsWizard(){
         <td>${escHtml(v.name || v.vehicleName || "-")}</td>
         <td>${escHtml(v.plate || v.registrationNo || "-")}</td>
         <td>${escHtml(v.passengerCapacity ?? v.loadCapacity ?? "-")}</td>
-        <td>${escHtml(v.status || "-")}</td>
+        <td><span class="status-soft">${escHtml(v.status || "-")}</span></td>
         <td>${escHtml(v.driver || "-")}</td>
         <td class="text-end">-</td>
       </tr>
@@ -1306,7 +1876,7 @@ function renderLogisticsWizard(){
         <td>${escHtml(s.id || "-")}</td>
         <td>${escHtml(s.type || s.name || "-")}</td>
         <td>${escHtml(s.location || "-")}</td>
-        <td>${escHtml(s.status || "-")}</td>
+        <td><span class="status-soft">${escHtml(s.status || "-")}</span></td>
         <td class="text-end">-</td>
       </tr>
     `).join("");
@@ -1798,7 +2368,7 @@ async function generateMissionPdf(){
     });
     afterTable();
 
-    addTitle("2. Human Resource");
+    addTitle("2. Sumber Manusia");
     const hrRows=missionReportData.hrMembers.map(x=>[
       pdfText(x.member?.id || x.memberId),
       pdfText(x.member?.name || x.memberName),
@@ -1894,7 +2464,7 @@ async function generateMissionPdf(){
     });
     afterTable();
 
-    addTitle("6. Basic / Team Daily Reports");
+    addTitle("6. Laporan Harian Pasukans");
     const dailyRows=missionReportData.dailyReports.map(r=>[
       pdfText(formatDate(r.reportDate)),
       pdfText(r.teamName),

@@ -10,7 +10,42 @@
     <link href="assets/css/main.css" rel="stylesheet">
 
     <style>
-      body{background:#f4f6f9}
+      html,
+      body{
+        min-height:100%;
+      }
+
+      body{
+        min-height:100vh;
+        display:flex;
+        flex-direction:column;
+        background:#f4f6f9;
+      }
+
+      #header,
+      #footer{
+        flex:0 0 auto;
+      }
+
+      .page-shell{
+        flex:1 0 auto;
+        display:flex;
+        flex-direction:column;
+        width:100%;
+      }
+
+      .page-shell > .row{
+        flex:1 0 auto;
+      }
+
+      #footer{
+        margin-top:auto;
+        width:100%;
+      }
+
+      #footer > *{
+        margin-bottom:0 !important;
+      }
       .nav-pills .nav-link{font-weight:700;color:#536579}
       .nav-pills .nav-link.active{background:#0d6efd}
       .metric-card{border:0;border-radius:14px;box-shadow:0 .25rem .75rem rgba(0,0,0,.06)}
@@ -21,6 +56,85 @@
       .table-card{border:0;border-radius:14px;box-shadow:0 .25rem .75rem rgba(0,0,0,.06);overflow:hidden}
       .section-subtitle{color:#6c757d;font-size:.9rem}
       .filter-row{background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:1rem}
+
+      /* Senarai misi */
+      .mission-table thead th{
+        font-size:.78rem;
+        color:#6c757d;
+        font-weight:800;
+        text-transform:uppercase;
+        letter-spacing:.02em;
+        white-space:nowrap;
+        vertical-align:middle;
+      }
+
+      .mission-table tbody td{
+        vertical-align:middle;
+        padding:.9rem .75rem;
+      }
+
+      .mission-row:hover{
+        background:#f8fbff;
+      }
+
+      .mission-name{
+        font-weight:800;
+        color:#1f2937;
+        margin-bottom:.18rem;
+      }
+
+      .mission-id{
+        font-size:.75rem;
+        color:#8a94a3;
+      }
+
+      .mission-meta{
+        font-size:.78rem;
+        color:#6c757d;
+        margin-top:.15rem;
+      }
+
+      .mission-pic{
+        display:flex;
+        align-items:center;
+        gap:.5rem;
+      }
+
+      .pic-avatar{
+        width:32px;
+        height:32px;
+        display:grid;
+        place-items:center;
+        border-radius:50%;
+        background:#e9f2ff;
+        color:#0d6efd;
+        flex:0 0 32px;
+      }
+
+      .date-range{
+        min-width:145px;
+      }
+
+      .date-range .date-main{
+        font-weight:700;
+      }
+
+      .applicant-count{
+        min-width:36px;
+        height:30px;
+        padding:0 .55rem;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:999px;
+        background:#eef4ff;
+        color:#0d6efd;
+        font-weight:800;
+      }
+
+      .mission-actions{
+        white-space:nowrap;
+      }
     </style>
 </head>
 
@@ -28,7 +142,7 @@
 
 <div id="header"></div>
 
-<div class="container-fluid">
+<div class="container-fluid page-shell">
   <div class="row">
 
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
@@ -248,7 +362,7 @@
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
               <h5 class="mb-1 fw-semibold">Senarai Rekod Misi EMT</h5>
-              <small class="text-muted">Semua rekod misi yang tersedia dalam sistem.</small>
+              <small class="text-muted">Semua misi EMT yang direkodkan, termasuk PIC, tempoh operasi dan status semasa.</small>
             </div>
 
             <a href="mission_add.html" class="btn btn-primary">
@@ -260,7 +374,7 @@
             <div class="row g-3">
               <div class="col-md-4">
                 <label class="form-label">Carian Misi</label>
-                <input type="text" id="searchMission" class="form-control" placeholder="Cari nama misi / lokasi">
+                <input type="text" id="searchMission" class="form-control" placeholder="Cari nama misi / lokasi / PIC">
               </div>
 
               <div class="col-md-3">
@@ -288,29 +402,34 @@
 
           <div class="card table-card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
-              <strong>Senarai Misi EMT</strong>
+              <div>
+                <strong>Senarai Misi EMT</strong>
+                <div class="small text-muted">
+                  Disusun mengikut anggaran tamat paling latest.
+                </div>
+              </div>
               <span class="badge bg-primary" id="recordCount">0 rekod</span>
             </div>
 
             <div class="table-responsive">
-              <table class="table table-hover align-middle mb-0">
+              <table class="table mission-table table-hover align-middle mb-0">
                 <thead class="table-light">
                   <tr>
-                    <th>Nama Misi</th>
-                    <th>Jenis</th>
-                    <th>Lokasi</th>
-                    <th>Tarikh Mula</th>
-                    <th>Anggaran Tamat</th>
-                    <th>Tarikh Sebenar Tamat</th>
+                    <th>Misi</th>
+                    <th>Jenis & Lokasi</th>
+                    <th>PIC</th>
+                    <th>Tempoh Misi</th>
                     <th>Status</th>
-                    <th>Pemohon</th>
+                    <!--
+                    <th class="text-center">Pemohon</th>
+                    -->
                     <th class="text-center">Tindakan</th>
                   </tr>
                 </thead>
 
                 <tbody id="tbodyMissions">
                   <tr>
-                    <td colspan="9" class="text-center text-muted py-4">Memuatkan...</td>
+                    <td colspan="6" class="text-center text-muted py-4">Memuatkan...</td>
                   </tr>
                 </tbody>
               </table>
@@ -504,58 +623,296 @@ function populateTypeFilter(){
     types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
 }
 
-function renderRecords(){
-  const search = document.getElementById('searchMission').value.trim().toLowerCase();
-  const status = document.getElementById('filterStatus').value;
-  const type = document.getElementById('filterType').value;
+function formatMissionDate(value){
+  if (!value) return '-';
 
-  const filtered = missions.filter(m=>{
-    const text = `${m.name || ''} ${m.location || ''} ${m.state || ''}`.toLowerCase();
-    return (!search || text.includes(search))
-      && (!status || m.status === status)
-      && (!type || m.type === type);
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())){
+    return esc(value);
+  }
+
+  return date.toLocaleDateString('ms-MY',{
+    day:'2-digit',
+    month:'2-digit',
+    year:'numeric'
   });
+}
 
-  document.getElementById('recordCount').textContent = `${filtered.length} rekod`;
 
-  const tbody = document.getElementById('tbodyMissions');
+function getMissionPic(mission){
+  return (
+    mission.picName ||
+    mission.pic ||
+    mission.pic_name ||
+    mission.leaderName ||
+    mission.leader ||
+    mission.teamLeader ||
+    '-'
+  );
+}
+
+
+function getMissionLocation(mission){
+  return (
+    mission.location ||
+    mission.state ||
+    mission.negeri ||
+    '-'
+  );
+}
+
+
+function missionPeriodHtml(mission){
+  const start =
+    formatMissionDate(
+      mission.startDate
+    );
+
+  const estimated =
+    formatMissionDate(
+      mission.estimatedEnd
+    );
+
+  const actual =
+    formatMissionDate(
+      mission.actualEnd
+    );
+
+  let html = `
+    <div class="date-range">
+      <div class="date-main">
+        ${start}
+      </div>
+  `;
+
+  if (
+    mission.status === 'Selesai' &&
+    mission.actualEnd
+  ){
+    html += `
+      <div class="mission-meta">
+        Tamat: ${actual}
+      </div>
+    `;
+  } else if (mission.estimatedEnd){
+    html += `
+      <div class="mission-meta">
+        <span class="fw-semibold">Anggaran tamat:</span> ${estimated}
+      </div>
+    `;
+  }
+
+  html += `</div>`;
+
+  return html;
+}
+
+
+function renderRecords(){
+  const search =
+    document.getElementById(
+      'searchMission'
+    ).value.trim().toLowerCase();
+
+  const status =
+    document.getElementById(
+      'filterStatus'
+    ).value;
+
+  const type =
+    document.getElementById(
+      'filterType'
+    ).value;
+
+
+  const filtered =
+    missions.filter(m => {
+
+      const text = `
+        ${m.id || ''}
+        ${m.name || ''}
+        ${m.type || ''}
+        ${getMissionLocation(m)}
+        ${getMissionPic(m)}
+      `.toLowerCase();
+
+      return (
+        (!search || text.includes(search)) &&
+        (!status || m.status === status) &&
+        (!type || m.type === type)
+      );
+    })
+    .sort((a,b) => {
+      const dateA = String(
+        a.estimatedEnd ||
+        a.actualEnd ||
+        a.startDate ||
+        ''
+      );
+
+      const dateB = String(
+        b.estimatedEnd ||
+        b.actualEnd ||
+        b.startDate ||
+        ''
+      );
+
+      return dateB.localeCompare(dateA);
+    });
+
+
+  document.getElementById(
+    'recordCount'
+  ).textContent =
+    `${filtered.length} rekod`;
+
+
+  const tbody =
+    document.getElementById(
+      'tbodyMissions'
+    );
+
 
   if (!filtered.length){
-    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-4">Tiada rekod ditemui.</td></tr>`;
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6"
+            class="text-center text-muted py-4">
+          Tiada rekod misi ditemui.
+        </td>
+      </tr>
+    `;
+
     return;
   }
 
-  tbody.innerHTML = filtered.map(m=>{
-    const s = MISSION_STATUS[m.status] || {badge:'bg-secondary',label:m.status || '-'};
 
-    const actualEnd =
-      m.status === 'Selesai'
-        ? (m.actualEnd || '<span class="text-muted">Belum ditetapkan</span>')
-        : '<span class="text-muted">-</span>';
+  tbody.innerHTML =
+    filtered.map(m => {
 
-    return `
-      <tr>
-        <td class="fw-semibold">${esc(m.name || '-')}</td>
-        <td>${esc(m.type || '-')}</td>
-        <td>${esc(m.location || m.state || '-')}</td>
-        <td>${esc(m.startDate || '-')}</td>
-        <td>${esc(m.estimatedEnd || '-')}</td>
-        <td>${actualEnd}</td>
-        <td><span class="badge ${s.badge}">${esc(s.label)}</span></td>
-        <td>${getApplicantCount(m.id)}</td>
-        <td class="text-center">
-          <a href="mission_detail.html?id=${encodeURIComponent(m.id)}"
-             class="btn btn-sm btn-outline-primary me-1">
-             Papar
-          </a>
-          <a href="mission_edit.html?id=${encodeURIComponent(m.id)}"
-             class="btn btn-sm btn-outline-secondary">
-             Kemaskini
-          </a>
-        </td>
-      </tr>`;
-  }).join('');
+      const s =
+        MISSION_STATUS[m.status] ||
+        {
+          badge:'bg-secondary',
+          label:m.status || '-'
+        };
+
+
+      // Dikekalkan untuk kegunaan semula nanti.
+      // Kolum Pemohon masih disembunyikan dalam HTML.
+      const applicantCount =
+        getApplicantCount(
+          m.id
+        );
+
+
+      const pic =
+        getMissionPic(
+          m
+        );
+
+
+      const location =
+        getMissionLocation(
+          m
+        );
+
+
+      return `
+        <tr class="mission-row">
+
+          <td>
+            <div class="mission-name">
+              ${esc(m.name || '-')}
+            </div>
+
+            <div class="mission-id">
+              ${esc(m.id || '-')}
+            </div>
+          </td>
+
+
+          <td>
+            <div class="fw-semibold">
+              ${esc(m.type || 'Tidak dinyatakan')}
+            </div>
+
+            <div class="mission-meta">
+              <i class="bi bi-geo-alt me-1"></i>
+              ${esc(location)}
+            </div>
+          </td>
+
+
+          <td>
+            <div class="mission-pic">
+
+              <span class="pic-avatar">
+                <i class="bi bi-person-fill"></i>
+              </span>
+
+              <div>
+                <div class="fw-semibold">
+                  ${esc(pic)}
+                </div>
+
+                <div class="mission-meta">
+                  Person In Charge
+                </div>
+              </div>
+
+            </div>
+          </td>
+
+
+          <td>
+            ${missionPeriodHtml(m)}
+          </td>
+
+
+          <td>
+            <span class="badge ${s.badge}">
+              ${esc(s.label)}
+            </span>
+          </td>
+
+
+          <!--
+          <td class="text-center">
+            <span class="applicant-count">
+              ${applicantCount}
+            </span>
+          </td>
+          -->
+
+
+          <td class="text-center mission-actions">
+
+            <a
+              href="mission_detail.html?id=${encodeURIComponent(m.id)}"
+              class="btn btn-sm btn-outline-primary me-1"
+            >
+              <i class="bi bi-eye me-1"></i>
+              Papar
+            </a>
+
+            <a
+              href="mission_edit.html?id=${encodeURIComponent(m.id)}"
+              class="btn btn-sm btn-outline-secondary"
+            >
+              <i class="bi bi-pencil-square me-1"></i>
+              Kemaskini
+            </a>
+
+          </td>
+
+        </tr>
+      `;
+    })
+    .join('');
 }
+
 
 async function loadDashboard(){
   try{
@@ -574,9 +931,15 @@ async function loadDashboard(){
     renderRecords();
 
   }catch(err){
-    console.error(err);
+    console.error("Gagal memuatkan Pengurusan Misi EMT:", err);
+
     document.getElementById('tbodyMissions').innerHTML =
-      `<tr><td colspan="9" class="text-center text-danger py-4">Gagal memuatkan data.</td></tr>`;
+      `<tr>
+        <td colspan="6" class="text-center text-danger py-4">
+          <i class="bi bi-exclamation-triangle me-1"></i>
+          Gagal memuatkan data.
+        </td>
+      </tr>`;
   }
 }
 
