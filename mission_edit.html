@@ -1,222 +1,454 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <title>MISSION ADD</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Kemaskini Misi EMT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Main CSS -->
-    <link href="assets/css/main.css" rel="stylesheet">
-
-    <style>
-    .mds-card{
-        border:1px solid #dee2e6;
-        border-radius:12px;
-        overflow:hidden;
-        margin-bottom:1rem;
-        box-shadow:0 .125rem .25rem rgba(0,0,0,.075);
+  <style>
+    body{
+      background:#f4f6f9;
     }
 
-    .mds-card .card-header{
-        background:#0d6efd;
-        color:#fff;
-        font-weight:600;
-        padding:.75rem 1rem;
+    .form-card{
+      border:0;
+      border-radius:14px;
+      box-shadow:0 .25rem .75rem rgba(0,0,0,.06);
     }
 
-    .mds-card .card-body{
-        background:#fff;
-        padding:1rem;
+    .section-card{
+      border:1px solid #e4e8ee;
+      border-radius:12px;
+      padding:1.25rem;
+      background:#fff;
+      margin-bottom:1.25rem;
     }
 
-    .form-check{
-        margin-bottom:.5rem;
+    .section-heading{
+      display:flex;
+      align-items:center;
+      gap:.65rem;
+      margin-bottom:1rem;
+      padding-bottom:.75rem;
+      border-bottom:1px solid #e9ecef;
+    }
+
+    .section-icon{
+      width:38px;
+      height:38px;
+      border-radius:10px;
+      display:grid;
+      place-items:center;
+      background:#e9f2ff;
+      color:#0d6efd;
+      font-size:1.1rem;
+      flex:0 0 auto;
+    }
+
+    .section-heading h6{
+      margin:0;
+      font-weight:800;
+    }
+
+    .section-heading small{
+      color:#6c757d;
     }
 
     .form-label{
-        font-weight:600;
+      font-weight:600;
     }
 
-    .badge-soft{
-        background:#e9ecef;
-        color:#495057;
-        font-weight:500;
+    .required::after{
+      content:" *";
+      color:#dc3545;
     }
 
-    .section-title{
-        font-size:1.1rem;
-        font-weight:700;
-        margin-bottom:1rem;
-        padding-bottom:.5rem;
-        border-bottom:2px solid #dee2e6;
+    .readonly-field{
+      background:#f8f9fa!important;
     }
 
     textarea{
-        resize:vertical;
+      resize:vertical;
     }
-    </style>
 
+    .admin-note{
+      border:1px solid #cfe2ff;
+      background:#f5f9ff;
+      border-radius:12px;
+      padding:1rem;
+    }
+
+    .status-note{
+      border:1px solid #dee2e6;
+      border-radius:10px;
+      background:#f8f9fa;
+      padding:.75rem 1rem;
+    }
+
+    .pic-preview{
+      display:none;
+      border:1px solid #dee2e6;
+      border-radius:10px;
+      padding:.9rem 1rem;
+      background:#f8f9fa;
+    }
+
+    .pic-preview.show{
+      display:block;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div id="header"></div>
 
 <div class="container-fluid">
   <div class="row">
 
-    <!-- SIDEBAR -->
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-<!-- MAIN CONTENT -->
-<main class="col-md-9 col-lg-10 px-4 py-4">
+    <main class="col-md-9 col-lg-10 px-4 py-4">
 
-<!-- PAGE HEADER -->
-<div class="d-flex justify-content-between align-items-center mb-4">
+      <!-- PAGE HEADER -->
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+        <div>
+          <h4 class="mb-1 fw-bold">Kemaskini Maklumat Misi EMT</h4>
+          <small class="text-muted">
+            Kemaskini maklumat operasi, tempoh dan PIC misi EMT.
+          </small>
+        </div>
 
-    <div>
-    <h4 class="mb-1">Kemaskini Maklumat Misi EMT</h4>
+        <a href="emt_crud.html" id="btnBack" class="btn btn-primary">
+          <i class="bi bi-arrow-left me-1"></i> Kembali
+        </a>
+      </div>
 
-    <small class="text-muted">
-        Sila semak dan kemaskini maklumat misi dengan tepat sebelum disimpan.
-    </small>
-    </div>
+      <!-- ADMIN NOTICE -->
+      <div class="admin-note mb-4">
+        <div class="d-flex gap-3">
+          <i class="bi bi-shield-lock-fill text-primary fs-4"></i>
 
-    <!-- BUTTON BACK -->
-    <div class="mb-3 d-flex justify-content-end">
-    <a href="mission_detail.html" id="btnBack" class="btn btn-primary">
-        <i class="bi bi-arrow-left me-1"></i> Kembali
-    </a>
-    </div>
-
-</div>
-
-<!-- FORM CARD -->
-<div class="card shadow-sm mb-4">
-    <div class="card-body">
-
-    <form id="editForm">
-
-        <!-- STEP CONTENT -->
-        <div class="tab-content">
-
-        <!-- STEP 1: MISSION INFO -->
-        <div class="tab-pane fade show active" id="step1">
-
-            <h5 class="mb-3 fw-semibold">Maklumat Misi</h5>
-
-            <div class="row g-3">
-
-            <div class="col-md-6">
-                <label class="form-label">Nama Misi</label>
-                <input type="text" id="missionName" class="form-control" required>
+          <div>
+            <div class="fw-bold">Pentadbir KKM</div>
+            <div class="small text-muted">
+              Pentadbir boleh mengemaskini maklumat misi dan menukar
+              <strong>PIC Misi</strong>. PIC yang ditetapkan bertanggungjawab
+              terhadap Basic / Team Daily Report bagi misi ini.
             </div>
+          </div>
+        </div>
+      </div>
 
-            <div class="col-md-3">
-                <label class="form-label">Tarikh Mula</label>
-                <input type="date" id="startDate" class="form-control" required>
-            </div>
+      <div class="card form-card">
+        <div class="card-body p-4">
 
-            <div class="col-md-3">
-                <label class="form-label">Anggaran Tamat</label>
-                <input type="date" id="estimatedEnd" class="form-control" required>
-            </div>
+          <form id="editForm">
 
-            <div class="col-md-3">
-                <label class="form-label">Tarikh Selesai</label>
-                <input type="date" id="actualEnd" class="form-control">
-                <small class="text-muted">Kosong jika masih berjalan</small>
-            </div>
+            <!-- =====================================================
+                 1. MAKLUMAT MISI
+            ====================================================== -->
+            <div class="section-card">
 
-            <div class="col-md-3">
-                <label class="form-label">Status Misi</label>
+              <div class="section-heading">
+                <div class="section-icon">
+                  <i class="bi bi-briefcase-fill"></i>
+                </div>
 
-                <select class="form-select" id="missionStatus" required>
-                    <option value="Perancangan">Dalam Perancangan</option>
-                    <option value="Sedang Dijalankan">Sedang Dijalankan</option>
-                    <option value="Selesai">Selesai</option>
-                </select>
+                <div>
+                  <h6>1. Maklumat Misi</h6>
+                  <small>Maklumat asas operasi EMT.</small>
+                </div>
+              </div>
 
-                <small class="text-muted">
-                    Status semasa operasi EMT
-                </small>
-            </div>
+              <div class="row g-3">
 
-            </div>
+                <div class="col-md-7">
+                  <label for="missionName" class="form-label required">
+                    Nama Misi
+                  </label>
 
-            <hr class="my-4">
+                  <input
+                    type="text"
+                    id="missionName"
+                    class="form-control"
+                    required
+                  >
+                </div>
 
-            <!-- OPTIONAL EXTRA INFO -->
-            <h6 class="fw-semibold mb-3">Maklumat Tambahan</h6>
+                <div class="col-md-5">
+                  <label for="jenisMisi" class="form-label required">
+                    Jenis Misi
+                  </label>
 
-            <div class="row g-3">
-
-            <div class="col-md-6">
-                <label class="form-label">Nama Ketua Misi</label>
-                <input type="text" id="leader" class="form-control">
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">Lokasi Misi</label>
-                <input type="text" id="location" class="form-control">
-            </div>
-
-            <div class="col-md-6">
-                <label class="form-label">Jenis Misi</label>
-
-                <select class="form-select" id="jenisMisi" onchange="toggleJenisLain()">
+                  <select id="jenisMisi" class="form-select" required>
+                    <option value="">-- Pilih Jenis Misi --</option>
                     <option value="Bantuan Banjir">Bantuan Banjir</option>
                     <option value="Bantuan Gempa Bumi">Bantuan Gempa Bumi</option>
                     <option value="Penghantaran Perubatan">Penghantaran Perubatan</option>
                     <option value="Sokongan Kecemasan">Sokongan Kecemasan</option>
                     <option value="lain">Lain-lain</option>
-                </select>
+                  </select>
+                </div>
+
+                <div class="col-md-7 d-none" id="jenisMisiLainBox">
+                  <label for="jenisMisiLain" class="form-label">
+                    Nyatakan Jenis Misi
+                  </label>
+
+                  <input
+                    type="text"
+                    id="jenisMisiLain"
+                    class="form-control"
+                    placeholder="Sila nyatakan jenis misi"
+                  >
+                </div>
+
+                <div class="col-md-5">
+                  <label for="missionStatus" class="form-label required">
+                    Status Misi
+                  </label>
+
+                  <select id="missionStatus" class="form-select" required>
+                    <option value="Perancangan">Dalam Perancangan</option>
+                    <option value="Sedang Dijalankan">Sedang Dijalankan</option>
+                    <option value="Selesai">Selesai</option>
+                  </select>
+                </div>
+
+              </div>
             </div>
 
-            <div class="col-md-6 d-none" id="jenisMisiLainBox">
-                <label class="form-label">Nyatakan Jenis Misi</label>
-                <input type="text" id="jenisMisiLain" class="form-control"
-                    placeholder="Sila nyatakan jenis misi">
+
+            <!-- =====================================================
+                 2. TEMPOH & LOKASI
+            ====================================================== -->
+            <div class="section-card">
+
+              <div class="section-heading">
+                <div class="section-icon">
+                  <i class="bi bi-calendar-event-fill"></i>
+                </div>
+
+                <div>
+                  <h6>2. Tempoh & Lokasi Misi</h6>
+                  <small>Tarikh operasi dan lokasi misi.</small>
+                </div>
+              </div>
+
+              <div class="row g-3">
+
+                <div class="col-md-4">
+                  <label for="startDate" class="form-label required">
+                    Tarikh Mula
+                  </label>
+
+                  <input
+                    type="date"
+                    id="startDate"
+                    class="form-control"
+                    required
+                  >
+                </div>
+
+                <div class="col-md-4">
+                  <label for="estimatedEnd" class="form-label required">
+                    Anggaran Tamat
+                  </label>
+
+                  <input
+                    type="date"
+                    id="estimatedEnd"
+                    class="form-control"
+                    required
+                  >
+                </div>
+
+                <div class="col-md-4">
+                  <label for="actualEnd" class="form-label">
+                    Tarikh Sebenar Tamat
+                  </label>
+
+                  <input
+                    type="date"
+                    id="actualEnd"
+                    class="form-control readonly-field"
+                    disabled
+                  >
+
+                  <small class="text-muted" id="actualEndHelp">
+                    Hanya boleh diisi apabila status misi ialah Selesai.
+                  </small>
+                </div>
+
+                <div class="col-md-8">
+                  <label for="location" class="form-label required">
+                    Lokasi Misi
+                  </label>
+
+                  <input
+                    type="text"
+                    id="location"
+                    class="form-control"
+                    placeholder="Contoh: Kota Belud, Sabah"
+                    required
+                  >
+                </div>
+
+              </div>
+
+              <div class="status-note mt-3">
+                <i class="bi bi-info-circle me-1"></i>
+                Jika status bukan <strong>Selesai</strong>, Tarikh Sebenar Tamat
+                akan dikosongkan dan disimpan sebagai <code>null</code>.
+              </div>
             </div>
 
-            <div class="col-md-6">
-                <label class="form-label">Catatan</label>
-                <textarea id="notes" class="form-control" rows="2"></textarea>
+
+            <!-- =====================================================
+                 3. PIC MISI
+            ====================================================== -->
+            <div class="section-card">
+
+              <div class="section-heading">
+                <div class="section-icon">
+                  <i class="bi bi-person-badge-fill"></i>
+                </div>
+
+                <div>
+                  <h6>3. PIC Misi</h6>
+                  <small>
+                    Pegawai yang bertanggungjawab mengemaskini Basic / Team Daily Report.
+                  </small>
+                </div>
+              </div>
+
+              <div class="row g-3">
+
+                <div class="col-md-8">
+                  <label for="picId" class="form-label required">
+                    PIC Misi
+                  </label>
+
+                  <select id="picId" class="form-select" required>
+                    <option value="">Memuatkan senarai pegawai...</option>
+                  </select>
+
+                  <small class="text-muted">
+                    Senarai diambil daripada ahli EMT yang telah diluluskan.
+                  </small>
+                </div>
+
+                <div class="col-md-4 d-flex align-items-end">
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary w-100"
+                    id="refreshPicBtn"
+                  >
+                    <i class="bi bi-arrow-clockwise me-1"></i>
+                    Muat Semula Senarai
+                  </button>
+                </div>
+
+                <div class="col-12">
+                  <div class="pic-preview" id="picPreview">
+
+                    <div class="row g-3">
+                      <div class="col-md-4">
+                        <small class="text-muted d-block">Nama PIC</small>
+                        <strong id="picPreviewName">-</strong>
+                      </div>
+
+                      <div class="col-md-4">
+                        <small class="text-muted d-block">Jawatan / Peranan</small>
+                        <strong id="picPreviewRole">-</strong>
+                      </div>
+
+                      <div class="col-md-4">
+                        <small class="text-muted d-block">Fasiliti / Organisasi</small>
+                        <strong id="picPreviewFacility">-</strong>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
             </div>
 
+
+            <!-- =====================================================
+                 4. MAKLUMAT TAMBAHAN
+            ====================================================== -->
+            <div class="section-card mb-0">
+
+              <div class="section-heading">
+                <div class="section-icon">
+                  <i class="bi bi-card-text"></i>
+                </div>
+
+                <div>
+                  <h6>4. Maklumat Tambahan</h6>
+                  <small>Catatan pentadbiran atau arahan berkaitan misi.</small>
+                </div>
+              </div>
+
+              <div class="row g-3">
+
+                <div class="col-12">
+                  <label for="notes" class="form-label">
+                    Catatan
+                  </label>
+
+                  <textarea
+                    id="notes"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Maklumat tambahan jika ada"
+                  ></textarea>
+                </div>
+
+              </div>
             </div>
+
+
+            <!-- SUBMIT -->
+            <div class="d-flex flex-wrap justify-content-end gap-2 mt-4">
+
+              <a href="emt_crud.html" id="btnCancel" class="btn btn-outline-secondary px-4">
+                Batal
+              </a>
+
+              <button
+                type="submit"
+                id="submitBtn"
+                class="btn btn-primary px-4"
+              >
+                <i class="bi bi-check-circle me-1"></i>
+                Kemaskini Misi
+              </button>
+
+            </div>
+
+          </form>
 
         </div>
+      </div>
 
-        </div>
-
-        <!-- SUBMIT BUTTON -->
-        <div class="d-flex justify-content-end mt-4">
-        <button type="submit" id="submitBtn" class="btn btn-primary rounded-pill shadow-sm px-4">
-            <i class="bi bi-check-circle me-1"></i> Kemaskini
-        </button>
-        </div>
-
-    </form>
-
-    </div>
-</div>
-
-</main>
+    </main>
   </div>
 </div>
 
-<!-- FOOTER -->
 <div id="footer"></div>
 
-<!-- LOAD HEADER / FOOTER / SIDEBAR -->
+
+<!-- =====================================================
+     HEADER / FOOTER / SIDEBAR
+====================================================== -->
 <script>
 fetch("header.html")
   .then(res => res.text())
@@ -234,105 +466,834 @@ fetch("sidebar.html")
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!--KALAU PILIH LAIN2-->
+
 <script>
-function toggleJenisLain() {
-  const select = document.getElementById("jenisMisi");
-  const box = document.getElementById("jenisMisiLainBox");
-  if (select.value === "lain") {
-    box.classList.remove("d-none");
+/* =====================================================
+   GLOBAL
+===================================================== */
+const KNOWN_TYPES = [
+  "Bantuan Banjir",
+  "Bantuan Gempa Bumi",
+  "Penghantaran Perubatan",
+  "Sokongan Kecemasan"
+];
+
+let approvedMembers = [];
+let currentMission = null;
+
+const params = new URLSearchParams(window.location.search);
+const missionId = params.get("id");
+
+const missionStatus = document.getElementById("missionStatus");
+const actualEnd = document.getElementById("actualEnd");
+const actualEndHelp = document.getElementById("actualEndHelp");
+
+const jenisMisi = document.getElementById("jenisMisi");
+const jenisMisiLain = document.getElementById("jenisMisiLain");
+const jenisMisiLainBox = document.getElementById("jenisMisiLainBox");
+
+const picSelect = document.getElementById("picId");
+const picPreview = document.getElementById("picPreview");
+
+
+/* =====================================================
+   BACK URL
+===================================================== */
+function updateBackLinks() {
+
+  const url = missionId
+    ? `mission_detail.html?id=${encodeURIComponent(missionId)}`
+    : "emt_crud.html";
+
+  document.getElementById("btnBack").href = url;
+  document.getElementById("btnCancel").href = url;
+}
+
+
+/* =====================================================
+   STATUS / ACTUAL END DATE
+===================================================== */
+function updateActualEndState() {
+
+  if (missionStatus.value === "Selesai") {
+
+    actualEnd.disabled = false;
+    actualEnd.required = true;
+    actualEnd.classList.remove("readonly-field");
+
+    actualEndHelp.textContent =
+      "Sila masukkan tarikh sebenar misi selesai.";
+
   } else {
-    box.classList.add("d-none");
+
+    actualEnd.disabled = true;
+    actualEnd.required = false;
+    actualEnd.value = "";
+    actualEnd.classList.add("readonly-field");
+
+    actualEndHelp.textContent =
+      "Hanya boleh diisi apabila status misi ialah Selesai.";
   }
 }
-</script>
 
-<script>
-const KNOWN_TYPES = ['Bantuan Banjir','Bantuan Gempa Bumi','Penghantaran Perubatan','Sokongan Kecemasan'];
+missionStatus.addEventListener("change", updateActualEndState);
 
-(async function () {
-  const id = new URLSearchParams(window.location.search).get('id');
-  if (!id) return;
 
-  // Update back button to return to the correct mission detail
-  document.getElementById('btnBack').href = 'mission_detail.html?id=' + id;
+/* =====================================================
+   OTHER MISSION TYPE
+===================================================== */
+function toggleJenisLain() {
 
-  // Pre-fill form from API
-  const res  = await fetch(`${API}/api/missions/` + id);
-  const json = await res.json();
-  if (!json.success) { alert('Misi tidak dijumpai.'); return; }
-  const m = json.data;
+  if (jenisMisi.value === "lain") {
 
-  document.getElementById('missionName').value  = m.name         || '';
-  document.getElementById('startDate').value    = m.startDate    || '';
-  document.getElementById('estimatedEnd').value = m.estimatedEnd || '';
-  document.getElementById('actualEnd').value    = m.actualEnd    || '';
-  document.getElementById('leader').value       = m.leader       || '';
-  document.getElementById('location').value     = m.location     || '';
-  document.getElementById('notes').value        = m.notes        || '';
+    jenisMisiLainBox.classList.remove("d-none");
+    jenisMisiLain.required = true;
 
-  // Status select
-  const statusEl = document.getElementById('missionStatus');
-  if (m.status) statusEl.value = m.status;
+  } else {
 
-  // Jenis misi — known value or "lain-lain"
-  const jenisEl = document.getElementById('jenisMisi');
-  if (m.type && KNOWN_TYPES.includes(m.type)) {
-    jenisEl.value = m.type;
-  } else if (m.type) {
-    jenisEl.value = 'lain';
-    document.getElementById('jenisMisiLain').value = m.type;
-    document.getElementById('jenisMisiLainBox').classList.remove('d-none');
+    jenisMisiLainBox.classList.add("d-none");
+    jenisMisiLain.required = false;
+    jenisMisiLain.value = "";
+  }
+}
+
+jenisMisi.addEventListener("change", toggleJenisLain);
+
+
+/* =====================================================
+   MEMBER HELPERS
+===================================================== */
+function memberName(member) {
+  return (
+    member.name ||
+    member.fullName ||
+    member.memberName ||
+    member.nama ||
+    member.email ||
+    member.id ||
+    "-"
+  );
+}
+
+function memberRole(member) {
+  return (
+    member.position ||
+    member.role ||
+    member.jobTitle ||
+    member.designation ||
+    member.profession ||
+    member.jawatan ||
+    "-"
+  );
+}
+
+function memberFacility(member) {
+  return (
+    member.facility ||
+    member.organization ||
+    member.organisation ||
+    member.hospital ||
+    member.fasiliti ||
+    "-"
+  );
+}
+
+function isApprovedMember(member) {
+
+  const status =
+    String(member.status || "")
+      .toLowerCase();
+
+  return !status ||
+         status === "approved" ||
+         status === "diluluskan" ||
+         status === "active" ||
+         status === "aktif";
+}
+
+
+/* =====================================================
+   PIC PREVIEW
+===================================================== */
+function updatePicPreview() {
+
+  const selectedId =
+    picSelect.value;
+
+  const member =
+    approvedMembers.find(
+      item =>
+        String(item.id) ===
+        String(selectedId)
+    );
+
+  if (!member) {
+
+    // Old mission may contain only leader / picName.
+    if (currentMission?.picName || currentMission?.leader) {
+
+      document.getElementById("picPreviewName").textContent =
+        currentMission.picName ||
+        currentMission.leader ||
+        "-";
+
+      document.getElementById("picPreviewRole").textContent =
+        currentMission.picRole || "-";
+
+      document.getElementById("picPreviewFacility").textContent =
+        currentMission.picFacility || "-";
+
+      picPreview.classList.add("show");
+
+    } else {
+
+      picPreview.classList.remove("show");
+    }
+
+    return;
   }
 
-  // Submit → PATCH /api/missions/:id
-  document.getElementById('editForm').addEventListener('submit', async function (e) {
-    e.preventDefault();
+  document.getElementById("picPreviewName").textContent =
+    memberName(member);
 
-    const jenis = document.getElementById('jenisMisi').value;
-    const type  = jenis === 'lain'
-      ? (document.getElementById('jenisMisiLain').value.trim() || 'Lain-lain')
-      : jenis;
+  document.getElementById("picPreviewRole").textContent =
+    memberRole(member);
 
-    const payload = {
-      name:         document.getElementById('missionName').value.trim(),
-      startDate:    document.getElementById('startDate').value,
-      estimatedEnd: document.getElementById('estimatedEnd').value,
-      actualEnd:    document.getElementById('actualEnd').value || null,
-      status:       document.getElementById('missionStatus').value,
-      leader:       document.getElementById('leader').value.trim(),
-      location:     document.getElementById('location').value.trim(),
-      type,
-      notes:        document.getElementById('notes').value.trim()
-    };
+  document.getElementById("picPreviewFacility").textContent =
+    memberFacility(member);
 
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
+  picPreview.classList.add("show");
+}
 
-    try {
-      const r      = await fetch(`${API}/api/missions/` + id, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const result = await r.json();
+picSelect.addEventListener(
+  "change",
+  updatePicPreview
+);
 
-      if (result.success) {
-        alert('✅ Misi berjaya dikemaskini!');
-        window.location.href = 'mission_detail.html?id=' + id;
-      } else {
-        alert('❌ Ralat: ' + result.message);
-        btn.disabled = false;
-        btn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Kemaskini';
+
+/* =====================================================
+   LOAD PIC OPTIONS
+===================================================== */
+async function loadPicOptions() {
+
+  picSelect.disabled = true;
+
+  picSelect.innerHTML =
+    '<option value="">Memuatkan senarai pegawai...</option>';
+
+  try {
+
+    const res =
+      await fetch(`${API}/api/members`);
+
+    const json =
+      await res.json();
+
+    approvedMembers =
+      (json.data || [])
+        .filter(isApprovedMember)
+        .sort((a, b) =>
+          memberName(a)
+            .localeCompare(
+              memberName(b),
+              "ms"
+            )
+        );
+
+
+    picSelect.innerHTML =
+      '<option value="">-- Pilih PIC Misi --</option>' +
+      approvedMembers.map(member => `
+        <option value="${String(member.id || "").replaceAll('"', '&quot;')}">
+          ${memberName(member)}
+          ${memberRole(member) !== "-" ? " — " + memberRole(member) : ""}
+        </option>
+      `).join("");
+
+
+    /*
+     * Set current PIC:
+     * 1. Prefer picId from new mission structure.
+     * 2. For old missions, try matching "leader" or "picName"
+     *    against member names.
+     */
+    if (currentMission) {
+
+      let selectedId =
+        currentMission.picId || "";
+
+
+      if (
+        !selectedId &&
+        (
+          currentMission.picName ||
+          currentMission.leader
+        )
+      ) {
+
+        const oldName =
+          String(
+            currentMission.picName ||
+            currentMission.leader
+          )
+          .trim()
+          .toLowerCase();
+
+
+        const match =
+          approvedMembers.find(member =>
+            memberName(member)
+              .trim()
+              .toLowerCase() === oldName
+          );
+
+
+        if (match) {
+          selectedId = match.id;
+        }
       }
-    } catch (err) {
-      alert('❌ Gagal menghubungi pelayan.');
-      btn.disabled = false;
-      btn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Kemaskini';
+
+
+      if (
+        selectedId &&
+        approvedMembers.some(
+          member =>
+            String(member.id) ===
+            String(selectedId)
+        )
+      ) {
+
+        picSelect.value =
+          String(selectedId);
+
+      } else if (
+        currentMission.picName ||
+        currentMission.leader
+      ) {
+
+        /*
+         * Preserve old PIC display even when
+         * member is no longer in /api/members.
+         */
+        const legacyOption =
+          document.createElement("option");
+
+        legacyOption.value =
+          currentMission.picId ||
+          "__legacy_pic__";
+
+        legacyOption.textContent =
+          `${currentMission.picName || currentMission.leader} (PIC Semasa)`;
+
+        picSelect.appendChild(
+          legacyOption
+        );
+
+        picSelect.value =
+          legacyOption.value;
+      }
     }
-  });
-})();
+
+
+    updatePicPreview();
+
+
+  } catch (err) {
+
+    console.error(
+      "Gagal memuatkan senarai PIC:",
+      err
+    );
+
+    picSelect.innerHTML =
+      '<option value="">Gagal memuatkan senarai pegawai</option>';
+
+  } finally {
+
+    picSelect.disabled = false;
+  }
+}
+
+
+document.getElementById("refreshPicBtn")
+  .addEventListener(
+    "click",
+    loadPicOptions
+  );
+
+
+/* =====================================================
+   LOAD MISSION
+===================================================== */
+async function loadMission() {
+
+  if (!missionId) {
+
+    alert(
+      "ID misi tidak dijumpai."
+    );
+
+    window.location.href =
+      "emt_crud.html";
+
+    return;
+  }
+
+
+  updateBackLinks();
+
+
+  try {
+
+    const res =
+      await fetch(
+        `${API}/api/missions/${encodeURIComponent(missionId)}`
+      );
+
+    const json =
+      await res.json();
+
+
+    if (!json.success) {
+
+      throw new Error(
+        json.message ||
+        "Misi tidak dijumpai."
+      );
+    }
+
+
+    currentMission =
+      json.data;
+
+
+    /* =============================
+       BASIC FIELDS
+    ============================== */
+    document.getElementById("missionName").value =
+      currentMission.name || "";
+
+    document.getElementById("startDate").value =
+      currentMission.startDate || "";
+
+    document.getElementById("estimatedEnd").value =
+      currentMission.estimatedEnd || "";
+
+    document.getElementById("location").value =
+      currentMission.location || "";
+
+    document.getElementById("notes").value =
+      currentMission.notes || "";
+
+
+    /* =============================
+       STATUS
+    ============================== */
+    missionStatus.value =
+      currentMission.status ||
+      "Perancangan";
+
+
+    /*
+     * Set actualEnd BEFORE calling status state,
+     * otherwise non-completed missions should clear it.
+     */
+    actualEnd.value =
+      currentMission.actualEnd || "";
+
+    if (
+      missionStatus.value === "Selesai"
+    ) {
+
+      actualEnd.disabled = false;
+      actualEnd.required = true;
+      actualEnd.classList.remove(
+        "readonly-field"
+      );
+
+      actualEndHelp.textContent =
+        "Sila masukkan tarikh sebenar misi selesai.";
+
+    } else {
+
+      updateActualEndState();
+    }
+
+
+    /* =============================
+       TYPE
+    ============================== */
+    if (
+      currentMission.type &&
+      KNOWN_TYPES.includes(
+        currentMission.type
+      )
+    ) {
+
+      jenisMisi.value =
+        currentMission.type;
+
+    } else if (
+      currentMission.type
+    ) {
+
+      jenisMisi.value =
+        "lain";
+
+      jenisMisiLain.value =
+        currentMission.type;
+
+      jenisMisiLainBox.classList.remove(
+        "d-none"
+      );
+
+      jenisMisiLain.required = true;
+
+    } else {
+
+      jenisMisi.value = "";
+    }
+
+
+    /* =============================
+       LOAD PIC AFTER MISSION
+    ============================== */
+    await loadPicOptions();
+
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      err.message ||
+      "Gagal memuatkan maklumat misi."
+    );
+  }
+}
+
+
+/* =====================================================
+   DATE VALIDATION
+===================================================== */
+function validateMissionDates(payload) {
+
+  if (
+    payload.estimatedEnd <
+    payload.startDate
+  ) {
+
+    alert(
+      "Anggaran Tamat tidak boleh lebih awal daripada Tarikh Mula."
+    );
+
+    document.getElementById(
+      "estimatedEnd"
+    ).focus();
+
+    return false;
+  }
+
+
+  if (
+    payload.actualEnd &&
+    payload.actualEnd <
+    payload.startDate
+  ) {
+
+    alert(
+      "Tarikh Sebenar Tamat tidak boleh lebih awal daripada Tarikh Mula."
+    );
+
+    actualEnd.focus();
+
+    return false;
+  }
+
+
+  return true;
+}
+
+
+/* =====================================================
+   SUBMIT UPDATE
+===================================================== */
+document.getElementById("editForm")
+  .addEventListener(
+    "submit",
+    async function(e) {
+
+      e.preventDefault();
+
+
+      if (!this.checkValidity()) {
+
+        this.reportValidity();
+        return;
+      }
+
+
+      /* =============================
+         TYPE
+      ============================== */
+      const type =
+        jenisMisi.value === "lain"
+          ? jenisMisiLain.value.trim()
+          : jenisMisi.value;
+
+
+      if (!type) {
+
+        alert(
+          "Sila pilih atau nyatakan Jenis Misi."
+        );
+
+        return;
+      }
+
+
+      /* =============================
+         ACTUAL END
+      ============================== */
+      if (
+        missionStatus.value === "Selesai" &&
+        !actualEnd.value
+      ) {
+
+        alert(
+          "Sila masukkan Tarikh Sebenar Tamat untuk misi yang telah selesai."
+        );
+
+        actualEnd.focus();
+
+        return;
+      }
+
+
+      /* =============================
+         PIC
+      ============================== */
+      const selectedPic =
+        approvedMembers.find(
+          member =>
+            String(member.id) ===
+            String(picSelect.value)
+        );
+
+
+      /*
+       * If the mission is old and current PIC isn't found
+       * in the member list, preserve the existing PIC.
+       */
+      let picData = null;
+
+      if (selectedPic) {
+
+        picData = {
+          picId:
+            selectedPic.id,
+
+          picName:
+            memberName(selectedPic),
+
+          picRole:
+            memberRole(selectedPic),
+
+          picFacility:
+            memberFacility(selectedPic),
+
+          leader:
+            memberName(selectedPic)
+        };
+
+      } else if (
+        picSelect.value === "__legacy_pic__" ||
+        (
+          currentMission &&
+          String(picSelect.value) ===
+          String(currentMission.picId || "")
+        )
+      ) {
+
+        picData = {
+          picId:
+            currentMission.picId || null,
+
+          picName:
+            currentMission.picName ||
+            currentMission.leader ||
+            "",
+
+          picRole:
+            currentMission.picRole || "",
+
+          picFacility:
+            currentMission.picFacility || "",
+
+          leader:
+            currentMission.picName ||
+            currentMission.leader ||
+            ""
+        };
+
+      } else {
+
+        alert(
+          "Sila pilih PIC Misi."
+        );
+
+        picSelect.focus();
+
+        return;
+      }
+
+
+      /* =============================
+         PAYLOAD
+      ============================== */
+      const payload = {
+
+        name:
+          document.getElementById(
+            "missionName"
+          )
+          .value
+          .trim(),
+
+        type,
+
+        status:
+          missionStatus.value,
+
+        startDate:
+          document.getElementById(
+            "startDate"
+          )
+          .value,
+
+        estimatedEnd:
+          document.getElementById(
+            "estimatedEnd"
+          )
+          .value,
+
+        actualEnd:
+          missionStatus.value ===
+          "Selesai"
+            ? actualEnd.value
+            : null,
+
+        location:
+          document.getElementById(
+            "location"
+          )
+          .value
+          .trim(),
+
+        ...picData,
+
+        notes:
+          document.getElementById(
+            "notes"
+          )
+          .value
+          .trim()
+      };
+
+
+      if (
+        !validateMissionDates(payload)
+      ) {
+
+        return;
+      }
+
+
+      /* =============================
+         LOADING BUTTON
+      ============================== */
+      const btn =
+        document.getElementById(
+          "submitBtn"
+        );
+
+      const originalBtn =
+        btn.innerHTML;
+
+      btn.disabled = true;
+
+      btn.innerHTML =
+        '<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...';
+
+
+      /* =============================
+         PATCH
+      ============================== */
+      try {
+
+        const res =
+          await fetch(
+            `${API}/api/missions/${encodeURIComponent(missionId)}`,
+            {
+              method: "PATCH",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body:
+                JSON.stringify(payload)
+            }
+          );
+
+
+        const result =
+          await res.json();
+
+
+        if (!result.success) {
+
+          throw new Error(
+            result.message ||
+            "Kemaskini misi gagal."
+          );
+        }
+
+
+        alert(
+          "Misi berjaya dikemaskini!"
+        );
+
+
+        window.location.href =
+          `mission_detail.html?id=${encodeURIComponent(missionId)}`;
+
+
+      } catch (err) {
+
+        console.error(err);
+
+        alert(
+          err.message ||
+          "Gagal menghubungi pelayan."
+        );
+
+        btn.disabled = false;
+        btn.innerHTML = originalBtn;
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+document.addEventListener(
+  "DOMContentLoaded",
+  loadMission
+);
 </script>
 
 </body>

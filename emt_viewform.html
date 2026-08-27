@@ -1,0 +1,1323 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Maklumat MyEMT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    body{
+      background:#f4f6f9;
+    }
+
+    .soft-card{
+      border:0;
+      border-radius:14px;
+      box-shadow:0 .25rem .75rem rgba(0,0,0,.06);
+    }
+
+    .profile-avatar{
+      width:64px;
+      height:64px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#f8f9fa;
+      border:1px solid #dee2e6;
+      flex:0 0 64px;
+    }
+
+    .info-row{
+      padding:.65rem 0;
+      border-bottom:1px solid #f0f1f3;
+    }
+
+    .info-row:last-child{
+      border-bottom:0;
+    }
+
+    .info-label{
+      color:#6c757d;
+      font-size:.88rem;
+    }
+
+    .info-value{
+      font-weight:600;
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .section-number{
+      width:32px;
+      height:32px;
+      border-radius:50%;
+      display:inline-grid;
+      place-items:center;
+      background:#e9ecef;
+      font-weight:800;
+      margin-right:.5rem;
+    }
+
+    .document-box{
+      border:1px solid #dee2e6;
+      border-radius:10px;
+      padding:.8rem 1rem;
+      background:#f8f9fa;
+    }
+
+    .loading-box{
+      min-height:260px;
+      display:grid;
+      place-items:center;
+    }
+
+    .content-wrap{
+      display:none;
+    }
+
+    .content-wrap.show{
+      display:block;
+    }
+
+    .error-box{
+      display:none;
+    }
+
+    .error-box.show{
+      display:block;
+    }
+  </style>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+
+    <main class="col-md-9 col-lg-10 px-4 py-4">
+
+      <!-- PAGE HEADER -->
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+
+        <div>
+          <h4 class="mb-1 fw-bold">Maklumat MyEMT</h4>
+          <small class="text-muted">
+            Paparan maklumat pendaftaran dan kesiapsiagaan MyEMT anda.
+          </small>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+
+          <a href="landingMyemt.html" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>Kembali
+          </a>
+
+          <a href="emt_editform.html" class="btn btn-primary" id="btnEdit">
+            <i class="bi bi-pencil-square me-1"></i>Kemaskini Maklumat
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- ERROR -->
+      <div class="alert alert-warning error-box" id="errorBox">
+
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+          <div>
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Maklumat MyEMT tidak dijumpai.</strong>
+            Sila daftar sebagai ahli MyEMT terlebih dahulu.
+          </div>
+
+          <a href="emt_form.html" class="btn btn-warning btn-sm">
+            Daftar MyEMT
+          </a>
+
+        </div>
+
+      </div>
+
+
+      <!-- LOADING -->
+      <div class="card soft-card" id="loadingBox">
+
+        <div class="card-body loading-box">
+
+          <div class="text-center">
+            <div class="spinner-border text-primary mb-3"></div>
+            <div class="text-muted">Memuatkan maklumat MyEMT...</div>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- CONTENT -->
+      <div class="content-wrap" id="contentWrap">
+
+        <!-- =====================================================
+             SUMMARY
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+
+          <div class="card-body">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+
+              <div class="d-flex align-items-center">
+
+                <div class="profile-avatar">
+                  <i class="bi bi-person-fill fs-3 text-secondary"></i>
+                </div>
+
+                <div class="ms-3">
+
+                  <h5 class="fw-bold mb-1" id="summaryName">-</h5>
+
+                  <div class="d-flex flex-wrap gap-2">
+
+                    <span class="badge bg-light text-dark border" id="summaryDesignation">
+                      -
+                    </span>
+
+                    <span class="badge bg-secondary" id="summaryStatus">
+                      -
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <div class="text-md-end">
+
+                <div class="small text-muted">
+                  ID Ahli MyEMT
+                </div>
+
+                <div class="fw-bold" id="summaryId">
+                  -
+                </div>
+
+                <div class="small text-muted mt-2">
+                  Tarikh Permohonan
+                </div>
+
+                <div class="fw-semibold" id="summarySubmitted">
+                  -
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="alert alert-light border mt-3 mb-0 d-none" id="adminCommentBox">
+
+              <div class="fw-semibold mb-1">
+                <i class="bi bi-chat-left-text me-1"></i>
+                Komen / Maklum Balas Urus Setia
+              </div>
+
+              <div id="adminComment">-</div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             1. APPLICANT
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+
+          <div class="card-header bg-white border-0 pt-3">
+
+            <h6 class="fw-bold mb-0">
+              <span class="section-number">1</span>
+              Maklumat Pemohon
+            </h6>
+
+          </div>
+
+          <div class="card-body pt-2">
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Nama Penuh</div>
+              <div class="col-md-8 info-value" id="v-full-name">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">No. Pengenalan</div>
+              <div class="col-md-8 info-value" id="v-identification">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Umur</div>
+              <div class="col-md-8 info-value" id="v-age">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Jantina</div>
+              <div class="col-md-8 info-value" id="v-gender">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Jawatan</div>
+              <div class="col-md-8 info-value" id="v-designation">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Gred</div>
+              <div class="col-md-8 info-value" id="v-grade">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Tempoh Perkhidmatan</div>
+              <div class="col-md-8 info-value" id="v-service-period">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Negeri</div>
+              <div class="col-md-8 info-value" id="v-state">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Jenis Fasiliti</div>
+              <div class="col-md-8 info-value" id="v-facility-type">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Tempat Bekerja</div>
+              <div class="col-md-8 info-value" id="v-workplace">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Alamat Rumah</div>
+              <div class="col-md-8 info-value" id="v-home-address">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Emel Pejabat</div>
+              <div class="col-md-8 info-value" id="v-office-email">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Emel Peribadi</div>
+              <div class="col-md-8 info-value" id="v-personal-email">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Nombor Telefon</div>
+              <div class="col-md-8 info-value" id="v-phone">-</div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             2. EMERGENCY
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+
+          <div class="card-header bg-white border-0 pt-3">
+
+            <h6 class="fw-bold mb-0">
+              <span class="section-number">2</span>
+              Maklumat Kecemasan
+            </h6>
+
+          </div>
+
+          <div class="card-body pt-2">
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Nama Waris</div>
+              <div class="col-md-8 info-value" id="v-emergency-name">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Hubungan</div>
+              <div class="col-md-8 info-value" id="v-relation">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Alamat Rumah Waris</div>
+              <div class="col-md-8 info-value" id="v-emergency-address">-</div>
+            </div>
+
+            <div class="row info-row">
+              <div class="col-md-4 info-label">Nombor Telefon Waris</div>
+              <div class="col-md-8 info-value" id="v-emergency-phone">-</div>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             3. PROFESSIONAL
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+
+          <div class="card-header bg-white border-0 pt-3">
+
+            <h6 class="fw-bold mb-0">
+              <span class="section-number">3</span>
+              Latar Belakang Profesional
+            </h6>
+
+          </div>
+
+          <div class="card-body pt-2">
+
+            <div class="row info-row">
+
+              <div class="col-md-4 info-label">
+                APC / Sijil Amalan / Dokumen Kelayakan Profesional
+              </div>
+
+              <div class="col-md-8" id="v-apc-document">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row">
+
+              <div class="col-md-4 info-label">
+                Pernah menghadiri latihan bencana / respons kecemasan?
+              </div>
+
+              <div class="col-md-8 info-value" id="v-attended-training">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row d-none" id="row-training-details">
+
+              <div class="col-md-4 info-label">
+                Butiran Latihan
+              </div>
+
+              <div class="col-md-8 info-value" id="v-training-details">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row">
+
+              <div class="col-md-4 info-label">
+                Pengalaman penugasan antarabangsa / misi kemanusiaan?
+              </div>
+
+              <div class="col-md-8 info-value" id="v-international-experience">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row d-none" id="row-mission-details">
+
+              <div class="col-md-4 info-label">
+                Butiran Pengalaman
+              </div>
+
+              <div class="col-md-8 info-value" id="v-mission-details">
+                -
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             4. HEALTH
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+
+          <div class="card-header bg-white border-0 pt-3">
+
+            <h6 class="fw-bold mb-0">
+              <span class="section-number">4</span>
+              Deklarasi Kesihatan & Kecergasan
+            </h6>
+
+          </div>
+
+          <div class="card-body pt-2">
+
+            <div class="row info-row">
+
+              <div class="col-md-4 info-label">
+                Keadaan perubatan yang boleh menjejaskan keupayaan operasi
+              </div>
+
+              <div class="col-md-8 info-value" id="v-medical-condition">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row d-none" id="row-medical-details">
+
+              <div class="col-md-4 info-label">
+                Butiran Keadaan Perubatan
+              </div>
+
+              <div class="col-md-8 info-value" id="v-medical-condition-details">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row">
+
+              <div class="col-md-4 info-label">
+                Rawatan profesional / kaunseling berkaitan kesihatan mental
+              </div>
+
+              <div class="col-md-8 info-value" id="v-mental-health">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row d-none" id="row-mental-details">
+
+              <div class="col-md-4 info-label">
+                Butiran
+              </div>
+
+              <div class="col-md-8 info-value" id="v-mental-health-details">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row">
+
+              <div class="col-md-4 info-label">
+                Alahan
+              </div>
+
+              <div class="col-md-8 info-value" id="v-allergies">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row d-none" id="row-allergy-details">
+
+              <div class="col-md-4 info-label">
+                Butiran Alahan
+              </div>
+
+              <div class="col-md-8 info-value" id="v-allergy-details">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row">
+
+              <div class="col-md-4 info-label">
+                Berat
+              </div>
+
+              <div class="col-md-8 info-value" id="v-weight">
+                -
+              </div>
+
+            </div>
+
+
+            <div class="row info-row">
+
+              <div class="col-md-4 info-label">
+                Tinggi
+              </div>
+
+              <div class="col-md-8 info-value" id="v-height">
+                -
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             5. COMMITMENT
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+
+          <div class="card-header bg-white border-0 pt-3">
+
+            <h6 class="fw-bold mb-0">
+              <span class="section-number">5</span>
+              Komitmen & Deklarasi
+            </h6>
+
+          </div>
+
+          <div class="card-body">
+
+            <div class="d-flex align-items-start gap-2">
+
+              <i class="bi bi-check-circle-fill text-success mt-1" id="commitmentIcon"></i>
+
+              <div>
+
+                <div class="fw-semibold" id="v-commitment">
+                  -
+                </div>
+
+                <div class="small text-muted mt-1">
+                  Pemohon mengesahkan bahawa maklumat yang diberikan adalah benar dan bersedia
+                  menyertai proses pemilihan, latihan serta aktiviti operasi MyEMT.
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             6. SUPPORT
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+
+          <div class="card-header bg-white border-0 pt-3">
+
+            <h6 class="fw-bold mb-0">
+              <span class="section-number">6</span>
+              Kebenaran & Sokongan Ketua Jabatan
+            </h6>
+
+          </div>
+
+          <div class="card-body">
+
+            <div class="row info-row">
+
+              <div class="col-md-4 info-label">
+                Borang Sokongan Ketua Jabatan
+              </div>
+
+              <div class="col-md-8" id="v-support-document">
+                -
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- ACTION -->
+        <div class="d-flex flex-wrap justify-content-end gap-2 mb-3">
+
+          <a href="emt_submitform.html" class="btn btn-outline-secondary" id="btnStatus">
+            <i class="bi bi-clipboard-check me-1"></i>Lihat Status Permohonan
+          </a>
+
+          <a href="emt_editform.html" class="btn btn-primary" id="btnEditBottom">
+            <i class="bi bi-pencil-square me-1"></i>Kemaskini Maklumat
+          </a>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+</div>
+
+<div id="footer"></div>
+
+
+<script src="assets/js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+/* =====================================================
+   SHARED LAYOUT
+===================================================== */
+fetch("header.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("header").innerHTML = data);
+
+fetch("footer.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("footer").innerHTML = data);
+
+fetch("sidebar.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
+  .catch(err => console.error("Sidebar load failed:", err));
+
+
+/* =====================================================
+   MEMBER
+===================================================== */
+const MEMBER_ID =
+  new URLSearchParams(location.search).get("memberId") ||
+  localStorage.getItem("myemt_memberId") ||
+  localStorage.getItem("memberId") ||
+  sessionStorage.getItem("myemt_memberId") ||
+  sessionStorage.getItem("memberId") ||
+  "";
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+function setText(id, value, suffix="") {
+
+  const el =
+    document.getElementById(id);
+
+  if (!el) return;
+
+  const hasValue =
+    value !== undefined &&
+    value !== null &&
+    value !== "";
+
+  el.textContent =
+    hasValue
+      ? `${value}${suffix}`
+      : "-";
+}
+
+
+function fmtDate(value) {
+
+  if (!value) return "-";
+
+  const date =
+    new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return String(value);
+  }
+
+  return date.toLocaleDateString(
+    "ms-MY",
+    {
+      day:"2-digit",
+      month:"2-digit",
+      year:"numeric"
+    }
+  );
+}
+
+
+function normalizeStatus(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+
+function statusInfo(value) {
+
+  const status =
+    normalizeStatus(value);
+
+  const map = {
+
+    pending:{
+      className:"bg-warning text-dark",
+      label:"Dalam Semakan"
+    },
+
+    approved:{
+      className:"bg-success",
+      label:"Diluluskan"
+    },
+
+    rejected:{
+      className:"bg-danger",
+      label:"Ditolak"
+    }
+
+  };
+
+  return map[status] || {
+    className:"bg-secondary",
+    label:value || "Tidak Diketahui"
+  };
+}
+
+
+function showDetailRow(
+  rowId,
+  valueId,
+  value
+) {
+
+  if (
+    value === undefined ||
+    value === null ||
+    value === ""
+  ) {
+    return;
+  }
+
+
+  const row =
+    document.getElementById(
+      rowId
+    );
+
+
+  if (row) {
+    row.classList.remove(
+      "d-none"
+    );
+  }
+
+
+  setText(
+    valueId,
+    value
+  );
+}
+
+
+function renderDocument(
+  containerId,
+  fileName,
+  fileData
+) {
+
+  const container =
+    document.getElementById(
+      containerId
+    );
+
+
+  if (!fileName && !fileData) {
+
+    container.innerHTML =
+      '<span class="text-muted">Tiada dokumen dimuat naik.</span>';
+
+    return;
+  }
+
+
+  container.innerHTML = `
+    <div class="document-box d-flex flex-wrap justify-content-between align-items-center gap-2">
+
+      <div>
+        <i class="bi bi-file-earmark-text me-1"></i>
+        <span class="fw-semibold document-name"></span>
+      </div>
+
+      ${fileData
+        ? '<a class="btn btn-sm btn-outline-primary document-link" target="_blank" rel="noopener">Lihat Dokumen</a>'
+        : '<span class="badge bg-light text-dark border">Fail direkodkan</span>'
+      }
+
+    </div>
+  `;
+
+
+  container.querySelector(
+    ".document-name"
+  ).textContent =
+    fileName || "Dokumen";
+
+
+  const link =
+    container.querySelector(
+      ".document-link"
+    );
+
+
+  if (link && fileData) {
+    link.href =
+      fileData;
+  }
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+function renderMember(member) {
+
+  const name =
+    member.full_name ||
+    member.fullName ||
+    member.name ||
+    "-";
+
+
+  const status =
+    statusInfo(
+      member.status
+    );
+
+
+  document.getElementById(
+    "summaryName"
+  ).textContent =
+    name;
+
+
+  document.getElementById(
+    "summaryDesignation"
+  ).textContent =
+    member.designation ||
+    member.position ||
+    "-";
+
+
+  const statusBadge =
+    document.getElementById(
+      "summaryStatus"
+    );
+
+
+  statusBadge.className =
+    `badge ${status.className}`;
+
+  statusBadge.textContent =
+    status.label;
+
+
+  setText(
+    "summaryId",
+    member.id ||
+    MEMBER_ID
+  );
+
+
+  setText(
+    "summarySubmitted",
+    fmtDate(
+      member.submittedAt ||
+      member.createdAt
+    )
+  );
+
+
+  const comment =
+    member.adminComment ||
+    member.comment ||
+    member.comments ||
+    member.rejectionReason ||
+    "";
+
+
+  if (comment) {
+
+    document.getElementById(
+      "adminCommentBox"
+    ).classList.remove(
+      "d-none"
+    );
+
+    setText(
+      "adminComment",
+      comment
+    );
+  }
+
+
+  /* 1 */
+  setText(
+    "v-full-name",
+    name
+  );
+
+  setText(
+    "v-identification",
+    member.identification_number ||
+    member.identificationNumber ||
+    member.ic
+  );
+
+  setText(
+    "v-age",
+    member.age
+  );
+
+  setText(
+    "v-gender",
+    member.gender
+  );
+
+  setText(
+    "v-designation",
+    member.designation ||
+    member.other_designation
+  );
+
+  setText(
+    "v-grade",
+    member.grade
+  );
+
+  setText(
+    "v-service-period",
+    member.service_period ||
+    member.servicePeriod
+  );
+
+  setText(
+    "v-state",
+    member.state
+  );
+
+  setText(
+    "v-facility-type",
+    member.facility_type ||
+    member.facilityType ||
+    member.facility_other
+  );
+
+  setText(
+    "v-workplace",
+    member.workplace ||
+    member.facility
+  );
+
+  setText(
+    "v-home-address",
+    member.home_address ||
+    member.address
+  );
+
+  setText(
+    "v-office-email",
+    member.office_email ||
+    member.officeEmail
+  );
+
+  setText(
+    "v-personal-email",
+    member.personal_email ||
+    member.personalEmail
+  );
+
+  setText(
+    "v-phone",
+    member.phone
+  );
+
+
+  /* 2 */
+  setText(
+    "v-emergency-name",
+    member.emergency_name
+  );
+
+  setText(
+    "v-relation",
+    member.relation ||
+    member.emergency_relation
+  );
+
+  setText(
+    "v-emergency-address",
+    member.emergency_address
+  );
+
+  setText(
+    "v-emergency-phone",
+    member.emergency_phone
+  );
+
+
+  /* 3 */
+  renderDocument(
+    "v-apc-document",
+    member.apc_file_name,
+    member.apc_file_data
+  );
+
+
+  setText(
+    "v-attended-training",
+    member.attended_training ||
+    member.disaster_training
+  );
+
+
+  showDetailRow(
+    "row-training-details",
+    "v-training-details",
+    member.training_details
+  );
+
+
+  setText(
+    "v-international-experience",
+    member.international_experience
+  );
+
+
+  showDetailRow(
+    "row-mission-details",
+    "v-mission-details",
+    member.mission_details
+  );
+
+
+  /* 4 */
+  setText(
+    "v-medical-condition",
+    member.medical_condition
+  );
+
+
+  showDetailRow(
+    "row-medical-details",
+    "v-medical-condition-details",
+    member.medical_condition_details
+  );
+
+
+  setText(
+    "v-mental-health",
+    member.mental_health
+  );
+
+
+  showDetailRow(
+    "row-mental-details",
+    "v-mental-health-details",
+    member.mental_health_details
+  );
+
+
+  setText(
+    "v-allergies",
+    member.allergies ||
+    member.allergy
+  );
+
+
+  showDetailRow(
+    "row-allergy-details",
+    "v-allergy-details",
+    member.allergy_details
+  );
+
+
+  setText(
+    "v-weight",
+    member.weight,
+    member.weight ? " kg" : ""
+  );
+
+
+  setText(
+    "v-height",
+    member.height,
+    member.height ? " cm" : ""
+  );
+
+
+  /* 5 */
+  const commitment =
+    member.commitment;
+
+
+  const commitmentAccepted =
+    commitment === true ||
+    commitment === "true" ||
+    commitment === "Ya";
+
+
+  setText(
+    "v-commitment",
+    commitmentAccepted
+      ? "Deklarasi telah dipersetujui."
+      : commitment
+  );
+
+
+  if (!commitmentAccepted) {
+
+    document.getElementById(
+      "commitmentIcon"
+    ).className =
+      "bi bi-dash-circle text-secondary mt-1";
+  }
+
+
+  /* 6 */
+  renderDocument(
+    "v-support-document",
+    member.lampiran_ketua_jabatan_name,
+    member.lampiran_ketua_jabatan_data
+  );
+
+
+  /* LINKS */
+  document.getElementById(
+    "btnEdit"
+  ).href =
+    `emt_editform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+
+  document.getElementById(
+    "btnEditBottom"
+  ).href =
+    `emt_editform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+
+  document.getElementById(
+    "btnStatus"
+  ).href =
+    `emt_submitform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+}
+
+
+/* =====================================================
+   LOAD
+===================================================== */
+async function loadMember() {
+
+  if (!MEMBER_ID) {
+
+    document.getElementById(
+      "loadingBox"
+    ).classList.add(
+      "d-none"
+    );
+
+
+    document.getElementById(
+      "errorBox"
+    ).classList.add(
+      "show"
+    );
+
+
+    return;
+  }
+
+
+  try {
+
+    const res =
+      await fetch(
+        `${API}/api/members/${encodeURIComponent(MEMBER_ID)}`
+      );
+
+
+    const json =
+      await res.json();
+
+
+    if (
+      !res.ok ||
+      !json.success ||
+      !json.data
+    ) {
+
+      throw new Error(
+        json.message ||
+        "Maklumat ahli tidak dijumpai."
+      );
+    }
+
+
+    renderMember(
+      json.data
+    );
+
+
+    document.getElementById(
+      "loadingBox"
+    ).classList.add(
+      "d-none"
+    );
+
+
+    document.getElementById(
+      "contentWrap"
+    ).classList.add(
+      "show"
+    );
+
+
+  } catch (err) {
+
+    console.error(
+      "Gagal memuatkan maklumat MyEMT:",
+      err
+    );
+
+
+    document.getElementById(
+      "loadingBox"
+    ).classList.add(
+      "d-none"
+    );
+
+
+    document.getElementById(
+      "errorBox"
+    ).classList.add(
+      "show"
+    );
+  }
+}
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  loadMember
+);
+</script>
+
+</body>
+</html>

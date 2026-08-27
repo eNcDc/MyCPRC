@@ -27,7 +27,6 @@
   <div class="row">
 
     <!-- LEFT PANEL -->
-    <!-- LEFT PANEL -->
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
       <!-- Sidebar will be loaded here -->
     </aside>
@@ -36,54 +35,72 @@
     <main class="col-md-9 col-lg-10 p-4">
 
       <!-- ===== Welcome Card ===== -->
-    <div class="welcome mb-4">
-      <h2>Maklumat Pengguna</h2>
-      <h6></h6>
-    </div>
+      <div class="welcome mb-4">
+        <h2>Maklumat Pengguna</h2>
+        <h6></h6>
+      </div>
 
-    <div class="main-cards">
+      <div class="main-cards">
 
-      <div class="card shadow-sm border-0" style="max-width: 350px;">
+        <div class="card shadow-sm border-0" style="max-width: 350px;">
 
-        <img src="https://i0.wp.com/sebenarnya.my/wp-content/uploads/2017/06/Logo-KKM-e1518677887552.jpg?fit=400%2C216&ssl=1"
+          <img 
+            src="https://i0.wp.com/sebenarnya.my/wp-content/uploads/2017/06/Logo-KKM-e1518677887552.jpg?fit=400%2C216&ssl=1"
             alt="KKM"
-            class="card-img-top">
+            class="card-img-top"
+          >
 
-        <div class="card-body text-center">
+          <div class="card-body text-center">
 
-          <!-- NAME (FORCED VISIBLE) -->
-          <h5 class="fw-bold mb-1 text-dark">-</h5>
+            <!-- NAME (FORCED VISIBLE) -->
+            <h5 class="fw-bold mb-1 text-dark">-</h5>
 
-          <p class="mb-1 text-dark">-</p>
+            <p class="mb-1 text-dark">-</p>
 
-          <p class="mb-1 text-dark">-</p>
+            <p class="mb-1 text-dark">-</p>
 
-          <p class="small text-dark mb-3">-</p>
-    <!--
-          <div class="d-flex justify-content-center gap-3 mb-3">
-            <a href="#" class="text-secondary"><i class="bi bi-facebook"></i></a>
-            <a href="#" class="text-secondary"><i class="bi bi-twitter-x"></i></a>
-            <a href="#" class="text-secondary"><i class="bi bi-linkedin"></i></a>
-          </div>
-    -->
-          <!-- BUTTON GROUP -->
-          <div class="w-100 mt-3">
+            <p class="small text-dark mb-3">-</p>
 
-            <a href="#" class="btn btn-primary w-100 mb-2">
-              <i class="bi bi-envelope me-1"></i>
-              E-mel
-            </a>
+            <!--
+            <div class="d-flex justify-content-center gap-3 mb-3">
+              <a href="#" class="text-secondary">
+                <i class="bi bi-facebook"></i>
+              </a>
 
-            <div class="d-flex justify-content-center">
-              <a href="user_edit.html" class="btn btn-outline-primary w-100">
-                <i class="bi bi-pencil-square me-1"></i>
-                Kemaskini Maklumat Pengguna
+              <a href="#" class="text-secondary">
+                <i class="bi bi-twitter-x"></i>
+              </a>
+
+              <a href="#" class="text-secondary">
+                <i class="bi bi-linkedin"></i>
               </a>
             </div>
+            -->
+
+            <!-- BUTTON GROUP -->
+            <div class="w-100 mt-3">
+
+              <a href="#" class="btn btn-primary w-100 mb-2">
+                <i class="bi bi-envelope me-1"></i>
+                E-mel
+              </a>
+
+              <div class="d-flex justify-content-center">
+
+                <a href="user_edit.html" class="btn btn-outline-primary w-100">
+                  <i class="bi bi-pencil-square me-1"></i>
+                  Kemaskini Maklumat Pengguna
+                </a>
+
+              </div>
+
+            </div>
+
           </div>
         </div>
+
       </div>
-    </div>
+
     </main>
   </div>
 </div>
@@ -91,26 +108,53 @@
 <!-- FOOTER -->
 <div id="footer"></div>
 
+
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+
 <!-- Load Header & Footer -->
 <script>
+
   fetch("header.html")
     .then(res => res.text())
-    .then(data => document.getElementById("header").innerHTML = data);
+    .then(data => {
+      document.getElementById("header").innerHTML = data;
+    });
 
   fetch("footer.html")
     .then(res => res.text())
-    .then(data => document.getElementById("footer").innerHTML = data);
+    .then(data => {
+      document.getElementById("footer").innerHTML = data;
+    });
+
 </script>
-<!-- Load Sidebar -->
+
+
+<!-- ==========================================
+     LOAD SIDEBAR
+     FIXED: sidebar-container -> sidebar-placeholder
+=========================================== -->
 <script>
+
   fetch("sidebar.html")
     .then(res => res.text())
-    .then(data => document.getElementById("sidebar-container").innerHTML = data);
+    .then(data => {
+
+      document.getElementById("sidebar-placeholder").innerHTML = data;
+
+    })
+    .catch(err => {
+
+      console.error("Failed to load sidebar:", err);
+
+    });
+
 </script>
+
+
 <style>
+
 .card {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   max-width: 300px;
@@ -143,40 +187,64 @@ a {
   color: black;
 }
 
-button:hover, a:hover {
+button:hover,
+a:hover {
   opacity: 0.7;
 }
-</style>
-<script src="assets/js/wizard-form.js">
 
-</script>
+</style>
+
+
+<script src="assets/js/wizard-form.js"></script>
+
+
 <!-- Improved Sidebar Sign Out (waits for sidebar to load) -->
 <script>
+
   // Run this after everything loads, including fetch
   window.addEventListener('load', function() {
-    // Give fetch a little time to complete (0.5–1 second delay)
+
+    // Give fetch a little time to complete
     setTimeout(() => {
+
       const sidebarSignOut = document.getElementById('sidebarSignOut');
       const loginOverlay = document.getElementById('loginOverlay');
       const dashboardContent = document.getElementById('dashboardContent');
 
-      console.log("Looking for sidebarSignOut:", sidebarSignOut); // Debug
+      console.log("Looking for sidebarSignOut:", sidebarSignOut);
 
       if (sidebarSignOut) {
+
         sidebarSignOut.addEventListener('click', function(e) {
+
           e.preventDefault();
+
           console.log("Sidebar Sign Out clicked!");
 
-          loginOverlay.style.display = 'flex';               // Show login
-          dashboardContent.classList.add('d-none');          // Hide dashboard
-          localStorage.removeItem('mycprc_loggedIn');        // Clear state
-          document.getElementById('loginForm')?.reset();     // Reset form
+          if (loginOverlay) {
+            loginOverlay.style.display = 'flex';
+          }
+
+          if (dashboardContent) {
+            dashboardContent.classList.add('d-none');
+          }
+
+          localStorage.removeItem('mycprc_loggedIn');
+
+          document.getElementById('loginForm')?.reset();
+
         });
+
       } else {
+
         console.log("sidebarSignOut ID NOT FOUND — check sidebar.html");
+
       }
-    }, 800); // 800ms delay — adjust to 1500 if still not found
+
+    }, 800);
+
   });
+
 </script>
 
 </body>

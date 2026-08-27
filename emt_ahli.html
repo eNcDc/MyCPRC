@@ -1,107 +1,456 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <title>MyEMT AHLI</title>
+  <title>Pengurusan Ahli MyEMT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-  <!-- Main CSS -->
   <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    body{background:#f4f6f9}
+
+    .soft-card{
+      border:0;
+      border-radius:14px;
+      box-shadow:0 .25rem .75rem rgba(0,0,0,.06);
+    }
+
+    .summary-card{
+      cursor:pointer;
+      transition:.15s ease;
+    }
+
+    .summary-card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 .35rem .9rem rgba(0,0,0,.08)!important;
+    }
+
+    .table td,
+    .table th{
+      vertical-align:middle;
+    }
+
+    .member-name{
+      font-weight:600;
+    }
+
+    .small-muted{
+      font-size:.8rem;
+      color:#6c757d;
+    }
+
+    .filter-bar{
+      background:#fff;
+      border:1px solid #e6e9ed;
+      border-radius:12px;
+      padding:1rem;
+    }
+
+    .empty-row td{
+      padding:2rem 1rem;
+    }
+
+
+    .admin-tabs{
+      border-bottom:1px solid #dee2e6;
+    }
+
+    .admin-tabs .nav-link{
+      color:#495057;
+      font-weight:600;
+      padding:.8rem 1.1rem;
+    }
+
+    .admin-tabs .nav-link.active{
+      color:#0d6efd;
+      font-weight:700;
+    }
+
+    .dashboard-kpi{
+      border:1px solid #e4e7eb;
+      border-radius:14px;
+      background:#fff;
+      height:100%;
+      padding:1rem;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+
+    .dashboard-kpi:hover{
+      transform:translateY(-2px);
+      box-shadow:0 .35rem .9rem rgba(0,0,0,.08);
+      border-color:#cfd4da;
+    }
+
+    .dashboard-kpi:focus{
+      outline:3px solid rgba(13,110,253,.18);
+      outline-offset:2px;
+    }
+
+    .dashboard-kpi .kpi-label{
+      font-size:.82rem;
+      color:#6c757d;
+      margin-bottom:.25rem;
+    }
+
+    .dashboard-kpi .kpi-number{
+      font-size:1.9rem;
+      font-weight:800;
+      line-height:1.1;
+    }
+
+    .dashboard-chart{
+      position:relative;
+      min-height:300px;
+    }
+
+    .dashboard-section-title{
+      font-weight:700;
+      margin-bottom:.2rem;
+    }
+
+    .dashboard-table td,
+    .dashboard-table th{
+      vertical-align:middle;
+    }
+
+    @media(max-width:767px){
+      .page-actions{
+        width:100%;
+      }
+
+      .page-actions .btn{
+        width:100%;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div id="header"></div>
 
 <div class="container-fluid">
   <div class="row">
 
-    <!-- LEFT PANEL -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
-    </aside>
+    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-    <!-- MAIN CONTENT -->
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
-      <!-- HEADER -->
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0">Pengurusan Malaysia Emergency Medical Team (MyEMT)</h4>
+      <!-- PAGE HEADER -->
+      <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3 mb-4">
 
-        <div class="mb-3 d-flex justify-content-end">
-            <a href="landingMyemtAdmin.html" class="btn btn-primary">
-                <i class="bi bi-arrow-left me-1"></i> Kembali
-            </a>
+        <div>
+          <h4 class="mb-1 fw-bold">Pengurusan Ahli MyEMT</h4>
+          <small class="text-muted">
+            Semakan dan keputusan permohonan keahlian Malaysia Emergency Medical Team (MyEMT).
+          </small>
+        </div>
+
+        <div class="d-flex gap-2 flex-wrap page-actions">
+
+          <a href="landingMyemtAdmin.html" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left me-1"></i>
+            Dashboard MyEMT
+          </a>
+
         </div>
 
       </div>
 
-      <!-- UNTUK PENGURUSAN MYEMT JE -->
-      <div class="row g-3 mb-4">
 
-        <div class="col-md-3">
-          <div class="card shadow-sm border-0 border-start border-primary border-4 h-100"
-              role="button"
-              data-bs-toggle="modal"
-              data-bs-target="#modalJumlahPendaftaran">
+      <!-- =====================================================
+           ADMIN TABS
+      ====================================================== -->
+      <ul class="nav nav-tabs admin-tabs mb-4" id="memberAdminTabs" role="tablist">
 
-            <div class="card-body d-flex align-items-center justify-content-between">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active"
+            id="dashboard-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#dashboardTab"
+            type="button"
+            role="tab"
+          >
+            <i class="bi bi-speedometer2 me-1"></i>
+            Dashboard
+          </button>
+        </li>
 
-              <div>
-                <h6 class="text-muted mb-1">Jumlah Pendaftaran</h6>
-                <h3 class="mb-0 fw-bold" id="countTotal">0</h3>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="management-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#managementTab"
+            type="button"
+            role="tab"
+          >
+            <i class="bi bi-person-lines-fill me-1"></i>
+            Pengurusan Permohonan
+          </button>
+        </li>
+
+      </ul>
+
+
+      <div class="tab-content">
+
+        <!-- =====================================================
+             TAB 1 : DASHBOARD
+        ====================================================== -->
+        <div
+          class="tab-pane fade show active"
+          id="dashboardTab"
+          role="tabpanel"
+          aria-labelledby="dashboard-tab"
+        >
+
+          <div class="d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-2 mb-3">
+
+            <div>
+              <h5 class="dashboard-section-title">Dashboard Ahli MyEMT</h5>
+              <div class="small text-muted">
+                Ringkasan status pendaftaran dan permohonan yang memerlukan perhatian admin.
               </div>
+            </div>
 
-              <div class="text-primary fs-3">
-                <i class="bi bi-clipboard-data"></i>
+            <button type="button"
+                    class="btn btn-sm btn-outline-primary"
+                    id="btnOpenPendingTab">
+              <i class="bi bi-hourglass-split me-1"></i>
+              Lihat Semua Dalam Semakan
+            </button>
+
+          </div>
+
+
+          <!-- DASHBOARD KPI -->
+          <div class="row g-3 mb-4">
+
+            <div class="col-6 col-xl-3">
+              <div class="dashboard-kpi dashboard-kpi-link" role="button" tabindex="0" data-status-target="all" aria-label="Lihat semua permohonan">
+                <div class="d-flex justify-content-between align-items-start">
+
+                  <div>
+                    <div class="kpi-label">Jumlah Pendaftaran</div>
+                    <div class="kpi-number" id="dbCountTotal">0</div>
+                  </div>
+
+                  <div class="text-primary fs-3">
+                    <i class="bi bi-clipboard-data"></i>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-6 col-xl-3">
+              <div class="dashboard-kpi dashboard-kpi-link" role="button" tabindex="0" data-status-target="pending" aria-label="Lihat permohonan dalam semakan">
+                <div class="d-flex justify-content-between align-items-start">
+
+                  <div>
+                    <div class="kpi-label">Dalam Semakan</div>
+                    <div class="kpi-number" id="dbCountPending">0</div>
+                    <div class="small-muted">Perlu tindakan admin</div>
+                  </div>
+
+                  <div class="text-warning fs-3">
+                    <i class="bi bi-hourglass-split"></i>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-6 col-xl-3">
+              <div class="dashboard-kpi dashboard-kpi-link" role="button" tabindex="0" data-status-target="approved" aria-label="Lihat permohonan diluluskan">
+                <div class="d-flex justify-content-between align-items-start">
+
+                  <div>
+                    <div class="kpi-label">Diluluskan</div>
+                    <div class="kpi-number" id="dbCountApproved">0</div>
+                  </div>
+
+                  <div class="text-success fs-3">
+                    <i class="bi bi-check-circle"></i>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-6 col-xl-3">
+              <div class="dashboard-kpi dashboard-kpi-link" role="button" tabindex="0" data-status-target="rejected" aria-label="Lihat permohonan ditolak">
+                <div class="d-flex justify-content-between align-items-start">
+
+                  <div>
+                    <div class="kpi-label">Ditolak</div>
+                    <div class="kpi-number" id="dbCountRejected">0</div>
+                  </div>
+
+                  <div class="text-danger fs-3">
+                    <i class="bi bi-x-circle"></i>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- DASHBOARD CHARTS -->
+          <div class="row g-4 mb-4">
+
+            <div class="col-lg-5">
+
+              <div class="card soft-card h-100">
+
+                <div class="card-header bg-white border-0 pt-3">
+
+                  <strong>Status Permohonan</strong>
+
+                  <div class="small text-muted">
+                    Peratusan permohonan mengikut status semasa.
+                  </div>
+
+                </div>
+
+                <div class="card-body">
+
+                  <div class="dashboard-chart">
+                    <canvas id="dashboardStatusChart"></canvas>
+                  </div>
+
+                </div>
+
               </div>
 
             </div>
-          </div>
-        </div>
 
-        <!-- MODAL JUMLAH PENDAFTARAN -->
-        <div class="modal fade" id="modalJumlahPendaftaran" tabindex="-1">
-          <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">
 
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  Senarai Semua Ahli MyEMT Berdaftar
-                </h5>
+            <div class="col-lg-7">
 
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                </button>
+              <div class="card soft-card h-100">
+
+                <div class="card-header bg-white border-0 pt-3">
+
+                  <strong>Taburan Ahli Mengikut Negeri</strong>
+
+                  <div class="small text-muted">
+                    Negeri dengan jumlah pendaftaran tertinggi.
+                  </div>
+
+                </div>
+
+                <div class="card-body">
+
+                  <div class="dashboard-chart">
+                    <canvas id="dashboardStateChart"></canvas>
+                  </div>
+
+                </div>
+
               </div>
 
-              <div class="modal-body">
+            </div>
+
+          </div>
+
+
+          <!-- DASHBOARD TABLES -->
+          <div class="row g-4">
+
+            <div class="col-xl-6">
+
+              <div class="card soft-card h-100">
+
+                <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+
+                  <div>
+                    <strong>Perlu Semakan</strong>
+
+                    <div class="small text-muted">
+                      Permohonan pending terkini.
+                    </div>
+                  </div>
+
+                  <span class="badge bg-warning text-dark" id="dbPendingBadge">
+                    0
+                  </span>
+
+                </div>
 
                 <div class="table-responsive">
 
-                  <table class="table table-hover align-middle">
+                  <table class="table table-hover dashboard-table mb-0">
 
                     <thead class="table-light">
                       <tr>
-                        <th>Nama Pemohon</th>
-                        <th>Jawatan</th>
-                        <th>Fasiliti</th>
+                        <th>Tarikh</th>
+                        <th>Pemohon</th>
                         <th>Negeri</th>
+                        <th class="text-end">Tindakan</th>
+                      </tr>
+                    </thead>
+
+                    <tbody id="dashboardPendingBody">
+                      <tr>
+                        <td colspan="4" class="text-center text-muted py-4">
+                          Memuatkan...
+                        </td>
+                      </tr>
+                    </tbody>
+
+                  </table>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <div class="col-xl-6">
+
+              <div class="card soft-card h-100">
+
+                <div class="card-header bg-white border-0 pt-3">
+
+                  <strong>Permohonan Terkini</strong>
+
+                  <div class="small text-muted">
+                    Lima rekod pendaftaran paling terkini.
+                  </div>
+
+                </div>
+
+                <div class="table-responsive">
+
+                  <table class="table table-hover dashboard-table mb-0">
+
+                    <thead class="table-light">
+                      <tr>
+                        <th>Tarikh</th>
+                        <th>Pemohon</th>
                         <th>Status</th>
                         <th class="text-end">Tindakan</th>
                       </tr>
                     </thead>
 
-                    <tbody id="tbodyAll">
+                    <tbody id="dashboardRecentBody">
                       <tr>
-                        <td colspan="6" class="text-center text-muted py-3">Tiada rekod pendaftaran</td>
+                        <td colspan="4" class="text-center text-muted py-4">
+                          Memuatkan...
+                        </td>
                       </tr>
                     </tbody>
 
@@ -111,505 +460,1876 @@
 
               </div>
 
-              <div class="modal-footer">
-                <button class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal">
-                  Tutup
-                </button>
-              </div>
-
             </div>
+
           </div>
+
         </div>
 
-        <div class="col-md-3">
-          <div class="card shadow-sm border-0 border-start border-warning border-4 h-100"
-              role="button"
-              data-bs-toggle="modal"
-              data-bs-target="#modalDalamSemakan">
 
-            <div class="card-body d-flex align-items-center justify-content-between">
+        <!-- =====================================================
+             TAB 2 : EXISTING MANAGEMENT
+        ====================================================== -->
+        <div
+          class="tab-pane fade"
+          id="managementTab"
+          role="tabpanel"
+          aria-labelledby="management-tab"
+        >
 
-              <div>
-                <h6 class="text-muted mb-1">Dalam Semakan</h6>
-                <h3 class="mb-0 fw-bold" id="countPending">0</h3>
-              </div>
-
-              <div class="text-warning fs-3">
-                <i class="bi bi-hourglass-split"></i>
-              </div>
-
-            </div>
+          <!-- IMPORTANT NOTE -->
+          <div class="alert alert-info border mb-4">
+            <i class="bi bi-info-circle me-1"></i>
+            <strong>Kelulusan di halaman ini ialah kelulusan keahlian MyEMT.</strong>
+            Selepas keahlian diluluskan, ahli boleh meneruskan permohonan Program Kursus MyEMT
+            (B-Course + C-Course + TTX + FTX). Ia bukan status tamat kursus atau kelayakan operasi.
           </div>
-        </div>
 
-        <!-- MODAL DALAM SEMAKAN -->
-        <div class="modal fade" id="modalDalamSemakan" tabindex="-1">
-          <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">
 
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  Senarai Pemohon Dalam Semakan
-                </h5>
+          <!-- SUMMARY -->
+          <div class="row g-3 mb-4">
+
+            <div class="col-6 col-xl-3">
+              <div class="card soft-card summary-card h-100"
+                   role="button"
+                   data-bs-toggle="modal"
+                   data-bs-target="#modalJumlahPendaftaran">
+
+                <div class="card-body d-flex align-items-center justify-content-between">
+
+                  <div>
+                    <h6 class="text-muted mb-1">Jumlah Pendaftaran</h6>
+                    <h3 class="mb-0 fw-bold" id="countTotal">0</h3>
+                  </div>
+
+                  <div class="text-primary fs-3">
+                    <i class="bi bi-clipboard-data"></i>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+
+            <div class="col-6 col-xl-3">
+              <div class="card soft-card summary-card h-100"
+                   role="button"
+                   data-bs-toggle="modal"
+                   data-bs-target="#modalDalamSemakan">
+
+                <div class="card-body d-flex align-items-center justify-content-between">
+
+                  <div>
+                    <h6 class="text-muted mb-1">Dalam Semakan</h6>
+                    <h3 class="mb-0 fw-bold" id="countPending">0</h3>
+                  </div>
+
+                  <div class="text-warning fs-3">
+                    <i class="bi bi-hourglass-split"></i>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+
+            <div class="col-6 col-xl-3">
+              <div class="card soft-card summary-card h-100"
+                   role="button"
+                   data-bs-toggle="modal"
+                   data-bs-target="#modalDiluluskan">
+
+                <div class="card-body d-flex align-items-center justify-content-between">
+
+                  <div>
+                    <h6 class="text-muted mb-1">Diluluskan</h6>
+                    <h3 class="mb-0 fw-bold" id="countApproved">0</h3>
+                  </div>
+
+                  <div class="text-success fs-3">
+                    <i class="bi bi-check-circle"></i>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+
+            <div class="col-6 col-xl-3">
+              <div class="card soft-card summary-card h-100"
+                   role="button"
+                   data-bs-toggle="modal"
+                   data-bs-target="#modalDitolak">
+
+                <div class="card-body d-flex align-items-center justify-content-between">
+
+                  <div>
+                    <h6 class="text-muted mb-1">Ditolak</h6>
+                    <h3 class="mb-0 fw-bold" id="countRejected">0</h3>
+                  </div>
+
+                  <div class="text-danger fs-3">
+                    <i class="bi bi-x-circle"></i>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+
+          <!-- FILTER -->
+          <div class="filter-bar mb-3">
+
+            <div class="row g-2">
+
+              <div class="col-lg-5">
+
+                <label class="form-label small text-muted mb-1">
+                  Carian
+                </label>
+
+                <div class="input-group">
+                  <span class="input-group-text bg-white">
+                    <i class="bi bi-search"></i>
+                  </span>
+
+                  <input
+                    type="search"
+                    id="searchInput"
+                    class="form-control"
+                    placeholder="Cari nama, jawatan, fasiliti atau negeri..."
+                  >
+                </div>
+
+              </div>
+
+
+              <div class="col-md-6 col-lg-3">
+
+                <label class="form-label small text-muted mb-1">
+                  Status
+                </label>
+
+                <select id="statusFilter" class="form-select">
+                  <option value="all">Semua Status</option>
+                  <option value="pending">Dalam Semakan</option>
+                  <option value="approved">Diluluskan</option>
+                  <option value="rejected">Ditolak</option>
+                </select>
+
+              </div>
+
+
+              <div class="col-md-6 col-lg-3">
+
+                <label class="form-label small text-muted mb-1">
+                  Negeri
+                </label>
+
+                <select id="stateFilter" class="form-select">
+                  <option value="all">Semua Negeri</option>
+                </select>
+
+              </div>
+
+
+              <div class="col-lg-1 d-flex align-items-end">
 
                 <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
+                        class="btn btn-outline-secondary w-100"
+                        id="btnReset"
+                        title="Reset filter">
+                  <i class="bi bi-arrow-counterclockwise"></i>
                 </button>
-              </div>
 
-              <div class="modal-body">
-
-                <!-- Ringkasan -->
-                <div class="alert alert-warning border mb-4">
-                  <strong id="alertPending">0 Permohonan</strong> sedang menunggu semakan dan kelulusan admin MyEMT.
-                </div>
-
-                <div class="table-responsive">
-
-                  <table class="table table-hover align-middle">
-
-                    <thead class="table-light">
-                      <tr>
-                        <th>Tarikh Mohon</th>
-                        <th>Nama Pemohon</th>
-                        <th>Jawatan</th>
-                        <th>Fasiliti</th>
-                        <th>Negeri</th>
-                        <th>Status</th>
-                        <th class="text-end">Tindakan</th>
-                      </tr>
-                    </thead>
-
-                    <tbody id="tbodyPending">
-                      <tr id="tbodyPendingPlaceholder">
-                        <td colspan="7" class="text-center text-muted py-3">Tiada permohonan dalam semakan</td>
-                      </tr>
-                    </tbody>
-
-                  </table>
-
-                </div>
-
-              </div>
-
-              <div class="modal-footer">
-                <button class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal">
-                  Tutup
-                </button>
               </div>
 
             </div>
+
           </div>
-        </div>
 
-        <div class="col-md-3">
-          <div class="card shadow-sm border-0 border-start border-success border-4 h-100"
-              role="button"
-              data-bs-toggle="modal"
-              data-bs-target="#modalDiluluskan">
 
-            <div class="card-body d-flex align-items-center justify-content-between">
+          <!-- MAIN TABLE -->
+          <div class="card soft-card">
+
+            <div class="card-header bg-white border-0 pt-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
 
               <div>
-                <h6 class="text-muted mb-1">Diluluskan</h6>
-                <h3 class="mb-0 fw-bold" id="countApproved">0</h3>
+                <strong>Senarai Permohonan Ahli MyEMT</strong>
+                <div class="small text-muted">
+                  Klik Semak untuk membaca borang lengkap pemohon. Kelulusan atau penolakan hanya boleh dibuat selepas semakan.
+                </div>
               </div>
 
-              <div class="text-success fs-3">
-                <i class="bi bi-check-circle"></i>
-              </div>
+              <span class="badge bg-light text-dark border" id="visibleCount">
+                0 rekod
+              </span>
 
             </div>
-          </div>
-        </div>
 
-        <!-- MODAL DILULUSKAN -->
-        <div class="modal fade" id="modalDiluluskan" tabindex="-1">
-          <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">
 
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  Senarai Pemohon Diluluskan
-                </h5>
+            <div class="table-responsive">
 
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                </button>
-              </div>
+              <table class="table table-hover align-middle mb-0">
 
-              <div class="modal-body">
+                <thead class="table-light">
+                  <tr>
+                    <th>Tarikh Mohon</th>
+                    <th>Nama Pemohon</th>
+                    <th>Jawatan</th>
+                    <th>Fasiliti</th>
+                    <th>Negeri</th>
+                    <th>Status</th>
+                    <th class="text-end">Tindakan</th>
+                  </tr>
+                </thead>
 
-                <div class="alert alert-success border mb-4">
-                  <strong id="alertApproved">0 Permohonan</strong> telah diluluskan dan layak menyertai MyEMT.
-                </div>
+                <tbody id="tbodyMain">
+                  <tr>
+                    <td colspan="7" class="text-center text-muted py-4">
+                      Memuatkan rekod...
+                    </td>
+                  </tr>
+                </tbody>
 
-                <div class="table-responsive">
-
-                  <table class="table table-hover align-middle">
-
-                    <thead class="table-light">
-                      <tr>
-                        <th>Tarikh Lulus</th>
-                        <th>Nama Pemohon</th>
-                        <th>Jawatan</th>
-                        <th>Fasiliti</th>
-                        <th>Negeri</th>
-                        <th>Status</th>
-                        <th class="text-end">Tindakan</th>
-                      </tr>
-                    </thead>
-
-                    <tbody id="tbodyApproved">
-                      <tr>
-                        <td colspan="7" class="text-center text-muted py-3">Tiada permohonan diluluskan</td>
-                      </tr>
-                    </tbody>
-
-                  </table>
-
-                </div>
-
-              </div>
-
-              <div class="modal-footer">
-                <button class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal">
-                  Tutup
-                </button>
-              </div>
+              </table>
 
             </div>
+
           </div>
-        </div>
 
-        <div class="col-md-3">
-          <div class="card shadow-sm border-0 border-start border-danger border-4 h-100"
-              role="button"
-              data-bs-toggle="modal"
-              data-bs-target="#modalDitolak">
-
-            <div class="card-body d-flex align-items-center justify-content-between">
-
-              <div>
-                <h6 class="text-muted mb-1">Ditolak</h6>
-                <h3 class="mb-0 fw-bold" id="countRejected">0</h3>
-              </div>
-
-              <div class="text-danger fs-3">
-                <i class="bi bi-x-circle"></i>
-              </div>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- MODAL DITOLAK -->
-        <div class="modal fade" id="modalDitolak" tabindex="-1">
-          <div class="modal-dialog modal-xl modal-dialog-scrollable">
-            <div class="modal-content">
-
-              <div class="modal-header">
-                <h5 class="modal-title">
-                  Senarai Pemohon Ditolak
-                </h5>
-
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal">
-                </button>
-              </div>
-
-              <div class="modal-body">
-
-                <div class="alert alert-danger border mb-4">
-                  <strong id="alertRejected">0 Permohonan</strong> telah ditolak selepas proses semakan.
-                </div>
-
-                <div class="table-responsive">
-
-                  <table class="table table-hover align-middle">
-
-                    <thead class="table-light">
-                      <tr>
-                        <th>Tarikh Keputusan</th>
-                        <th>Nama Pemohon</th>
-                        <th>Jawatan</th>
-                        <th>Fasiliti</th>
-                        <th>Negeri</th>
-                        <th>Sebab Penolakan</th>
-                        <th class="text-end">Tindakan</th>
-                      </tr>
-                    </thead>
-
-                    <tbody id="tbodyRejected">
-                      <tr>
-                        <td colspan="7" class="text-center text-muted py-3">Tiada permohonan ditolak</td>
-                      </tr>
-                    </tbody>
-
-                  </table>
-
-                </div>
-
-              </div>
-
-              <div class="modal-footer">
-                <button class="btn btn-outline-secondary"
-                        data-bs-dismiss="modal">
-                  Tutup
-                </button>
-              </div>
-
-            </div>
-          </div>
         </div>
 
       </div>
 
-      <!-- FILTER LULUS TOLAK-->
-      <div class="d-flex gap-2 mb-3">
-
-        <select id="statusFilter" class="form-select w-auto">
-          <option value="all">Semua Status</option>
-          <option value="Dalam Semakan">Dalam Semakan</option>
-          <option value="Diluluskan">Diluluskan</option>
-          <option value="Ditolak">Ditolak</option>
-        </select>
-
-      </div>
-
-      <!-- TABLE PENGURUSAN -->
-      <table class="table table-striped mb-0">
-
-        <thead class="table-light">
-          <tr>
-            <th>Tarikh</th>
-            <th>Nama Pemohon</th>
-            <th>Jawatan</th>
-            <th>Fasiliti</th>
-            <th>Negeri</th>
-            <th>Status</th>
-            <th class="text-end">Tindakan</th>
-          </tr>
-        </thead>
-
-        <tbody id="tbodyMain">
-          <tr>
-            <td colspan="7" class="text-center text-muted py-3">Tiada rekod permohonan</td>
-          </tr>
-        </tbody>
-      </table>
-      <br><br>
-      
     </main>
 
   </div>
 </div>
 
-<!-- FOOTER -->
+
+<!-- =====================================================
+     MODAL ALL
+===================================================== -->
+<div class="modal fade" id="modalJumlahPendaftaran" tabindex="-1">
+
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <div>
+          <h5 class="modal-title mb-0">Semua Permohonan Ahli MyEMT</h5>
+          <small class="text-muted">Keseluruhan permohonan yang direkodkan.</small>
+        </div>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="table-responsive">
+
+          <table class="table table-hover align-middle">
+
+            <thead class="table-light">
+              <tr>
+                <th>Tarikh</th>
+                <th>Nama Pemohon</th>
+                <th>Jawatan</th>
+                <th>Fasiliti</th>
+                <th>Negeri</th>
+                <th>Status</th>
+                <th class="text-end">Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="tbodyAll"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL PENDING
+===================================================== -->
+<div class="modal fade" id="modalDalamSemakan" tabindex="-1">
+
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <div>
+          <h5 class="modal-title mb-0">Permohonan Dalam Semakan</h5>
+          <small class="text-muted">Permohonan yang masih memerlukan keputusan admin.</small>
+        </div>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="alert alert-warning border">
+          <strong id="alertPending">0 Permohonan</strong>
+          sedang menunggu semakan.
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table table-hover align-middle">
+
+            <thead class="table-light">
+              <tr>
+                <th>Tarikh Mohon</th>
+                <th>Nama Pemohon</th>
+                <th>Jawatan</th>
+                <th>Fasiliti</th>
+                <th>Negeri</th>
+                <th>Status</th>
+                <th class="text-end">Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="tbodyPending"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL APPROVED
+===================================================== -->
+<div class="modal fade" id="modalDiluluskan" tabindex="-1">
+
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <div>
+          <h5 class="modal-title mb-0">Permohonan Keahlian Diluluskan</h5>
+          <small class="text-muted">Ahli yang telah mendapat kelulusan keahlian MyEMT.</small>
+        </div>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="alert alert-success border">
+          <strong id="alertApproved">0 Permohonan</strong>
+          telah diluluskan. Ahli boleh meneruskan permohonan Program Kursus MyEMT.
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table table-hover align-middle">
+
+            <thead class="table-light">
+              <tr>
+                <th>Tarikh Lulus</th>
+                <th>Nama Pemohon</th>
+                <th>Jawatan</th>
+                <th>Fasiliti</th>
+                <th>Negeri</th>
+                <th>Status</th>
+                <th class="text-end">Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="tbodyApproved"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL REJECTED
+===================================================== -->
+<div class="modal fade" id="modalDitolak" tabindex="-1">
+
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <div>
+          <h5 class="modal-title mb-0">Permohonan Ditolak</h5>
+          <small class="text-muted">Permohonan yang tidak diluluskan selepas semakan.</small>
+        </div>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="alert alert-danger border">
+          <strong id="alertRejected">0 Permohonan</strong>
+          telah ditolak selepas proses semakan.
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table table-hover align-middle">
+
+            <thead class="table-light">
+              <tr>
+                <th>Tarikh Keputusan</th>
+                <th>Nama Pemohon</th>
+                <th>Jawatan</th>
+                <th>Fasiliti</th>
+                <th>Negeri</th>
+                <th>Sebab Penolakan</th>
+                <th class="text-end">Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="tbodyRejected"></tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
 <div id="footer"></div>
 
-<!-- Bootstrap JS -->
+
 <script src="assets/js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Load Header & Footer -->
-<script>
-  fetch("header.html")
-    .then(res => res.text())
-    .then(data => document.getElementById("header").innerHTML = data);
 
-  fetch("footer.html")
-    .then(res => res.text())
-    .then(data => document.getElementById("footer").innerHTML = data);
-</script>
-
-<!-- Load Sidebar -->
 <script>
-  fetch("sidebar.html")
+/* =====================================================
+   SHARED LAYOUT
+===================================================== */
+fetch("header.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("header").innerHTML = data);
+
+fetch("footer.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("footer").innerHTML = data);
+
+fetch("sidebar.html")
   .then(res => res.text())
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
   .catch(err => console.error("Sidebar load failed:", err));
-</script>
 
-<!-- API integration -->
-<script>
+
+/* =====================================================
+   STATE
+===================================================== */
 const STATUS_MAP = {
-  pending:  { label: 'Dalam Semakan', badge: 'bg-warning text-dark' },
-  approved: { label: 'Diluluskan',    badge: 'bg-success' },
-  rejected: { label: 'Ditolak',       badge: 'bg-danger' }
+  pending: {
+    label:"Dalam Semakan",
+    badge:"bg-warning text-dark"
+  },
+
+  approved: {
+    label:"Diluluskan",
+    badge:"bg-success"
+  },
+
+  rejected: {
+    label:"Ditolak",
+    badge:"bg-danger"
+  }
 };
 
-function statusBadge(status) {
-  const s = STATUS_MAP[status] || { label: status, badge: 'bg-secondary' };
-  return `<span class="badge ${s.badge}">${s.label}</span>`;
+
+let allMembers = [];
+
+if (typeof Chart !== "undefined" && typeof ChartDataLabels !== "undefined") {
+  Chart.register(ChartDataLabels);
 }
 
-function actionBtns(id, status) {
-  const dis = (status === 'approved' || status === 'rejected') ? 'disabled' : '';
+let dashboardStatusChart = null;
+let dashboardStateChart = null;
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+function esc(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function normalize(value){
+  return String(value || "").trim().toLowerCase();
+}
+
+
+function fmtDate(value){
+
+  if(!value){
+    return "-";
+  }
+
+
+  const date =
+    new Date(value);
+
+
+  if(!Number.isNaN(date.getTime())){
+
+    return date.toLocaleDateString(
+      "ms-MY",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }
+    );
+  }
+
+
+  return String(value);
+}
+
+
+function statusBadge(status){
+
+  const config =
+    STATUS_MAP[normalize(status)] ||
+    {
+      label:status || "-",
+      badge:"bg-secondary"
+    };
+
+
   return `
-    <button class="btn btn-sm btn-success me-1 btn-approve" data-id="${id}" ${dis}>Lulus</button>
-    <button class="btn btn-sm btn-danger btn-reject" data-id="${id}" ${dis}>Tolak</button>`;
+    <span class="badge ${config.badge}">
+      ${esc(config.label)}
+    </span>
+  `;
 }
 
-async function patchStatus(id, status) {
-  const res = await fetch(`${API}/api/members/${id}/status`, {
-    method: 'PATCH',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status })
-  });
-  return res.json();
+
+function memberName(member){
+
+  return (
+    member.full_name ||
+    member.fullName ||
+    member.name ||
+    "-"
+  );
 }
 
-function bindActionBtns(tbody) {
-  tbody.querySelectorAll('.btn-approve').forEach(btn => {
-    btn.addEventListener('click', async function () {
-      const id = this.dataset.id;
-      await patchStatus(id, 'approved');
-      loadMembers();
-    });
-  });
-  tbody.querySelectorAll('.btn-reject').forEach(btn => {
-    btn.addEventListener('click', async function () {
-      const id = this.dataset.id;
-      await patchStatus(id, 'rejected');
-      loadMembers();
-    });
-  });
+
+function memberFacility(member){
+
+  return (
+    member.workplace ||
+    member.facility ||
+    member.facility_type ||
+    "-"
+  );
 }
 
-async function loadMembers() {
-  const res = await fetch(`${API}/api/members`);
-  const json = await res.json();
-  const members = json.data || json;
 
-  const pending  = members.filter(m => m.status === 'pending');
-  const approved = members.filter(m => m.status === 'approved');
-  const rejected = members.filter(m => m.status === 'rejected');
+function rejectionReason(member){
 
-  // Update counters
-  document.getElementById('countTotal').textContent    = members.length;
-  document.getElementById('countPending').textContent  = pending.length;
-  document.getElementById('countApproved').textContent = approved.length;
-  document.getElementById('countRejected').textContent = rejected.length;
-
-  // Update modal alert text
-  document.getElementById('alertPending').textContent  = `${pending.length} Permohonan`;
-  document.getElementById('alertApproved').textContent = `${approved.length} Permohonan`;
-  document.getElementById('alertRejected').textContent = `${rejected.length} Permohonan`;
-
-  // Main table (all members)
-  const tbodyMain = document.getElementById('tbodyMain');
-  if (members.length === 0) {
-    tbodyMain.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod permohonan</td></tr>';
-  } else {
-    tbodyMain.innerHTML = members.map(m => `
-      <tr data-status="${STATUS_MAP[m.status]?.label || m.status}">
-        <td>${m.submittedAt || '-'}</td>
-        <td>${m.full_name || m.name || '-'}</td>
-        <td>${m.designation || '-'}</td>
-        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
-        <td>${m.state || '-'}</td>
-        <td class="status">${statusBadge(m.status)}</td>
-        <td class="text-end">${actionBtns(m.id, m.status)}</td>
-      </tr>`).join('');
-    bindActionBtns(tbodyMain);
-  }
-
-  // Modal All
-  const tbodyAll = document.getElementById('tbodyAll');
-  if (members.length === 0) {
-    tbodyAll.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">Tiada rekod pendaftaran</td></tr>';
-  } else {
-    tbodyAll.innerHTML = members.map(m => `
-      <tr>
-        <td>${m.full_name || m.name || '-'}</td>
-        <td>${m.designation || '-'}</td>
-        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
-        <td>${m.state || '-'}</td>
-        <td>${statusBadge(m.status)}</td>
-        <td class="text-end">${actionBtns(m.id, m.status)}</td>
-      </tr>`).join('');
-    bindActionBtns(tbodyAll);
-  }
-
-  // Modal Pending
-  const tbodyPending = document.getElementById('tbodyPending');
-  if (pending.length === 0) {
-    tbodyPending.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">Tiada permohonan dalam semakan</td></tr>';
-  } else {
-    tbodyPending.innerHTML = pending.map(m => `
-      <tr>
-        <td>${m.submittedAt || '-'}</td>
-        <td>${m.full_name || m.name || '-'}</td>
-        <td>${m.designation || '-'}</td>
-        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
-        <td>${m.state || '-'}</td>
-        <td>${statusBadge(m.status)}</td>
-        <td class="text-end">${actionBtns(m.id, m.status)}</td>
-      </tr>`).join('');
-    bindActionBtns(tbodyPending);
-  }
-
-  // Modal Approved
-  const tbodyApproved = document.getElementById('tbodyApproved');
-  if (approved.length === 0) {
-    tbodyApproved.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">Tiada permohonan diluluskan</td></tr>';
-  } else {
-    tbodyApproved.innerHTML = approved.map(m => `
-      <tr>
-        <td>${m.submittedAt || '-'}</td>
-        <td>${m.full_name || m.name || '-'}</td>
-        <td>${m.designation || '-'}</td>
-        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
-        <td>${m.state || '-'}</td>
-        <td>${statusBadge(m.status)}</td>
-        <td class="text-end">${actionBtns(m.id, m.status)}</td>
-      </tr>`).join('');
-    bindActionBtns(tbodyApproved);
-  }
-
-  // Modal Rejected
-  const tbodyRejected = document.getElementById('tbodyRejected');
-  if (rejected.length === 0) {
-    tbodyRejected.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">Tiada permohonan ditolak</td></tr>';
-  } else {
-    tbodyRejected.innerHTML = rejected.map(m => `
-      <tr>
-        <td>${m.submittedAt || '-'}</td>
-        <td>${m.full_name || m.name || '-'}</td>
-        <td>${m.designation || '-'}</td>
-        <td>${m.workplace || m.facility || m.facility_type || '-'}</td>
-        <td>${m.state || '-'}</td>
-        <td>${statusBadge(m.status)}</td>
-        <td class="text-end">${actionBtns(m.id, m.status)}</td>
-      </tr>`).join('');
-    bindActionBtns(tbodyRejected);
-  }
-
-  // Reapply filter
-  applyFilter();
+  return (
+    member.adminComment ||
+    member.rejectionReason ||
+    member.remark ||
+    member.comment ||
+    member.comments ||
+    "-"
+  );
 }
 
-function applyFilter() {
-  const filter = document.getElementById('statusFilter').value;
-  document.querySelectorAll('#tbodyMain tr').forEach(row => {
-    if (filter === 'all' || row.dataset.status === filter) {
-      row.style.display = '';
-    } else {
-      row.style.display = 'none';
+
+function reviewDate(member){
+
+  return (
+    member.reviewedAt ||
+    member.updatedAt ||
+    member.submittedAt ||
+    "-"
+  );
+}
+
+
+function memberViewUrl(member){
+
+  return `emt_deployform.html?id=${encodeURIComponent(member.id || "")}`;
+}
+
+
+/* =====================================================
+   ACTION BUTTONS
+===================================================== */
+function actionButtons(member){
+
+  return `
+    <a
+      href="${memberViewUrl(member)}"
+      class="btn btn-sm btn-outline-primary"
+    >
+      <i class="bi bi-eye me-1"></i>
+      Semak
+    </a>
+  `;
+}
+
+
+/* =====================================================
+   ADMIN ACTION
+===================================================== */
+/*
+ * Tiada tindakan Lulus / Tolak dari halaman senarai.
+ * Admin mesti klik "Semak" dan membuat keputusan di
+ * emt_deployform.html selepas membaca maklumat lengkap pemohon.
+ */
+
+
+/* =====================================================
+   GENERIC ROWS
+===================================================== */
+function standardRows(
+  members,
+  options={}
+){
+
+  const {
+    dateField="submitted",
+    rejectedMode=false
+  } = options;
+
+
+  if(!members.length){
+
+    return `
+      <tr class="empty-row">
+        <td colspan="7" class="text-center text-muted">
+          Tiada rekod.
+        </td>
+      </tr>
+    `;
+  }
+
+
+  return members.map(member => {
+
+    const date =
+      dateField === "review"
+        ? reviewDate(member)
+        : member.submittedAt ||
+          member.createdAt ||
+          "-";
+
+
+    if(rejectedMode){
+
+      return `
+        <tr>
+
+          <td>
+            ${esc(
+              fmtDate(date)
+            )}
+          </td>
+
+          <td>
+            <div class="member-name">
+              ${esc(
+                memberName(member)
+              )}
+            </div>
+          </td>
+
+          <td>
+            ${esc(
+              member.designation ||
+              "-"
+            )}
+          </td>
+
+          <td>
+            ${esc(
+              memberFacility(member)
+            )}
+          </td>
+
+          <td>
+            ${esc(
+              member.state ||
+              "-"
+            )}
+          </td>
+
+          <td style="min-width:220px">
+            ${esc(
+              rejectionReason(member)
+            )}
+          </td>
+
+          <td class="text-end text-nowrap">
+            ${actionButtons(member)}
+          </td>
+
+        </tr>
+      `;
     }
+
+
+    return `
+      <tr>
+
+        <td>
+          ${esc(
+            fmtDate(date)
+          )}
+        </td>
+
+        <td>
+          <div class="member-name">
+            ${esc(
+              memberName(member)
+            )}
+          </div>
+
+          <small class="text-muted">
+            ${esc(
+              member.id ||
+              "-"
+            )}
+          </small>
+        </td>
+
+        <td>
+          ${esc(
+            member.designation ||
+            "-"
+          )}
+        </td>
+
+        <td>
+          ${esc(
+            memberFacility(member)
+          )}
+        </td>
+
+        <td>
+          ${esc(
+            member.state ||
+            "-"
+          )}
+        </td>
+
+        <td>
+          ${statusBadge(
+            member.status
+          )}
+        </td>
+
+        <td class="text-end text-nowrap">
+          ${actionButtons(member)}
+        </td>
+
+      </tr>
+    `;
+  }).join("");
+}
+
+
+/* =====================================================
+   DASHBOARD
+===================================================== */
+function renderDashboard(
+  pending,
+  approved,
+  rejected
+){
+
+  document.getElementById(
+    "dbCountTotal"
+  ).textContent =
+    allMembers.length;
+
+
+  document.getElementById(
+    "dbCountPending"
+  ).textContent =
+    pending.length;
+
+
+  document.getElementById(
+    "dbCountApproved"
+  ).textContent =
+    approved.length;
+
+
+  document.getElementById(
+    "dbCountRejected"
+  ).textContent =
+    rejected.length;
+
+
+  document.getElementById(
+    "dbPendingBadge"
+  ).textContent =
+    pending.length;
+
+
+  renderDashboardPending(
+    pending
+  );
+
+
+  renderDashboardRecent();
+
+
+  renderDashboardStatusChart(
+    pending.length,
+    approved.length,
+    rejected.length
+  );
+
+
+  renderDashboardStateChart();
+}
+
+
+function renderDashboardPending(
+  pending
+){
+
+  const tbody =
+    document.getElementById(
+      "dashboardPendingBody"
+    );
+
+
+  const latest =
+    pending.slice(0,5);
+
+
+  if(!latest.length){
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" class="text-center text-muted py-4">
+          Tiada permohonan menunggu semakan.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    latest.map(member => `
+      <tr>
+
+        <td>
+          ${esc(
+            fmtDate(
+              member.submittedAt ||
+              member.createdAt
+            )
+          )}
+        </td>
+
+        <td>
+          <div class="member-name">
+            ${esc(
+              memberName(member)
+            )}
+          </div>
+
+          <small class="text-muted">
+            ${esc(
+              member.designation ||
+              "-"
+            )}
+          </small>
+        </td>
+
+        <td>
+          ${esc(
+            member.state ||
+            "-"
+          )}
+        </td>
+
+        <td class="text-end">
+          <a
+            href="${memberViewUrl(member)}"
+            class="btn btn-sm btn-outline-primary"
+          >
+            Semak
+          </a>
+        </td>
+
+      </tr>
+    `).join("");
+}
+
+
+function renderDashboardRecent(){
+
+  const tbody =
+    document.getElementById(
+      "dashboardRecentBody"
+    );
+
+
+  const recent =
+    allMembers.slice(0,5);
+
+
+  if(!recent.length){
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" class="text-center text-muted py-4">
+          Tiada rekod pendaftaran.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    recent.map(member => `
+      <tr>
+
+        <td>
+          ${esc(
+            fmtDate(
+              member.submittedAt ||
+              member.createdAt
+            )
+          )}
+        </td>
+
+        <td>
+          <div class="member-name">
+            ${esc(
+              memberName(member)
+            )}
+          </div>
+
+          <small class="text-muted">
+            ${esc(
+              member.state ||
+              "-"
+            )}
+          </small>
+        </td>
+
+        <td>
+          ${statusBadge(
+            member.status
+          )}
+        </td>
+
+        <td class="text-end">
+          <a
+            href="${memberViewUrl(member)}"
+            class="btn btn-sm btn-outline-secondary"
+          >
+            Semak
+          </a>
+        </td>
+
+      </tr>
+    `).join("");
+}
+
+
+function renderDashboardStatusChart(
+  pending,
+  approved,
+  rejected
+){
+
+  const canvas =
+    document.getElementById(
+      "dashboardStatusChart"
+    );
+
+
+  if(!canvas || typeof Chart === "undefined"){
+    return;
+  }
+
+
+  if(dashboardStatusChart){
+    dashboardStatusChart.destroy();
+  }
+
+
+  dashboardStatusChart =
+    new Chart(
+      canvas,
+      {
+        type:"doughnut",
+
+        data:{
+          labels:[
+            "Dalam Semakan",
+            "Diluluskan",
+            "Ditolak"
+          ],
+
+          datasets:[
+            {
+              data:[
+                pending,
+                approved,
+                rejected
+              ]
+            }
+          ]
+        },
+
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          cutout:"62%",
+
+          plugins:{
+            legend:{
+              position:"bottom"
+            },
+
+            datalabels:{
+              display:function(context){
+                return Number(context.dataset.data[context.dataIndex] || 0) > 0;
+              },
+
+              formatter:function(value){
+                return value;
+              },
+
+              font:{
+                weight:"bold",
+                size:14
+              },
+
+              color:"#212529",
+
+              backgroundColor:"rgba(255,255,255,.88)",
+
+              borderRadius:6,
+
+              padding:{
+                top:4,
+                right:7,
+                bottom:4,
+                left:7
+              },
+
+              anchor:"center",
+
+              align:"center",
+
+              clamp:true
+            },
+
+            tooltip:{
+              callbacks:{
+                label:function(context){
+                  const value = Number(context.raw || 0);
+                  const total = context.dataset.data.reduce(
+                    (sum,item) => sum + Number(item || 0),
+                    0
+                  );
+
+                  const percent = total
+                    ? ((value / total) * 100).toFixed(1)
+                    : "0.0";
+
+                  return `${context.label}: ${value} (${percent}%)`;
+                }
+              }
+            }
+          }
+        }
+      }
+    );
+}
+
+
+function renderDashboardStateChart(){
+
+  const canvas =
+    document.getElementById(
+      "dashboardStateChart"
+    );
+
+
+  if(!canvas || typeof Chart === "undefined"){
+    return;
+  }
+
+
+  const stateCounts = {};
+
+
+  allMembers.forEach(member => {
+
+    const state =
+      member.state ||
+      "Tidak Dinyatakan";
+
+
+    stateCounts[state] =
+      (
+        stateCounts[state] ||
+        0
+      ) + 1;
+  });
+
+
+  const topStates =
+    Object.entries(
+      stateCounts
+    )
+    .sort(
+      (a,b) =>
+        b[1] - a[1]
+    )
+    .slice(0,8);
+
+
+  if(dashboardStateChart){
+    dashboardStateChart.destroy();
+  }
+
+
+  dashboardStateChart =
+    new Chart(
+      canvas,
+      {
+        type:"bar",
+
+        data:{
+          labels:
+            topStates.map(
+              item => item[0]
+            ),
+
+          datasets:[
+            {
+              label:"Bilangan Ahli",
+              data:
+                topStates.map(
+                  item => item[1]
+                ),
+              borderWidth:1
+            }
+          ]
+        },
+
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+
+          layout:{
+            padding:{
+              top:24
+            }
+          },
+
+          plugins:{
+            legend:{
+              display:false
+            },
+
+            datalabels:{
+              display:function(context){
+                return Number(context.dataset.data[context.dataIndex] || 0) > 0;
+              },
+
+              formatter:function(value){
+                return value;
+              },
+
+              anchor:"end",
+
+              align:"top",
+
+              offset:2,
+
+              color:"#212529",
+
+              font:{
+                weight:"bold",
+                size:12
+              },
+
+              clamp:true
+            },
+
+            tooltip:{
+              callbacks:{
+                label:function(context){
+                  return `Bilangan Ahli: ${context.raw}`;
+                }
+              }
+            }
+          },
+
+          scales:{
+            y:{
+              beginAtZero:true,
+
+              suggestedMax:function(context){
+                return context.chart
+                  ? Math.max(
+                      ...context.chart.data.datasets[0].data.map(Number),
+                      0
+                    ) + 1
+                  : undefined;
+              },
+
+              ticks:{
+                precision:0,
+                stepSize:1
+              },
+
+              title:{
+                display:true,
+                text:"Bilangan Ahli"
+              }
+            },
+
+            x:{
+              title:{
+                display:true,
+                text:"Negeri"
+              }
+            }
+          }
+        }
+      }
+    );
+}
+
+
+function openManagementByStatus(status){
+
+  bootstrap.Tab
+    .getOrCreateInstance(
+      document.getElementById(
+        "management-tab"
+      )
+    )
+    .show();
+
+
+  document.getElementById(
+    "statusFilter"
+  ).value =
+    status || "all";
+
+
+  applyFilters();
+
+
+  setTimeout(
+    () => {
+
+      const tableCard =
+        document.getElementById(
+          "tbodyMain"
+        )?.closest(
+          ".card"
+        );
+
+
+      if(tableCard){
+
+        tableCard.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+      }
+    },
+    150
+  );
+}
+
+
+document.getElementById(
+  "btnOpenPendingTab"
+).addEventListener(
+  "click",
+  () => {
+
+    openManagementByStatus(
+      "pending"
+    );
+  }
+);
+
+
+document.querySelectorAll(
+  ".dashboard-kpi-link"
+).forEach(card => {
+
+  const activate = () => {
+
+    openManagementByStatus(
+      card.dataset.statusTarget ||
+      "all"
+    );
+  };
+
+
+  card.addEventListener(
+    "click",
+    activate
+  );
+
+
+  card.addEventListener(
+    "keydown",
+    event => {
+
+      if(
+        event.key === "Enter" ||
+        event.key === " "
+      ){
+
+        event.preventDefault();
+        activate();
+      }
+    }
+  );
+});
+
+
+/* =====================================================
+   RENDER ALL TABLES
+===================================================== */
+function renderTables(){
+
+  const pending =
+    allMembers.filter(
+      member =>
+        normalize(member.status) ===
+        "pending"
+    );
+
+
+  const approved =
+    allMembers.filter(
+      member =>
+        normalize(member.status) ===
+        "approved"
+    );
+
+
+  const rejected =
+    allMembers.filter(
+      member =>
+        normalize(member.status) ===
+        "rejected"
+    );
+
+
+  document.getElementById(
+    "countTotal"
+  ).textContent =
+    allMembers.length;
+
+
+  document.getElementById(
+    "countPending"
+  ).textContent =
+    pending.length;
+
+
+  document.getElementById(
+    "countApproved"
+  ).textContent =
+    approved.length;
+
+
+  document.getElementById(
+    "countRejected"
+  ).textContent =
+    rejected.length;
+
+
+  document.getElementById(
+    "alertPending"
+  ).textContent =
+    `${pending.length} Permohonan`;
+
+
+  document.getElementById(
+    "alertApproved"
+  ).textContent =
+    `${approved.length} Permohonan`;
+
+
+  document.getElementById(
+    "alertRejected"
+  ).textContent =
+    `${rejected.length} Permohonan`;
+
+
+  renderDashboard(
+    pending,
+    approved,
+    rejected
+  );
+
+
+  const tbodyAll =
+    document.getElementById(
+      "tbodyAll"
+    );
+
+
+  const tbodyPending =
+    document.getElementById(
+      "tbodyPending"
+    );
+
+
+  const tbodyApproved =
+    document.getElementById(
+      "tbodyApproved"
+    );
+
+
+  const tbodyRejected =
+    document.getElementById(
+      "tbodyRejected"
+    );
+
+
+  tbodyAll.innerHTML =
+    standardRows(
+      allMembers
+    );
+
+
+  tbodyPending.innerHTML =
+    standardRows(
+      pending
+    );
+
+
+  tbodyApproved.innerHTML =
+    standardRows(
+      approved,
+      {
+        dateField:"review"
+      }
+    );
+
+
+  tbodyRejected.innerHTML =
+    standardRows(
+      rejected,
+      {
+        dateField:"review",
+        rejectedMode:true
+      }
+    );
+applyFilters();
+}
+
+
+/* =====================================================
+   FILTER MAIN TABLE
+===================================================== */
+function getFilteredMembers(){
+
+  const search =
+    normalize(
+      document.getElementById(
+        "searchInput"
+      ).value
+    );
+
+
+  const status =
+    document.getElementById(
+      "statusFilter"
+    ).value;
+
+
+  const state =
+    document.getElementById(
+      "stateFilter"
+    ).value;
+
+
+  return allMembers.filter(member => {
+
+    if(
+      status !== "all" &&
+      normalize(member.status) !== status
+    ){
+      return false;
+    }
+
+
+    if(
+      state !== "all" &&
+      String(member.state || "") !== state
+    ){
+      return false;
+    }
+
+
+    if(search){
+
+      const haystack =
+        normalize([
+          memberName(member),
+          member.designation,
+          memberFacility(member),
+          member.state,
+          member.id
+        ].join(" "));
+
+
+      if(
+        !haystack.includes(search)
+      ){
+        return false;
+      }
+    }
+
+
+    return true;
   });
 }
 
-document.getElementById('statusFilter').addEventListener('change', applyFilter);
 
-document.addEventListener('DOMContentLoaded', loadMembers);
+function applyFilters(){
+
+  const filtered =
+    getFilteredMembers();
+
+
+  const tbody =
+    document.getElementById(
+      "tbodyMain"
+    );
+
+
+  tbody.innerHTML =
+    standardRows(
+      filtered
+    );
+document.getElementById(
+    "visibleCount"
+  ).textContent =
+    `${filtered.length} rekod`;
+}
+
+
+function populateStateFilter(){
+
+  const states =
+    [...new Set(
+      allMembers
+        .map(member => member.state)
+        .filter(Boolean)
+    )]
+    .sort((a,b)=>
+      String(a).localeCompare(
+        String(b),
+        "ms"
+      )
+    );
+
+
+  const select =
+    document.getElementById(
+      "stateFilter"
+    );
+
+
+  const selected =
+    select.value;
+
+
+  select.innerHTML =
+    '<option value="all">Semua Negeri</option>';
+
+
+  states.forEach(state => {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+
+    option.value =
+      state;
+
+
+    option.textContent =
+      state;
+
+
+    select.appendChild(
+      option
+    );
+  });
+
+
+  if(
+    states.includes(selected)
+  ){
+    select.value =
+      selected;
+  }
+}
+
+
+/* =====================================================
+   LOAD MEMBERS
+===================================================== */
+async function loadMembers(){
+
+  try{
+
+    const res =
+      await fetch(
+        `${API}/api/members`
+      );
+
+
+    const json =
+      await res.json();
+
+
+    if(
+      !res.ok ||
+      json.success === false
+    ){
+
+      throw new Error(
+        json.message ||
+        "Gagal memuatkan senarai ahli."
+      );
+    }
+
+
+    const raw =
+      Array.isArray(json.data)
+        ? json.data
+        : Array.isArray(json)
+          ? json
+          : [];
+
+
+    allMembers =
+      raw
+        .slice()
+        .sort(
+          (a,b) =>
+            String(
+              b.submittedAt ||
+              b.createdAt ||
+              ""
+            )
+            .localeCompare(
+              String(
+                a.submittedAt ||
+                a.createdAt ||
+                ""
+              )
+            )
+        );
+
+
+    populateStateFilter();
+    renderTables();
+
+
+  }catch(err){
+
+    console.error(
+      "Gagal muatkan ahli:",
+      err
+    );
+
+
+    const message =
+      `
+        <tr>
+          <td colspan="7" class="text-center text-danger py-4">
+            ${esc(
+              err.message ||
+              "Gagal memuatkan rekod."
+            )}
+          </td>
+        </tr>
+      `;
+
+
+    document.getElementById(
+      "tbodyMain"
+    ).innerHTML =
+      message;
+
+
+    document.getElementById(
+      "tbodyAll"
+    ).innerHTML =
+      message;
+
+
+    document.getElementById(
+      "tbodyPending"
+    ).innerHTML =
+      message;
+
+
+    document.getElementById(
+      "tbodyApproved"
+    ).innerHTML =
+      message;
+
+
+    document.getElementById(
+      "tbodyRejected"
+    ).innerHTML =
+      message;
+  }
+}
+
+
+/* =====================================================
+   FILTER EVENTS
+===================================================== */
+document.getElementById(
+  "searchInput"
+).addEventListener(
+  "input",
+  applyFilters
+);
+
+
+document.getElementById(
+  "statusFilter"
+).addEventListener(
+  "change",
+  applyFilters
+);
+
+
+document.getElementById(
+  "stateFilter"
+).addEventListener(
+  "change",
+  applyFilters
+);
+
+
+document.getElementById(
+  "btnReset"
+).addEventListener(
+  "click",
+  () => {
+
+    document.getElementById(
+      "searchInput"
+    ).value =
+      "";
+
+
+    document.getElementById(
+      "statusFilter"
+    ).value =
+      "all";
+
+
+    document.getElementById(
+      "stateFilter"
+    ).value =
+      "all";
+
+
+    applyFilters();
+  }
+);
+
+
+/* =====================================================
+   INIT
+===================================================== */
+document.addEventListener(
+  "DOMContentLoaded",
+  loadMembers
+);
 </script>
 
 </body>

@@ -1,141 +1,422 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
   <title>MyEMT Ahli</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-  <!-- Main CSS -->
   <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    body{background:#f4f6f9}
+
+    .soft-card{
+      border:0;
+      border-radius:14px;
+      box-shadow:0 .25rem .75rem rgba(0,0,0,.06);
+    }
+
+    .profile-avatar{
+      width:64px;
+      height:64px;
+      flex:0 0 64px;
+    }
+
+    .flow-step{
+      border:1px solid #dee2e6;
+      border-radius:12px;
+      padding:1rem;
+      background:#fff;
+      height:100%;
+      position:relative;
+    }
+
+    .flow-number{
+      width:34px;
+      height:34px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:#e9ecef;
+      font-weight:800;
+      margin-bottom:.65rem;
+    }
+
+    .flow-step.completed{
+      border-color:#badbcc;
+      background:#f7fffa;
+    }
+
+    .flow-step.completed .flow-number{
+      background:#198754;
+      color:#fff;
+    }
+
+    .flow-step.current{
+      border-color:#ffe69c;
+      background:#fffdf5;
+    }
+
+    .flow-step.current .flow-number{
+      background:#ffc107;
+      color:#212529;
+    }
+
+    .flow-step.locked{
+      background:#f8f9fa;
+    }
+
+    .summary-card{
+      border:1px solid #e3e7ed;
+      border-radius:12px;
+      padding:1rem;
+      height:100%;
+      background:#fff;
+    }
+
+    .summary-label{
+      color:#6c757d;
+      font-size:.8rem;
+    }
+
+    .summary-value{
+      font-size:1.35rem;
+      font-weight:800;
+    }
+
+    .action-card{
+      border:1px solid #dee2e6;
+      border-radius:12px;
+      padding:1rem;
+      height:100%;
+      background:#fff;
+    }
+
+    .action-card .icon-box{
+      width:42px;
+      height:42px;
+      border-radius:10px;
+      background:#f1f3f5;
+      display:grid;
+      place-items:center;
+      font-size:1.2rem;
+      margin-bottom:.8rem;
+    }
+
+    .locked-action{
+      opacity:.72;
+    }
+
+    .status-dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      display:inline-block;
+      margin-right:.4rem;
+    }
+
+    .empty-profile{
+      display:none;
+    }
+
+    .empty-profile.show{
+      display:block;
+    }
+
+    .member-profile{
+      display:none;
+    }
+
+    .member-profile.show{
+      display:block;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div id="header"></div>
 
 <div class="container-fluid">
   <div class="row">
 
-    <!-- LEFT PANEL -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder">
-    </aside>
+    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-    <!-- MAIN CONTENT -->
     <main class="col-md-9 col-lg-10 px-4 py-4">
-      
-      <!-- SEMUA USER  -->
-      <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0">Permohonan Malaysia Emergency Medical Team (MyEMT)</h4>
+
+      <!-- PAGE HEADER -->
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-4">
+        <div>
+          <h4 class="mb-1 fw-bold">MyEMT</h4>
+          <small class="text-muted">
+            Pendaftaran ahli, program latihan MyEMT dan akses operasi Malaysia Emergency Medical Team.
+          </small>
+        </div>
+      </div>
+
+
+      <!-- =====================================================
+           PROFILE / MEMBER STATUS
+      ====================================================== -->
+      <div class="card soft-card mb-4">
+        <div class="card-body">
+
+          <div class="member-profile" id="memberProfile">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+
+              <div class="d-flex align-items-center">
+
+                <div class="profile-avatar rounded-circle bg-light border d-flex align-items-center justify-content-center">
+                  <i class="bi bi-person-fill fs-3 text-secondary"></i>
+                </div>
+
+                <div class="ms-3">
+                  <h5 class="mb-1" id="profile-name">-</h5>
+
+                  <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-light text-dark border" id="profile-designation">-</span>
+                    <span class="badge bg-secondary" id="profile-status-badge">-</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="d-flex flex-wrap gap-2">
+
+                <a href="emt_viewform.html"
+                  id="btn-member-view"
+                  class="btn btn-sm btn-outline-secondary">
+                  <i class="bi bi-eye me-1"></i>
+                  Lihat Maklumat
+                </a>
+
+                <a href="emt_editform.html"
+                  id="btn-member-edit"
+                  class="btn btn-sm btn-outline-primary">
+                  <i class="bi bi-pencil-square me-1"></i>
+                  Kemaskini Maklumat
+                </a>
+
+              </div>
+
+            </div>
+
+
+            <div class="row g-4">
+
+              <div class="col-md-6">
+                <div class="border-start ps-3">
+
+                  <div class="text-muted small mb-2">Maklumat Peribadi</div>
+
+                  <div class="mb-2">
+                    <small class="text-muted">Nama</small>
+                    <div class="fw-semibold" id="info-name">-</div>
+                  </div>
+
+                  <div class="mb-2">
+                    <small class="text-muted">No. Kad Pengenalan</small>
+                    <div class="fw-semibold" id="info-ic">-</div>
+                  </div>
+
+                  <div>
+                    <small class="text-muted">Tempoh Perkhidmatan</small>
+                    <div class="fw-semibold" id="info-service">-</div>
+                  </div>
+
+                </div>
+              </div>
+
+
+              <div class="col-md-6">
+                <div class="border-start ps-3">
+
+                  <div class="text-muted small mb-2">Maklumat Perkhidmatan</div>
+
+                  <div class="mb-2">
+                    <small class="text-muted">Jawatan</small>
+                    <div class="fw-semibold" id="info-designation">-</div>
+                  </div>
+
+                  <div class="mb-2">
+                    <small class="text-muted">Fasiliti</small>
+                    <div class="fw-semibold" id="info-facility">-</div>
+                  </div>
+
+                  <div>
+                    <small class="text-muted">Negeri</small>
+                    <div class="fw-semibold" id="info-state">-</div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- USER HAS NOT APPLIED YET -->
+          <div class="empty-profile" id="emptyProfile">
+
+            <div class="d-flex align-items-start gap-3">
+
+              <div class="profile-avatar rounded-circle bg-light border d-flex align-items-center justify-content-center">
+                <i class="bi bi-person-plus fs-3 text-secondary"></i>
+              </div>
+
+              <div>
+                <h5 class="mb-1">Belum Berdaftar Sebagai Ahli MyEMT</h5>
+                <p class="text-muted mb-3">
+                  Lengkapkan permohonan MyEMT terlebih dahulu sebelum meneruskan ke kursus kelayakan dan operasi misi.
+                </p>
+
+                <a href="emt_form.html" class="btn btn-primary">
+                  <i class="bi bi-person-plus me-1"></i>Daftar MyEMT
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+
+      <!-- =====================================================
+           CURRENT PROGRESS SUMMARY
+      ====================================================== -->
+      <div class="row g-3 mb-4">
+
+        <div class="col-6 col-lg-3">
+          <div class="summary-card">
+            <div class="summary-label">Keahlian MyEMT</div>
+            <div class="summary-value" id="summary-member">Belum Mohon</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <div class="summary-card">
+            <div class="summary-label">Program Kursus MyEMT</div>
+            <div class="summary-value" id="summary-course">Belum Mohon</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <div class="summary-card">
+            <div class="summary-label">Komponen Kursus</div>
+            <div class="summary-value">4 Komponen</div>
+            <div class="small text-muted mt-1">B-Course • C-Course • TTX • FTX</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <div class="summary-card">
+            <div class="summary-label">Kelayakan Operasi</div>
+            <div class="summary-value" id="summary-active">Belum Layak</div>
+          </div>
+        </div>
 
       </div>
 
 
-      <!-- USER PROFILE CARD -->
-      <div class="card shadow-sm mb-4">
+      <!-- =====================================================
+           MAIN ACTIONS
+      ====================================================== -->
+      <div class="card soft-card mb-4">
+        <div class="card-header bg-white fw-bold">
+          Tindakan Utama
+        </div>
 
         <div class="card-body">
 
-          <!-- TOP SECTION -->
-          <div class="d-flex justify-content-between align-items-start mb-4">
+          <div class="row g-3">
 
-            <!-- PROFILE INFO -->
-            <div class="d-flex align-items-center">
+            <!-- MEMBERSHIP -->
+            <div class="col-md-4">
+              <div class="action-card">
 
-              <div class="rounded-circle bg-light border d-flex align-items-center justify-content-center"
-                  style="width:64px;height:64px;">
-                <i class="bi bi-person-fill fs-3 text-secondary"></i>
-              </div>
-
-              <div class="ms-3">
-                <h5 class="mb-1" id="profile-name">-</h5>
-
-                <div class="d-flex flex-wrap gap-2">
-                  <span class="badge bg-light text-dark border" id="profile-designation">-</span>
-                  <span class="badge bg-secondary" id="profile-status-badge">-</span>
+                <div class="icon-box">
+                  <i class="bi bi-person-vcard"></i>
                 </div>
-              </div>
 
+                <h6 class="fw-bold">Permohonan MyEMT</h6>
+
+                <p class="small text-muted">
+                  Daftar sebagai ahli MyEMT dan lengkapkan maklumat peribadi, perkhidmatan serta kesihatan.
+                </p>
+
+                <div class="d-grid gap-2">
+                  <a href="emt_form.html" class="btn btn-primary" id="btn-daftar-emt">
+                    Daftar MyEMT
+                  </a>
+
+                  <a href="emt_submitform.html" class="btn btn-outline-secondary" id="btn-member-status">
+                    Lihat Status Permohonan
+                  </a>
+                </div>
+
+              </div>
             </div>
 
-            <!-- ACTION 
-            <div class="d-flex gap-2">
 
-              <a href="user_healthview.html"
-                class="btn btn-sm btn-outline-dark px-3">
-                Lihat Maklumat
-              </a>
+            <!-- COURSE -->
+            <div class="col-md-4">
+              <div class="action-card" id="courseActionCard">
 
-              <a href="user_healthform.html"
-                class="btn btn-sm btn-primary px-3">
-                Kemaskini Maklumat
-              </a>
-
-            </div>-->
-
-          </div>
-
-          <!-- INFO GRID -->
-          <div class="row g-4">
-
-            <div class="col-md-6">
-
-              <div class="border-start ps-3">
-
-                <div class="text-muted small mb-2">
-                  Maklumat Peribadi
+                <div class="icon-box">
+                  <i class="bi bi-mortarboard"></i>
                 </div>
 
-                <div class="mb-2">
-                  <small class="text-muted">Nama</small>
-                  <div class="fw-semibold" id="info-name">-</div>
+                <h6 class="fw-bold">Kursus Kelayakan</h6>
+
+                <p class="small text-muted">
+                  Satu program kursus MyEMT merangkumi empat komponen latihan: B-Course, C-Course, TTX dan FTX.
+                </p>
+
+                <div class="d-grid gap-2">
+                  <a href="course_apply.html" class="btn btn-success" id="btn-course">
+                    Daftar Kursus
+                  </a>
+
+                  <a href="user_healthview.html" class="btn btn-outline-secondary" id="btn-course-health">
+                    Lihat Maklumat Kesihatan
+                  </a>
                 </div>
 
-                <div class="mb-2">
-                  <small class="text-muted">No. Kad Pengenalan</small>
-                  <div class="fw-semibold" id="info-ic">-</div>
-                </div>
-
-                <div>
-                  <small class="text-muted">Tempoh Perkhidmatan</small>
-                  <div class="fw-semibold" id="info-service">-</div>
-                </div>
+                <div class="small text-muted mt-2" id="course-lock-note"></div>
 
               </div>
-
             </div>
 
-            <div class="col-md-6">
 
-              <div class="border-start ps-3">
+            <!-- MISSION -->
+            <div class="col-md-4">
+              <div class="action-card" id="missionActionCard">
 
-                <div class="text-muted small mb-2">
-                  Maklumat Perkhidmatan
+                <div class="icon-box">
+                  <i class="bi bi-briefcase"></i>
                 </div>
 
-                <div class="mb-2">
-                  <small class="text-muted">Jawatan</small>
-                  <div class="fw-semibold" id="info-designation">-</div>
+                <h6 class="fw-bold">Operasi & Misi EMT</h6>
+
+                <p class="small text-muted">
+                  Lihat misi yang tersedia, status permohonan misi dan operasi yang telah dipautkan kepada anda.
+                </p>
+
+                <div class="d-grid gap-2">
+                  <a href="landingMyemt_mission.html" class="btn btn-dark" id="btn-mission">
+                    Lihat Misi EMT
+                  </a>
                 </div>
 
-                <div class="mb-2">
-                  <small class="text-muted">Fasiliti</small>
-                  <div class="fw-semibold" id="info-facility">-</div>
-                </div>
-
-                <div>
-                  <small class="text-muted">Negeri</small>
-                  <div class="fw-semibold" id="info-state">-</div>
-                </div>
+                <div class="small text-muted mt-2" id="mission-lock-note"></div>
 
               </div>
-
             </div>
 
           </div>
@@ -144,458 +425,1060 @@
       </div>
 
 
+      <!-- =====================================================
+           APPLICATION FLOW
+      ====================================================== -->
+      <div class="card soft-card mb-4">
+        <div class="card-header bg-white fw-bold">
+          Proses Kelayakan MyEMT
+        </div>
 
-      <!-- DAFTAR PERMOHONAN MYEMT & COURSE -->
-      <div class="card shadow-sm mb-4">
+        <div class="card-body">
 
-          <div class="card-header bg-white fw-bold">
-              📝 Pendaftaran MyEMT & Kursus
-          </div>
+          <p class="text-muted mb-3">
+            Status di bawah dikira daripada permohonan keahlian dan program kursus MyEMT anda.
+          </p>
 
-          <div class="card-body">
+          <div class="row g-3">
 
-              <div class="row g-4">
-
-                <!-- MYEMT REGISTRATION -->
-                <div class="col-md-6">
-                    <div class="border rounded p-3 h-100">
-
-                        <h6 class="fw-bold mb-3">
-                            📌 Daftar Permohonan MyEMT
-                        </h6>
-
-                        <p class="text-muted small">
-                            Permohonan sebagai ahli EMT baharu. Sila lengkapkan maklumat peribadi dan kesihatan.
-                        </p>
-
-                        <ul class="small text-muted mb-3">
-                            <li>Maklumat peribadi</li>
-                            <li>Maklumat kesihatan</li>
-                            <li>Pengesahan jawatan</li>
-                        </ul>
-
-                        <!-- BUTTONS -->
-                        <div class="d-grid gap-2">
-
-                            <a href="emt_form.html" class="btn btn-primary" id="btn-daftar-emt">
-                                Daftar MyEMT
-                            </a>
-
-                            <a href="emt_submitform.html" class="btn btn-outline-secondary">
-                                Lihat Status Permohonan
-                            </a>
-
-                        </div>
-
-                    </div>
+            <div class="col-md-4">
+              <div class="flow-step" id="flow-member">
+                <div class="flow-number">1</div>
+                <h6 class="fw-bold">Permohonan MyEMT</h6>
+                <p class="small text-muted mb-2">Hantar dan dapatkan kelulusan keahlian MyEMT.</p>
+                <div id="flow-member-status">
+                  <span class="badge bg-secondary">Belum Mohon</span>
                 </div>
+              </div>
+            </div>
 
-                <!-- B & C COURSE -->
-                <div class="col-md-6">
-                    <div class="border rounded p-3 h-100">
-
-                        <h6 class="fw-bold mb-3">
-                            🎓 Daftar B-Course & C-Course
-                        </h6>
-
-                        <p class="text-muted small">
-                            Kursus wajib dan lanjutan untuk kelayakan operasi EMT.
-                        </p>
-
-                        <ul class="small text-muted mb-3">
-                            <li>B-Course: Asas EMT & keselamatan operasi</li>
-                            <li>C-Course: Klinikal & Kemahiran Operasional</li>
-                            <li>TTX: Latihan Tabletop</li>
-                            <li>FTX: Latihan Simulasi Lapangan</li>
-                        </ul>
-
-                        <!-- BUTTONS -->
-                        <div class="d-grid gap-2">
-
-                            <a href="course_apply.html" class="btn btn-success">
-                                Daftar Kursus
-                            </a>
-
-                            <a href="user_healthview.html" class="btn btn-outline-secondary">
-                                Lihat Maklumat Kesihatan
-                            </a>
-
-                        </div>
-
-                    </div>
+            <div class="col-md-4">
+              <div class="flow-step locked" id="flow-course">
+                <div class="flow-number">2</div>
+                <h6 class="fw-bold">Program Kursus MyEMT</h6>
+                <p class="small text-muted mb-2">
+                  Satu intake merangkumi:
+                  <strong>B-Course, C-Course, TTX dan FTX</strong>.
+                </p>
+                <div id="flow-course-status">
+                  <span class="badge bg-secondary">Belum Mohon</span>
                 </div>
-
               </div>
+            </div>
 
-          </div>
-
-      </div>
-
-      <!-- STEP PERMOHONAN MYEMT (INFO SAHAJA) -->
-      <div class="card shadow-sm mb-4">
-
-          <div class="card-header bg-white fw-bold">
-              📌 Proses Permohonan MyEMT
-          </div>
-
-          <div class="card-body">
-
-              <p class="text-muted mb-3">
-                  Makluman langkah-langkah yang perlu dilalui oleh pemohon untuk menyertai EMT.
-              </p>
-
-              <div class="table-responsive">
-
-                  <table class="table table-bordered align-middle">
-
-                      <thead class="table-light">
-                          <tr>
-                              <th>Bil</th>
-                              <th>Proses</th>
-                              <th>Keterangan</th>
-                          </tr>
-                      </thead>
-
-                      <tbody>
-
-                          <tr>
-                              <td>1</td>
-                              <td>Permohonan MyEMT</td>
-                              <td>Hantar permohonan sebagai ahli EMT melalui sistem</td>
-                          </tr>
-
-                          <tr>
-                              <td>2</td>
-                              <td>Lulus B-Course</td>
-                              <td>Latihan asas EMT sebelum layak menyertai operasi</td>
-                          </tr>
-
-                          <tr>
-                              <td>3</td>
-                              <td>Lulus C-Course</td>
-                              <td>Latihan lanjutan klinikal dan pengurusan bencana</td>
-                          </tr>
-
-                          <tr>
-                              <td>4</td>
-                              <td>Aktif EMT</td>
-                              <td>Layak ditempatkan dalam misi dan operasi EMT</td>
-                          </tr>
-
-                      </tbody>
-
-                  </table>
-
+            <div class="col-md-4">
+              <div class="flow-step locked" id="flow-active">
+                <div class="flow-number">3</div>
+                <h6 class="fw-bold">Layak Operasi EMT</h6>
+                <p class="small text-muted mb-2">Boleh melihat dan menyertai aliran operasi / misi EMT.</p>
+                <div id="flow-active-status">
+                  <span class="badge bg-secondary">Belum Layak</span>
+                </div>
               </div>
+            </div>
 
           </div>
 
-      </div>
-
-
-      <!-- STATUS PERMOHONAN MYEMT -->
-      <div class="card shadow-sm mb-4">
-
-          <div class="card-header bg-white fw-bold">
-              📊 Status Permohonan MyEMT
-          </div>
-
-          <div class="card-body">
-
-              <p class="text-muted mb-3">
-                  Semakan status kelayakan pemohon untuk menyertai aktiviti EMT.
-              </p>
-
-              <div class="table-responsive">
-
-                  <table class="table table-bordered align-middle">
-
-                      <thead class="table-light">
-                          <tr>
-                              <th>Proses</th>
-                              <th>Status</th>
-                              <th>Catatan</th>
-                          </tr>
-                      </thead>
-
-                      <tbody>
-
-                          <tr>
-                              <td>Permohonan MyEMT</td>
-                              <td id="step-emt"><span class="badge bg-secondary">Belum Mohon</span></td>
-                              <td>Permohonan keahlian EMT</td>
-                          </tr>
-
-                          <tr>
-                              <td>Lulus B-Course</td>
-                              <td id="step-bcourse"><span class="badge bg-secondary">Belum Mohon</span></td>
-                              <td>Latihan asas EMT sebelum layak menyertai operasi</td>
-                          </tr>
-
-                          <tr>
-                              <td>Lulus C-Course</td>
-                              <td id="step-ccourse"><span class="badge bg-secondary">Belum Mohon</span></td>
-                              <td>Latihan lanjutan klinikal dan pengurusan bencana</td>
-                          </tr>
-
-                          <tr>
-                              <td>Aktif EMT</td>
-                              <td id="step-aktif"><span class="badge bg-secondary">Belum Mohon</span></td>
-                              <td>Layak ditempatkan dalam misi dan operasi EMT</td>
-                          </tr>
-
-                      </tbody>
-
-                  </table>
-
-              </div>
-
-              <hr>
-
-              <div class="alert alert-warning mb-0" id="eligibility-alert">
-                  ⏳ Permohonan sedang dalam proses. Sila lengkapkan semua tahap untuk menjadi ahli aktif EMT.
-              </div>
-
-          </div>
-
-      </div>
-
-      <!-- APPLICATION STATUS TABLE -->
-      <div class="card shadow-sm">
-
-        <div class="card shadow-sm border-0">
-
-          <div class="card-header bg-white fw-bold">
-            📊 Status Permohonan
-          </div>
-
-          <div class="table-responsive">
-
-            <table class="table align-middle mb-0">
-
-              <thead class="table-light">
-                <tr>
-                  <th>Tarikh Hantar</th>
-                  <th>Fasa Permohonan</th>
-                  <th>Status</th>
-                  <th>Komen</th>
-                  <th class="text-end">Tindakan</th>
-                </tr>
-              </thead>
-
-              <tbody id="tbody-application-status">
-                <tr><td colspan="5" class="text-center text-muted py-3">Memuatkan...</td></tr>
-              </tbody>
-
-            </table>
-
+          <div class="alert alert-warning mt-3 mb-0" id="eligibility-alert">
+            Permohonan belum lengkap.
           </div>
 
         </div>
-
       </div>
-      
+
+
+      <!-- =====================================================
+           APPLICATION HISTORY
+      ====================================================== -->
+      <div class="card soft-card">
+        <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+
+          <div>
+            <strong>Rekod Permohonan</strong>
+            <div class="small text-muted">
+              Sejarah permohonan MyEMT dan kursus.
+            </div>
+          </div>
+
+          <span class="badge bg-light text-dark border" id="application-count">0 rekod</span>
+
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table align-middle mb-0">
+
+            <thead class="table-light">
+              <tr>
+                <th>Tarikh Hantar</th>
+                <th>Fasa Permohonan</th>
+                <th>Status</th>
+                <th>Komen</th>
+                <th class="text-end">Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="tbody-application-status">
+              <tr>
+                <td colspan="5" class="text-center text-muted py-3">Memuatkan...</td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+      </div>
+
     </main>
-
   </div>
 </div>
 
-<!-- FOOTER -->
 <div id="footer"></div>
 
-<!-- Bootstrap JS -->
+
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Load Header & Footer -->
 <script>
-  fetch("header.html")
-    .then(res => res.text())
-    .then(data => document.getElementById("header").innerHTML = data);
+fetch("header.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("header").innerHTML = data);
 
-  fetch("footer.html")
-    .then(res => res.text())
-    .then(data => document.getElementById("footer").innerHTML = data);
-</script>
+fetch("footer.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("footer").innerHTML = data);
 
-<!-- Load Sidebar -->
-<script>
-  fetch("sidebar.html")
+fetch("sidebar.html")
   .then(res => res.text())
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
   .catch(err => console.error("Sidebar load failed:", err));
 </script>
 
-<!-- ══ LIVE MEMBER & APPLICATION STATUS ══ -->
-<script>
 
-const MEMBER_ID = localStorage.getItem('myemt_memberId') || '';
+<script>
+/* =====================================================
+   USER / MEMBER ID
+===================================================== */
+const MEMBER_ID =
+  localStorage.getItem("myemt_memberId") ||
+  localStorage.getItem("memberId") ||
+  localStorage.getItem("userId") ||
+  sessionStorage.getItem("myemt_memberId") ||
+  sessionStorage.getItem("memberId") ||
+  sessionStorage.getItem("userId") ||
+  new URLSearchParams(location.search).get("memberId") ||
+  "";
+
+
+let currentMember = null;
+let courseApplications = [];
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+function escHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+
+function fmtDate(value) {
+
+  if (!value) return "-";
+
+  const raw = String(value);
+
+  if (raw.includes("T")) {
+    const date = new Date(raw);
+
+    if (!Number.isNaN(date.getTime())) {
+      return date.toLocaleDateString("ms-MY");
+    }
+  }
+
+  const parts = raw.split("-");
+
+  return parts.length === 3
+    ? `${parts[2]}/${parts[1]}/${parts[0]}`
+    : raw;
+}
+
+
+function normalizeStatus(status) {
+  return String(status || "none").trim().toLowerCase();
+}
+
+
+function statusInfo(status) {
+
+  const normalized = normalizeStatus(status);
+
+  const map = {
+    pending: {
+      label: "Dalam Semakan",
+      className: "bg-warning text-dark"
+    },
+
+    approved: {
+      label: "Diluluskan",
+      className: "bg-success"
+    },
+
+    rejected: {
+      label: "Ditolak",
+      className: "bg-danger"
+    },
+
+    active: {
+      label: "Aktif",
+      className: "bg-success"
+    },
+
+    completed: {
+      label: "Lulus",
+      className: "bg-success"
+    },
+
+    passed: {
+      label: "Lulus",
+      className: "bg-success"
+    },
+
+    none: {
+      label: "Belum Mohon",
+      className: "bg-secondary"
+    }
+  };
+
+  return map[normalized] || {
+    label: status || "-",
+    className: "bg-secondary"
+  };
+}
+
 
 function statusBadge(status) {
-  const map = { pending: 'bg-warning text-dark', approved: 'bg-success', rejected: 'bg-danger' };
-  const label = { pending: 'Dalam Semakan', approved: 'Diluluskan', rejected: 'Ditolak' };
-  return `<span class="badge ${map[status] || 'bg-secondary'}">${label[status] || status}</span>`;
+
+  const info = statusInfo(status);
+
+  return `
+    <span class="badge ${info.className}">
+      ${escHtml(info.label)}
+    </span>
+  `;
 }
 
-function fmtDate(d) {
-  if (!d) return '-';
-  const p = d.split('-');
-  return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
+
+async function safeJson(url) {
+
+  try {
+
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      return null;
+    }
+
+    return await res.json();
+
+  } catch (err) {
+
+    console.warn("API request failed:", url, err);
+    return null;
+  }
 }
 
+
+/* =====================================================
+   COURSE HELPERS
+===================================================== */
+function statusRank(status) {
+
+  const normalized = normalizeStatus(status);
+
+  const ranks = {
+    none: 0,
+    rejected: 1,
+    pending: 2,
+    approved: 3,
+    completed: 4,
+    passed: 4,
+    active: 4
+  };
+
+  return ranks[normalized] ?? 0;
+}
+
+
+function isApprovedLike(status) {
+
+  return [
+    "approved",
+    "completed",
+    "passed",
+    "active"
+  ].includes(
+    normalizeStatus(status)
+  );
+}
+
+
+/*
+ * Kursus MyEMT dianggap satu program / intake.
+ * B-Course, C-Course, TTX dan FTX ialah empat komponen
+ * di dalam program tersebut, bukan empat permohonan berasingan.
+ */
+function bestCourseApplication() {
+
+  return courseApplications
+    .slice()
+    .sort((a, b) => {
+
+      const rankDiff =
+        statusRank(b.status) -
+        statusRank(a.status);
+
+      if (rankDiff !== 0) {
+        return rankDiff;
+      }
+
+      return String(
+        b.submittedAt ||
+        b.createdAt ||
+        ""
+      ).localeCompare(
+        String(
+          a.submittedAt ||
+          a.createdAt ||
+          ""
+        )
+      );
+    })[0] || null;
+}
+
+
+const viewBtn = document.getElementById("btn-member-view");
+const editBtn = document.getElementById("btn-member-edit");
+
+if (MEMBER_ID) {
+
+  if (viewBtn) {
+    viewBtn.href =
+      `emt_viewform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+  }
+
+  if (editBtn) {
+    editBtn.href =
+      `emt_editform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+  }
+
+}
+
+/* =====================================================
+   PROFILE
+===================================================== */
 async function loadMemberProfile() {
-  if (!MEMBER_ID) return; // No application yet — show defaults
 
-  try {
-    const res  = await fetch(`${API}/api/members/${MEMBER_ID}`);
-    const { data: m } = await res.json();
-    if (!m) return;
+  const memberProfile =
+    document.getElementById("memberProfile");
 
-    // Profile card
-    document.getElementById('profile-name').textContent        = m.full_name || m.name || '-';
-    document.getElementById('profile-designation').textContent = m.designation || '-';
-    document.getElementById('profile-status-badge').className  =
-      m.status === 'approved' ? 'badge bg-success' : 'badge bg-warning text-dark';
-    document.getElementById('profile-status-badge').textContent =
-      m.status === 'approved' ? 'Aktif' : 'Dalam Semakan';
+  const emptyProfile =
+    document.getElementById("emptyProfile");
 
-    // Info grid
-    document.getElementById('info-name').textContent            = m.full_name || m.name || '-';
-    document.getElementById('info-ic').textContent              = m.identification_number || '-';
-    document.getElementById('info-service').textContent         = m.service_period || '-';
-    document.getElementById('info-designation').textContent     = m.designation || '-';
-    document.getElementById('info-facility').textContent        = m.facility || m.workplace || '-';
-    document.getElementById('info-state').textContent           = m.state || '-';
 
-    // MyEMT registration button — already applied, show status instead
-    const emtBtn = document.getElementById('btn-daftar-emt');
-    if (emtBtn) {
-      if (m.status === 'pending') {
-        emtBtn.className = 'btn btn-warning text-dark';
-        emtBtn.textContent = '⏳ Dalam Semakan';
-        emtBtn.removeAttribute('href');
-        emtBtn.style.cursor = 'default';
-      } else if (m.status === 'approved') {
-        emtBtn.className = 'btn btn-success';
-        emtBtn.textContent = '✅ Diluluskan';
-        emtBtn.removeAttribute('href');
-        emtBtn.style.cursor = 'default';
-      } else if (m.status === 'rejected') {
-        emtBtn.className = 'btn btn-danger';
-        emtBtn.textContent = '❌ Ditolak — Mohon Semula';
-        emtBtn.href = 'emt_form.html';
-      }
-    }
-  } catch (err) {
-    console.error('Gagal muatkan profil:', err);
+  if (!MEMBER_ID) {
+
+    memberProfile.classList.remove("show");
+    emptyProfile.classList.add("show");
+
+    document.getElementById("btn-member-status")
+      .href = "emt_form.html";
+
+    return null;
+  }
+
+
+  const json = await safeJson(
+    `${API}/api/members/${encodeURIComponent(MEMBER_ID)}`
+  );
+
+
+  const member =
+    json?.success === false
+      ? null
+      : json?.data;
+
+
+  if (!member) {
+
+    memberProfile.classList.remove("show");
+    emptyProfile.classList.add("show");
+
+    return null;
+  }
+
+
+  currentMember = member;
+
+  memberProfile.classList.add("show");
+  emptyProfile.classList.remove("show");
+
+
+  const name =
+    member.full_name ||
+    member.fullName ||
+    member.name ||
+    "-";
+
+
+  const memberStatus =
+    normalizeStatus(member.status);
+
+
+  document.getElementById("profile-name")
+    .textContent = name;
+
+  document.getElementById("profile-designation")
+    .textContent =
+      member.designation ||
+      member.position ||
+      "-";
+
+
+  const profileStatusInfo =
+    statusInfo(memberStatus);
+
+
+  const profileBadge =
+    document.getElementById(
+      "profile-status-badge"
+    );
+
+
+  profileBadge.className =
+    `badge ${profileStatusInfo.className}`;
+
+  profileBadge.textContent =
+    memberStatus === "approved"
+      ? "Keahlian Diluluskan"
+      : profileStatusInfo.label;
+
+
+  document.getElementById("info-name")
+    .textContent = name;
+
+  document.getElementById("info-ic")
+    .textContent =
+      member.identification_number ||
+      member.identificationNumber ||
+      member.ic ||
+      "-";
+
+  document.getElementById("info-service")
+    .textContent =
+      member.service_period ||
+      member.servicePeriod ||
+      "-";
+
+  document.getElementById("info-designation")
+    .textContent =
+      member.designation ||
+      member.position ||
+      "-";
+
+  document.getElementById("info-facility")
+    .textContent =
+      member.facility ||
+      member.workplace ||
+      member.organization ||
+      "-";
+
+  document.getElementById("info-state")
+    .textContent =
+      member.state ||
+      "-";
+
+
+  /* MEMBER-SPECIFIC LINKS */
+  document.getElementById("btn-health-view").href =
+    `user_healthview.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+  document.getElementById("btn-health-edit").href =
+    `user_healthform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+  document.getElementById("btn-course-health").href =
+    `user_healthview.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+
+  /* MEMBER APPLICATION BUTTON */
+  const emtBtn =
+    document.getElementById("btn-daftar-emt");
+
+
+  if (memberStatus === "pending") {
+
+    emtBtn.className =
+      "btn btn-warning text-dark disabled";
+
+    emtBtn.innerHTML =
+      '<i class="bi bi-hourglass-split me-1"></i>Dalam Semakan';
+
+    emtBtn.removeAttribute("href");
+
+  } else if (memberStatus === "approved") {
+
+    emtBtn.className =
+      "btn btn-success disabled";
+
+    emtBtn.innerHTML =
+      '<i class="bi bi-check-circle me-1"></i>Keahlian Diluluskan';
+
+    emtBtn.removeAttribute("href");
+
+  } else if (memberStatus === "rejected") {
+
+    emtBtn.className =
+      "btn btn-danger";
+
+    emtBtn.innerHTML =
+      '<i class="bi bi-arrow-repeat me-1"></i>Mohon Semula';
+
+    emtBtn.href =
+      `emt_form.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+  }
+
+
+  document.getElementById("btn-member-status").href =
+    `emt_submitform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+
+  return member;
+}
+
+
+/* =====================================================
+   COURSE APPLICATIONS
+===================================================== */
+async function loadCourseApplications() {
+
+  if (!MEMBER_ID) {
+
+    courseApplications = [];
+    return [];
+  }
+
+
+  const json = await safeJson(
+    `${API}/api/course-applications?memberId=${encodeURIComponent(MEMBER_ID)}`
+  );
+
+
+  const apps =
+    Array.isArray(json?.data)
+      ? json.data
+      : [];
+
+
+  courseApplications =
+    apps.filter(app =>
+      !app.memberId ||
+      String(app.memberId) ===
+      String(MEMBER_ID)
+    );
+
+
+  return courseApplications;
+}
+
+
+/* =====================================================
+   FLOW / ELIGIBILITY
+===================================================== */
+function updateFlow() {
+
+  const memberStatus =
+    normalizeStatus(
+      currentMember?.status
+    );
+
+
+  const courseApp =
+    bestCourseApplication();
+
+
+  const memberApproved =
+    memberStatus === "approved";
+
+
+  const courseApproved =
+    isApprovedLike(
+      courseApp?.status
+    );
+
+
+  const fullyActive =
+    memberApproved &&
+    courseApproved;
+
+
+  /* =============================
+     SUMMARY
+  ============================== */
+  const memberInfo =
+    currentMember
+      ? statusInfo(memberStatus)
+      : statusInfo("none");
+
+
+  document.getElementById("summary-member")
+    .textContent =
+      memberInfo.label;
+
+
+  document.getElementById("summary-course")
+    .textContent =
+      courseApp
+        ? statusInfo(courseApp.status).label
+        : "Belum Mohon";
+
+
+  document.getElementById("summary-active")
+    .textContent =
+      fullyActive
+        ? "Layak"
+        : "Belum Layak";
+
+
+  /* =============================
+     FLOW STATUS
+  ============================== */
+  document.getElementById(
+    "flow-member-status"
+  ).innerHTML =
+    statusBadge(
+      currentMember
+        ? memberStatus
+        : "none"
+    );
+
+
+  document.getElementById(
+    "flow-course-status"
+  ).innerHTML =
+    statusBadge(
+      courseApp?.status || "none"
+    );
+
+
+  document.getElementById(
+    "flow-active-status"
+  ).innerHTML =
+    fullyActive
+      ? '<span class="badge bg-success">Layak Operasi</span>'
+      : '<span class="badge bg-secondary">Belum Layak</span>';
+
+
+  setFlowCard(
+    "flow-member",
+    memberApproved,
+    !currentMember ||
+    memberStatus === "pending"
+  );
+
+
+  setFlowCard(
+    "flow-course",
+    courseApproved,
+    memberApproved &&
+    !courseApproved
+  );
+
+
+  setFlowCard(
+    "flow-active",
+    fullyActive,
+    courseApproved &&
+    !fullyActive
+  );
+
+
+  /* =============================
+     COURSE ACCESS
+  ============================== */
+  const courseBtn =
+    document.getElementById(
+      "btn-course"
+    );
+
+  const courseCard =
+    document.getElementById(
+      "courseActionCard"
+    );
+
+  const courseNote =
+    document.getElementById(
+      "course-lock-note"
+    );
+
+
+  if (!memberApproved) {
+
+    courseBtn.classList.add("disabled");
+    courseBtn.removeAttribute("href");
+
+    courseCard.classList.add(
+      "locked-action"
+    );
+
+    courseNote.textContent =
+      "Program kursus boleh dipohon selepas permohonan MyEMT diluluskan.";
+
+  } else {
+
+    courseBtn.classList.remove(
+      "disabled"
+    );
+
+    courseBtn.href =
+      `course_apply.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+    courseCard.classList.remove(
+      "locked-action"
+    );
+
+    courseNote.textContent =
+      courseApproved
+        ? "Program kursus telah diluluskan. Program ini merangkumi B-Course, C-Course, TTX dan FTX."
+        : "Satu permohonan kursus merangkumi B-Course, C-Course, TTX dan FTX.";
+  }
+
+
+  /* =============================
+     MISSION ACCESS
+  ============================== */
+  const missionBtn =
+    document.getElementById(
+      "btn-mission"
+    );
+
+  const missionCard =
+    document.getElementById(
+      "missionActionCard"
+    );
+
+  const missionNote =
+    document.getElementById(
+      "mission-lock-note"
+    );
+
+
+  if (!fullyActive) {
+
+    missionBtn.classList.add(
+      "disabled"
+    );
+
+    missionBtn.removeAttribute(
+      "href"
+    );
+
+    missionCard.classList.add(
+      "locked-action"
+    );
+
+    missionNote.textContent =
+      "Akses operasi misi dibuka selepas keahlian MyEMT dan program kursus yang merangkumi B-Course, C-Course, TTX dan FTX diluluskan.";
+
+  } else {
+
+    missionBtn.classList.remove(
+      "disabled"
+    );
+
+    missionBtn.href =
+      "user_misilist.html";
+
+    missionCard.classList.remove(
+      "locked-action"
+    );
+
+    missionNote.textContent =
+      "Anda telah memenuhi aliran kelayakan untuk melihat operasi dan misi EMT.";
+  }
+
+
+  /* =============================
+     ELIGIBILITY ALERT
+  ============================== */
+  const alertEl =
+    document.getElementById(
+      "eligibility-alert"
+    );
+
+
+  if (fullyActive) {
+
+    alertEl.className =
+      "alert alert-success mt-3 mb-0";
+
+    alertEl.innerHTML =
+      '<i class="bi bi-check-circle me-1"></i><strong>Layak Operasi EMT.</strong> Keahlian dan program latihan MyEMT telah diluluskan.';
+
+  } else if (!currentMember) {
+
+    alertEl.className =
+      "alert alert-secondary mt-3 mb-0";
+
+    alertEl.innerHTML =
+      '<i class="bi bi-info-circle me-1"></i>Mulakan dengan permohonan keahlian MyEMT.';
+
+  } else if (!memberApproved) {
+
+    alertEl.className =
+      "alert alert-warning mt-3 mb-0";
+
+    alertEl.innerHTML =
+      '<i class="bi bi-hourglass-split me-1"></i>Permohonan keahlian MyEMT perlu diluluskan sebelum meneruskan ke program kursus.';
+
+  } else {
+
+    alertEl.className =
+      "alert alert-warning mt-3 mb-0";
+
+    alertEl.innerHTML =
+      '<i class="bi bi-mortarboard me-1"></i>Keahlian telah diluluskan. Seterusnya daftar program kursus MyEMT yang merangkumi <strong>B-Course, C-Course, TTX dan FTX</strong>.';
   }
 }
 
-async function loadApplicationStatus() {
-  const tbody = document.getElementById('tbody-application-status');
-  if (!tbody) return;
 
-  try {
-    const rows = [];
+function setFlowCard(
+  id,
+  completed,
+  current
+) {
 
-    // MyEMT application
-    if (MEMBER_ID) {
-      const mRes = await fetch(`${API}/api/members/${MEMBER_ID}`);
-      const { data: m } = await mRes.json();
-      if (m) {
-        rows.push({
-          date: fmtDate(m.submittedAt),
-          phase: 'Pendaftaran Ahli MyEMT',
-          sub: 'Permohonan keahlian EMT',
-          status: m.status,
-          link: 'emt_submitform.html'
-        });
-      }
-    } else {
-      rows.push({
-        date: '-', phase: 'Pendaftaran Ahli MyEMT', sub: 'Belum mohon',
-        status: 'none', link: 'emt_form.html'
-      });
-    }
+  const el =
+    document.getElementById(id);
 
-    // Course application
-    if (MEMBER_ID) {
-      const cRes  = await fetch(`${API}/api/course-applications?memberId=${MEMBER_ID}`);
-      const { data: apps } = await cRes.json();
-      if (apps && apps.length) {
-        apps.forEach(a => rows.push({
-          date: fmtDate(a.submittedAt),
-          phase: `Pendaftaran Kursus — ${a.sessionName}`,
-          sub: 'B-Course & C-Course',
-          status: a.status,
-          link: 'course_apply.html'
-        }));
-      } else {
-        rows.push({ date: '-', phase: 'Pendaftaran Kursus MyEMT', sub: 'B-Course & C-Course', status: 'none', link: 'course_apply.html' });
-      }
-    } else {
-      rows.push({ date: '-', phase: 'Pendaftaran Kursus MyEMT', sub: 'B-Course & C-Course', status: 'none', link: 'course_apply.html' });
-    }
+  el.classList.remove(
+    "completed",
+    "current",
+    "locked"
+  );
 
-    const labelMap = { pending: 'Dalam Semakan', approved: 'Diluluskan', rejected: 'Ditolak', none: 'Belum Mohon' };
-    const classMap = { pending: 'bg-warning text-dark', approved: 'bg-success', rejected: 'bg-danger', none: 'bg-secondary' };
 
-    tbody.innerHTML = rows.map(r => `
-      <tr>
-        <td class="fw-semibold">${r.date}</td>
-        <td>
-          <div class="fw-semibold">${r.phase}</div>
-          <small class="text-muted">${r.sub}</small>
-        </td>
-        <td><span class="badge ${classMap[r.status] || 'bg-secondary'}">${labelMap[r.status] || r.status}</span></td>
-        <td class="text-muted">-</td>
-        <td class="text-end">
-          <a href="${r.link}" class="btn btn-sm btn-outline-secondary">Lihat</a>
-        </td>
-      </tr>`).join('');
+  if (completed) {
 
-    // Also update the eligibility steps table
-    updateEligibilitySteps(rows);
+    el.classList.add(
+      "completed"
+    );
 
-  } catch (err) {
-    console.error('Gagal muatkan status permohonan:', err);
+  } else if (current) {
+
+    el.classList.add(
+      "current"
+    );
+
+  } else {
+
+    el.classList.add(
+      "locked"
+    );
   }
 }
 
-function updateEligibilitySteps(rows) {
-  const emtRow    = rows.find(r => r.phase === 'Pendaftaran Ahli MyEMT');
-  const courseRow = rows.find(r => r.phase && r.phase.includes('Kursus'));
 
-  const steps = [
-    { id: 'step-emt',    status: emtRow?.status === 'approved' ? 'approved' : emtRow?.status === 'pending' ? 'pending' : 'none' },
-    { id: 'step-bcourse', status: courseRow?.status || 'none' },
-    { id: 'step-ccourse', status: courseRow?.status === 'approved' ? 'approved' : 'none' },
-    { id: 'step-aktif',   status: (emtRow?.status === 'approved' && courseRow?.status === 'approved') ? 'approved' : 'none' }
-  ];
+/* =====================================================
+   APPLICATION HISTORY
+===================================================== */
+function renderApplicationHistory() {
 
-  steps.forEach(({ id, status }) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const map = { approved: '<span class="badge bg-success">Lulus</span>', pending: '<span class="badge bg-warning text-dark">Dalam Semakan</span>', none: '<span class="badge bg-secondary">Belum Mohon</span>' };
-    el.innerHTML = map[status] || map.none;
+  const rows = [];
+
+
+  /* MEMBERSHIP */
+  if (currentMember) {
+
+    rows.push({
+
+      date:
+        fmtDate(
+          currentMember.submittedAt ||
+          currentMember.createdAt
+        ),
+
+      phase:
+        "Pendaftaran Ahli MyEMT",
+
+      sub:
+        "Permohonan keahlian EMT",
+
+      status:
+        currentMember.status,
+
+      comment:
+        currentMember.comment ||
+        currentMember.comments ||
+        currentMember.adminComment ||
+        "-",
+
+      link:
+        `emt_submitform.html?memberId=${encodeURIComponent(MEMBER_ID)}`
+    });
+
+  } else {
+
+    rows.push({
+
+      date: "-",
+
+      phase:
+        "Pendaftaran Ahli MyEMT",
+
+      sub:
+        "Belum membuat permohonan",
+
+      status:
+        "none",
+
+      comment:
+        "-",
+
+      link:
+        "emt_form.html"
+    });
+  }
+
+
+  /* COURSE / TRAINING INTAKES */
+  courseApplications.forEach(app => {
+
+    rows.push({
+
+      date:
+        fmtDate(
+          app.submittedAt ||
+          app.createdAt
+        ),
+
+      phase:
+        `Program Kursus MyEMT${app.sessionName ? " — " + app.sessionName : ""}`,
+
+      sub:
+        "Merangkumi B-Course, C-Course, TTX dan FTX",
+
+      status:
+        app.status,
+
+      comment:
+        app.comment ||
+        app.comments ||
+        app.adminComment ||
+        "-",
+
+      link:
+        `course_apply.html?memberId=${encodeURIComponent(MEMBER_ID)}`
+    });
   });
 
-  // Summary alert
-  const alertEl = document.getElementById('eligibility-alert');
-  if (!alertEl) return;
-  const isFullyActive = steps.every(s => s.status === 'approved');
-  alertEl.className = isFullyActive ? 'alert alert-success mb-0' : 'alert alert-warning mb-0';
-  alertEl.innerHTML = isFullyActive
-    ? '✅ Pemohon telah <strong>LULUS SEMUA TAHAP</strong> dan layak menyertai aktiviti EMT.'
-    : '⏳ Permohonan sedang dalam proses. Sila lengkapkan semua tahap untuk menjadi ahli aktif EMT.';
+
+  rows.sort((a, b) => {
+
+    const aDate =
+      a.date === "-"
+        ? ""
+        : a.date;
+
+    const bDate =
+      b.date === "-"
+        ? ""
+        : b.date;
+
+    return bDate.localeCompare(aDate);
+  });
+
+
+  const tbody =
+    document.getElementById(
+      "tbody-application-status"
+    );
+
+
+  tbody.innerHTML =
+    rows.map(row => {
+
+      const info =
+        statusInfo(
+          row.status
+        );
+
+      return `
+        <tr>
+
+          <td class="fw-semibold">
+            ${escHtml(row.date)}
+          </td>
+
+          <td>
+            <div class="fw-semibold">
+              ${escHtml(row.phase)}
+            </div>
+
+            <small class="text-muted">
+              ${escHtml(row.sub)}
+            </small>
+          </td>
+
+          <td>
+            <span class="badge ${info.className}">
+              ${escHtml(info.label)}
+            </span>
+          </td>
+
+          <td class="text-muted">
+            ${escHtml(row.comment)}
+          </td>
+
+          <td class="text-end">
+            <a href="${escHtml(row.link)}"
+               class="btn btn-sm btn-outline-secondary">
+              Lihat
+            </a>
+          </td>
+
+        </tr>
+      `;
+    }).join("");
+
+
+  document.getElementById(
+    "application-count"
+  ).textContent =
+    `${rows.length} rekod`;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  loadMemberProfile();
-  loadApplicationStatus();
-});
-</script>
 
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    await loadMemberProfile();
+    await loadCourseApplications();
+
+    updateFlow();
+    renderApplicationHistory();
+  }
+);
+</script>
 
 </body>
 </html>

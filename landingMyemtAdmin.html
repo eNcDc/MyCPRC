@@ -1,764 +1,534 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <title>Admin Pengurusan</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Dashboard Pengurusan MyEMT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/css/main.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<style>
+body{background:#f4f6f9}
 
-    <!-- Main CSS -->
-    <link href="assets/css/main.css" rel="stylesheet">
+.soft-card{
+  border:0;
+  border-radius:14px;
+  box-shadow:0 .25rem .75rem rgba(0,0,0,.06);
+}
 
-    <style>
-    .mds-card{
-        border:1px solid #dee2e6;
-        border-radius:12px;
-        overflow:hidden;
-        margin-bottom:1rem;
-        box-shadow:0 .125rem .25rem rgba(0,0,0,.075);
-    }
+.kpi-card{
+  border:1px solid #e3e7ed;
+  border-radius:12px;
+  padding:1rem;
+  background:#fff;
+  height:100%;
+}
 
-    .mds-card .card-header{
-        background:#0d6efd;
-        color:#fff;
-        font-weight:600;
-        padding:.75rem 1rem;
-    }
+.kpi-label{
+  font-size:.8rem;
+  color:#6c757d;
+}
 
-    .mds-card .card-body{
-        background:#fff;
-        padding:1rem;
-    }
+.kpi-value{
+  font-size:1.8rem;
+  font-weight:800;
+  line-height:1.1;
+}
 
-    .form-check{
-        margin-bottom:.5rem;
-    }
+.category-card{
+  border:1px solid #e3e7ed;
+  border-radius:12px;
+  padding:1rem;
+  background:#fff;
+  height:100%;
+  cursor:pointer;
+  transition:.15s ease;
+}
 
-    .form-label{
-        font-weight:600;
-    }
+.category-card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 .25rem .75rem rgba(0,0,0,.08);
+}
 
-    .badge-soft{
-        background:#e9ecef;
-        color:#495057;
-        font-weight:500;
-    }
+.category-icon{
+  width:44px;
+  height:44px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:#f1f3f5;
+  font-size:1.2rem;
+}
 
-    .section-title{
-        font-size:1.1rem;
-        font-weight:700;
-        margin-bottom:1rem;
-        padding-bottom:.5rem;
-        border-bottom:2px solid #dee2e6;
-    }
+.section-head{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:.75rem;
+  margin-bottom:1rem;
+}
 
-    textarea{
-        resize:vertical;
-    }
-    </style>
+.chart-wrap{
+  position:relative;
+  min-height:300px;
+}
+
+.queue-badge{
+  min-width:72px;
+}
+
+.small-muted{
+  font-size:.8rem;
+  color:#6c757d;
+}
+
+.table td,.table th{
+  vertical-align:middle;
+}
+
+@media(max-width:767px){
+  .header-actions{
+    width:100%;
+  }
+
+  .header-actions .btn{
+    width:100%;
+  }
+}
+</style>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div id="header"></div>
 
 <div class="container-fluid">
-  <div class="row">
+<div class="row">
 
-    <!-- SIDEBAR -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+<aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="col-md-9 col-lg-10 px-4 py-4">
+<main class="col-md-9 col-lg-10 px-4 py-4">
 
-        <!-- PAGE HEADER -->
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
+  <!-- =====================================================
+       PAGE HEADER
+  ====================================================== -->
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
 
-            <div>
-                <h4 class="mb-0">Pengurusan Ahli MyEMT</h4>
-                <small class="text-muted">
-                    Administrasi bagi Pengurusan Ahli dan Permohonan MyEMT
-                </small>
-            </div>
+    <div>
+      <h4 class="mb-1 fw-bold">Dashboard Pengurusan MyEMT</h4>
+      <small class="text-muted">
+        Pengurusan ahli, permohonan keahlian dan Program Kursus MyEMT.
+      </small>
+    </div>
 
-            <div class="d-flex gap-2 flex-wrap">
-                <a href="emt_ahli.html" class="btn btn-outline-secondary">
-                    <i class="bi bi-people me-1"></i>
-                    Pengurusan Ahli
-                </a>
+    <div class="d-flex gap-2 flex-wrap header-actions">
 
-                <a href="course_management.html" class="btn btn-primary">
-                    <i class="bi bi-mortarboard me-1"></i>
-                    Pengurusan B-Course & C-Course
-                </a>
-            </div>
+      <a href="emt_ahli.html" class="btn btn-outline-secondary">
+        <i class="bi bi-people me-1"></i>
+        Pengurusan Ahli
+      </a>
 
-        </div>
+      <a href="course_management.html" class="btn btn-primary">
+        <i class="bi bi-mortarboard me-1"></i>
+        Pengurusan Program Kursus
+      </a>
 
-      <!-- CARD 1 -->
-      <div class="row g-3 mb-4">
+    </div>
 
-
-        <!-- ================= KATEGORI AHLI ================= -->
-        <div class="card shadow-sm mb-4 border-0">
-
-            <div class="card-header bg-white">
-                <strong>Kategori Ahli MyEMT</strong>
-            </div>
-
-            <div class="card-body">
-
-                <div class="row g-3">
-
-                    <!-- Semua -->
-                    <div class="col-md-3">
-                    <div class="border rounded p-3 h-100 bg-light"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#analyticsModal">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted d-block">Semua</small>
-                            <h4 class="fw-bold mb-0" id="cnt-semua">...</h4>
-                        </div>
-                        <i class="bi bi-heart-pulse-fill fs-3 text-secondary"></i>
-                        </div>
-
-                    </div>
-                    </div>
-
-                    <div class="modal fade" id="analyticsModal" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <div class="modal-content">
-
-                        <!-- Header -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Analitik Ahli Berdaftar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- Body -->
-                        <div class="modal-body">
-
-                            <div class="row g-3">
-
-                            <div class="col-md-6">
-                                <div class="border rounded p-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Doktor</span>
-                                    <strong id="analytics-cnt-doktor">...</strong>
-                                </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="border rounded p-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Jururawat</span>
-                                    <strong id="analytics-cnt-jururawat">...</strong>
-                                </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="border rounded p-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Paramedik</span>
-                                    <strong id="analytics-cnt-paramedik">...</strong>
-                                </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="border rounded p-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Pegawai Farmasi</span>
-                                    <strong id="analytics-cnt-farmasi">...</strong>
-                                </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="border rounded p-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Pegawai Kesihatan Awam</span>
-                                    <strong id="analytics-cnt-kesihatan">...</strong>
-                                </div>
-                                </div>
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="border rounded p-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Staf Sokongan</span>
-                                    <strong id="analytics-cnt-staf">...</strong>
-                                </div>
-                                </div>
-                            </div>
-
-                            <!--
-                            <div class="col-md-6">
-                                <div class="border rounded p-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Lain-lain</span>
-                                    <strong>31</strong>
-                                </div>
-                                </div>
-                            </div>
-                            -->
-
-                            </div>
-
-                        </div>
-
-                        </div>
-                    </div>
-                    </div>
-
-                    <!-- Doktor -->
-                    <div class="col-md-3">
-                    <div class="border rounded p-3 h-100 bg-light"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#doktorModal">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted d-block">Doktor</small>
-                            <h4 class="fw-bold mb-0" id="cnt-doktor">...</h4>
-                        </div>
-                        <i class="bi bi-heart-pulse-fill fs-3 text-secondary"></i>
-                        </div>
-
-                    </div>
-                    </div>
-
-                    <div class="modal fade" id="doktorModal" tabindex="-1">
-                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                        <div class="modal-content">
-
-                        <!-- HEADER -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Senarai Doktor Berdaftar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- BODY -->
-                        <div class="modal-body">
-
-                            <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Tarikh</th>
-                                    <th>Nama Pemohon</th>
-                                    <th>Jawatan</th>
-                                    <th>Fasiliti</th>
-                                    <th>Negeri</th>
-                                    <th class="text-end">Tindakan</th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tbody-doktor">
-                                <!-- populated by loadMemberData() -->
-                                </tbody>
-
-                            </table>
-                            </div>
-
-                        </div>
-
-                        </div>
-                    </div>
-                    </div>
-
-                    <!-- Jururawat -->
-                    <div class="col-md-3">
-                    <div class="border rounded p-3 h-100 bg-light"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#jururawatModal">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted d-block">Jururawat</small>
-                            <h4 class="fw-bold mb-0" id="cnt-jururawat">...</h4>
-                        </div>
-                        <i class="bi bi-hospital-fill fs-3 text-secondary"></i>
-                        </div>
-
-                    </div>
-                    </div>
-
-                    <div class="modal fade" id="jururawatModal" tabindex="-1">
-                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                        <div class="modal-content">
-
-                        <!-- HEADER -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Senarai Jururawat Berdaftar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- BODY -->
-                        <div class="modal-body">
-
-                            <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Tarikh</th>
-                                    <th>Nama Pemohon</th>
-                                    <th>Jawatan</th>
-                                    <th>Fasiliti</th>
-                                    <th>Negeri</th>
-                                    <th class="text-end">Tindakan</th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tbody-jururawat">
-                                <!-- populated by loadMemberData() -->
-                                </tbody>
-
-                            </table>
-                            </div>
-
-                        </div>
-
-                        </div>
-                    </div>
-                    </div>
-
-                    <!-- Paramedik -->
-                    <div class="col-md-3">
-                    <div class="border rounded p-3 h-100 bg-light"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#paramedikModal">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted d-block">Paramedik</small>
-                            <h4 class="fw-bold mb-0" id="cnt-paramedik">...</h4>
-                        </div>
-                        <i class="bi bi-truck-front-fill fs-3 text-secondary"></i>
-                        </div>
-
-                    </div>
-                    </div>
-
-                    <div class="modal fade" id="paramedikModal" tabindex="-1">
-                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                        <div class="modal-content">
-
-                        <!-- HEADER -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Senarai Paramedik Berdaftar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- BODY -->
-                        <div class="modal-body">
-
-                            <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Tarikh</th>
-                                    <th>Nama Pemohon</th>
-                                    <th>Jawatan</th>
-                                    <th>Fasiliti</th>
-                                    <th>Negeri</th>
-                                    <th class="text-end">Tindakan</th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tbody-paramedik">
-                                <!-- populated by loadMemberData() -->
-                                </tbody>
-
-                            </table>
-                            </div>
-
-                        </div>
-
-                        </div>
-                    </div>
-                    </div>
-
-                    <!-- Pegawai Farmasi -->
-                    <div class="col-md-3">
-                    <div class="border rounded p-3 h-100 bg-light"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#farmasiModal">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted d-block">Pegawai Farmasi</small>
-                            <h4 class="fw-bold mb-0" id="cnt-farmasi">...</h4>
-                        </div>
-                        <i class="bi bi-capsule-pill fs-3 text-secondary"></i>
-                        </div>
-
-                    </div>
-                    </div>
-
-                    <div class="modal fade" id="farmasiModal" tabindex="-1">
-                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                        <div class="modal-content">
-
-                        <!-- HEADER -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Senarai Pegawai Farmasi Berdaftar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- BODY -->
-                        <div class="modal-body">
-
-                            <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Tarikh</th>
-                                    <th>Nama Pemohon</th>
-                                    <th>Jawatan</th>
-                                    <th>Fasiliti</th>
-                                    <th>Negeri</th>
-                                    <th class="text-end">Tindakan</th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tbody-farmasi">
-                                <!-- populated by loadMemberData() -->
-                                </tbody>
-
-                            </table>
-                            </div>
-
-                        </div>
-
-                        </div>
-                    </div>
-                    </div>
-
-                    <!-- Pegawai Kesihatan Awam -->
-                    <div class="col-md-3">
-                    <div class="border rounded p-3 h-100 bg-light"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#kesihatanAwamModal">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted d-block">Pegawai Kesihatan Awam</small>
-                            <h4 class="fw-bold mb-0" id="cnt-kesihatan">...</h4>
-                        </div>
-                        <i class="bi bi-shield-check fs-3 text-secondary"></i>
-                        </div>
-
-                    </div>
-                    </div>
-
-                    <div class="modal fade" id="kesihatanAwamModal" tabindex="-1">
-                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                        <div class="modal-content">
-
-                        <!-- HEADER -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Senarai Pegawai Kesihatan Awam Berdaftar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- BODY -->
-                        <div class="modal-body">
-
-                            <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Tarikh</th>
-                                    <th>Nama Pemohon</th>
-                                    <th>Jawatan</th>
-                                    <th>Fasiliti</th>
-                                    <th>Negeri</th>
-                                    <th class="text-end">Tindakan</th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tbody-kesihatan">
-                                <!-- populated by loadMemberData() -->
-                                </tbody>
-
-                            </table>
-                            </div>
-
-                        </div>
-
-                        </div>
-                    </div>
-                    </div>
-
-                    <!-- Staf Sokongan -->
-                    <div class="col-md-3">
-                    <div class="border rounded p-3 h-100 bg-light"
-                        role="button"
-                        data-bs-toggle="modal"
-                        data-bs-target="#stafSokonganModal">
-
-                        <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted d-block">Staf Sokongan</small>
-                            <h4 class="fw-bold mb-0" id="cnt-staf">...</h4>
-                        </div>
-                        <i class="bi bi-people-fill fs-3 text-secondary"></i>
-                        </div>
-
-                    </div>
-                    </div>
-
-                    <div class="modal fade" id="stafSokonganModal" tabindex="-1">
-                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                        <div class="modal-content">
-
-                        <!-- HEADER -->
-                        <div class="modal-header">
-                            <h5 class="modal-title">Senarai Staf Sokongan Berdaftar</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <!-- BODY -->
-                        <div class="modal-body">
-
-                            <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Tarikh</th>
-                                    <th>Nama Pemohon</th>
-                                    <th>Jawatan</th>
-                                    <th>Fasiliti</th>
-                                    <th>Negeri</th>
-                                    <th class="text-end">Tindakan</th>
-                                </tr>
-                                </thead>
-
-                                <tbody id="tbody-staf">
-                                <!-- populated by loadMemberData() -->
-                                </tbody>
-
-                            </table>
-                            </div>
-
-                        </div>
-
-                        </div>
-                    </div>
-                    </div>
-                    
-                    <!-- Lain-lain -->
-                    <!--
-                    <div class="col-md-3">
-                        <div class="border rounded p-3 h-100 bg-light"
-                            role="button"
-                            data-bs-toggle="modal"
-                            data-bs-target="#modalLainLain">
-
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div>
-                                    <small class="text-muted d-block">Lain-lain (Vendor / NGO)</small>
-                                    <h4 class="fw-bold mb-0">31</h4>
-                                </div>
-                                <i class="bi bi-person-badge-fill fs-3 text-secondary"></i>
-                            </div>
-
-                        </div>
-                    </div>
-                    
-
-                    <div class="modal fade" id="modalLainLain" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered">
-
-                        <div class="modal-content">
-
-                        <div class="modal-header">
-                            <h5 class="modal-title">Senarai Lain-lain (Vendor / NGO / Kontraktor)</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-
-                        <div class="modal-body">
-
-                            <div class="table-responsive">
-                            <table class="table table-sm align-middle">
-                                <thead class="table-light">
-                                <tr>
-                                    <th>Tarikh</th>
-                                    <th>Nama</th>
-                                    <th>Kategori</th>
-                                    <th>Organisasi</th>
-                                    <th>Negeri</th>
-                                    <th class="text-end">Tindakan</th>
-                                </tr>
-                                </thead>
-
-                                <tbody>
-                                <tr>
-                                    <td>12/01/2026</td>
-                                    <td>Ali Hassan</td>
-                                    <td>Vendor</td>
-                                    <td>ABC Medical Supply</td>
-                                    <td>Kelantan</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>10/01/2026</td>
-                                    <td>Syarikat Meditech</td>
-                                    <td>NGO</td>
-                                    <td>Relief Care Malaysia</td>
-                                    <td>Selangor</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td>08/01/2026</td>
-                                    <td>Rahman Ismail</td>
-                                    <td>Kontraktor</td>
-                                    <td>BuildSafe Services</td>
-                                    <td>Johor</td>
-                                    <td class="text-end">
-                                    <a href="emt_deployform.html" class="btn btn-sm btn-outline-primary">
-                                        Papar
-                                    </a>
-                                    </td>
-                                </tr>
-
-                                </tbody>
-                            </table>
-                            </div>
-
-                        </div>
-
-                        </div>
-                    </div>
-                    </div>
-                    -->
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- CARD 2 -->
-        <!--chart analisis-->
-        <div class="card shadow-sm border-0 mb-4">
-
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-
-                <strong>Analisis Ahli MyEMT</strong>
-
-                <a href="emt_ahli.html"
-                class="btn btn-sm btn-outline-secondary">
-                    Senarai Ahli
-                </a>
-
-            </div>
-
-            <div class="card-body">
-
-                <div class="row g-4">
-
-                    <!-- BAR CHART -->
-                    <div class="col-md-7">
-                        <h6 class="text-muted mb-3">Taburan Ahli (Bar Chart)</h6>
-                        <canvas id="ahliBarChart"></canvas>
-                    </div>
-
-                    <!-- DONUT CHART -->
-                    <div class="col-md-5">
-                        <h6 class="text-muted mb-3">Peratusan Ahli</h6>
-                        <canvas id="ahliDonutChart"></canvas>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-      </div>      
-
-        <!-- CARD 3-->
-        <!--chart ikut negeri-->
-        <div class="card shadow-sm border-0 mb-4">
-
-            <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                <strong>Ahli MyEMT Mengikut Negeri</strong>
-
-                <!-- FILTER NEGERI -->
-                <select id="negeriFilter" class="form-select form-select-sm w-auto">
-                    <option value="all">Semua Negeri (Malaysia)</option>
-
-                    <option value="johor">Johor</option>
-                    <option value="kedah">Kedah</option>
-                    <option value="kelantan">Kelantan</option>
-                    <option value="melaka">Melaka</option>
-                    <option value="negeri_sembilan">Negeri Sembilan</option>
-                    <option value="pahang">Pahang</option>
-                    <option value="perak">Perak</option>
-                    <option value="perlis">Perlis</option>
-                    <option value="pulau_pinang">Pulau Pinang</option>
-                    <option value="sabah">Sabah</option>
-                    <option value="sarawak">Sarawak</option>
-                    <option value="selangor">Selangor</option>
-                    <option value="terengganu">Terengganu</option>
-
-                    <option value="wp_kuala_lumpur">W.P. Kuala Lumpur</option>
-                    <option value="wp_labuan">W.P. Labuan</option>
-                    <option value="wp_putrajaya">W.P. Putrajaya</option>
-                </select>
-            </div>
-
-            <div class="card-body">
-                <canvas id="negeriChart"></canvas>
-            </div>
-
-        </div>
-
-    </main>
   </div>
+
+
+  <!-- =====================================================
+       MEMBERSHIP KPI
+  ====================================================== -->
+  <div class="card soft-card mb-4">
+
+    <div class="card-body">
+
+      <div class="section-head">
+        <div>
+          <h5 class="fw-bold mb-1">Status Keahlian MyEMT</h5>
+          <div class="small text-muted">
+            Ringkasan permohonan keahlian yang dihantar melalui borang MyEMT.
+          </div>
+        </div>
+
+        <a href="emt_ahli.html" class="btn btn-sm btn-outline-primary">
+          Semak Permohonan
+        </a>
+      </div>
+
+
+      <div class="row g-3">
+
+        <div class="col-6 col-lg-3">
+          <div class="kpi-card">
+            <div class="kpi-label">Jumlah Permohonan</div>
+            <div class="kpi-value" id="kpiMemberTotal">0</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <div class="kpi-card">
+            <div class="kpi-label">Dalam Semakan</div>
+            <div class="kpi-value" id="kpiMemberPending">0</div>
+            <div class="small-muted">Perlu tindakan admin</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <div class="kpi-card">
+            <div class="kpi-label">Diluluskan</div>
+            <div class="kpi-value" id="kpiMemberApproved">0</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg-3">
+          <div class="kpi-card">
+            <div class="kpi-label">Ditolak</div>
+            <div class="kpi-value" id="kpiMemberRejected">0</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       MEMBER CATEGORY
+  ====================================================== -->
+  <div class="card soft-card mb-4">
+
+    <div class="card-body">
+
+      <div class="section-head">
+        <div>
+          <h5 class="fw-bold mb-1">Kategori Ahli MyEMT</h5>
+          <div class="small text-muted">
+            Kategori dikira daripada jawatan terperinci yang dihantar melalui borang pendaftaran.
+          </div>
+        </div>
+
+        <span class="badge bg-light text-dark border" id="categoryTotalBadge">
+          0 ahli
+        </span>
+      </div>
+
+
+      <div class="row g-3" id="categoryCards"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       CATEGORY MODAL
+  ====================================================== -->
+  <div class="modal fade" id="categoryModal" tabindex="-1">
+
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+
+      <div class="modal-content">
+
+        <div class="modal-header">
+          <div>
+            <h5 class="modal-title mb-0" id="categoryModalTitle">Senarai Ahli</h5>
+            <small class="text-muted" id="categoryModalSub">-</small>
+          </div>
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+
+        <div class="modal-body">
+
+          <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+              <thead class="table-light">
+                <tr>
+                  <th>Tarikh</th>
+                  <th>Nama Pemohon</th>
+                  <th>Jawatan</th>
+                  <th>Fasiliti</th>
+                  <th>Negeri</th>
+                  <th>Status</th>
+                  <th class="text-end">Tindakan</th>
+                </tr>
+              </thead>
+
+              <tbody id="categoryModalBody"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       COURSE KPI
+  ====================================================== -->
+  <div class="card soft-card mb-4">
+
+    <div class="card-body">
+
+      <div class="section-head">
+        <div>
+          <h5 class="fw-bold mb-1">Program Kursus MyEMT</h5>
+          <div class="small text-muted">
+            Setiap sesi Program Kursus MyEMT merangkumi B-Course, C-Course, TTX dan FTX.
+          </div>
+        </div>
+
+        <a href="course_management.html" class="btn btn-sm btn-outline-primary">
+          Urus Program Kursus
+        </a>
+      </div>
+
+
+      <div class="alert alert-light border">
+        <i class="bi bi-info-circle me-1"></i>
+        <strong>Satu sesi = satu permohonan program.</strong>
+        B-Course, C-Course, TTX dan FTX ialah empat komponen dalam program yang sama,
+        bukan empat permohonan berasingan.
+      </div>
+
+
+      <div class="row g-3">
+
+        <div class="col-6 col-lg">
+          <div class="kpi-card">
+            <div class="kpi-label">Jumlah Permohonan Kursus</div>
+            <div class="kpi-value" id="kpiCourseTotal">0</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg">
+          <div class="kpi-card">
+            <div class="kpi-label">Dalam Semakan</div>
+            <div class="kpi-value" id="kpiCoursePending">0</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg">
+          <div class="kpi-card">
+            <div class="kpi-label">Permohonan Diluluskan</div>
+            <div class="kpi-value" id="kpiCourseApproved">0</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg">
+          <div class="kpi-card">
+            <div class="kpi-label">Ditolak</div>
+            <div class="kpi-value" id="kpiCourseRejected">0</div>
+          </div>
+        </div>
+
+        <div class="col-6 col-lg">
+          <div class="kpi-card">
+            <div class="kpi-label">Jumlah Sesi</div>
+            <div class="kpi-value" id="kpiSessions">0</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       PENDING QUEUES
+  ====================================================== -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-xl-6">
+
+      <div class="card soft-card h-100">
+
+        <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+          <div>
+            <strong>Permohonan Ahli Menunggu Semakan</strong>
+            <div class="small text-muted">Permohonan terkini yang memerlukan tindakan admin.</div>
+          </div>
+
+          <span class="badge bg-warning text-dark" id="pendingMemberBadge">0</span>
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table table-hover align-middle mb-0">
+
+            <thead class="table-light">
+              <tr>
+                <th>Tarikh</th>
+                <th>Nama</th>
+                <th>Jawatan</th>
+                <th class="text-end">Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="pendingMemberBody">
+              <tr>
+                <td colspan="4" class="text-center text-muted py-4">
+                  Memuatkan...
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="col-xl-6">
+
+      <div class="card soft-card h-100">
+
+        <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+          <div>
+            <strong>Permohonan Kursus Menunggu Semakan</strong>
+            <div class="small text-muted">Permohonan menyertai sesi Program Kursus MyEMT.</div>
+          </div>
+
+          <span class="badge bg-warning text-dark" id="pendingCourseBadge">0</span>
+        </div>
+
+        <div class="table-responsive">
+
+          <table class="table table-hover align-middle mb-0">
+
+            <thead class="table-light">
+              <tr>
+                <th>Tarikh</th>
+                <th>Ahli</th>
+                <th>Sesi</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody id="pendingCourseBody">
+              <tr>
+                <td colspan="4" class="text-center text-muted py-4">
+                  Memuatkan...
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       MEMBER ANALYTICS
+  ====================================================== -->
+  <div class="card soft-card mb-4">
+
+    <div class="card-header bg-white border-0 pt-3 d-flex justify-content-between align-items-center">
+
+      <div>
+        <strong>Analisis Ahli MyEMT</strong>
+        <div class="small text-muted">
+          Taburan ahli berdasarkan kategori profesion.
+        </div>
+      </div>
+
+      <a href="emt_ahli.html" class="btn btn-sm btn-outline-secondary">
+        Senarai Ahli
+      </a>
+
+    </div>
+
+    <div class="card-body">
+
+      <div class="row g-4">
+
+        <div class="col-lg-7">
+          <h6 class="text-muted mb-3">Taburan Ahli Mengikut Kategori</h6>
+          <div class="chart-wrap">
+            <canvas id="memberBarChart"></canvas>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <h6 class="text-muted mb-3">Peratusan Ahli</h6>
+          <div class="chart-wrap">
+            <canvas id="memberDonutChart"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       STATE ANALYTICS
+  ====================================================== -->
+  <div class="card soft-card">
+
+    <div class="card-header bg-white border-0 pt-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+
+      <div>
+        <strong>Ahli MyEMT Mengikut Negeri</strong>
+        <div class="small text-muted">
+          Data dikira secara langsung daripada rekod ahli.
+        </div>
+      </div>
+
+      <select id="stateFilter" class="form-select form-select-sm w-auto">
+        <option value="all">Semua Negeri (Malaysia)</option>
+      </select>
+
+    </div>
+
+    <div class="card-body">
+      <div class="chart-wrap">
+        <canvas id="stateChart"></canvas>
+      </div>
+    </div>
+
+  </div>
+
+</main>
+
+</div>
 </div>
 
-<!-- FOOTER -->
 <div id="footer"></div>
 
-<!-- LOAD HEADER / FOOTER / SIDEBAR -->
+
 <script>
 fetch("header.html")
   .then(res => res.text())
@@ -770,247 +540,1348 @@ fetch("footer.html")
 
 fetch("sidebar.html")
   .then(res => res.text())
-  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
+  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
+  .catch(err => console.error("Sidebar load failed:", err));
 </script>
 
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
-<!-- ══════════════════════════════════════════════════
-     LIVE DATA — fetched from /api/members & /api/members/summary
-     All counts and modal tables are populated dynamically.
-══════════════════════════════════════════════════ -->
 <script>
-
-
-// Helper: format date string "YYYY-MM-DD" → "DD/MM/YYYY"
-function fmtDate(d) {
-  if (!d) return '-';
-  const p = d.split('-');
-  return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : d;
-}
-
-// Helper: render rows into a modal tbody
-function renderRows(tbodyId, members) {
-  const tbody = document.getElementById(tbodyId);
-  if (!tbody) return;
-  if (!members.length) {
-    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">Tiada rekod.</td></tr>';
-    return;
+/* =====================================================
+   CONFIG
+===================================================== */
+const MEMBER_CATEGORIES = [
+  {
+    key:"doctor",
+    label:"Doktor",
+    icon:"bi-heart-pulse-fill"
+  },
+  {
+    key:"nurse",
+    label:"Jururawat",
+    icon:"bi-hospital-fill"
+  },
+  {
+    key:"paramedic",
+    label:"Paramedik",
+    icon:"bi-truck-front-fill"
+  },
+  {
+    key:"pharmacy",
+    label:"Pegawai Farmasi",
+    icon:"bi-capsule-pill"
+  },
+  {
+    key:"public_health",
+    label:"Pegawai Kesihatan Awam",
+    icon:"bi-shield-check"
+  },
+  {
+    key:"support",
+    label:"Staf Sokongan",
+    icon:"bi-people-fill"
+  },
+  {
+    key:"other",
+    label:"Lain-lain",
+    icon:"bi-person-badge-fill"
   }
-  tbody.innerHTML = members.map(m => `
-    <tr>
-      <td>${fmtDate(m.submittedAt)}</td>
-      <td>${m.name || '-'}</td>
-      <td>${m.designation || '-'}</td>
-      <td>${m.facility || '-'}</td>
-      <td>${m.state || '-'}</td>
-      <td class="text-end">
-        <a href="emt_deployform.html?id=${m.id}" class="btn btn-sm btn-outline-primary">Papar</a>
-      </td>
-    </tr>`).join('');
-}
-
-// Designation → { countEl, tbodyId, modalId }
-const DESIGNATIONS = [
-  { label: 'Doktor',                  countEl: 'cnt-doktor',      tbodyId: 'tbody-doktor',      filterKey: 'Doktor' },
-  { label: 'Jururawat',               countEl: 'cnt-jururawat',   tbodyId: 'tbody-jururawat',   filterKey: 'Jururawat' },
-  { label: 'Paramedik',               countEl: 'cnt-paramedik',   tbodyId: 'tbody-paramedik',   filterKey: 'Paramedik' },
-  { label: 'Pegawai Farmasi',         countEl: 'cnt-farmasi',     tbodyId: 'tbody-farmasi',     filterKey: 'Pegawai Farmasi' },
-  { label: 'Pegawai Kesihatan Awam',  countEl: 'cnt-kesihatan',   tbodyId: 'tbody-kesihatan',   filterKey: 'Pegawai Kesihatan Awam' },
-  { label: 'Staf Sokongan',           countEl: 'cnt-staf',        tbodyId: 'tbody-staf',        filterKey: 'Staf Sokongan' },
 ];
 
+
+const STATES = [
+  "Johor",
+  "Kedah",
+  "Kelantan",
+  "Melaka",
+  "Negeri Sembilan",
+  "Pahang",
+  "Perak",
+  "Perlis",
+  "Pulau Pinang",
+  "Sabah",
+  "Sarawak",
+  "Selangor",
+  "Terengganu",
+  "WP Kuala Lumpur",
+  "WP Labuan",
+  "WP Putrajaya"
+];
+
+
 let allMembers = [];
+let courseApplications = [];
+let sessions = [];
 
-async function loadMemberData() {
-  try {
-    const [summaryRes, membersRes] = await Promise.all([
-      fetch(`${API}/api/members/summary`),
-      fetch(`${API}/api/members`)
-    ]);
-    const summary = await summaryRes.json();
-    const membersData = await membersRes.json();
-    allMembers = membersData.data || [];
+let memberBarChart = null;
+let memberDonutChart = null;
+let stateChart = null;
 
-    // Update total count
-    const totalEl = document.getElementById('cnt-semua');
-    if (totalEl) totalEl.textContent = summary.total || 0;
+if (
+  typeof Chart !== "undefined" &&
+  typeof ChartDataLabels !== "undefined"
+) {
+  Chart.register(ChartDataLabels);
+}
 
-    // Update per-designation counts
-    DESIGNATIONS.forEach(d => {
-      const el = document.getElementById(d.countEl);
-      if (el) el.textContent = (summary.byDesignation || {})[d.filterKey] || 0;
 
-      // Populate modal tbody
-      renderRows(d.tbodyId, allMembers.filter(m => m.designation === d.filterKey));
-    });
+/* =====================================================
+   HELPERS
+===================================================== */
+function esc(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
 
-    // Update analytics modal breakdown
-    DESIGNATIONS.forEach(d => {
-      const el = document.getElementById(`analytics-${d.countEl}`);
-      if (el) el.textContent = (summary.byDesignation || {})[d.filterKey] || 0;
-    });
 
-    // Update charts
-    updateCharts(summary.byDesignation || {});
+function fmtDate(value){
 
-  } catch (err) {
-    console.error('Gagal muatkan data ahli:', err);
+  if(!value) return "-";
+
+  const date = new Date(value);
+
+  if(!Number.isNaN(date.getTime())){
+    return date.toLocaleDateString(
+      "ms-MY",
+      {
+        day:"2-digit",
+        month:"2-digit",
+        year:"numeric"
+      }
+    );
+  }
+
+  const parts = String(value).split("-");
+
+  return parts.length === 3
+    ? `${parts[2]}/${parts[1]}/${parts[0]}`
+    : String(value);
+}
+
+
+function normalize(value){
+  return String(value || "")
+    .trim()
+    .toLowerCase();
+}
+
+
+function normalizedState(value){
+
+  const raw = normalize(value)
+    .replaceAll(".","")
+    .replace(/\s+/g," ");
+
+
+  const aliases = {
+    "wp kuala lumpur":"WP Kuala Lumpur",
+    "w p kuala lumpur":"WP Kuala Lumpur",
+    "wilayah persekutuan kuala lumpur":"WP Kuala Lumpur",
+
+    "wp putrajaya":"WP Putrajaya",
+    "w p putrajaya":"WP Putrajaya",
+    "wilayah persekutuan putrajaya":"WP Putrajaya",
+
+    "wp labuan":"WP Labuan",
+    "w p labuan":"WP Labuan",
+    "wilayah persekutuan labuan":"WP Labuan"
+  };
+
+
+  if(aliases[raw]){
+    return aliases[raw];
+  }
+
+
+  const exact =
+    STATES.find(
+      state =>
+        normalize(state) === raw
+    );
+
+
+  return exact || value || "-";
+}
+
+
+function memberCategory(member){
+
+  const designation =
+    normalize(
+      member.designation ||
+      member.position ||
+      member.other_designation
+    );
+
+
+  /*
+   * Doktor:
+   * Emergency Physician, FMS, MO, Doctor/Doktor.
+   * Public Health Medicine Specialist diletakkan di kategori
+   * Kesihatan Awam kerana fungsi dashboard ini berasaskan
+   * kumpulan operasi.
+   */
+  if(
+    designation.includes("emergency physician") ||
+    designation.includes("family medicine specialist") ||
+    designation.includes("medical officer") &&
+      !designation.includes("assistant medical officer") ||
+    designation.includes("doctor") ||
+    designation.includes("doktor")
+  ){
+    return "doctor";
+  }
+
+
+  if(
+    designation.includes("staff nurse") ||
+    designation.includes("nurse") ||
+    designation.includes("jururawat")
+  ){
+    return "nurse";
+  }
+
+
+  if(
+    designation.includes("assistant medical officer") ||
+    designation.includes("paramedic") ||
+    designation.includes("paramedik") ||
+    designation.includes("penolong pegawai perubatan")
+  ){
+    return "paramedic";
+  }
+
+
+  if(
+    designation.includes("pharmacist") ||
+    designation.includes("farmasi")
+  ){
+    return "pharmacy";
+  }
+
+
+  if(
+    designation.includes("public health medicine specialist") ||
+    designation.includes("environmental health") ||
+    designation.includes("kesihatan awam") ||
+    designation.includes("public health")
+  ){
+    return "public_health";
+  }
+
+
+  if(
+    designation.includes("staf sokongan") ||
+    designation.includes("staff support") ||
+    designation.includes("support staff")
+  ){
+    return "support";
+  }
+
+
+  return "other";
+}
+
+
+function statusBadge(status){
+
+  const s = normalize(status);
+
+  const map = {
+    pending:["bg-warning text-dark","Dalam Semakan"],
+    approved:["bg-success","Diluluskan"],
+    rejected:["bg-danger","Ditolak"],
+    active:["bg-success","Aktif"],
+    completed:["bg-success","Selesai"],
+    passed:["bg-success","Lulus"]
+  };
+
+
+  const config =
+    map[s] ||
+    ["bg-secondary",status || "-"];
+
+
+  return `
+    <span class="badge ${config[0]}">
+      ${esc(config[1])}
+    </span>
+  `;
+}
+
+
+async function safeApi(path){
+
+  try{
+
+    const res =
+      await fetch(
+        `${API}${path}`
+      );
+
+
+    if(!res.ok){
+      return null;
+    }
+
+
+    return await res.json();
+
+  }catch(err){
+
+    console.warn(
+      "API gagal:",
+      path,
+      err
+    );
+
+    return null;
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadMemberData);
-</script>
 
-<!--chart analisis-->
-<script>
-let barChart, donutChart;
+/* =====================================================
+   CATEGORY CARDS
+===================================================== */
+function categoryMembers(key){
 
-function updateCharts(byDesignation) {
-    const labels = [
-        'Doktor',
-        'Jururawat',
-        'Paramedik',
-        'Pegawai Farmasi',
-        'Pegawai Kesihatan Awam',
-        'Staf Sokongan',
-    ];
-
-    const dataValues = labels.map(l => byDesignation[l] || 0);
-
-    // BAR CHART
-    if (barChart) barChart.destroy();
-    barChart = new Chart(document.getElementById('ahliBarChart'), {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [{ label: 'Bilangan Ahli', data: dataValues, borderWidth: 1 }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { display: false } },
-            scales: { y: { beginAtZero: true, ticks: { precision: 0 } } }
-        }
-    });
-
-    // DONUT CHART
-    if (donutChart) donutChart.destroy();
-    donutChart = new Chart(document.getElementById('ahliDonutChart'), {
-        type: 'doughnut',
-        data: {
-            labels: labels,
-            datasets: [{ data: dataValues }]
-        },
-        options: {
-            responsive: true,
-            plugins: { legend: { position: 'bottom' } }
-        }
-    });
+  return allMembers.filter(
+    member =>
+      memberCategory(member) === key
+  );
 }
-</script>
 
 
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+function renderCategoryCards(){
 
-<!--chart ikut negeri-->
-<script>
+  const container =
+    document.getElementById(
+      "categoryCards"
+    );
 
-    const kategoriAhli = [
-        'Doktor',
-        'Jururawat',
-        'Paramedik',
-        'Pegawai Farmasi',
-        'Pegawai Kesihatan Awam',
-        'Staf Sokongan',
-        //'Lain-lain'
-    ];
 
-    const negeriData = {
+  container.innerHTML =
+    MEMBER_CATEGORIES.map(category => {
 
-        all: {
-            labels: [
-                'Johor',
-                'Kedah',
-                'Kelantan',
-                'Melaka',
-                'Negeri Sembilan',
-                'Pahang',
-                'Perak',
-                'Perlis',
-                'Pulau Pinang',
-                'Sabah',
-                'Sarawak',
-                'Selangor',
-                'Terengganu',
-                'W.P. Kuala Lumpur',
-                'W.P. Labuan',
-                'W.P. Putrajaya'
-            ],
-            data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        },
+      const count =
+        categoryMembers(
+          category.key
+        ).length;
 
-        johor:           { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        kedah:           { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        kelantan:        { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        melaka:          { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        negeri_sembilan: { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        pahang:          { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        perak:           { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        perlis:          { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        pulau_pinang:    { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        sabah:           { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        sarawak:         { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        selangor:        { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        terengganu:      { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        wp_kuala_lumpur: { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        wp_labuan:       { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] },
-        wp_putrajaya:    { labels: kategoriAhli, data: [0, 0, 0, 0, 0, 0] }
-    };
 
-    const ctx = document.getElementById('negeriChart');
+      return `
+        <div class="col-6 col-md-4 col-xl">
+          <div
+            class="category-card"
+            data-category="${esc(category.key)}"
+            role="button"
+          >
 
-    let negeriChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: negeriData.all.labels,
-            datasets: [{
-                label: 'Bilangan Ahli',
-                data: negeriData.all.data,
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    display: false
-                }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+            <div class="d-flex justify-content-between align-items-start gap-2">
+
+              <div>
+                <div class="small text-muted">
+                  ${esc(category.label)}
+                </div>
+
+                <div class="fs-3 fw-bold">
+                  ${count}
+                </div>
+              </div>
+
+              <div class="category-icon">
+                <i class="bi ${esc(category.icon)}"></i>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      `;
+    }).join("");
+
+
+  document.getElementById(
+    "categoryTotalBadge"
+  ).textContent =
+    `${allMembers.length} ahli`;
+}
+
+
+document.getElementById(
+  "categoryCards"
+).addEventListener(
+  "click",
+  event => {
+
+    const card =
+      event.target.closest(
+        ".category-card"
+      );
+
+
+    if(!card){
+      return;
+    }
+
+
+    openCategoryModal(
+      card.dataset.category
+    );
+  }
+);
+
+
+function openCategoryModal(key){
+
+  const config =
+    MEMBER_CATEGORIES.find(
+      category =>
+        category.key === key
+    );
+
+
+  if(!config){
+    return;
+  }
+
+
+  const members =
+    categoryMembers(key)
+      .slice()
+      .sort((a,b)=>
+        String(
+          b.submittedAt ||
+          b.createdAt ||
+          ""
+        )
+        .localeCompare(
+          String(
+            a.submittedAt ||
+            a.createdAt ||
+            ""
+          )
+        )
+      );
+
+
+  document.getElementById(
+    "categoryModalTitle"
+  ).textContent =
+    `Senarai ${config.label}`;
+
+
+  document.getElementById(
+    "categoryModalSub"
+  ).textContent =
+    `${members.length} rekod`;
+
+
+  const tbody =
+    document.getElementById(
+      "categoryModalBody"
+    );
+
+
+  if(!members.length){
+
+    tbody.innerHTML =
+      `
+        <tr>
+          <td colspan="7" class="text-center text-muted py-4">
+            Tiada rekod.
+          </td>
+        </tr>
+      `;
+
+  }else{
+
+    tbody.innerHTML =
+      members.map(member => `
+        <tr>
+
+          <td>
+            ${esc(
+              fmtDate(
+                member.submittedAt ||
+                member.createdAt
+              )
+            )}
+          </td>
+
+          <td>
+            ${esc(
+              member.full_name ||
+              member.fullName ||
+              member.name ||
+              "-"
+            )}
+          </td>
+
+          <td>
+            ${esc(
+              member.designation ||
+              member.position ||
+              "-"
+            )}
+          </td>
+
+          <td>
+            ${esc(
+              member.workplace ||
+              member.facility ||
+              "-"
+            )}
+          </td>
+
+          <td>
+            ${esc(
+              normalizedState(
+                member.state
+              )
+            )}
+          </td>
+
+          <td>
+            ${statusBadge(
+              member.status
+            )}
+          </td>
+
+          <td class="text-end">
+            <a
+              href="emt_deployform.html?id=${encodeURIComponent(member.id || "")}"
+              class="btn btn-sm btn-outline-primary"
+            >
+              Papar
+            </a>
+          </td>
+
+        </tr>
+      `).join("");
+  }
+
+
+  bootstrap.Modal
+    .getOrCreateInstance(
+      document.getElementById(
+        "categoryModal"
+      )
+    )
+    .show();
+}
+
+
+/* =====================================================
+   MEMBER KPI
+===================================================== */
+function renderMemberKpi(){
+
+  const pending =
+    allMembers.filter(
+      member =>
+        normalize(member.status) ===
+        "pending"
+    );
+
+
+  const approved =
+    allMembers.filter(
+      member =>
+        normalize(member.status) ===
+        "approved"
+    );
+
+
+  const rejected =
+    allMembers.filter(
+      member =>
+        normalize(member.status) ===
+        "rejected"
+    );
+
+
+  document.getElementById(
+    "kpiMemberTotal"
+  ).textContent =
+    allMembers.length;
+
+
+  document.getElementById(
+    "kpiMemberPending"
+  ).textContent =
+    pending.length;
+
+
+  document.getElementById(
+    "kpiMemberApproved"
+  ).textContent =
+    approved.length;
+
+
+  document.getElementById(
+    "kpiMemberRejected"
+  ).textContent =
+    rejected.length;
+
+
+  document.getElementById(
+    "pendingMemberBadge"
+  ).textContent =
+    pending.length;
+}
+
+
+/* =====================================================
+   MEMBER PENDING QUEUE
+===================================================== */
+function renderPendingMembers(){
+
+  const pending =
+    allMembers
+      .filter(
+        member =>
+          normalize(member.status) ===
+          "pending"
+      )
+      .sort((a,b)=>
+        String(
+          b.submittedAt ||
+          b.createdAt ||
+          ""
+        )
+        .localeCompare(
+          String(
+            a.submittedAt ||
+            a.createdAt ||
+            ""
+          )
+        )
+      );
+
+
+  const body =
+    document.getElementById(
+      "pendingMemberBody"
+    );
+
+
+  if(!pending.length){
+
+    body.innerHTML =
+      `
+        <tr>
+          <td colspan="4" class="text-center text-muted py-4">
+            Tiada permohonan ahli menunggu semakan.
+          </td>
+        </tr>
+      `;
+
+    return;
+  }
+
+
+  body.innerHTML =
+    pending
+      .slice(0,8)
+      .map(member => `
+        <tr>
+
+          <td>
+            ${esc(
+              fmtDate(
+                member.submittedAt ||
+                member.createdAt
+              )
+            )}
+          </td>
+
+          <td>
+            <div class="fw-semibold">
+              ${esc(
+                member.full_name ||
+                member.fullName ||
+                member.name ||
+                "-"
+              )}
+            </div>
+
+            <small class="text-muted">
+              ${esc(
+                normalizedState(
+                  member.state
+                )
+              )}
+            </small>
+          </td>
+
+          <td>
+            ${esc(
+              member.designation ||
+              member.position ||
+              "-"
+            )}
+          </td>
+
+          <td class="text-end">
+            <a
+              href="emt_deployform.html?id=${encodeURIComponent(member.id || "")}"
+              class="btn btn-sm btn-outline-primary"
+            >
+              Semak
+            </a>
+          </td>
+
+        </tr>
+      `).join("");
+}
+
+
+/* =====================================================
+   COURSE DATA
+===================================================== */
+function renderCourseKpi(){
+
+  const pending =
+    courseApplications.filter(
+      app =>
+        normalize(app.status) ===
+        "pending"
+    );
+
+
+  const approved =
+    courseApplications.filter(
+      app =>
+        normalize(app.status) ===
+        "approved"
+    );
+
+
+  const rejected =
+    courseApplications.filter(
+      app =>
+        normalize(app.status) ===
+        "rejected"
+    );
+
+
+  document.getElementById(
+    "kpiCourseTotal"
+  ).textContent =
+    courseApplications.length;
+
+
+  document.getElementById(
+    "kpiCoursePending"
+  ).textContent =
+    pending.length;
+
+
+  document.getElementById(
+    "kpiCourseApproved"
+  ).textContent =
+    approved.length;
+
+
+  document.getElementById(
+    "kpiCourseRejected"
+  ).textContent =
+    rejected.length;
+
+
+  document.getElementById(
+    "kpiSessions"
+  ).textContent =
+    sessions.length;
+
+
+  document.getElementById(
+    "pendingCourseBadge"
+  ).textContent =
+    pending.length;
+}
+
+
+function sessionNameById(id){
+
+  const session =
+    sessions.find(
+      session =>
+        String(session.id) ===
+        String(id)
+    );
+
+
+  return session?.name || id || "-";
+}
+
+
+function renderPendingCourses(){
+
+  const pending =
+    courseApplications
+      .filter(
+        app =>
+          normalize(app.status) ===
+          "pending"
+      )
+      .sort((a,b)=>
+        String(
+          b.submittedAt ||
+          b.createdAt ||
+          ""
+        )
+        .localeCompare(
+          String(
+            a.submittedAt ||
+            a.createdAt ||
+            ""
+          )
+        )
+      );
+
+
+  const body =
+    document.getElementById(
+      "pendingCourseBody"
+    );
+
+
+  if(!pending.length){
+
+    body.innerHTML =
+      `
+        <tr>
+          <td colspan="4" class="text-center text-muted py-4">
+            Tiada permohonan kursus menunggu semakan.
+          </td>
+        </tr>
+      `;
+
+    return;
+  }
+
+
+  body.innerHTML =
+    pending
+      .slice(0,8)
+      .map(app => `
+        <tr>
+
+          <td>
+            ${esc(
+              fmtDate(
+                app.submittedAt ||
+                app.createdAt
+              )
+            )}
+          </td>
+
+          <td>
+            ${esc(
+              app.memberName ||
+              "-"
+            )}
+          </td>
+
+          <td>
+            <div class="fw-semibold">
+              ${esc(
+                app.sessionName ||
+                sessionNameById(
+                  app.sessionId
+                )
+              )}
+            </div>
+
+            <small class="text-muted">
+              B-Course + C-Course + TTX + FTX
+            </small>
+          </td>
+
+          <td>
+            ${statusBadge(
+              app.status
+            )}
+          </td>
+
+        </tr>
+      `).join("");
+}
+
+
+/* =====================================================
+   MEMBER CHARTS
+===================================================== */
+function renderMemberCharts(){
+
+  const labels =
+    MEMBER_CATEGORIES.map(
+      category =>
+        category.label
+    );
+
+
+  const values =
+    MEMBER_CATEGORIES.map(
+      category =>
+        categoryMembers(
+          category.key
+        ).length
+    );
+
+
+  if(memberBarChart){
+    memberBarChart.destroy();
+  }
+
+
+  memberBarChart =
+    new Chart(
+      document.getElementById(
+        "memberBarChart"
+      ),
+      {
+        type:"bar",
+
+        data:{
+          labels,
+
+          datasets:[
+            {
+              label:"Bilangan Ahli",
+              data:values,
+              borderWidth:1
             }
+          ]
+        },
+
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+
+          layout:{
+            padding:{
+              top:24
+            }
+          },
+
+          plugins:{
+            legend:{
+              display:false
+            },
+
+            datalabels:{
+              display:function(context){
+                return Number(
+                  context.dataset.data[
+                    context.dataIndex
+                  ] || 0
+                ) > 0;
+              },
+
+              formatter:function(value){
+                return value;
+              },
+
+              anchor:"end",
+              align:"top",
+              offset:2,
+              color:"#212529",
+
+              font:{
+                weight:"bold",
+                size:12
+              },
+
+              clamp:true
+            }
+          },
+
+          scales:{
+            y:{
+              beginAtZero:true,
+
+              ticks:{
+                precision:0,
+                stepSize:1
+              },
+
+              title:{
+                display:true,
+                text:"Bilangan Ahli"
+              }
+            }
+          }
         }
-    });
+      }
+    );
 
-    document.getElementById('negeriFilter').addEventListener('change', function () {
 
-        const selected = this.value;
+  if(memberDonutChart){
+    memberDonutChart.destroy();
+  }
 
-        negeriChart.data.labels = negeriData[selected].labels;
-        negeriChart.data.datasets[0].data = negeriData[selected].data;
 
-        negeriChart.update();
+  memberDonutChart =
+    new Chart(
+      document.getElementById(
+        "memberDonutChart"
+      ),
+      {
+        type:"doughnut",
 
-    });
+        data:{
+          labels,
 
+          datasets:[
+            {
+              data:values
+            }
+          ]
+        },
+
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+
+          plugins:{
+            legend:{
+              position:"bottom"
+            },
+
+            datalabels:{
+              display:function(context){
+                return Number(
+                  context.dataset.data[
+                    context.dataIndex
+                  ] || 0
+                ) > 0;
+              },
+
+              formatter:function(value){
+                return value;
+              },
+
+              color:"#212529",
+
+              backgroundColor:"rgba(255,255,255,.90)",
+
+              borderRadius:6,
+
+              padding:{
+                top:4,
+                right:7,
+                bottom:4,
+                left:7
+              },
+
+              font:{
+                weight:"bold",
+                size:13
+              },
+
+              anchor:"center",
+              align:"center",
+              clamp:true
+            },
+
+            tooltip:{
+              callbacks:{
+                label:function(context){
+
+                  const value =
+                    Number(
+                      context.raw || 0
+                    );
+
+                  const total =
+                    context.dataset.data.reduce(
+                      (sum,item) =>
+                        sum + Number(item || 0),
+                      0
+                    );
+
+                  const percentage =
+                    total > 0
+                      ? (
+                          (
+                            value /
+                            total
+                          ) * 100
+                        ).toFixed(1)
+                      : "0.0";
+
+                  return `${context.label}: ${value} (${percentage}%)`;
+                }
+              }
+            }
+          },
+
+          cutout:"60%"
+        }
+      }
+    );
+}
+
+
+/* =====================================================
+   STATE CHART
+===================================================== */
+function populateStateFilter(){
+
+  const select =
+    document.getElementById(
+      "stateFilter"
+    );
+
+
+  STATES.forEach(state => {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+
+    option.value =
+      state;
+
+
+    option.textContent =
+      state;
+
+
+    select.appendChild(
+      option
+    );
+  });
+}
+
+
+function renderStateChart(selected="all"){
+
+  let labels = [];
+  let values = [];
+
+
+  if(selected === "all"){
+
+    labels =
+      STATES;
+
+
+    values =
+      STATES.map(state =>
+        allMembers.filter(
+          member =>
+            normalizedState(
+              member.state
+            ) === state
+        ).length
+      );
+
+  }else{
+
+    labels =
+      MEMBER_CATEGORIES.map(
+        category =>
+          category.label
+      );
+
+
+    values =
+      MEMBER_CATEGORIES.map(
+        category =>
+          allMembers.filter(
+            member =>
+              normalizedState(
+                member.state
+              ) === selected &&
+              memberCategory(
+                member
+              ) === category.key
+          ).length
+      );
+  }
+
+
+  if(stateChart){
+    stateChart.destroy();
+  }
+
+
+  stateChart =
+    new Chart(
+      document.getElementById(
+        "stateChart"
+      ),
+      {
+        type:"bar",
+
+        data:{
+          labels,
+
+          datasets:[
+            {
+              label:
+                selected === "all"
+                  ? "Bilangan Ahli"
+                  : `Ahli di ${selected}`,
+
+              data:values,
+
+              borderWidth:1
+            }
+          ]
+        },
+
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+
+          layout:{
+            padding:{
+              top:24
+            }
+          },
+
+          plugins:{
+            legend:{
+              display:false
+            },
+
+            datalabels:{
+              display:function(context){
+                return Number(
+                  context.dataset.data[
+                    context.dataIndex
+                  ] || 0
+                ) > 0;
+              },
+
+              formatter:function(value){
+                return value;
+              },
+
+              anchor:"end",
+              align:"top",
+              offset:2,
+              color:"#212529",
+
+              font:{
+                weight:"bold",
+                size:12
+              },
+
+              clamp:true
+            }
+          },
+
+          scales:{
+            y:{
+              beginAtZero:true,
+
+              ticks:{
+                precision:0,
+                stepSize:1
+              },
+
+              title:{
+                display:true,
+                text:"Bilangan Ahli"
+              }
+            }
+          }
+        }
+      }
+    );
+}
+
+
+document.getElementById(
+  "stateFilter"
+).addEventListener(
+  "change",
+  function(){
+
+    renderStateChart(
+      this.value
+    );
+  }
+);
+
+
+/* =====================================================
+   LOAD ALL DASHBOARD DATA
+===================================================== */
+async function loadDashboard(){
+
+  const [
+    membersJson,
+    courseJson,
+    sessionsJson
+  ] =
+    await Promise.all([
+      safeApi("/api/members"),
+      safeApi("/api/course-applications"),
+      safeApi("/api/sessions")
+    ]);
+
+
+  allMembers =
+    Array.isArray(
+      membersJson?.data
+    )
+      ? membersJson.data
+      : [];
+
+
+  courseApplications =
+    Array.isArray(
+      courseJson?.data
+    )
+      ? courseJson.data
+      : [];
+
+
+  sessions =
+    Array.isArray(
+      sessionsJson?.data
+    )
+      ? sessionsJson.data
+      : [];
+
+
+  renderMemberKpi();
+  renderCategoryCards();
+  renderPendingMembers();
+  renderCourseKpi();
+  renderPendingCourses();
+  renderMemberCharts();
+  renderStateChart("all");
+}
+
+
+/* =====================================================
+   INIT
+===================================================== */
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
+
+    populateStateFilter();
+    loadDashboard();
+  }
+);
 </script>
-
-
 
 </body>
 </html>

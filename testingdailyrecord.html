@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rekod Harian EMT MDS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f5f6f8;
+        }
+
+        .page-title {
+            font-weight: 700;
+        }
+
+        .summary-card {
+            border: 0;
+            border-radius: 14px;
+        }
+
+        .summary-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .day-card {
+            border: 0;
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .day-header {
+            background: #0d6efd;
+            color: #fff;
+            padding: .8rem 1rem;
+        }
+
+        .table th {
+            white-space: nowrap;
+            font-size: .84rem;
+        }
+
+        .table td {
+            font-size: .86rem;
+            vertical-align: middle;
+        }
+
+        .empty-state {
+            padding: 3rem 1rem;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .record-badge {
+            font-size: .74rem;
+        }
+
+        .daily-report-table th,
+        .daily-report-table td {
+            font-size: .78rem;
+            vertical-align: middle;
+        }
+
+        .report-section-title {
+            background: #212529;
+            color: #fff;
+            font-weight: 700;
+            padding: .45rem .65rem;
+            margin-top: 1rem;
+        }
+
+        .report-meta {
+            border: 1px solid #dee2e6;
+            background: #fff;
+        }
+
+        .report-meta .col {
+            padding: .5rem .65rem;
+            border-right: 1px solid #dee2e6;
+        }
+
+        .report-meta .col:last-child {
+            border-right: 0;
+        }
+
+        .analysis-card {
+            border: 0;
+            border-radius: 14px;
+            height: 100%;
+        }
+
+        .analysis-kpi {
+            font-size: 1.45rem;
+            font-weight: 700;
+        }
+
+        .analysis-chart-wrap {
+            position: relative;
+            min-height: 280px;
+        }
+
+        .analysis-insight {
+            border-left: 4px solid #0d6efd;
+            background: #f8f9fa;
+            padding: .8rem 1rem;
+            margin-bottom: .65rem;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden !important;
+            }
+
+            #dailyReportModal,
+            #dailyReportModal * {
+                visibility: visible !important;
+            }
+
+            #dailyReportModal {
+                position: absolute !important;
+                left: 0;
+                top: 0;
+                width: 100%;
+                display: block !important;
+            }
+
+            #dailyReportModal .modal-dialog {
+                max-width: 100% !important;
+                width: 100% !important;
+                margin: 0 !important;
+            }
+
+            #dailyReportModal .modal-content {
+                border: 0 !important;
+                box-shadow: none !important;
+            }
+
+            #dailyReportModal .modal-header,
+            #dailyReportModal .modal-footer {
+                display: none !important;
+            }
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #495057;
+            font-size: .8rem;
+            margin-bottom: .1rem;
+        }
+
+        .detail-value {
+            margin-bottom: .75rem;
+            word-break: break-word;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="container-fluid">
+    <div class="row">
+
+        <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+
+        <main class="col-md-9 col-lg-10 px-4 py-4">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+                <div>
+                    <h4 class="page-title mb-1">Rekod Harian EMT MDS</h4>
+                    <div class="text-muted">
+                        Senarai rekod EMT MDS yang telah dihantar, dikumpulkan mengikut tarikh.
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-outline-primary" id="refreshBtn">
+                        <i class="bi bi-arrow-clockwise me-1"></i>Refresh
+                    </button>
+
+                    <a href="emt_mds_form_pdf_aligned.html" class="btn btn-primary" id="newRecordBtn">
+                        <i class="bi bi-plus-lg me-1"></i>Rekod Baru
+                    </a>
+                </div>
+            </div>
+
+            <!-- FILTER -->
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <div class="row g-3 align-items-end">
+
+                        <div class="col-md-4">
+                            <label class="form-label">Tarikh</label>
+                            <input type="date" id="dateFilter" class="form-control">
+                        </div>
+
+                        <div class="col-md-5">
+                            <label class="form-label">Carian</label>
+                            <input type="text" id="searchFilter" class="form-control"
+                                   placeholder="Nama pesakit / ID / diagnosis">
+                        </div>
+
+                        <div class="col-md-3 d-flex gap-2">
+                            <button type="button" id="applyFilterBtn" class="btn btn-primary flex-fill">
+                                <i class="bi bi-funnel me-1"></i>Tapis
+                            </button>
+
+                            <button type="button" id="resetFilterBtn" class="btn btn-outline-secondary flex-fill">
+                                Reset
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="row g-3 mb-4">
+
+                <div class="col-md-4">
+                    <div class="card summary-card shadow-sm">
+                        <div class="card-body">
+                            <div class="text-muted small">Jumlah Rekod</div>
+                            <div class="summary-value" id="totalRecords">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card summary-card shadow-sm">
+                        <div class="card-body">
+                            <div class="text-muted small">Jumlah Hari</div>
+                            <div class="summary-value" id="totalDays">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card summary-card shadow-sm">
+                        <div class="card-body">
+                            <div class="text-muted small">Rekod Hari Ini</div>
+                            <div class="summary-value" id="todayRecords">0</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- STATUS -->
+            <div id="statusBox"></div>
+
+            <!-- DAILY RECORDS -->
+            <div id="dailyRecordsContainer"></div>
+
+        </main>
+    </div>
+</div>
+
+<div id="footer"></div>
+
+
+<!-- DETAIL MODAL -->
+<div class="modal fade" id="recordDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Butiran Rekod EMT MDS</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="recordDetailBody"></div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- DATA ANALYSIS MODAL -->
+<div class="modal fade" id="dailyAnalysisModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title mb-0">Analisis Data Harian EMT MDS</h5>
+                    <small class="text-muted">Analisis automatik berdasarkan rekod MDS bagi tarikh yang dipilih</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="dailyAnalysisBody"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-primary" id="downloadAnalysisSlideBtn">
+                    <i class="bi bi-file-earmark-ppt me-1"></i>Muat Turun Laporan Slaid
+                </button>
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- DAILY REPORT MODAL -->
+<div class="modal fade" id="dailyReportModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title mb-0">Laporan Harian EMT MDS</h5>
+                    <small class="text-muted">Dijana daripada rekod pesakit harian</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body" id="dailyReportBody"></div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Tutup
+                </button>
+
+                <button type="button" class="btn btn-primary" id="printDailyReportBtn">
+                    <i class="bi bi-printer me-1"></i>Cetak / Simpan PDF
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+fetch("header.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("header").innerHTML = data)
+    .catch(() => {});
+
+fetch("footer.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("footer").innerHTML = data)
+    .catch(() => {});
+
+fetch("sidebar.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
+    .catch(() => {});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
+<script src="assets/js/config.js"></script>
+
+<script>
+(function () {
+
+    let allRecords = [];
+    let displayedRecords = [];
+
+    const container = document.getElementById("dailyRecordsContainer");
+    const statusBox = document.getElementById("statusBox");
+
+    // Keep missionId if this page is opened from a specific mission.
+    const params = new URLSearchParams(location.search);
+    const missionId = params.get("missionId") || "";
+
+    if (missionId) {
+        document.getElementById("newRecordBtn").href =
+            "emt_mds_form_pdf_aligned.html?missionId=" + encodeURIComponent(missionId);
+    }
+
+
+    function translateDisplay(value) {
+        const map = {
+            "Male": "Lelaki",
+            "Female non-preg.": "Perempuan tidak hamil",
+            "Female pregnant": "Perempuan hamil",
+            "Unknown": "Tidak diketahui",
+            "Trauma": "Trauma",
+            "Infectious disease": "Penyakit berjangkit",
+            "Additional": "Tambahan",
+            "Emergency": "Kecemasan",
+            "Other key diseases": "Penyakit penting lain",
+            "Procedure": "Prosedur",
+            "Outcome": "Hasil rawatan",
+            "Admission": "Kemasukan",
+            "Referral": "Rujukan",
+            "Discharge without medical follow-up": "Discaj tanpa susulan perubatan",
+            "Discharge with medical follow-up": "Discaj dengan susulan perubatan",
+            "Discharge against medical advice": "Discaj bertentangan nasihat perubatan",
+            "Dead on arrival": "Meninggal semasa tiba",
+            "Death within facility": "Kematian dalam fasiliti",
+            "Requiring long term rehabilitation": "Memerlukan rehabilitasi jangka panjang",
+            "Directly related to event": "Berkaitan secara langsung dengan insiden",
+            "Indirectly related to event": "Berkaitan secara tidak langsung dengan insiden",
+            "Not related to event": "Tidak berkaitan dengan insiden",
+            "Vulnerable child": "Kanak-kanak rentan",
+            "Vulnerable adult": "Dewasa rentan",
+            "Sexual Gender Based Violence (SGBV)": "Keganasan Seksual dan Berasaskan Gender (SGBV)",
+            "Violence (non-SGBV)": "Keganasan (bukan SGBV)",
+            "Major head / spine injury": "Kecederaan utama kepala / tulang belakang",
+            "Major torso injury": "Kecederaan utama torso",
+            "Major extremity injury": "Kecederaan utama anggota",
+            "Moderate injury": "Kecederaan sederhana",
+            "Minor injury": "Kecederaan ringan",
+            "Acute respiratory infection": "Jangkitan pernafasan akut",
+            "Acute watery diarrhea": "Cirit-birit berair akut",
+            "Acute bloody diarrhea": "Cirit-birit berdarah akut",
+            "Acute jaundice syndrome": "Sindrom jaundis akut",
+            "Suspected measles": "Disyaki campak",
+            "Suspected meningitis": "Disyaki meningitis",
+            "Suspected tetanus": "Disyaki tetanus",
+            "Acute flaccid paralysis": "Lumpuh lembik akut",
+            "Acute haemorrhagic fever": "Demam berdarah akut",
+            "Fever of unknown origin": "Demam tidak diketahui punca",
+            "Surgical emergency (Non-trauma)": "Kecemasan pembedahan (bukan trauma)",
+            "Medical emergency (Non-infectious)": "Kecemasan perubatan (bukan berjangkit)",
+            "Skin disease": "Penyakit kulit",
+            "Acute mental health problem": "Masalah kesihatan mental akut",
+            "Obstetric complications": "Komplikasi obstetrik",
+            "Severe Acute Malnutrition (SAM)": "Malnutrisi Akut Teruk (SAM)",
+            "Other diagnosis, not specified above": "Diagnosis lain yang tidak dinyatakan di atas",
+            "Major procedure (excluding MDS31)": "Prosedur utama (tidak termasuk MDS31)",
+            "Limb amputation excluding digits": "Amputasi anggota tidak termasuk jari",
+            "Minor surgical procedure": "Prosedur pembedahan kecil",
+            "Normal Vaginal Delivery (NVD)": "Kelahiran Faraj Normal (NVD)",
+            "Caesarean section": "Pembedahan Caesarean",
+            "Obstetrics others": "Obstetrik lain"
+        };
+        return map[String(value)] || String(value ?? "-");
+    }
+
+    function translatedCountObject(obj) {
+        const translated = {};
+        Object.entries(obj || {}).forEach(([key, value]) => {
+            translated[translateDisplay(key)] = value;
+        });
+        return translated;
+    }
+
+    function esc(value) {
+        return String(value ?? "")
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    function getRecordDate(record) {
+        return (
+            record.date ||
+            record.recordDate ||
+            record.createdDate ||
+            record.created_at ||
+            record.createdAt ||
+            ""
+        ).toString().slice(0, 10);
+    }
+
+    function getRecordId(record, index) {
+        return (
+            record.id ||
+            record.mdsId ||
+            record.mds_id ||
+            record.recordId ||
+            record._id ||
+            ("MDS-" + String(index + 1).padStart(4, "0"))
+        );
+    }
+
+    function getPatientName(record) {
+        return (
+            record.patientName ||
+            record.patient_name ||
+            record.name ||
+            "-"
+        );
+    }
+
+    function getDiagnosis(record) {
+        return (
+            record.clinicalNotes ||
+            record.clinical_notes ||
+            record.diagnosis ||
+            record.diseaseType ||
+            "-"
+        );
+    }
+
+    function getGender(record) {
+        return record.gender || record.sex || "-";
+    }
+
+    function getAge(record) {
+        if (record.age === null || record.age === undefined || record.age === "") return "-";
+
+        const unit =
+            record.ageUnit ||
+            record.age_unit ||
+            "";
+
+        return unit ? `${record.age} ${unit}` : String(record.age);
+    }
+
+    function normaliseApiData(json) {
+        if (Array.isArray(json)) return json;
+
+        if (Array.isArray(json.data)) return json.data;
+        if (Array.isArray(json.records)) return json.records;
+        if (Array.isArray(json.result)) return json.result;
+        if (Array.isArray(json.mds)) return json.mds;
+
+        return [];
+    }
+
+    async function loadRecords() {
+        statusBox.innerHTML = `
+            <div class="alert alert-info">
+                <span class="spinner-border spinner-border-sm me-2"></span>
+                Memuatkan rekod EMT MDS...
+            </div>
+        `;
+
+        container.innerHTML = "";
+
+        try {
+            let url = `${API}/api/mds`;
+
+            if (missionId) {
+                url += `?missionId=${encodeURIComponent(missionId)}`;
+            }
+
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Accept": "application/json"
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}`);
+            }
+
+            const json = await response.json();
+            allRecords = normaliseApiData(json);
+
+            statusBox.innerHTML = "";
+
+            applyFilters();
+
+        } catch (error) {
+            console.error("Load MDS records error:", error);
+
+            allRecords = [];
+            displayedRecords = [];
+
+            updateSummary();
+
+            statusBox.innerHTML = `
+                <div class="alert alert-warning">
+                    <strong>Rekod tidak dapat dimuatkan.</strong><br>
+                    Page ini cuba membaca data menggunakan
+                    <code>GET /api/mds</code>, iaitu endpoint MDS sedia ada.
+                    Jika backend anda belum menyediakan fungsi GET untuk endpoint tersebut,
+                    backend perlu ditambah fungsi membaca rekod tanpa mengubah struktur database.
+                </div>
+            `;
+
+            renderRecords();
+        }
+    }
+
+    function applyFilters() {
+        const selectedDate = document.getElementById("dateFilter").value;
+        const search = document.getElementById("searchFilter").value.trim().toLowerCase();
+
+        displayedRecords = allRecords.filter((record, index) => {
+            const recordDate = getRecordDate(record);
+
+            if (selectedDate && recordDate !== selectedDate) {
+                return false;
+            }
+
+            if (search) {
+                const searchable = [
+                    getRecordId(record, index),
+                    getPatientName(record),
+                    getDiagnosis(record),
+                    record.clinicalClass,
+                    record.clinical_class,
+                    record.diseaseType,
+                    record.disease_type
+                ]
+                    .filter(Boolean)
+                    .join(" ")
+                    .toLowerCase();
+
+                if (!searchable.includes(search)) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
+
+        updateSummary();
+        renderRecords();
+    }
+
+    function updateSummary() {
+        document.getElementById("totalRecords").textContent = displayedRecords.length;
+
+        const dates = new Set(
+            displayedRecords
+                .map(getRecordDate)
+                .filter(Boolean)
+        );
+
+        document.getElementById("totalDays").textContent = dates.size;
+
+        const today = new Date().toISOString().slice(0, 10);
+        const todayCount = displayedRecords.filter(
+            record => getRecordDate(record) === today
+        ).length;
+
+        document.getElementById("todayRecords").textContent = todayCount;
+    }
+
+    function groupByDate(records) {
+        const grouped = {};
+
+        records.forEach((record, index) => {
+            const date = getRecordDate(record) || "Tarikh Tidak Dinyatakan";
+
+            if (!grouped[date]) grouped[date] = [];
+
+            grouped[date].push({
+                record,
+                originalIndex: allRecords.indexOf(record)
+            });
+        });
+
+        return grouped;
+    }
+
+    function formatDate(dateString) {
+        if (!dateString || dateString === "Tarikh Tidak Dinyatakan") {
+            return "Tarikh Tidak Dinyatakan";
+        }
+
+        const d = new Date(dateString + "T00:00:00");
+
+        if (Number.isNaN(d.getTime())) return dateString;
+
+        return d.toLocaleDateString("ms-MY", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+            weekday: "long"
+        });
+    }
+
+    function renderRecords() {
+        container.innerHTML = "";
+
+        if (!displayedRecords.length) {
+            container.innerHTML = `
+                <div class="card border-0 shadow-sm">
+                    <div class="empty-state">
+                        <i class="bi bi-folder2-open fs-1 d-block mb-2"></i>
+                        <div class="fw-semibold">Tiada rekod EMT MDS dijumpai.</div>
+                        <div class="small mt-1">
+                            Rekod yang berjaya dihantar akan dipaparkan di sini.
+                        </div>
+                    </div>
+                </div>
+            `;
+            return;
+        }
+
+        const grouped = groupByDate(displayedRecords);
+
+        const dates = Object.keys(grouped).sort((a, b) => {
+            if (a === "Tarikh Tidak Dinyatakan") return 1;
+            if (b === "Tarikh Tidak Dinyatakan") return -1;
+            return b.localeCompare(a);
+        });
+
+        dates.forEach(date => {
+            const items = grouped[date];
+
+            const card = document.createElement("div");
+            card.className = "card day-card shadow-sm mb-4";
+
+            let rows = "";
+
+            items.forEach((item, rowIndex) => {
+                const record = item.record;
+                const index = item.originalIndex;
+
+                rows += `
+                    <tr>
+                        <td class="text-center">${rowIndex + 1}</td>
+                        <td>
+                            <span class="badge text-bg-light record-badge">
+                                ${esc(getRecordId(record, index))}
+                            </span>
+                        </td>
+                        <td>${esc(getPatientName(record))}</td>
+                        <td>${esc(getAge(record))}</td>
+                        <td>${esc(translateDisplay(getGender(record)))}</td>
+                        <td>${esc(translateDisplay(record.clinicalClass || record.clinical_class || "-"))}</td>
+                        <td>${esc(getDiagnosis(record))}</td>
+                        <td class="text-center">
+                            <button type="button"
+                                class="btn btn-outline-primary btn-sm"
+                                data-view-index="${index}">
+                                <i class="bi bi-eye me-1"></i>Lihat
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            card.innerHTML = `
+                <div class="day-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+                    <div>
+                        <i class="bi bi-calendar3 me-2"></i>
+                        <strong>${esc(formatDate(date))}</strong>
+                    </div>
+
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge bg-light text-dark">
+                            ${items.length} rekod
+                        </span>
+
+                        <button type="button"
+                            class="btn btn-light btn-sm"
+                            data-generate-report-date="${esc(date)}">
+                            <i class="bi bi-file-earmark-bar-graph me-1"></i>
+                            Jana Laporan Harian
+                        </button>
+
+                        <button type="button"
+                            class="btn btn-warning btn-sm"
+                            data-analyse-date="${esc(date)}">
+                            <i class="bi bi-graph-up-arrow me-1"></i>
+                            Analisis Data
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="text-center">No.</th>
+                                <th>ID</th>
+                                <th>Nama Pesakit</th>
+                                <th>Umur</th>
+                                <th>Jantina</th>
+                                <th>Pengelasan Klinikal</th>
+                                <th>Diagnosis / Nota Klinikal</th>
+                                <th class="text-center">Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            container.appendChild(card);
+        });
+
+        container.querySelectorAll("[data-view-index]").forEach(button => {
+            button.addEventListener("click", function () {
+                const index = Number(this.dataset.viewIndex);
+                showDetail(allRecords[index], index);
+            });
+        });
+
+        container.querySelectorAll("[data-generate-report-date]").forEach(button => {
+            button.addEventListener("click", function () {
+                generateDailyReport(this.dataset.generateReportDate);
+            });
+        });
+
+        container.querySelectorAll("[data-analyse-date]").forEach(button => {
+            button.addEventListener("click", function () {
+                generateDailyAnalysis(this.dataset.analyseDate);
+            });
+        });
+    }
+
+
+    // =========================================================
+    // DAILY DATA ANALYSIS
+    // The training slide shows that patient-level MDS ticks are tallied
+    // by the EMT Data Manager into the daily reporting form. This section
+    // turns the same daily tally into operational summaries and charts.
+    // =========================================================
+    let analysisCharts = [];
+    let currentAnalysisReport = null;
+
+    function destroyAnalysisCharts() {
+        analysisCharts.forEach(chart => {
+            try { chart.destroy(); } catch (e) {}
+        });
+        analysisCharts = [];
+    }
+
+    function countBy(records, getter) {
+        const counts = {};
+        records.forEach(record => {
+            const key = getter(record) || "Unknown";
+            counts[key] = (counts[key] || 0) + 1;
+        });
+        return counts;
+    }
+
+    function topEntry(obj) {
+        const entries = Object.entries(obj).sort((a, b) => b[1] - a[1]);
+        return entries.length ? entries[0] : ["-", 0];
+    }
+
+    function generateDailyAnalysis(date) {
+        const records = allRecords.filter(record => getRecordDate(record) === date);
+
+        if (!records.length) {
+            alert("Tiada rekod untuk dianalisis pada tarikh ini.");
+            return;
+        }
+
+        destroyAnalysisCharts();
+
+        const genderCounts = countBy(records, r => getGender(r));
+        const ageCounts = countBy(records, r => ageCategory(r) || "Unknown");
+        const clinicalCounts = countBy(records, r =>
+            r.clinicalClass || r.clinical_class || "Unknown"
+        );
+        const outcomeCounts = countBy(records, r => r.outcome || "Unknown");
+        const relationCounts = countBy(records, r => {
+            const value = r.context;
+            if (Array.isArray(value)) return value.join(", ") || "Unknown";
+            return value || "Unknown";
+        });
+
+        const diagnosisCounts = {};
+        records.forEach(record => {
+            const candidates = [
+                record.traumaType,
+                record.trauma_type,
+                record.diseaseType,
+                record.disease_type,
+                record.emergency
+            ].filter(v => v && v !== "-");
+
+            if (!candidates.length) {
+                const note = getDiagnosis(record);
+                if (note && note !== "-") candidates.push(note);
+            }
+
+            candidates.forEach(item => {
+                const key = String(item);
+                diagnosisCounts[key] = (diagnosisCounts[key] || 0) + 1;
+            });
+        });
+
+        const [topClinical, topClinicalCount] = topEntry(clinicalCounts);
+        const [topDiagnosis, topDiagnosisCount] = topEntry(diagnosisCounts);
+        const [topOutcome, topOutcomeCount] = topEntry(outcomeCounts);
+
+        const admissionCount = records.filter(r => sameText(r.outcome, "Admission")).length;
+        const referralCount = records.filter(r => sameText(r.outcome, "Referral")).length;
+        const followUpCount = records.filter(r =>
+            sameText(r.outcome, "Discharge with medical follow-up") ||
+            sameText(r.outcome, "Requiring Medical Follow up")
+        ).length;
+        const eventRelated = records.filter(r => {
+            const ctx = Array.isArray(r.context) ? r.context.join(" ") : (r.context || "");
+            const n = normalText(ctx);
+            return n.includes("directly related") || n.includes("indirectly related");
+        }).length;
+
+        const percent = value =>
+            records.length ? ((value / records.length) * 100).toFixed(1) : "0.0";
+
+        const insights = [];
+
+        insights.push(
+            `Sebanyak <strong>${records.length}</strong> rekod pesakit direkodkan pada ${esc(formatDate(date))}.`
+        );
+
+        if (topClinical !== "Unknown" && topClinical !== "-") {
+            insights.push(
+                `Pengelasan klinikal paling banyak ialah <strong>${esc(translateDisplay(topClinical))}</strong> ` +
+                `dengan ${topClinicalCount} rekod (${percent(topClinicalCount)}%).`
+            );
+        }
+
+        if (topDiagnosis !== "-") {
+            insights.push(
+                `Peristiwa kesihatan / diagnosis yang paling kerap direkodkan ialah ` +
+                `<strong>${esc(topDiagnosis)}</strong> (${topDiagnosisCount} rekod).`
+            );
+        }
+
+        if (topOutcome !== "Unknown" && topOutcome !== "-") {
+            insights.push(
+                `Hasil rawatan paling kerap ialah <strong>${esc(translateDisplay(topOutcome))}</strong> ` +
+                `dengan ${topOutcomeCount} rekod (${percent(topOutcomeCount)}%).`
+            );
+        }
+
+        if (admissionCount || referralCount || followUpCount) {
+            insights.push(
+                `Keperluan kesinambungan rawatan: <strong>${admissionCount}</strong> kemasukan, ` +
+                `<strong>${referralCount}</strong> rujukan dan ` +
+                `<strong>${followUpCount}</strong> memerlukan susulan perubatan.`
+            );
+        }
+
+        if (eventRelated) {
+            insights.push(
+                `<strong>${eventRelated}</strong> rekod (${percent(eventRelated)}%) ` +
+                `ditandakan mempunyai hubungan langsung atau tidak langsung dengan insiden/bencana.`
+            );
+        }
+
+        currentAnalysisReport = {
+            date,
+            reportDate: formatDate(date),
+            reportTime: new Date().toLocaleString("ms-MY"),
+            recordsCount: records.length,
+            genderCounts,
+            ageCounts,
+            clinicalCounts,
+            diagnosisCounts,
+            outcomeCounts,
+            relationCounts,
+            topClinical,
+            topClinicalCount,
+            topDiagnosis,
+            topDiagnosisCount,
+            topOutcome,
+            topOutcomeCount,
+            admissionCount,
+            referralCount,
+            followUpCount,
+            eventRelated,
+            insights: insights.map(text => text.replace(/<[^>]*>/g, "")),
+            missionId: records[0]?.missionId || records[0]?.mission_id || "-"
+        };
+
+        const body = document.getElementById("dailyAnalysisBody");
+
+        body.innerHTML = `
+            <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+                <div>
+                    <h5 class="fw-bold mb-1">${esc(formatDate(date))}</h5>
+                    <div class="text-muted small">
+                        Analisis rekod MDS peringkat pesakit yang dihimpunkan bagi hari pelaporan ini
+                    </div>
+                </div>
+                <span class="badge text-bg-primary fs-6">${records.length} records</span>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="card analysis-card shadow-sm">
+                        <div class="card-body">
+                            <div class="text-muted small">Jumlah Konsultasi</div>
+                            <div class="analysis-kpi">${records.length}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card analysis-card shadow-sm">
+                        <div class="card-body">
+                            <div class="text-muted small">Admission</div>
+                            <div class="analysis-kpi">${admissionCount}</div>
+                            <div class="small text-muted">${percent(admissionCount)}%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card analysis-card shadow-sm">
+                        <div class="card-body">
+                            <div class="text-muted small">Referral</div>
+                            <div class="analysis-kpi">${referralCount}</div>
+                            <div class="small text-muted">${percent(referralCount)}%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card analysis-card shadow-sm">
+                        <div class="card-body">
+                            <div class="text-muted small">Berkaitan Insiden</div>
+                            <div class="analysis-kpi">${eventRelated}</div>
+                            <div class="small text-muted">${percent(eventRelated)}%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="fw-bold mb-3">Analisis Demografi</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-lg-6">
+                    <div class="card analysis-card shadow-sm">
+                        <div class="card-body">
+                            <h6>Pesakit Mengikut Jantina</h6>
+                            <div class="analysis-chart-wrap">
+                                <canvas id="analysisGenderChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card analysis-card shadow-sm">
+                        <div class="card-body">
+                            <h6>Pesakit Mengikut Kumpulan Umur</h6>
+                            <div class="analysis-chart-wrap">
+                                <canvas id="analysisAgeChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="fw-bold mb-3">Analisis Klinikal / Peristiwa Kesihatan</h6>
+            <div class="row g-3 mb-4">
+                <div class="col-lg-6">
+                    <div class="card analysis-card shadow-sm">
+                        <div class="card-body">
+                            <h6>Pengelasan Klinikal</h6>
+                            <div class="analysis-chart-wrap">
+                                <canvas id="analysisClinicalChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card analysis-card shadow-sm">
+                        <div class="card-body">
+                            <h6>Peristiwa Kesihatan / Diagnosis</h6>
+                            <div class="analysis-chart-wrap">
+                                <canvas id="analysisDiagnosisChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="fw-bold mb-3">Analisis Hasil Rawatan</h6>
+            <div class="card analysis-card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="analysis-chart-wrap">
+                        <canvas id="analysisOutcomeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="fw-bold mb-3">Dapatan Harian Automatik</h6>
+            <div>
+                ${insights.map(text => `<div class="analysis-insight">${text}</div>`).join("")}
+            </div>
+
+            <div class="alert alert-light border small mt-4 mb-0">
+                Analysis ini hanya menggunakan field yang dipulangkan oleh database/API.
+                Nilai yang tidak disimpan dalam rekod asal tidak dianggarkan.
+            </div>
+        `;
+
+        const modalEl = document.getElementById("dailyAnalysisModal");
+        const modal = new bootstrap.Modal(modalEl);
+
+        modalEl.addEventListener("shown.bs.modal", function drawChartsOnce() {
+            modalEl.removeEventListener("shown.bs.modal", drawChartsOnce);
+
+            function makeChart(id, type, dataObj, horizontal = false) {
+                const labels = Object.keys(dataObj);
+                const values = Object.values(dataObj);
+
+                const chart = new Chart(document.getElementById(id), {
+                    type,
+                    data: {
+                        labels,
+                        datasets: [{
+                            label: "Bilangan pesakit",
+                            data: values
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        indexAxis: horizontal ? "y" : "x",
+                        plugins: {
+                            legend: {
+                                display: type === "doughnut"
+                            }
+                        },
+                        scales: type === "doughnut" ? {} : {
+                            y: horizontal ? {} : {
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            },
+                            x: horizontal ? {
+                                beginAtZero: true,
+                                ticks: { precision: 0 }
+                            } : {}
+                        }
+                    }
+                });
+
+                analysisCharts.push(chart);
+            }
+
+            makeChart("analysisGenderChart", "doughnut", translatedCountObject(genderCounts));
+            makeChart("analysisAgeChart", "bar", ageCounts);
+            makeChart("analysisClinicalChart", "bar", translatedCountObject(clinicalCounts));
+            makeChart("analysisDiagnosisChart", "bar", translatedCountObject(diagnosisCounts), true);
+            makeChart("analysisOutcomeChart", "bar", translatedCountObject(outcomeCounts));
+        });
+
+        modal.show();
+    }
+
+    async function downloadAnalysisSlideReport() {
+        if (!currentAnalysisReport) {
+            alert("Sila buka Analisis Data untuk satu tarikh dahulu.");
+            return;
+        }
+
+        if (typeof pptxgen === "undefined") {
+            alert("PPTX library belum dimuatkan. Sila refresh page dan cuba semula.");
+            return;
+        }
+
+        const btn = document.getElementById("downloadAnalysisSlideBtn");
+        const original = btn.innerHTML;
+
+        btn.disabled = true;
+        btn.innerHTML = "Sedang menjana...";
+
+        try {
+            const pptx = new pptxgen();
+            pptx.layout = "LAYOUT_WIDE";
+            pptx.author = "MyEMT MDS";
+            pptx.subject = "Analisis Data Harian EMT MDS";
+            pptx.title = "Analisis Data Harian EMT MDS";
+            pptx.company = "MyEMT";
+            pptx.lang = "en-US";
+
+            const blue = "0D6EFD";
+            const dark = "212529";
+            const gray = "6C757D";
+            const light = "F8F9FA";
+            const white = "FFFFFF";
+            const orange = "FFC107";
+
+            function addHeader(slide, title, subtitle) {
+                slide.addShape(pptx.ShapeType.rect, {
+                    x: 0, y: 0, w: 13.333, h: 0.68,
+                    fill: { color: blue },
+                    line: { color: blue }
+                });
+
+                slide.addText(title, {
+                    x: 0.45, y: 0.16, w: 8.8, h: 0.32,
+                    fontFace: "Aptos Display",
+                    fontSize: 18,
+                    bold: true,
+                    color: white,
+                    margin: 0
+                });
+
+                slide.addText(subtitle || "", {
+                    x: 9.4, y: 0.19, w: 3.45, h: 0.25,
+                    fontSize: 9,
+                    color: white,
+                    align: "right",
+                    margin: 0
+                });
+            }
+
+            function addFooter(slide) {
+                slide.addText("Dijana daripada rekod harian EMT MDS", {
+                    x: 0.45, y: 7.12, w: 6, h: 0.2,
+                    fontSize: 8,
+                    color: gray,
+                    margin: 0
+                });
+            }
+
+            function addKpi(slide, label, value, x, y, accentColor = blue) {
+                slide.addShape(pptx.ShapeType.roundRect, {
+                    x, y, w: 2.75, h: 1.05,
+                    rectRadius: 0.08,
+                    fill: { color: light },
+                    line: { color: "DEE2E6" }
+                });
+
+                slide.addText(label, {
+                    x: x + 0.15, y: y + 0.13, w: 2.4, h: 0.18,
+                    fontSize: 9,
+                    color: gray,
+                    margin: 0
+                });
+
+                slide.addText(String(value), {
+                    x: x + 0.15, y: y + 0.39, w: 2.4, h: 0.38,
+                    fontSize: 23,
+                    bold: true,
+                    color: accentColor,
+                    margin: 0
+                });
+            }
+
+            function objectToRows(obj) {
+                const rows = Object.entries(obj || {})
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([name, value]) => [name, String(value)]);
+
+                return rows.length ? rows : [["Tiada data", "0"]];
+            }
+
+            function addSimpleTable(slide, title, rows, x, y, w, h) {
+                slide.addText(title, {
+                    x, y, w, h: 0.28,
+                    fontSize: 13,
+                    bold: true,
+                    color: dark,
+                    margin: 0
+                });
+
+                const limited = rows.slice(0, 8);
+                const tableRows = [
+                    [
+                        { text: "Kategori", options: { bold: true, color: white, fill: { color: dark } } },
+                        { text: "Jumlah", options: { bold: true, color: white, fill: { color: dark }, align: "center" } }
+                    ],
+                    ...limited.map(r => [
+                        { text: String(r[0]), options: { fontSize: 8 } },
+                        { text: String(r[1]), options: { fontSize: 8, align: "center" } }
+                    ])
+                ];
+
+                slide.addTable(tableRows, {
+                    x, y: y + 0.35, w, h,
+                    border: { type: "solid", color: "CED4DA", pt: 0.5 },
+                    fontSize: 8,
+                    margin: 0.05,
+                    valign: "mid",
+                    autoFit: false,
+                    colW: [w * 0.72, w * 0.28]
+                });
+            }
+
+            function canvasDataUrl(id) {
+                const canvas = document.getElementById(id);
+                if (!canvas) return null;
+                return canvas.toDataURL("image/png", 1.0);
+            }
+
+            // Slide 1: Executive summary
+            let slide = pptx.addSlide();
+            slide.background = { color: white };
+            addHeader(slide, "Analisis Data Harian EMT MDS", currentAnalysisReport.reportDate);
+            addFooter(slide);
+
+            slide.addText("Ringkasan operasi harian", {
+                x: 0.55, y: 1.0, w: 6.6, h: 0.38,
+                fontSize: 24,
+                bold: true,
+                color: dark,
+                margin: 0
+            });
+
+            slide.addText(`Mission ID: ${currentAnalysisReport.missionId}   |   Generated: ${currentAnalysisReport.reportTime}`, {
+                x: 0.58, y: 1.42, w: 8.8, h: 0.25,
+                fontSize: 10,
+                color: gray,
+                margin: 0
+            });
+
+            addKpi(slide, "Jumlah Konsultasi", currentAnalysisReport.recordsCount, 0.58, 2.0, blue);
+            addKpi(slide, "Admission", currentAnalysisReport.admissionCount, 3.55, 2.0, orange);
+            addKpi(slide, "Referral", currentAnalysisReport.referralCount, 6.52, 2.0, blue);
+            addKpi(slide, "Berkaitan Insiden", currentAnalysisReport.eventRelated, 9.49, 2.0, orange);
+
+            slide.addText("Dapatan Utama", {
+                x: 0.6, y: 3.45, w: 4, h: 0.28,
+                fontSize: 15,
+                bold: true,
+                color: dark,
+                margin: 0
+            });
+
+            const bulletText = currentAnalysisReport.insights.slice(0, 5).map(t => ({
+                text: t,
+                options: { bullet: { indent: 14 }, hanging: 4 }
+            }));
+
+            slide.addText(bulletText, {
+                x: 0.75, y: 3.9, w: 11.7, h: 2.45,
+                fontSize: 12,
+                breakLine: false,
+                fit: "shrink",
+                color: dark,
+                margin: 0.05
+            });
+
+            // Slide 2: Demographic analysis
+            slide = pptx.addSlide();
+            slide.background = { color: white };
+            addHeader(slide, "Analisis Demografi", currentAnalysisReport.reportDate);
+            addFooter(slide);
+
+            const genderImg = canvasDataUrl("analysisGenderChart");
+            const ageImg = canvasDataUrl("analysisAgeChart");
+
+            if (genderImg) {
+                slide.addText("Pesakit Mengikut Jantina", {
+                    x: 0.65, y: 1.0, w: 4.8, h: 0.3,
+                    fontSize: 16,
+                    bold: true,
+                    color: dark,
+                    margin: 0
+                });
+                slide.addImage({ data: genderImg, x: 0.75, y: 1.45, w: 4.7, h: 3.8 });
+            }
+
+            if (ageImg) {
+                slide.addText("Pesakit Mengikut Kumpulan Umur", {
+                    x: 6.35, y: 1.0, w: 5.2, h: 0.3,
+                    fontSize: 16,
+                    bold: true,
+                    color: dark,
+                    margin: 0
+                });
+                slide.addImage({ data: ageImg, x: 6.2, y: 1.45, w: 5.7, h: 3.8 });
+            }
+
+            addSimpleTable(slide, "Kiraan Kumpulan Umur", objectToRows(currentAnalysisReport.ageCounts), 0.75, 5.55, 5.0, 1.3);
+            addSimpleTable(slide, "Kiraan Jantina", objectToRows(translatedCountObject(currentAnalysisReport.genderCounts)), 6.2, 5.55, 5.1, 1.3);
+
+            // Slide 3: Clinical analysis
+            slide = pptx.addSlide();
+            slide.background = { color: white };
+            addHeader(slide, "Analisis Klinikal / Peristiwa Kesihatan", currentAnalysisReport.reportDate);
+            addFooter(slide);
+
+            const clinicalImg = canvasDataUrl("analysisClinicalChart");
+            const diagnosisImg = canvasDataUrl("analysisDiagnosisChart");
+
+            if (clinicalImg) {
+                slide.addText("Pengelasan Klinikal", {
+                    x: 0.65, y: 1.0, w: 5.2, h: 0.3,
+                    fontSize: 15,
+                    bold: true,
+                    color: dark,
+                    margin: 0
+                });
+                slide.addImage({ data: clinicalImg, x: 0.6, y: 1.35, w: 5.6, h: 3.9 });
+            }
+
+            if (diagnosisImg) {
+                slide.addText("Peristiwa Kesihatan / Diagnosis", {
+                    x: 6.55, y: 1.0, w: 5.5, h: 0.3,
+                    fontSize: 15,
+                    bold: true,
+                    color: dark,
+                    margin: 0
+                });
+                slide.addImage({ data: diagnosisImg, x: 6.3, y: 1.35, w: 6.25, h: 3.9 });
+            }
+
+            addSimpleTable(slide, "Peristiwa Kesihatan Utama", objectToRows(translatedCountObject(currentAnalysisReport.diagnosisCounts)), 0.75, 5.55, 5.75, 1.3);
+            addSimpleTable(slide, "Kiraan Pengelasan Klinikal", objectToRows(translatedCountObject(currentAnalysisReport.clinicalCounts)), 6.8, 5.55, 5.0, 1.3);
+
+            // Slide 4: Outcome and action points
+            slide = pptx.addSlide();
+            slide.background = { color: white };
+            addHeader(slide, "Hasil Rawatan dan Susulan Operasi", currentAnalysisReport.reportDate);
+            addFooter(slide);
+
+            const outcomeImg = canvasDataUrl("analysisOutcomeChart");
+
+            if (outcomeImg) {
+                slide.addText("Taburan Hasil Rawatan", {
+                    x: 0.65, y: 1.0, w: 5.5, h: 0.3,
+                    fontSize: 16,
+                    bold: true,
+                    color: dark,
+                    margin: 0
+                });
+                slide.addImage({ data: outcomeImg, x: 0.6, y: 1.35, w: 6.0, h: 4.2 });
+            }
+
+            addSimpleTable(slide, "Kiraan Hasil Rawatan", objectToRows(translatedCountObject(currentAnalysisReport.outcomeCounts)), 7.0, 1.25, 5.3, 2.3);
+
+            slide.addText("Fokus Penyelarasan Dicadangkan", {
+                x: 7.0, y: 4.1, w: 5.4, h: 0.3,
+                fontSize: 15,
+                bold: true,
+                color: dark,
+                margin: 0
+            });
+
+            const actionBullets = [
+                `Utamakan susulan bagi ${currentAnalysisReport.admissionCount} kemasukan dan ${currentAnalysisReport.referralCount} rujukan.`,
+                `Pantau kategori klinikal utama: ${currentAnalysisReport.topClinical}.`,
+                `Semak kes berkaitan insiden: ${currentAnalysisReport.eventRelated}.`,
+                "Sahkan sebarang medan demografi atau hasil rawatan yang tiada sebelum laporan akhir."
+            ].map(t => ({
+                text: t,
+                options: { bullet: { indent: 14 }, hanging: 4 }
+            }));
+
+            slide.addText(actionBullets, {
+                x: 7.15, y: 4.55, w: 5.0, h: 1.8,
+                fontSize: 11,
+                color: dark,
+                fit: "shrink",
+                margin: 0.05
+            });
+
+            const safeDate = currentAnalysisReport.date.replaceAll("-", "");
+            await pptx.writeFile({
+                fileName: `EMT_MDS_Daily_Analysis_${safeDate}.pptx`
+            });
+
+        } catch (error) {
+            console.error("Download slide report error:", error);
+            alert("Slide report gagal dijana. Sila cuba semula.");
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = original;
+        }
+    }
+
+    document.getElementById("downloadAnalysisSlideBtn").addEventListener("click", downloadAnalysisSlideReport);
+
+    // =========================================================
+    // DAILY REPORT
+    // Based on the main structure of the WHO EMT MDS DailyReport_EN
+    // workbook: Daily Summary, Demographic, Health Events / Procedure,
+    // Outcome, Relation and Protection.
+    // =========================================================
+
+    const MDS_ITEMS = [
+        { no: 4,  group: "Trauma", item: "Major head / spine injury" },
+        { no: 5,  group: "Trauma", item: "Major torso injury" },
+        { no: 6,  group: "Trauma", item: "Major extremity injury" },
+        { no: 7,  group: "Trauma", item: "Moderate injury" },
+        { no: 8,  group: "Trauma", item: "Minor injury" },
+
+        { no: 9,  group: "Infectious disease", item: "Acute respiratory infection" },
+        { no: 10, group: "Infectious disease", item: "Acute watery diarrhea" },
+        { no: 11, group: "Infectious disease", item: "Acute bloody diarrhea" },
+        { no: 12, group: "Infectious disease", item: "Acute jaundice syndrome" },
+        { no: 13, group: "Infectious disease", item: "Suspected measles" },
+        { no: 14, group: "Infectious disease", item: "Suspected meningitis" },
+        { no: 15, group: "Infectious disease", item: "Suspected tetanus" },
+        { no: 16, group: "Infectious disease", item: "Acute flaccid paralysis" },
+        { no: 17, group: "Infectious disease", item: "Acute haemorrhagic fever" },
+        { no: 18, group: "Infectious disease", item: "Fever of unknown origin" },
+
+        { no: 19, group: "Additional", item: "Dengue Fever / DHF" },
+        { no: 20, group: "Additional", item: "Hazardous Materials Related Injuries" },
+        { no: 21, group: "Additional", item: "Leptospirosis" },
+        { no: 22, group: "Additional", item: "Additional 4" },
+
+        { no: 23, group: "Emergency", item: "Surgical emergency (Non-trauma)" },
+        { no: 24, group: "Emergency", item: "Medical emergency (Non-infectious)" },
+
+        { no: 25, group: "Other key diseases", item: "Skin disease" },
+        { no: 26, group: "Other key diseases", item: "Acute mental health problem" },
+        { no: 27, group: "Other key diseases", item: "Obstetric complications" },
+        { no: 28, group: "Other key diseases", item: "Severe Acute Malnutrition (SAM)" },
+        { no: 29, group: "Other key diseases", item: "Other diagnosis, not specified above" },
+
+        { no: 30, group: "Procedure", item: "Major procedure (excluding MDS31)" },
+        { no: 31, group: "Procedure", item: "Limb amputation excluding digits" },
+        { no: 32, group: "Procedure", item: "Minor surgical procedure" },
+        { no: 33, group: "Procedure", item: "Normal Vaginal Delivery (NVD)" },
+        { no: 34, group: "Procedure", item: "Caesarean section" },
+        { no: 35, group: "Procedure", item: "Obstetrics others" }
+    ];
+
+    const OUTCOME_ITEMS = [
+        { no: 36, item: "Discharge without medical follow-up" },
+        { no: 37, item: "Discharge with medical follow-up" },
+        { no: 38, item: "Discharge against medical advice" },
+        { no: 39, item: "Referral" },
+        { no: 40, item: "Admission" },
+        { no: 41, item: "Dead on arrival" },
+        { no: 42, item: "Death within facility" },
+        { no: 43, item: "Requiring long term rehabilitation" }
+    ];
+
+    const CONTEXT_ITEMS = [
+        { no: 44, group: "Relation", item: "Directly related to event" },
+        { no: 45, group: "Relation", item: "Indirectly related to event" },
+        { no: 46, group: "Relation", item: "Not related to event" },
+        { no: 47, group: "Protection", item: "Vulnerable child" },
+        { no: 48, group: "Protection", item: "Vulnerable adult" },
+        { no: 49, group: "Protection", item: "Sexual Gender Based Violence (SGBV)" },
+        { no: 50, group: "Protection", item: "Violence (non-SGBV)" }
+    ];
+
+    function normalText(value) {
+        return String(value || "")
+            .toLowerCase()
+            .replace(/[–—]/g, "-")
+            .replace(/\*/g, "")
+            .replace(/\s+/g, " ")
+            .trim();
+    }
+
+    function recordAgeYears(record) {
+        const age = Number(record.age);
+        if (!Number.isFinite(age)) return null;
+
+        const unit = normalText(record.ageUnit || record.age_unit);
+        if (unit.includes("month")) return age / 12;
+
+        return age;
+    }
+
+    function ageCategory(record) {
+        const saved = String(record.ageGroup || record.age_group || "").trim();
+
+        if (saved) {
+            if (saved === "65+") return "65-";
+            return saved;
+        }
+
+        const years = recordAgeYears(record);
+        if (years === null) return "";
+
+        if (years < 1) return "<1";
+        if (years <= 4) return "1-4";
+        if (years <= 17) return "5-17";
+        if (years <= 64) return "18-64";
+        return "65-";
+    }
+
+    function sameText(a, b) {
+        const x = normalText(a);
+        const y = normalText(b);
+        return x && y && (x === y || x.includes(y) || y.includes(x));
+    }
+
+    function recordContainsMds(record, mds) {
+        const candidates = [
+            record.traumaType,
+            record.trauma_type,
+            record.diseaseType,
+            record.disease_type,
+            record.emergency,
+            record.clinicalNotes,
+            record.clinical_notes,
+            record.diagnosis
+        ];
+
+        if (Array.isArray(record.clinicalGroups)) {
+            record.clinicalGroups.forEach(group => {
+                if (Array.isArray(group.items)) {
+                    candidates.push(...group.items);
+                }
+            });
+        }
+
+        return candidates.some(value => sameText(value, mds.item));
+    }
+
+    function countMds(records, mds, ageMode) {
+        return records.filter(record => {
+            if (!recordContainsMds(record, mds)) return false;
+
+            const years = recordAgeYears(record);
+
+            if (ageMode === "under5") {
+                return years !== null && years < 5;
+            }
+
+            if (ageMode === "5plus") {
+                return years !== null && years >= 5;
+            }
+
+            return true;
+        }).length;
+    }
+
+    function countOutcome(records, item) {
+        return records.filter(record =>
+            sameText(record.outcome, item)
+        ).length;
+    }
+
+    function countContext(records, item, group) {
+        return records.filter(record => {
+            const values = [];
+
+            if (group === "Relation") {
+                if (Array.isArray(record.context)) values.push(...record.context);
+                else values.push(record.context);
+            } else {
+                if (Array.isArray(record.protection)) values.push(...record.protection);
+                else values.push(record.protection);
+            }
+
+            return values.some(value => sameText(value, item));
+        }).length;
+    }
+
+    function demographicCount(records, gender, age) {
+        return records.filter(record =>
+            sameText(getGender(record), gender) &&
+            ageCategory(record) === age
+        ).length;
+    }
+
+    function reportNumber(value) {
+        return Number(value || 0).toLocaleString("en-MY");
+    }
+
+    function generateDailyReport(date) {
+        const records = allRecords.filter(record => getRecordDate(record) === date);
+
+        if (!records.length) {
+            alert("Tiada rekod untuk tarikh ini.");
+            return;
+        }
+
+        const ageGroups = ["<1", "1-4", "5-17", "18-64", "65-"];
+        const demographics = [
+            { no: 1, gender: "Male" },
+            { no: 2, gender: "Female non-preg." },
+            { no: 3, gender: "Female pregnant" }
+        ];
+
+        const demographicRows = demographics.map(row => {
+            const counts = ageGroups.map(age =>
+                demographicCount(records, row.gender, age)
+            );
+
+            const total = counts.reduce((a, b) => a + b, 0);
+
+            return `
+                <tr>
+                    <td class="text-center">${row.no}</td>
+                    <td>${esc(row.gender)}</td>
+                    ${counts.map(v => `<td class="text-center">${reportNumber(v)}</td>`).join("")}
+                    <td class="text-center fw-bold">${reportNumber(total)}</td>
+                </tr>
+            `;
+        }).join("");
+
+        const mdsRows = MDS_ITEMS.map(mds => {
+            const under5 = countMds(records, mds, "under5");
+            const over5 = countMds(records, mds, "5plus");
+            const total = countMds(records, mds);
+
+            return `
+                <tr>
+                    <td class="text-center">${mds.no}</td>
+                    <td>${esc(mds.group)}</td>
+                    <td>${esc(mds.item)}</td>
+                    <td class="text-center">${reportNumber(under5)}</td>
+                    <td class="text-center">${reportNumber(over5)}</td>
+                    <td class="text-center fw-bold">${reportNumber(total)}</td>
+                </tr>
+            `;
+        }).join("");
+
+        const outcomeRows = OUTCOME_ITEMS.map(mds => `
+            <tr>
+                <td class="text-center">${mds.no}</td>
+                <td>${esc(mds.item)}</td>
+                <td class="text-center fw-bold">
+                    ${reportNumber(countOutcome(records, mds.item))}
+                </td>
+            </tr>
+        `).join("");
+
+        const contextRows = CONTEXT_ITEMS.map(mds => `
+            <tr>
+                <td class="text-center">${mds.no}</td>
+                <td>${esc(mds.group)}</td>
+                <td>${esc(mds.item)}</td>
+                <td class="text-center fw-bold">
+                    ${reportNumber(countContext(records, mds.item, mds.group))}
+                </td>
+            </tr>
+        `).join("");
+
+        const admissions = records.filter(record =>
+            sameText(record.outcome, "Admission")
+        ).length;
+
+        const firstRecord = records[0];
+        const reportDate = formatDate(date);
+        const reportTime = new Date().toLocaleString("ms-MY");
+
+        const body = document.getElementById("dailyReportBody");
+
+        body.innerHTML = `
+            <div class="text-center mb-3">
+                <h4 class="fw-bold mb-1">
+                    EMERGENCY MEDICAL TEAM – MDS DAILY REPORT
+                </h4>
+                <div class="text-muted">
+                    Based on WHO Laporan Harian EMT MDS structure
+                </div>
+            </div>
+
+            <div class="row report-meta g-0 mb-3">
+                <div class="col">
+                    <div class="small text-muted">Mission ID</div>
+                    <div class="fw-semibold">${esc(firstRecord.missionId || firstRecord.mission_id || "-")}</div>
+                </div>
+
+                <div class="col">
+                    <div class="small text-muted">Tarikh Aktiviti</div>
+                    <div class="fw-semibold">${esc(reportDate)}</div>
+                </div>
+
+                <div class="col">
+                    <div class="small text-muted">Masa Pelaporan</div>
+                    <div class="fw-semibold">${esc(reportTime)}</div>
+                </div>
+
+                <div class="col">
+                    <div class="small text-muted">Jumlah Rekod</div>
+                    <div class="fw-semibold">${records.length}</div>
+                </div>
+            </div>
+
+            <div class="report-section-title">Daily Summary</div>
+            <div class="table-responsive">
+                <table class="table table-bordered daily-report-table mb-0">
+                    <tbody>
+                        <tr>
+                            <th style="width:40%">Jumlah Konsultasi Baharu</th>
+                            <td class="text-center fw-bold">${records.length}</td>
+
+                            <th style="width:35%">Kemasukan Baharu (=MDS40)</th>
+                            <td class="text-center fw-bold">${admissions}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="report-section-title">Demographic – MDS Statistics</div>
+            <div class="table-responsive">
+                <table class="table table-bordered daily-report-table mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No.</th>
+                            <th>Jantina & Umur</th>
+                            <th class="text-center">&lt;1 y.o.</th>
+                            <th class="text-center">1-4 y.o.</th>
+                            <th class="text-center">5-17 y.o.</th>
+                            <th class="text-center">18-64 y.o.</th>
+                            <th class="text-center">65- y.o.</th>
+                            <th class="text-center">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${demographicRows}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="report-section-title">Health Events and Procedure – MDS Statistics</div>
+            <div class="table-responsive">
+                <table class="table table-bordered daily-report-table mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>No.</th>
+                            <th>Category</th>
+                            <th>Peristiwa Kesihatan / Prosedur</th>
+                            <th class="text-center">&lt;5 y.o.</th>
+                            <th class="text-center">&gt;=5 y.o.</th>
+                            <th class="text-center">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${mdsRows}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="report-section-title">Outcome – MDS Statistics</div>
+            <div class="table-responsive">
+                <table class="table table-bordered daily-report-table mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:10%">No.</th>
+                            <th>Hasil Rawatan</th>
+                            <th style="width:20%" class="text-center">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${outcomeRows}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="report-section-title">Hubungan & Perlindungan – MDS Statistics</div>
+            <div class="table-responsive">
+                <table class="table table-bordered daily-report-table mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width:10%">No.</th>
+                            <th style="width:18%">Category</th>
+                            <th>Item</th>
+                            <th style="width:18%" class="text-center">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${contextRows}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert alert-light border mt-3 mb-0 small">
+                <strong>Nota:</strong>
+                Daily report ini dikira daripada data yang dipulangkan oleh
+                <code>GET /api/mds</code>. Field yang tidak disimpan dalam database
+                tidak boleh dimasukkan dalam kiraan. Struktur database sedia ada tidak diubah.
+            </div>
+        `;
+
+        const modal = new bootstrap.Modal(
+            document.getElementById("dailyReportModal")
+        );
+
+        modal.show();
+    }
+
+    document.getElementById("printDailyReportBtn").addEventListener("click", function () {
+        window.print();
+    });
+
+    function detailItem(label, value) {
+        return `
+            <div class="col-md-6">
+                <div class="detail-label">${esc(label)}</div>
+                <div class="detail-value">${esc(value || "-")}</div>
+            </div>
+        `;
+    }
+
+    function showDetail(record, index) {
+        const body = document.getElementById("recordDetailBody");
+
+        function getAny(...keys) {
+            for (const key of keys) {
+                const value = record[key];
+                if (value !== undefined && value !== null && value !== "") {
+                    return value;
+                }
+            }
+            return "-";
+        }
+
+        function section(title, content) {
+            return `
+                <div class="mb-4">
+                    <h6 class="fw-bold border-bottom pb-2 mb-3">${esc(title)}</h6>
+                    ${content}
+                </div>
+            `;
+        }
+
+        function fullItem(label, value) {
+            return `
+                <div class="col-12">
+                    <div class="detail-label">${esc(label)}</div>
+                    <div class="detail-value">${esc(value || "-")}</div>
+                </div>
+            `;
+        }
+
+        function formatObject(value) {
+            if (value === null || value === undefined || value === "") return "-";
+
+            if (Array.isArray(value)) {
+                if (!value.length) return "-";
+                return value.map(item => {
+                    if (typeof item === "object") {
+                        return JSON.stringify(item);
+                    }
+                    return String(item);
+                }).join(", ");
+            }
+
+            if (typeof value === "object") {
+                return Object.entries(value)
+                    .map(([key, val]) => `${key}: ${Array.isArray(val) ? val.join(", ") : val}`)
+                    .join(" | ");
+            }
+
+            return String(value);
+        }
+
+        body.innerHTML =
+            section("Maklumat Asas", `
+                <div class="row">
+                    ${detailItem("ID Rekod", getRecordId(record, index))}
+                    ${detailItem("Mission ID", getAny("missionId", "mission_id"))}
+                    ${detailItem("Tarikh", getRecordDate(record))}
+                    ${detailItem("Nama Pesakit", getPatientName(record))}
+                    ${detailItem("Nama Panggilan", getAny("nickname", "nickName"))}
+                    ${detailItem("Umur", getAge(record))}
+                    ${detailItem("Unit Umur", getAny("ageUnit", "age_unit"))}
+                    ${detailItem("Kumpulan Umur", getAny("ageGroup", "age_group"))}
+                    ${detailItem("Jantina", getGender(record))}
+                    ${fullItem("Alamat Semasa", getAny("patientAddress", "patient_address", "presentAddress"))}
+                    ${detailItem("Poskod", getAny("postcode", "postCode"))}
+                    ${detailItem("Latitude", getAny("latitude", "lat"))}
+                    ${detailItem("Longitude", getAny("longitude", "lng", "lon"))}
+                </div>
+            `)
+
+            + section("Maklumat Klinikal / Klasifikasi MDS", `
+                <div class="row">
+                    ${detailItem("Pengelasan Klinikal", getAny("clinicalClass", "clinical_class"))}
+                    ${detailItem("Jenis Trauma", getAny("traumaType", "trauma_type"))}
+                    ${detailItem("Jenis Penyakit", getAny("diseaseType", "disease_type"))}
+                    ${detailItem("Kecemasan", getAny("emergency"))}
+                    ${detailItem("Outcome", getAny("outcome"))}
+                    ${detailItem("Context", formatObject(getAny("context")))}
+                    ${fullItem("Protection", formatObject(getAny("protection")))}
+                    ${fullItem("Clinical Groups / Checklist", formatObject(getAny("clinicalGroups", "clinical_groups")))}
+                </div>
+            `)
+
+            + section("Sejarah Pesakit", `
+                <div class="row">
+                    ${detailItem("Breast-feed", getAny("breastfeed"))}
+                    ${detailItem("Arm Circumference", getAny("armCircumference", "arm_circumference"))}
+                    ${detailItem("Vaccination - Measles", getAny("vaccinationMeasles", "vacc_measles"))}
+                    ${detailItem("Vaccination - Tetanus", getAny("vaccinationTetanus", "vacc_tetanus"))}
+                    ${detailItem("Allergy", getAny("allergy"))}
+                    ${fullItem("Allergy Details", getAny("allergyDetails", "allergy_details"))}
+                    ${detailItem("Past History", getAny("pastHistoryYN", "past_history_yn"))}
+                    ${fullItem("Past History Details", getAny("pastHistory", "past_history"))}
+                    ${detailItem("Medication", getAny("medicationYN", "medication_yn"))}
+                    ${fullItem("Current Medication", getAny("currentMedication", "current_medication"))}
+                </div>
+            `)
+
+            + section("Aduan & Pemeriksaan", `
+                <div class="row">
+                    ${fullItem("Chief Complaints / Aduan Utama", getAny("chiefComplaints", "chief_complaints"))}
+                    ${detailItem("BT / Suhu Badan", getAny("bt"))}
+                    ${detailItem("BP / Tekanan Darah", getAny("bp"))}
+                    ${detailItem("PR / Nadi", getAny("pr"))}
+                    ${detailItem("RR / Kadar Pernafasan", getAny("rr"))}
+                    ${detailItem("Berat", getAny("weight"))}
+                    ${detailItem("Tinggi", getAny("height"))}
+                    ${fullItem("History of Present Illness", getAny("historyPresentIllness", "history_present_illness"))}
+                    ${fullItem("Diagnosis", getAny("diagnosis"))}
+                    ${fullItem("Clinical Notes", getAny("clinicalNotes", "clinical_notes"))}
+                    ${fullItem("Drug Name / Dose", getAny("drugNameDose", "drug_name_dose"))}
+                </div>
+            `)
+
+            + section("Body Diagram / Clinical Marking", `
+                <div class="row">
+                    ${fullItem(
+                        "Body Annotations",
+                        formatObject(getAny("bodyAnnotations", "body_annotations"))
+                    )}
+                </div>
+            `)
+
+            + section("Pegawai / Tandatangan", `
+                <div class="row">
+                    ${detailItem(
+                        "Pegawai Bertanggungjawab",
+                        getAny("responsibleOfficer", "responsible_officer")
+                    )}
+                    ${detailItem(
+                        "Jawatan",
+                        getAny("officerPosition", "officer_position")
+                    )}
+                    ${detailItem("Reception", getAny("signatureReception", "signature_reception"))}
+                    ${detailItem("Doctor", getAny("signatureDoctor", "signature_doctor"))}
+                    ${detailItem("MDS", getAny("signatureMds", "signature_mds"))}
+                    ${detailItem("Nurse", getAny("signatureNurse", "signature_nurse"))}
+                    ${detailItem("Drug", getAny("signatureDrug", "signature_drug"))}
+                    ${detailItem("Examination", getAny("signatureExamination", "signature_examination"))}
+                    ${detailItem("Data Input", getAny("signatureDataInput", "signature_data_input"))}
+                    ${detailItem("Other", getAny("signatureOther", "signature_other"))}
+                </div>
+            `)
+
+            + section("Memo / Nota Tambahan", `
+                <div class="row">
+                    ${fullItem("Memo", getAny("memo"))}
+                </div>
+            `)
+
+            + section("Maklumat Rekod Sistem", `
+                <div class="row">
+                    ${detailItem("Created At", getAny("createdAt", "created_at"))}
+                    ${detailItem("Updated At", getAny("updatedAt", "updated_at"))}
+                </div>
+            `);
+
+        const modal = new bootstrap.Modal(
+            document.getElementById("recordDetailModal")
+        );
+
+        modal.show();
+    }
+
+    document.getElementById("applyFilterBtn").addEventListener("click", applyFilters);
+
+    document.getElementById("resetFilterBtn").addEventListener("click", function () {
+        document.getElementById("dateFilter").value = "";
+        document.getElementById("searchFilter").value = "";
+        applyFilters();
+    });
+
+    document.getElementById("searchFilter").addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            event.preventDefault();
+            applyFilters();
+        }
+    });
+
+    document.getElementById("refreshBtn").addEventListener("click", loadRecords);
+
+    loadRecords();
+
+})();
+</script>
+
+</body>
+</html>

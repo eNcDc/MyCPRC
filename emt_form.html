@@ -2,130 +2,226 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <title>
-    MyEMT Form
-  </title>
+  <title>Pendaftaran MyEMT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Bootstrap Icons -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-  <!-- Main CSS (FOLLOW ORIGINAL) -->
   <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    body{background:#f4f6f9}
+
+    .form-shell{
+      border:0;
+      border-radius:14px;
+      box-shadow:0 .25rem .75rem rgba(0,0,0,.06);
+    }
+
+    .wizard-step{display:none}
+    .wizard-step.active{display:block}
+
+    #stepNav{
+      gap:.35rem;
+      flex-wrap:wrap;
+    }
+
+    #stepNav .nav-link{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      padding:0;
+      display:grid;
+      place-items:center;
+      font-weight:700;
+    }
+
+    #stepNav .nav-link.completed{
+      background:#198754;
+      color:#fff;
+    }
+
+    #stepNav .nav-link.locked{
+      opacity:.45;
+      pointer-events:none;
+    }
+
+    .step-caption{
+      font-size:.78rem;
+      color:#6c757d;
+      margin-top:.35rem;
+      text-align:center;
+    }
+
+    .section-card{
+      border:1px solid #e3e7ed;
+      border-radius:12px;
+      padding:1rem;
+      background:#fff;
+    }
+
+    .required::after{
+      content:" *";
+      color:#dc3545;
+    }
+
+    .existing-alert{
+      display:none;
+    }
+
+    .existing-alert.show{
+      display:block;
+    }
+
+    .small-help{
+      font-size:.8rem;
+      color:#6c757d;
+    }
+
+    textarea{resize:vertical}
+  </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div id="header"></div>
 
 <div class="container-fluid">
   <div class="row">
 
-    <!-- SIDEBAR -->
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-    <!-- MAIN -->
     <main class="col-md-9 col-lg-10 p-4">
 
-      <div class="card shadow-sm">
+      <div class="d-flex justify-content-end mb-3">
+        <a href="landingMyemt.html" class="btn btn-primary">
+          <i class="bi bi-arrow-left me-1"></i>Kembali
+        </a>
+      </div>
 
-        <!-- HEADER -->
-        <div class="card-body">
+      <div class="card form-shell">
 
-          <!--BUTTON BACK-->
-          <div class="mb-3 d-flex justify-content-end">
-            <a href="landingMyemt.html" class="btn btn-primary">
-              <i class="bi bi-arrow-left me-1"></i> Kembali
-            </a>
-          </div>
-
-          <h4>Pendaftaran Malaysia Emergency Medical Team (MyEMT)</h4>
-          <p class="text-muted">
+        <div class="card-body border-bottom">
+          <h4 class="mb-1">Pendaftaran Malaysia Emergency Medical Team (MyEMT)</h4>
+          <p class="text-muted mb-3">
             Borang Pendaftaran & Kesiapsiagaan Pasukan Kecemasan Perubatan
-          </p><br>
+          </p>
 
           <p>
             Terima kasih atas minat anda untuk menyertai Malaysia Emergency Medical Team (MyEMT).
-            MyEMT merupakan Pasukan Perubatan Kecemasan Kebangsaan Malaysia yang selaras dengan standard WHO EMT dan menuju ke arah pensijilan WHO.
+            MyEMT merupakan Pasukan Perubatan Kecemasan Kebangsaan Malaysia yang selaras dengan
+            standard WHO EMT dan menuju ke arah pensijilan WHO.
           </p>
 
-          <p>
-            Borang ini mengumpul maklumat untuk tujuan berikut:
-          </p>
+          <p class="mb-2">Borang ini mengumpul maklumat untuk tujuan:</p>
 
-          <ul>
+          <ul class="mb-3">
             <li>Pengambilan anggota EMT</li>
             <li>Pembangunan daftar nasional EMT</li>
             <li>Perancangan latihan</li>
-            <li>Penilaian kesiapsagaan untuk penugasan</li>
+            <li>Penilaian kesiapsiagaan untuk penugasan</li>
           </ul>
 
-          <p>
-            Segala maklumat yang diberikan adalah sulit dan akan digunakan hanya untuk tujuan operasi serta kesiapsiagaan di bawah Kementerian Kesihatan Malaysia.
-          </p>
-
+          <div class="alert alert-light border mb-0">
+            <i class="bi bi-shield-check me-1"></i>
+            Maklumat yang diberikan digunakan untuk tujuan operasi dan kesiapsiagaan MyEMT di bawah
+            Kementerian Kesihatan Malaysia.
+          </div>
         </div>
 
-        <!-- CONTENT -->
+
         <div class="card-body">
 
+          <!-- EXISTING APPLICATION NOTICE -->
+          <div class="existing-alert alert alert-warning" id="existingApplicationAlert"></div>
+
+
           <!-- WIZARD NAV -->
-          <ul class="nav nav-pills justify-content-center mb-4" id="stepNav">
-            <li class="nav-item"><button class="nav-link active" data-step="0">1</button></li>
-            <li class="nav-item"><button class="nav-link" data-step="1">2</button></li>
-            <li class="nav-item"><button class="nav-link" data-step="2">3</button></li>
-            <li class="nav-item"><button class="nav-link" data-step="3">4</button></li>
-            <li class="nav-item"><button class="nav-link" data-step="4">5</button></li>
-            <li class="nav-item"><button class="nav-link" data-step="5">6</button></li>
-          </ul>
+          <div class="d-flex justify-content-center mb-4">
+            <div>
+              <ul class="nav nav-pills justify-content-center" id="stepNav">
+                <li class="nav-item"><button class="nav-link active" type="button" data-step="0">1</button></li>
+                <li class="nav-item"><button class="nav-link locked" type="button" data-step="1">2</button></li>
+                <li class="nav-item"><button class="nav-link locked" type="button" data-step="2">3</button></li>
+                <li class="nav-item"><button class="nav-link locked" type="button" data-step="3">4</button></li>
+                <li class="nav-item"><button class="nav-link locked" type="button" data-step="4">5</button></li>
+                <li class="nav-item"><button class="nav-link locked" type="button" data-step="5">6</button></li>
+              </ul>
 
-          <style>
-            .wizard-step { display:none; }
-            .wizard-step.active { display:block; }
-          </style>
+              <div class="d-flex justify-content-between gap-2 mt-1">
+                <div class="step-caption">Pemohon</div>
+                <div class="step-caption">Kecemasan</div>
+                <div class="step-caption">Profesional</div>
+                <div class="step-caption">Kesihatan</div>
+                <div class="step-caption">Deklarasi</div>
+                <div class="step-caption">Sokongan</div>
+              </div>
+            </div>
+          </div>
 
-          <form id="myemtForm">
 
-          <!-- 1. PEMOHON -->
-          <div class="wizard-step active">
-            <h5>1. Maklumat Pemohon</h5>
+          <form id="myemtForm" novalidate>
 
-            <div class="card p-3 mb-3">
+            <!-- =====================================================
+                 STEP 1
+            ====================================================== -->
+            <section class="wizard-step active">
+              <h5 class="mb-3">1. Maklumat Pemohon</h5>
+
+              <div class="section-card">
 
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Nama Penuh</label>
-                  <input type="text" class="form-control" required>
+                  <label class="form-label fw-bold required" for="full_name">Nama Penuh</label>
+                  <input type="text" class="form-control" id="full_name" name="full_name" required>
                 </div>
 
                 <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">No Pengenalan (Tanpa -)</label>
-                    <input type="number" class="form-control" name="identification_number"
-                          placeholder="Contoh: 101010101010" required>
-                  </div>
 
                   <div class="col-md-6 mb-3">
-                    <label class="form-label fw-bold">Umur</label>
-                    <input type="number" class="form-control" required>
+                    <label class="form-label fw-bold required" for="identification_number">
+                      No. Pengenalan (Tanpa -)
+                    </label>
+
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="identification_number"
+                      name="identification_number"
+                      inputmode="numeric"
+                      minlength="12"
+                      maxlength="12"
+                      pattern="[0-9]{12}"
+                      placeholder="Contoh: 101010101010"
+                      required
+                    >
+
+                    <div class="invalid-feedback">Masukkan 12 digit nombor pengenalan tanpa “-”.</div>
                   </div>
+
+
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold required" for="age">Umur</label>
+                    <input type="number" class="form-control" id="age" name="age" min="18" max="100" required>
+                  </div>
+
                 </div>
 
+
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Jantina</label>
-                  <select class="form-control" required>
-                    <option disabled selected>Sila pilih</option>
-                    <option>Lelaki</option>
-                    <option>Perempuan</option>
+                  <label class="form-label fw-bold required" for="gender">Jantina</label>
+
+                  <select class="form-select" id="gender" name="gender" required>
+                    <option value="">Sila pilih</option>
+                    <option value="Lelaki">Lelaki</option>
+                    <option value="Perempuan">Perempuan</option>
                   </select>
                 </div>
 
+
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Jawatan</label>
-                  <select class="form-control" id="designationSelect" name="designation" required>
+                  <label class="form-label fw-bold required" for="designationSelect">Jawatan</label>
+
+                  <select class="form-select" id="designationSelect" name="designation" required>
                     <option value="">Sila Pilih Jawatan</option>
                     <option value="Emergency Physician">Emergency Physician</option>
                     <option value="Public Health Medicine Specialist">Public Health Medicine Specialist</option>
@@ -142,49 +238,36 @@
                   </select>
                 </div>
 
-                <!-- Textfield Muncul Bila Lain-Lain -->
+
                 <div class="mb-3 d-none" id="otherDesignationWrapper">
-                  <label class="form-label fw-bold">Sila Nyatakan Jawatan</label>
+                  <label class="form-label fw-bold required" for="otherDesignationInput">Sila Nyatakan Jawatan</label>
                   <input type="text" class="form-control" id="otherDesignationInput" name="other_designation">
                 </div>
 
-                <script>
-                  // jawatan lain-lain
-                  const designationSelect = document.getElementById('designationSelect');
-                  const otherWrapper = document.getElementById('otherDesignationWrapper');
-                  const otherInput = document.getElementById('otherDesignationInput');
-
-                  designationSelect.addEventListener('change', function () {
-                    if (this.value === "Other") {
-                      otherWrapper.classList.remove('d-none');
-                      otherInput.required = true;
-                    } else {
-                      otherWrapper.classList.add('d-none');
-                      otherInput.required = false;
-                      otherInput.value = "";
-                    }
-                  });
-                </script>
 
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Gred</label>
-                  <input type="text" class="form-control" required>
+                  <label class="form-label fw-bold required" for="grade">Gred</label>
+                  <input type="text" class="form-control" id="grade" name="grade" required>
                 </div>
 
+
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Tempoh Perkhidmatan</label>
-                  <select class="form-control" required>
-                    <option disabled selected>Sila pilih</option>
-                    <option>< 5 tahun</option>
-                    <option>5 - 10 tahun</option>
-                    <option>11 - 15 tahun</option>
-                    <option>> 15 tahun</option>
+                  <label class="form-label fw-bold required" for="service_period">Tempoh Perkhidmatan</label>
+
+                  <select class="form-select" id="service_period" name="service_period" required>
+                    <option value="">Sila pilih</option>
+                    <option value="< 5 tahun">&lt; 5 tahun</option>
+                    <option value="5 - 10 tahun">5 - 10 tahun</option>
+                    <option value="11 - 15 tahun">11 - 15 tahun</option>
+                    <option value="> 15 tahun">&gt; 15 tahun</option>
                   </select>
                 </div>
 
+
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Negeri</label>
-                  <select class="form-control" name="state" required>
+                  <label class="form-label fw-bold required" for="state">Negeri</label>
+
+                  <select class="form-select" id="state" name="state" required>
                     <option value="">Sila Pilih Negeri</option>
                     <option>Johor</option>
                     <option>Kedah</option>
@@ -205,10 +288,11 @@
                   </select>
                 </div>
 
-                <div class="mb-3">
-                  <label class="form-label fw-bold">Jenis Fasiliti</label>
 
-                  <select class="form-control" id="facilitySelect" name="facility_type" required>
+                <div class="mb-3">
+                  <label class="form-label fw-bold required" for="facilitySelect">Jenis Fasiliti</label>
+
+                  <select class="form-select" id="facilitySelect" name="facility_type" required>
                     <option value="">Sila Pilih Jenis Fasiliti</option>
                     <option value="Hospital">Hospital</option>
                     <option value="Klinik Kesihatan">Klinik Kesihatan</option>
@@ -218,442 +302,434 @@
                     <option value="Others">Lain-lain</option>
                   </select>
 
-                  <!-- Auto muncul bila pilih Lain-lain -->
                   <div id="facility_other_field" class="mt-2 d-none">
-                    <label class="form-label">Sila nyatakan</label>
-                    <input type="text" class="form-control" name="facility_other">
+                    <label class="form-label required" for="facility_other">Sila nyatakan jenis fasiliti</label>
+                    <input type="text" class="form-control" id="facility_other" name="facility_other">
                   </div>
                 </div>
 
-                <script>
-                  const facilitySelect = document.getElementById('facilitySelect');
-                  const facilityOtherField = document.getElementById('facility_other_field');
-                  const facilityOtherInput = facilityOtherField.querySelector('input');
-
-                  facilitySelect.addEventListener('change', function () {
-                    if (this.value === "Others") {
-                      facilityOtherField.classList.remove('d-none');
-                      facilityOtherInput.required = true;
-                    } else {
-                      facilityOtherField.classList.add('d-none');
-                      facilityOtherInput.required = false;
-                      facilityOtherInput.value = "";
-                    }
-                  });
-                </script>
 
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Tempat Bekerja</label>
-                  <input type="text" class="form-control" required>
+                  <label class="form-label fw-bold required" for="workplace">Tempat Bekerja</label>
+                  <input type="text" class="form-control" id="workplace" name="workplace" required>
                 </div>
+
 
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Alamat Rumah</label>
-                  <textarea class="form-control" rows="3" required></textarea>
+                  <label class="form-label fw-bold required" for="home_address">Alamat Rumah</label>
+                  <textarea class="form-control" id="home_address" name="home_address" rows="3" required></textarea>
                 </div>
+
 
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Emel Pejabat</label>
-                  <input type="email" class="form-control" placeholder="contoh: nama@kkm.gov.my" required>
+                  <label class="form-label fw-bold required" for="office_email">Emel Pejabat</label>
+                  <input type="email" class="form-control" id="office_email" name="office_email"
+                         placeholder="contoh: nama@kkm.gov.my" required>
                 </div>
+
 
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Emel Peribadi</label>
-                  <input type="email" class="form-control" placeholder="contoh: nama@gmail.com" required>
+                  <label class="form-label fw-bold required" for="personal_email">Emel Peribadi</label>
+                  <input type="email" class="form-control" id="personal_email" name="personal_email"
+                         placeholder="contoh: nama@gmail.com" required>
                 </div>
+
 
                 <div class="mb-3">
-                  <label class="form-label fw-bold">Nombor Telefon</label>
-                  <input type="text" class="form-control" placeholder="contoh: 0123456789" required>
+                  <label class="form-label fw-bold required" for="phone">Nombor Telefon</label>
+                  <input type="tel" class="form-control" id="phone" name="phone"
+                         inputmode="tel" placeholder="contoh: 0123456789" required>
                 </div>
 
-              <div class="d-flex gap-2">
-                <button type="button" class="btn btn-primary next-step">Seterusnya</button>
+
+                <div class="d-flex justify-content-end">
+                  <button type="button" class="btn btn-primary next-step">
+                    Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                  </button>
+                </div>
+
               </div>
+            </section>
 
-            </div>
 
-          </div>
+            <!-- =====================================================
+                 STEP 2
+            ====================================================== -->
+            <section class="wizard-step">
+              <h5 class="mb-3">2. Maklumat Kecemasan</h5>
 
-          <!-- 2. MAKLUMAT EMERGENCY  -->
-          <div class="wizard-step">
+              <div class="section-card">
 
-              <h5>2. Maklumat Kecemasan</h5>
+                <div class="mb-3">
+                  <label class="form-label fw-bold required" for="emergency_name">Nama Waris (Next of Kin)</label>
+                  <input type="text" class="form-control" id="emergency_name" name="emergency_name" required>
+                </div>
 
-              <div class="card p-3 mb-3">
 
-                  <div class="mb-3">
-                      <label class="form-label fw-bold">Nama Waris (Next of Kin)</label>
-                      <input type="text" class="form-control" name="emergency_name" required>
+                <div class="mb-3">
+                  <label class="form-label fw-bold required">Hubungan</label>
+
+                  <div class="form-check">
+                    <input class="form-check-input relationRadio" type="radio" name="relation" value="Ibu/Bapa" required>
+                    <label class="form-check-label">Ibu / Bapa</label>
                   </div>
 
-                  <div class="mb-3">
-                      <label class="form-label fw-bold">Hubungan</label>
-
-                      <div class="form-check">
-                          <input class="form-check-input relationRadio" type="radio" name="relation" value="Ibu/Bapa" required>
-                          <label class="form-check-label">Ibu / Bapa</label>
-                      </div>
-
-                      <div class="form-check">
-                          <input class="form-check-input relationRadio" type="radio" name="relation" value="Suami/Isteri">
-                          <label class="form-check-label">Suami / Isteri</label>
-                      </div>
-
-                      <div class="form-check">
-                          <input class="form-check-input relationRadio" type="radio" name="relation" value="Other" id="relation_other">
-                          <label class="form-check-label">Lain-lain</label>
-                      </div>
-
-                      <!-- Auto muncul bila pilih Other -->
-                      <div id="relation_other_field" class="mt-2" style="display:none;">
-                          <input type="text" class="form-control" name="relation_other_text" placeholder="Sila nyatakan">
-                      </div>
+                  <div class="form-check">
+                    <input class="form-check-input relationRadio" type="radio" name="relation" value="Suami/Isteri">
+                    <label class="form-check-label">Suami / Isteri</label>
                   </div>
 
-                  <script>
-                      // Papar textfield bila pilih "Lain-lain"
-                      document.querySelectorAll('.relationRadio').forEach(radio => {
-                          radio.addEventListener('change', function () {
-                              const field = document.getElementById('relation_other_field');
-                              
-                              if (this.value === "Other") {
-                                  field.style.display = "block";
-                                  field.querySelector('input').required = true;
-                              } else {
-                                  field.style.display = "none";
-                                  field.querySelector('input').required = false;
-                                  field.querySelector('input').value = "";
-                              }
-                          });
-                      });
-                  </script>
-
-                  <div class="mb-3">
-                      <label class="form-label fw-bold">Alamat Rumah</label>
-                      <textarea class="form-control" name="emergency_address" rows="3" required></textarea>
+                  <div class="form-check">
+                    <input class="form-check-input relationRadio" type="radio" name="relation" value="Other" id="relation_other">
+                    <label class="form-check-label">Lain-lain</label>
                   </div>
 
-                  <div class="mb-3">
-                      <label class="form-label fw-bold">Nombor Telefon</label>
-                      <input type="tel" class="form-control" name="emergency_phone" placeholder="Contoh: 0123456789" required>
+                  <div id="relation_other_field" class="mt-2 d-none">
+                    <input type="text" class="form-control" name="relation_other_text"
+                           id="relation_other_text" placeholder="Sila nyatakan">
                   </div>
+                </div>
 
 
-              <div class="d-flex gap-2">
-                <button type="button" class="btn btn-secondary prev-step">Kembali</button>
-                <button type="button" class="btn btn-primary next-step">Seterusnya</button>
+                <div class="mb-3">
+                  <label class="form-label fw-bold required" for="emergency_address">Alamat Rumah Waris</label>
+                  <textarea class="form-control" id="emergency_address" name="emergency_address" rows="3" required></textarea>
+                </div>
+
+
+                <div class="mb-3">
+                  <label class="form-label fw-bold required" for="emergency_phone">Nombor Telefon Waris</label>
+                  <input type="tel" class="form-control" id="emergency_phone" name="emergency_phone"
+                         inputmode="tel" placeholder="Contoh: 0123456789" required>
+                </div>
+
+
+                <div class="d-flex justify-content-between gap-2">
+                  <button type="button" class="btn btn-secondary prev-step">
+                    <i class="bi bi-arrow-left me-1"></i>Kembali
+                  </button>
+
+                  <button type="button" class="btn btn-primary next-step">
+                    Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                  </button>
+                </div>
+
               </div>
+            </section>
 
-            </div>
-          </div>
 
-          <!-- 3. BACKGROUND -->
-          <div class="wizard-step">
-            <h5>3. Latar Belakang Profesional</h5>
+            <!-- =====================================================
+                 STEP 3
+            ====================================================== -->
+            <section class="wizard-step">
+              <h5 class="mb-3">3. Latar Belakang Profesional</h5>
 
-            <div class="card p-3 mb-3">
+              <div class="section-card">
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Salinan APC / Sijil Amalan</label>
-                    <input type="file" class="form-control" name="apc_file" required>
+                  <label class="form-label fw-bold required" for="apc_file">
+                    APC / Sijil Amalan / Dokumen Kelayakan Profesional
+                  </label>
+
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="apc_file"
+                    name="apc_file"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    required
+                  >
+
+                  <div class="small-help mt-1">
+                    Format: PDF/JPG/PNG. Saiz maksimum 3 MB.
+                  </div>
                 </div>
 
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Pernah menghadiri latihan bencana atau respons kecemasan?</label>
-
-                    <div class="form-check">
-                        <input class="form-check-input trainingRadio" type="radio" name="attended_training" value="Yes" required>
-                        <label class="form-check-label">Ya</label>
-                    </div>
-
-                    <div class="form-check">
-                        <input class="form-check-input trainingRadio" type="radio" name="attended_training" value="No">
-                        <label class="form-check-label">Tidak</label>
-                    </div>
-
-                    <!-- Auto muncul bila pilih Yes -->
-                    <div id="training_details_field" class="mt-2" style="display:none;">
-                        <label class="form-label mt-2">Jika Ya, sila nyatakan latihan yang telah dihadiri:</label>
-                        <textarea class="form-control" name="training_details" rows="3"></textarea>
-                    </div>
-                </div>
-
-                <script>
-                    // Papar textfield untuk latihan bila pilih Yes
-                    document.querySelectorAll('.trainingRadio').forEach(radio => {
-                        radio.addEventListener('change', function () {
-                            const field = document.getElementById('training_details_field');
-
-                            if (this.value === "Yes") {
-                                field.style.display = "block";
-                                field.querySelector('textarea').required = true;
-                            } else {
-                                field.style.display = "none";
-                                field.querySelector('textarea').required = false;
-                                field.querySelector('textarea').value = "";
-                            }
-                        });
-                    });
-                </script>
-
-                <!-- 4. EXPERIENCE -->
-                <div class="mb-3">
-                    <label class="form-label fw-bold">Pengalaman penugasan antarabangsa / misi kemanusiaan?</label>
-
-                    <div class="form-check">
-                        <input class="form-check-input missionRadio" type="radio" name="international_experience" value="Yes" required>
-                        <label class="form-check-label">Ya</label>
-                    </div>
-
-                    <div class="form-check">
-                        <input class="form-check-input missionRadio" type="radio" name="international_experience" value="No">
-                        <label class="form-check-label">Tidak</label>
-                    </div>
-
-                    <!-- Auto muncul bila pilih Yes -->
-                    <div id="mission_details_field" class="mt-2" style="display:none;">
-                        <label class="form-label mt-2">Jika Ya, sila nyatakan pengalaman:</label>
-                        <textarea class="form-control" name="mission_details" rows="3"></textarea>
-                    </div>
-                </div>
-
-                <script>
-                    // Papar textfield bila pilih Yes (International deployment)
-                    document.querySelectorAll('.missionRadio').forEach(radio => {
-                        radio.addEventListener('change', function () {
-                            const field = document.getElementById('mission_details_field');
-
-                            if (this.value === "Yes") {
-                                field.style.display = "block";
-                                field.querySelector('textarea').required = true;
-                            } else {
-                                field.style.display = "none";
-                                field.querySelector('textarea').required = false;
-                                field.querySelector('textarea').value = "";
-                            }
-                        });
-                    });
-                </script>
-
-              <div class="d-flex gap-2">
-                <button type="button" class="btn btn-secondary prev-step">Kembali</button>
-                <button type="button" class="btn btn-primary next-step">Seterusnya</button>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- 4. FITNESS -->
-          <div class="wizard-step">
-            <h5>4. Deklarasi Kesihatan & Kecergasan</h5>
-
-            <div class="card p-3 mb-3">
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">
-                        Adakah anda mempunyai sebarang keadaan perubatan yang boleh menjejaskan keupayaan anda untuk bekerja dalam persekitaran bencana atau kecemasan?
+                  <label class="form-label fw-bold required">
+                    Pernah menghadiri latihan bencana atau respons kecemasan?
+                  </label>
+
+                  <div class="form-check">
+                    <input class="form-check-input trainingRadio" type="radio"
+                           name="attended_training" value="Ya" required>
+                    <label class="form-check-label">Ya</label>
+                  </div>
+
+                  <div class="form-check">
+                    <input class="form-check-input trainingRadio" type="radio"
+                           name="attended_training" value="Tidak">
+                    <label class="form-check-label">Tidak</label>
+                  </div>
+
+                  <div id="training_details_field" class="mt-2 d-none">
+                    <label class="form-label required" for="training_details">
+                      Jika Ya, sila nyatakan latihan yang telah dihadiri
                     </label>
-
-                    <div class="form-check">
-                        <input class="form-check-input medConditionRadio" type="radio" name="medical_condition" value="Tidak" required>
-                        <label class="form-check-label">Tidak</label>
-                    </div>
-
-                    <div class="form-check">
-                        <input class="form-check-input medConditionRadio" type="radio" name="medical_condition" value="Ya">
-                        <label class="form-check-label">Ya</label>
-                    </div>
-
-                    <!-- Auto muncul bila pilih Yes -->
-                    <div id="medical_condition_field" class="mt-2" style="display:none;">
-                        <label class="form-label mt-2">Jika Ya, sila nyatakan:</label>
-                        <textarea class="form-control" name="medical_condition_details" rows="3"></textarea>
-                    </div>
+                    <textarea class="form-control" id="training_details" name="training_details" rows="3"></textarea>
+                  </div>
                 </div>
 
-                <script>
-                    document.querySelectorAll('.medConditionRadio').forEach(radio => {
-                        radio.addEventListener('change', function () {
-                            const field = document.getElementById('medical_condition_field');
-                            const input = field.querySelector('textarea');
-
-                            if (this.value === "Ya") {
-                                field.style.display = "block";
-                                input.required = true;
-                            } else {
-                                field.style.display = "none";
-                                input.required = false;
-                                input.value = "";
-                            }
-                        });
-                    });
-                </script>
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">
-                        Pernahkah anda menerima rawatan profesional atau kaunseling berkaitan kesihatan mental?
+                  <label class="form-label fw-bold required">
+                    Pengalaman penugasan antarabangsa / misi kemanusiaan?
+                  </label>
+
+                  <div class="form-check">
+                    <input class="form-check-input missionRadio" type="radio"
+                           name="international_experience" value="Ya" required>
+                    <label class="form-check-label">Ya</label>
+                  </div>
+
+                  <div class="form-check">
+                    <input class="form-check-input missionRadio" type="radio"
+                           name="international_experience" value="Tidak">
+                    <label class="form-check-label">Tidak</label>
+                  </div>
+
+                  <div id="mission_details_field" class="mt-2 d-none">
+                    <label class="form-label required" for="mission_details">
+                      Jika Ya, sila nyatakan pengalaman
                     </label>
-
-                    <div class="form-check">
-                        <input class="form-check-input mentalRadio" type="radio" name="mental_health" value="Tidak" required>
-                        <label class="form-check-label">Tidak</label>
-                    </div>
-
-                    <div class="form-check">
-                        <input class="form-check-input mentalRadio" type="radio" name="mental_health" value="Ya">
-                        <label class="form-check-label">Ya</label>
-                    </div>
-
-                    <!-- Auto muncul bila pilih Yes -->
-                    <div id="mental_health_field" class="mt-2" style="display:none;">
-                        <label class="form-label mt-2">Jika Ya, sila nyatakan:</label>
-                        <textarea class="form-control" name="mental_health_details" rows="3"></textarea>
-                    </div>
+                    <textarea class="form-control" id="mission_details" name="mission_details" rows="3"></textarea>
+                  </div>
                 </div>
 
-                <script>
-                    document.querySelectorAll('.mentalRadio').forEach(radio => {
-                        radio.addEventListener('change', function () {
-                            const field = document.getElementById('mental_health_field');
-                            const input = field.querySelector('textarea');
 
-                            if (this.value === "Ya") {
-                                field.style.display = "block";
-                                input.required = true;
-                            } else {
-                                field.style.display = "none";
-                                input.required = false;
-                                input.value = "";
-                            }
-                        });
-                    });
-                </script>
+                <div class="d-flex justify-content-between gap-2">
+                  <button type="button" class="btn btn-secondary prev-step">
+                    <i class="bi bi-arrow-left me-1"></i>Kembali
+                  </button>
+
+                  <button type="button" class="btn btn-primary next-step">
+                    Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                  </button>
+                </div>
+
+              </div>
+            </section>
+
+
+            <!-- =====================================================
+                 STEP 4
+            ====================================================== -->
+            <section class="wizard-step">
+              <h5 class="mb-3">4. Deklarasi Kesihatan & Kecergasan</h5>
+
+              <div class="section-card">
+
+                <div class="alert alert-light border">
+                  Maklumat kesihatan digunakan bagi penilaian kesiapsiagaan dan kesesuaian penugasan MyEMT.
+                </div>
+
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Adakah anda mempunyai sebarang alahan?</label>
+                  <label class="form-label fw-bold required">
+                    Adakah anda mempunyai sebarang keadaan perubatan yang boleh menjejaskan
+                    keupayaan anda untuk bekerja dalam persekitaran bencana atau kecemasan?
+                  </label>
 
-                    <div class="form-check">
-                        <input class="form-check-input allergyRadio" type="radio" name="allergies" value="Tidak" required>
-                        <label class="form-check-label">Tidak</label>
-                    </div>
+                  <div class="form-check">
+                    <input class="form-check-input medConditionRadio" type="radio"
+                           name="medical_condition" value="Tidak" required>
+                    <label class="form-check-label">Tidak</label>
+                  </div>
 
-                    <div class="form-check">
-                        <input class="form-check-input allergyRadio" type="radio" name="allergies" value="Ya">
-                        <label class="form-check-label">Ya</label>
-                    </div>
+                  <div class="form-check">
+                    <input class="form-check-input medConditionRadio" type="radio"
+                           name="medical_condition" value="Ya">
+                    <label class="form-check-label">Ya</label>
+                  </div>
 
-                    <!-- Auto muncul bila pilih Yes -->
-                    <div id="allergy_field" class="mt-2" style="display:none;">
-                        <label class="form-label mt-2">Jika Ya, sila nyatakan:</label>
-                        <textarea class="form-control" name="allergy_details" rows="3"></textarea>
-                    </div>
+                  <div id="medical_condition_field" class="mt-2 d-none">
+                    <label class="form-label required" for="medical_condition_details">
+                      Jika Ya, sila nyatakan
+                    </label>
+                    <textarea class="form-control" id="medical_condition_details"
+                              name="medical_condition_details" rows="3"></textarea>
+                  </div>
                 </div>
 
-                <script>
-                    document.querySelectorAll('.allergyRadio').forEach(radio => {
-                        radio.addEventListener('change', function () {
-                            const field = document.getElementById('allergy_field');
-                            const input = field.querySelector('textarea');
-
-                            if (this.value === "Ya") {
-                                field.style.display = "block";
-                                input.required = true;
-                            } else {
-                                field.style.display = "none";
-                                input.required = false;
-                                input.value = "";
-                            }
-                        });
-                    });
-                </script>
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Berat (kg)</label>
-                    <input type="number" class="form-control" name="weight" required>
+                  <label class="form-label fw-bold required">
+                    Pernahkah anda menerima rawatan profesional atau kaunseling berkaitan kesihatan mental?
+                  </label>
+
+                  <div class="form-check">
+                    <input class="form-check-input mentalRadio" type="radio"
+                           name="mental_health" value="Tidak" required>
+                    <label class="form-check-label">Tidak</label>
+                  </div>
+
+                  <div class="form-check">
+                    <input class="form-check-input mentalRadio" type="radio"
+                           name="mental_health" value="Ya">
+                    <label class="form-check-label">Ya</label>
+                  </div>
+
+                  <div id="mental_health_field" class="mt-2 d-none">
+                    <label class="form-label required" for="mental_health_details">
+                      Jika Ya, sila nyatakan
+                    </label>
+                    <textarea class="form-control" id="mental_health_details"
+                              name="mental_health_details" rows="3"></textarea>
+                  </div>
                 </div>
+
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Tinggi (cm)</label>
-                    <input type="number" class="form-control" name="height" required>
+                  <label class="form-label fw-bold required">Adakah anda mempunyai sebarang alahan?</label>
+
+                  <div class="form-check">
+                    <input class="form-check-input allergyRadio" type="radio"
+                           name="allergies" value="Tidak" required>
+                    <label class="form-check-label">Tidak</label>
+                  </div>
+
+                  <div class="form-check">
+                    <input class="form-check-input allergyRadio" type="radio"
+                           name="allergies" value="Ya">
+                    <label class="form-check-label">Ya</label>
+                  </div>
+
+                  <div id="allergy_field" class="mt-2 d-none">
+                    <label class="form-label required" for="allergy_details">
+                      Jika Ya, sila nyatakan
+                    </label>
+                    <textarea class="form-control" id="allergy_details"
+                              name="allergy_details" rows="3"></textarea>
+                  </div>
                 </div>
 
-                <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-secondary prev-step">Kembali</button>
-                  <button type="button" class="btn btn-primary next-step">Seterusnya</button>
+
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold required" for="weight">Berat (kg)</label>
+                    <input type="number" class="form-control" id="weight" name="weight"
+                           min="20" max="300" step="0.1" required>
+                  </div>
+
+                  <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold required" for="height">Tinggi (cm)</label>
+                    <input type="number" class="form-control" id="height" name="height"
+                           min="100" max="250" step="0.1" required>
+                  </div>
                 </div>
 
-            </div>
-          </div>
 
-          <!-- 5. CONFIRM -->
-          <div class="wizard-step">
-            <h5>5. Komitmen & Deklarasi</h5>
+                <div class="d-flex justify-content-between gap-2">
+                  <button type="button" class="btn btn-secondary prev-step">
+                    <i class="bi bi-arrow-left me-1"></i>Kembali
+                  </button>
 
-            <div class="card p-3 mb-3">
-
-              <p class="fw-bold">Saya faham bahawa ahli MyEMT mungkin dikehendaki untuk:</p>
-
-              <ul>
-                <li>Menyertai latihan dan aktiviti kesiapsiagaan secara berkala.</li>
-                <li>Bersedia untuk panggilan kecemasan bagi tujuan penempatan.</li>
-                <li>Bekerja dalam pasukan pelbagai disiplin semasa operasi respons bencana.</li>
-                <li>Ditempatkan ke kawasan terjejas bencana di dalam Malaysia atau di peringkat antarabangsa.</li>
-              </ul>
-
-              <!--
-              <p class="fw-bold mt-3">
-                Saya dengan ini mengisytiharkan bahawa maklumat yang diberikan adalah benar, 
-                dan saya bersedia untuk menyertai proses pemilihan, latihan dan aktiviti operasi MyEMT.
-              </p>
-            -->
-
-              <div class="mb-3">
-                <label class="form-label fw-bold">
-                  Saya dengan ini mengisytiharkan bahawa maklumat yang diberikan adalah benar, dan saya bersedia untuk menyertai proses pemilihan, latihan dan aktiviti operasi MyEMT.
-                </label>
-
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="commitment" value="Ya" required>
-                  <label class="form-check-label">Ya</label>
+                  <button type="button" class="btn btn-primary next-step">
+                    Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                  </button>
                 </div>
 
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="commitment" value="Tidak">
-                  <label class="form-check-label">Tidak</label>
-                </div>
               </div>
+            </section>
 
-                <div class="d-flex gap-2">
-                  <button type="button" class="btn btn-secondary prev-step">Kembali</button>
-                  <button type="button" class="btn btn-primary next-step">Seterusnya</button>
+
+            <!-- =====================================================
+                 STEP 5
+            ====================================================== -->
+            <section class="wizard-step">
+              <h5 class="mb-3">5. Komitmen & Deklarasi</h5>
+
+              <div class="section-card">
+
+                <p class="fw-bold">Saya faham bahawa ahli MyEMT mungkin dikehendaki untuk:</p>
+
+                <ul>
+                  <li>Menyertai latihan dan aktiviti kesiapsiagaan secara berkala.</li>
+                  <li>Bersedia untuk panggilan kecemasan bagi tujuan penempatan.</li>
+                  <li>Bekerja dalam pasukan pelbagai disiplin semasa operasi respons bencana.</li>
+                  <li>Ditempatkan ke kawasan terjejas bencana di dalam Malaysia atau di peringkat antarabangsa.</li>
+                </ul>
+
+
+                <div class="form-check mt-4">
+                  <input class="form-check-input" type="checkbox" id="commitment" name="commitment"
+                         value="Ya" required>
+
+                  <label class="form-check-label fw-semibold required" for="commitment">
+                    Saya mengisytiharkan bahawa maklumat yang diberikan adalah benar dan saya bersedia
+                    untuk menyertai proses pemilihan, latihan dan aktiviti operasi MyEMT.
+                  </label>
                 </div>
 
-            </div>
-          </div>
 
-          <!-- 6. APPROVAL -->
-          <div class="wizard-step">
-            <h5>6. Borang Kebenaran & Sokongan Ketua Jabatan</h5>
+                <div class="d-flex justify-content-between gap-2 mt-4">
+                  <button type="button" class="btn btn-secondary prev-step">
+                    <i class="bi bi-arrow-left me-1"></i>Kembali
+                  </button>
 
-            <div class="card p-3 mb-3">
+                  <button type="button" class="btn btn-primary next-step">
+                    Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                  </button>
+                </div>
 
-              <p class="fw-bold">
-                Borang Ulasan Penyelia / Ketua Jabatan (Lampiran 4)
-              </p>
-
-              <div class="mb-3">
-                <label class="form-label fw-bold">Muat naik Borang (jika ada)</label>
-                <input type="file" class="form-control" name="lampiran_ketua_jabatan">
               </div>
+            </section>
 
-              <div class="d-flex gap-2">
-                <button type="button" class="btn btn-secondary prev-step">Kembali</button>
-                <button type="submit" class="btn btn-success">Hantar</button>
+
+            <!-- =====================================================
+                 STEP 6
+            ====================================================== -->
+            <section class="wizard-step">
+              <h5 class="mb-3">6. Kebenaran & Sokongan Ketua Jabatan</h5>
+
+              <div class="section-card">
+
+                <p class="fw-bold mb-1">Borang Ulasan Penyelia / Ketua Jabatan (Lampiran 4)</p>
+                <p class="small text-muted">
+                  Muat naik dokumen sokongan jika telah tersedia. Jika belum, proses susulan boleh dibuat
+                  mengikut arahan urus setia.
+                </p>
+
+
+                <div class="mb-3">
+                  <label class="form-label fw-bold" for="lampiran_ketua_jabatan">
+                    Muat naik Borang Sokongan
+                  </label>
+
+                  <input
+                    type="file"
+                    class="form-control"
+                    id="lampiran_ketua_jabatan"
+                    name="lampiran_ketua_jabatan"
+                    accept=".pdf,.jpg,.jpeg,.png"
+                  >
+
+                  <div class="small-help mt-1">
+                    Format: PDF/JPG/PNG. Saiz maksimum 3 MB.
+                  </div>
+                </div>
+
+
+                <div class="alert alert-info">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Selepas dihantar, permohonan akan berstatus <strong>Dalam Semakan</strong>.
+                  Anda boleh menyemak status daripada halaman MyEMT.
+                </div>
+
+
+                <div class="d-flex justify-content-between gap-2">
+                  <button type="button" class="btn btn-secondary prev-step">
+                    <i class="bi bi-arrow-left me-1"></i>Kembali
+                  </button>
+
+                  <button type="submit" class="btn btn-success" id="submitBtn">
+                    <i class="bi bi-send-check me-1"></i>Hantar Permohonan
+                  </button>
+                </div>
+
               </div>
-
-            </div>
-          </div>
+            </section>
 
           </form>
 
@@ -664,120 +740,850 @@
   </div>
 </div>
 
-<!-- FOOTER -->
 <div id="footer"></div>
 
-<!-- JS -->
+
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/common.js"></script>
 
+
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+/* =====================================================
+   SHARED LAYOUT
+===================================================== */
+fetch("header.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("header").innerHTML = data);
 
-    const steps = document.querySelectorAll(".wizard-step");
-    const nav = document.querySelectorAll("#stepNav .nav-link");
+fetch("footer.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("footer").innerHTML = data);
 
-    let current = 0;
-
-    function show(step) {
-        steps.forEach((s,i)=> s.classList.toggle("active", i===step));
-        nav.forEach((n,i)=> n.classList.toggle("active", i===step));
-        current = step;
-    }
-
-    document.querySelectorAll(".next-step").forEach(btn=>{
-        btn.addEventListener("click", ()=> {
-            if(current < steps.length-1) show(current+1);
-        });
-    });
-
-    document.querySelectorAll(".prev-step").forEach(btn=>{
-        btn.addEventListener("click", ()=> {
-            if(current > 0) show(current-1);
-        });
-    });
-
-    nav.forEach(btn=>{
-        btn.addEventListener("click", function(){
-            show(parseInt(this.dataset.step));
-        });
-    });
-
-    show(0);
-});
-</script>
-<!-- Load Header & Footer -->
-<script>
-  fetch("header.html")
-    .then(res => res.text())
-    .then(data => document.getElementById("header").innerHTML = data);
-
-  fetch("footer.html")
-    .then(res => res.text())
-    .then(data => document.getElementById("footer").innerHTML = data);
-</script>
-
-<!-- Load Sidebar -->
-<script>
-  fetch("sidebar.html")
+fetch("sidebar.html")
   .then(res => res.text())
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
   .catch(err => console.error("Sidebar load failed:", err));
-</script>
 
-<!-- ══ SUBMIT FORM TO API ══ -->
-<script>
-document.getElementById('myemtForm').addEventListener('submit', async function (e) {
-  e.preventDefault();
 
-  const form = e.target;
-  const data = {};
+/* =====================================================
+   EXISTING MEMBER
+===================================================== */
+const EXISTING_MEMBER_ID =
+  new URLSearchParams(location.search).get("memberId") ||
+  localStorage.getItem("myemt_memberId") ||
+  localStorage.getItem("memberId") ||
+  sessionStorage.getItem("myemt_memberId") ||
+  sessionStorage.getItem("memberId") ||
+  "";
 
-  // Collect all named inputs
-  new FormData(form).forEach((value, key) => { data[key] = value; });
+let resubmissionOf = null;
 
-  // Also grab un-named fields by label order (full_name, age, gender, grade, service_period, workplace, home_address, office_email, personal_email, phone)
-  const inputs = form.querySelectorAll('input[type=text], input[type=number], input[type=email], input[type=tel], textarea, select');
-  const unnamedLabels = ['full_name','age','gender','grade','service_period','workplace','home_address','office_email','personal_email','phone'];
-  let unnamedIdx = 0;
-  inputs.forEach(el => {
-    if (!el.name && unnamedIdx < unnamedLabels.length) {
-      data[unnamedLabels[unnamedIdx++]] = el.value;
-    }
-  });
 
-  // Store member ID in localStorage so landingMyemt.html can read it
-  const submitBtn = form.querySelector('[type=submit]');
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Menghantar...';
+/* =====================================================
+   CONDITIONAL FIELDS
+===================================================== */
+function setupConditionalRadio(selector, expectedValue, wrapperId, inputSelector) {
 
-  try {
-    const res = await fetch(`${API}/api/members`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+  document.querySelectorAll(selector).forEach(radio => {
+
+    radio.addEventListener("change", function() {
+
+      const wrapper = document.getElementById(wrapperId);
+      const input = wrapper.querySelector(inputSelector);
+
+      const show = this.value === expectedValue;
+
+      wrapper.classList.toggle("d-none", !show);
+      input.required = show;
+
+      if (!show) {
+        input.value = "";
+      }
     });
-    const result = await res.json();
+  });
+}
 
-    if (result.success) {
-      // Save this user's member ID locally so other pages can identify them
-      localStorage.setItem('myemt_memberId', result.data.id);
-      localStorage.setItem('myemt_memberName', result.data.full_name || result.data.name || '');
-      alert('✅ Permohonan berjaya dihantar! ID anda: ' + result.data.id);
-      window.location.href = 'landingMyemt.html';
-    } else {
-      alert('❌ Ralat: ' + result.message);
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Hantar';
-    }
-  } catch (err) {
-    console.error(err);
-    alert('❌ Gagal menghubungi pelayan. Pastikan server berjalan.');
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Hantar';
+
+const designationSelect = document.getElementById("designationSelect");
+const otherDesignationWrapper = document.getElementById("otherDesignationWrapper");
+const otherDesignationInput = document.getElementById("otherDesignationInput");
+
+designationSelect.addEventListener("change", function() {
+
+  const show = this.value === "Other";
+
+  otherDesignationWrapper.classList.toggle("d-none", !show);
+  otherDesignationInput.required = show;
+
+  if (!show) {
+    otherDesignationInput.value = "";
   }
 });
+
+
+const facilitySelect = document.getElementById("facilitySelect");
+const facilityOtherField = document.getElementById("facility_other_field");
+const facilityOtherInput = document.getElementById("facility_other");
+
+facilitySelect.addEventListener("change", function() {
+
+  const show = this.value === "Others";
+
+  facilityOtherField.classList.toggle("d-none", !show);
+  facilityOtherInput.required = show;
+
+  if (!show) {
+    facilityOtherInput.value = "";
+  }
+});
+
+
+setupConditionalRadio(
+  ".relationRadio",
+  "Other",
+  "relation_other_field",
+  "input"
+);
+
+setupConditionalRadio(
+  ".trainingRadio",
+  "Ya",
+  "training_details_field",
+  "textarea"
+);
+
+setupConditionalRadio(
+  ".missionRadio",
+  "Ya",
+  "mission_details_field",
+  "textarea"
+);
+
+setupConditionalRadio(
+  ".medConditionRadio",
+  "Ya",
+  "medical_condition_field",
+  "textarea"
+);
+
+setupConditionalRadio(
+  ".mentalRadio",
+  "Ya",
+  "mental_health_field",
+  "textarea"
+);
+
+setupConditionalRadio(
+  ".allergyRadio",
+  "Ya",
+  "allergy_field",
+  "textarea"
+);
+
+
+/* =====================================================
+   WIZARD
+===================================================== */
+const form = document.getElementById("myemtForm");
+const steps = [...document.querySelectorAll(".wizard-step")];
+const navButtons = [...document.querySelectorAll("#stepNav .nav-link")];
+
+let currentStep = 0;
+let maxUnlockedStep = 0;
+
+
+function showStep(index) {
+
+  if (index < 0 || index >= steps.length) {
+    return;
+  }
+
+  steps.forEach((step, i) => {
+    step.classList.toggle("active", i === index);
+  });
+
+  navButtons.forEach((button, i) => {
+
+    button.classList.toggle("active", i === index);
+    button.classList.toggle("completed", i < index);
+    button.classList.toggle("locked", i > maxUnlockedStep);
+  });
+
+  currentStep = index;
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+function validateCurrentStep() {
+
+  const fields = [
+    ...steps[currentStep].querySelectorAll(
+      "input, select, textarea"
+    )
+  ];
+
+
+  for (const field of fields) {
+
+    if (field.disabled || field.type === "hidden") {
+      continue;
+    }
+
+    if (!field.checkValidity()) {
+
+      field.reportValidity();
+      field.focus();
+
+      return false;
+    }
+  }
+
+
+  return true;
+}
+
+
+document.querySelectorAll(".next-step").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    if (!validateCurrentStep()) {
+      return;
+    }
+
+    if (currentStep < steps.length - 1) {
+
+      maxUnlockedStep =
+        Math.max(
+          maxUnlockedStep,
+          currentStep + 1
+        );
+
+      showStep(currentStep + 1);
+    }
+  });
+});
+
+
+document.querySelectorAll(".prev-step").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    if (currentStep > 0) {
+      showStep(currentStep - 1);
+    }
+  });
+});
+
+
+navButtons.forEach(button => {
+
+  button.addEventListener("click", function() {
+
+    const target =
+      Number(this.dataset.step);
+
+    if (target > maxUnlockedStep) {
+      return;
+    }
+
+    if (
+      target > currentStep &&
+      !validateCurrentStep()
+    ) {
+      return;
+    }
+
+    showStep(target);
+  });
+});
+
+
+showStep(0);
+
+
+/* =====================================================
+   FILE HELPERS
+===================================================== */
+const MAX_FILE_SIZE = 3 * 1024 * 1024;
+
+function validateFile(file) {
+
+  if (!file) return true;
+
+  const allowed = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png"
+  ];
+
+  if (!allowed.includes(file.type)) {
+
+    alert(
+      `Fail "${file.name}" tidak disokong. Gunakan PDF, JPG atau PNG.`
+    );
+
+    return false;
+  }
+
+
+  if (file.size > MAX_FILE_SIZE) {
+
+    alert(
+      `Fail "${file.name}" melebihi had 3 MB.`
+    );
+
+    return false;
+  }
+
+
+  return true;
+}
+
+
+function fileToBase64(file) {
+
+  return new Promise((resolve, reject) => {
+
+    if (!file) {
+      resolve(null);
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () =>
+      resolve(reader.result);
+
+    reader.onerror = () =>
+      reject(
+        new Error(
+          `Gagal membaca fail ${file.name}`
+        )
+      );
+
+    reader.readAsDataURL(file);
+  });
+}
+
+
+/* =====================================================
+   EXISTING APPLICATION CHECK
+===================================================== */
+async function loadExistingApplication() {
+
+  if (!EXISTING_MEMBER_ID) {
+    return;
+  }
+
+
+  try {
+
+    const res = await fetch(
+      `${API}/api/members/${encodeURIComponent(EXISTING_MEMBER_ID)}`
+    );
+
+    if (!res.ok) {
+      return;
+    }
+
+
+    const json = await res.json();
+    const member = json.data;
+
+    if (!member) {
+      return;
+    }
+
+
+    const status =
+      String(member.status || "")
+        .toLowerCase();
+
+
+    const alertBox =
+      document.getElementById(
+        "existingApplicationAlert"
+      );
+
+
+    if (
+      status === "pending" ||
+      status === "approved"
+    ) {
+
+      alertBox.className =
+        status === "approved"
+          ? "existing-alert show alert alert-success"
+          : "existing-alert show alert alert-warning";
+
+      alertBox.innerHTML = `
+        <strong>Permohonan sedia ada ditemui.</strong><br>
+        Status semasa:
+        <strong>${status === "approved" ? "Diluluskan" : "Dalam Semakan"}</strong>.
+        Anda tidak perlu menghantar permohonan baharu.
+        <div class="mt-2">
+          <a href="emt_submitform.html?memberId=${encodeURIComponent(EXISTING_MEMBER_ID)}"
+             class="btn btn-sm btn-outline-dark">
+             Lihat Status Permohonan
+          </a>
+        </div>
+      `;
+
+      form.classList.add("d-none");
+
+      return;
+    }
+
+
+    if (status === "rejected") {
+
+      resubmissionOf =
+        EXISTING_MEMBER_ID;
+
+      alertBox.className =
+        "existing-alert show alert alert-danger";
+
+      alertBox.innerHTML = `
+        <strong>Permohonan terdahulu telah ditolak.</strong><br>
+        Anda boleh mengemaskini maklumat dan menghantar permohonan semula.
+        Dokumen perlu dimuat naik semula.
+      `;
+
+      prefillForm(member);
+    }
+
+
+  } catch (err) {
+
+    console.warn(
+      "Gagal menyemak permohonan sedia ada:",
+      err
+    );
+  }
+}
+
+
+/* =====================================================
+   PREFILL REJECTED APPLICATION
+===================================================== */
+function setValue(name, value) {
+
+  if (
+    value === undefined ||
+    value === null ||
+    value === ""
+  ) {
+    return;
+  }
+
+  const field =
+    form.elements[name];
+
+  if (!field) {
+    return;
+  }
+
+
+  if (
+    field instanceof RadioNodeList
+  ) {
+
+    [...field].forEach(input => {
+      input.checked =
+        String(input.value) ===
+        String(value);
+    });
+
+    return;
+  }
+
+
+  field.value = value;
+}
+
+
+function prefillForm(member) {
+
+  const simpleFields = [
+    "full_name",
+    "identification_number",
+    "age",
+    "gender",
+    "designation",
+    "other_designation",
+    "grade",
+    "service_period",
+    "state",
+    "facility_type",
+    "facility_other",
+    "workplace",
+    "home_address",
+    "office_email",
+    "personal_email",
+    "phone",
+    "emergency_name",
+    "relation",
+    "relation_other_text",
+    "emergency_address",
+    "emergency_phone",
+    "attended_training",
+    "training_details",
+    "international_experience",
+    "mission_details",
+    "medical_condition",
+    "medical_condition_details",
+    "mental_health",
+    "mental_health_details",
+    "allergies",
+    "allergy_details",
+    "weight",
+    "height"
+  ];
+
+
+  simpleFields.forEach(name => {
+
+    setValue(
+      name,
+      member[name]
+    );
+  });
+
+
+  designationSelect.dispatchEvent(
+    new Event("change")
+  );
+
+  facilitySelect.dispatchEvent(
+    new Event("change")
+  );
+
+
+  document.querySelectorAll(
+    ".relationRadio, .trainingRadio, .missionRadio, .medConditionRadio, .mentalRadio, .allergyRadio"
+  )
+  .forEach(input => {
+
+    if (input.checked) {
+      input.dispatchEvent(
+        new Event("change")
+      );
+    }
+  });
+}
+
+
+/* =====================================================
+   BUILD PAYLOAD
+===================================================== */
+async function buildPayload() {
+
+  const payload = {};
+
+
+  new FormData(form)
+    .forEach((value, key) => {
+
+      if (!(value instanceof File)) {
+        payload[key] = value;
+      }
+    });
+
+
+  /* Normalize "Other" fields */
+  if (
+    payload.designation === "Other"
+  ) {
+
+    payload.designation =
+      payload.other_designation || "Lain-lain";
+  }
+
+
+  if (
+    payload.facility_type === "Others"
+  ) {
+
+    payload.facility_type =
+      payload.facility_other || "Lain-lain";
+  }
+
+
+  if (
+    payload.relation === "Other"
+  ) {
+
+    payload.relation =
+      payload.relation_other_text || "Lain-lain";
+  }
+
+
+  /*
+   * Keep aliases expected by the current landing page /
+   * existing MyEMT records.
+   */
+  payload.name =
+    payload.full_name;
+
+  payload.facility =
+    payload.workplace;
+
+
+  payload.status =
+    "pending";
+
+  payload.submittedAt =
+    new Date().toISOString();
+
+  payload.applicationSource =
+    "user";
+
+
+  if (resubmissionOf) {
+
+    payload.resubmissionOf =
+      resubmissionOf;
+  }
+
+
+  /* Files */
+  const apcFile =
+    document.getElementById("apc_file")
+      .files[0];
+
+
+  const supportFile =
+    document.getElementById(
+      "lampiran_ketua_jabatan"
+    )
+    .files[0];
+
+
+  if (!validateFile(apcFile)) {
+    throw new Error("Fail APC / kelayakan profesional tidak sah.");
+  }
+
+
+  if (
+    supportFile &&
+    !validateFile(supportFile)
+  ) {
+
+    throw new Error("Fail sokongan Ketua Jabatan tidak sah.");
+  }
+
+
+  if (apcFile) {
+
+    payload.apc_file_name =
+      apcFile.name;
+
+    payload.apc_file_type =
+      apcFile.type;
+
+    payload.apc_file_data =
+      await fileToBase64(apcFile);
+  }
+
+
+  if (supportFile) {
+
+    payload.lampiran_ketua_jabatan_name =
+      supportFile.name;
+
+    payload.lampiran_ketua_jabatan_type =
+      supportFile.type;
+
+    payload.lampiran_ketua_jabatan_data =
+      await fileToBase64(supportFile);
+  }
+
+
+  return payload;
+}
+
+
+/* =====================================================
+   SUBMIT
+===================================================== */
+form.addEventListener(
+  "submit",
+  async function(e) {
+
+    e.preventDefault();
+
+
+    if (!validateCurrentStep()) {
+      return;
+    }
+
+
+    if (!form.checkValidity()) {
+
+      form.classList.add(
+        "was-validated"
+      );
+
+      const invalid =
+        form.querySelector(":invalid");
+
+      if (invalid) {
+
+        const stepIndex =
+          steps.findIndex(
+            step =>
+              step.contains(invalid)
+          );
+
+
+        if (stepIndex >= 0) {
+
+          maxUnlockedStep =
+            Math.max(
+              maxUnlockedStep,
+              stepIndex
+            );
+
+          showStep(stepIndex);
+        }
+
+
+        invalid.reportValidity();
+      }
+
+      return;
+    }
+
+
+    const submitBtn =
+      document.getElementById(
+        "submitBtn"
+      );
+
+
+    const originalText =
+      submitBtn.innerHTML;
+
+
+    submitBtn.disabled = true;
+
+    submitBtn.innerHTML =
+      '<span class="spinner-border spinner-border-sm me-1"></span>Menghantar...';
+
+
+    try {
+
+      const payload =
+        await buildPayload();
+
+
+      const res =
+        await fetch(
+          `${API}/api/members`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json"
+            },
+            body:
+              JSON.stringify(payload)
+          }
+        );
+
+
+      const result =
+        await res.json();
+
+
+      if (
+        !res.ok ||
+        !result.success ||
+        !result.data
+      ) {
+
+        throw new Error(
+          result.message ||
+          "Permohonan gagal dihantar."
+        );
+      }
+
+
+      const memberId =
+        result.data.id;
+
+
+      const memberName =
+        result.data.full_name ||
+        result.data.name ||
+        payload.full_name ||
+        "";
+
+
+      /*
+       * Store both current and legacy keys because
+       * existing MyEMT pages use different names.
+       */
+      localStorage.setItem(
+        "myemt_memberId",
+        memberId
+      );
+
+      localStorage.setItem(
+        "memberId",
+        memberId
+      );
+
+      localStorage.setItem(
+        "myemt_memberName",
+        memberName
+      );
+
+      localStorage.setItem(
+        "memberName",
+        memberName
+      );
+
+
+      alert(
+        "Permohonan MyEMT berjaya dihantar dan kini Dalam Semakan."
+      );
+
+
+      window.location.href =
+        `emt_submitform.html?memberId=${encodeURIComponent(memberId)}`;
+
+
+    } catch (err) {
+
+      console.error(err);
+
+      alert(
+        err.message ||
+        "Gagal menghubungi pelayan."
+      );
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalText;
+    }
+  }
+);
+
+
+/* =====================================================
+   INIT
+===================================================== */
+document.addEventListener(
+  "DOMContentLoaded",
+  loadExistingApplication
+);
 </script>
+
 </body>
 </html>

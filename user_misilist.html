@@ -91,7 +91,7 @@
 
                 
                 <a href="landingMyemt_mission.html"
-                class="btn btn-primary rounded-pill px-3 shadow-sm">
+                class="btn btn-primary  shadow-sm">
                     <i class="bi bi-arrow-left me-1"></i> Kembali
                 </a>
                 
@@ -257,7 +257,11 @@ async function loadMisiList() {
         <td class="fw-semibold">${m.name || '-'}</td>
         <td>${m.startDate || '-'}</td>
         <td>${m.estimatedEnd || '-'}</td>
-        <td>${m.actualEnd || '<span class="text-muted">-</span>'}</td>
+        <td>${
+            m.status === 'Selesai'
+            ? (m.actualEnd || '<span class="text-muted">Belum ditetapkan</span>')
+            : '<span class="text-muted">-</span>'
+        }</td>
         <td><span class="badge ${STATUS_BADGE[m.status] || 'bg-secondary'}">${m.status || '-'}</span></td>
         <td class="text-center">
           <a href="user_misidetail.html?id=${m.id}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Papar Butiran</a>

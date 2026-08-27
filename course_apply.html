@@ -1,228 +1,343 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <title>Pendaftaran Kursus</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Pendaftaran Program Kursus MyEMT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body{background:#f4f6f9}
 
-    <!-- Main CSS -->
-    <link href="assets/css/main.css" rel="stylesheet">
-
-    <style>
-    .mds-card{
-        border:1px solid #dee2e6;
-        border-radius:12px;
-        overflow:hidden;
-        margin-bottom:1rem;
-        box-shadow:0 .125rem .25rem rgba(0,0,0,.075);
+    .soft-card{
+      border:0;
+      border-radius:14px;
+      box-shadow:0 .25rem .75rem rgba(0,0,0,.06);
     }
 
-    .mds-card .card-header{
-        background:#0d6efd;
-        color:#fff;
-        font-weight:600;
-        padding:.75rem 1rem;
+    .component-card{
+      border:1px solid #dee2e6;
+      border-radius:12px;
+      padding:1rem;
+      background:#fff;
+      height:100%;
     }
 
-    .mds-card .card-body{
-        background:#fff;
-        padding:1rem;
+    .component-number{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:#e9f2ff;
+      color:#0d6efd;
+      font-weight:800;
+      margin-bottom:.7rem;
     }
 
-    .form-check{
-        margin-bottom:.5rem;
+    .member-info{
+      border:1px solid #e3e7ed;
+      border-radius:10px;
+      padding:.75rem;
+      background:#f8f9fa;
+      height:100%;
     }
 
-    .form-label{
-        font-weight:600;
+    .member-label{
+      color:#6c757d;
+      font-size:.78rem;
+      margin-bottom:.2rem;
     }
 
-    .badge-soft{
-        background:#e9ecef;
-        color:#495057;
-        font-weight:500;
+    .member-value{
+      font-weight:700;
+      word-break:break-word;
     }
 
-    .section-title{
-        font-size:1.1rem;
-        font-weight:700;
-        margin-bottom:1rem;
-        padding-bottom:.5rem;
-        border-bottom:2px solid #dee2e6;
+    .eligibility-panel{
+      border-left:5px solid #adb5bd;
     }
 
-    textarea{
-        resize:vertical;
-    }
-    </style>
+    .eligibility-panel.approved{border-left-color:#198754}
+    .eligibility-panel.pending{border-left-color:#ffc107}
+    .eligibility-panel.rejected{border-left-color:#dc3545}
 
+    .summary-box{
+      border:1px solid #dee2e6;
+      border-radius:10px;
+      padding:.85rem 1rem;
+      background:#f8f9fa;
+      height:100%;
+    }
+
+    .application-empty{
+      display:none;
+    }
+
+    .application-empty.show{
+      display:block;
+    }
+
+    .page-content{
+      display:none;
+    }
+
+    .page-content.show{
+      display:block;
+    }
+
+    .status-pill{
+      white-space:nowrap;
+    }
+
+    .component-badge{
+      font-size:.8rem;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div id="header"></div>
 
 <div class="container-fluid">
   <div class="row">
 
-    <!-- SIDEBAR -->
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-
-    <!-- MAIN CONTENT -->
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
       <!-- PAGE HEADER -->
-      <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
         <div>
-          <h4 class="mb-0">Daftar Kursus B-Course & C-Course</h4>
+          <h4 class="mb-1 fw-bold">Pendaftaran Program Kursus MyEMT</h4>
           <small class="text-muted">
-            Pendaftaran Kursus MyEMT (B-Course + C-Course + TTX + FTX)
+            Pilih sesi program latihan MyEMT yang dianjurkan oleh Kementerian Kesihatan Malaysia.
           </small>
         </div>
 
         <a href="landingMyemt.html" class="btn btn-primary">
-          <i class="bi bi-arrow-left me-1"></i> Kembali
+          <i class="bi bi-arrow-left me-1"></i>Kembali
         </a>
       </div>
 
-      <!-- INFO CARD -->
-      <div class="card shadow-sm mb-3">
-        <div class="card-body">
 
-          <h6 class="fw-bold">📌 Struktur Kursus MyEMT</h6>
+      <!-- NO MEMBER / INELIGIBLE -->
+      <div class="application-empty" id="accessMessage"></div>
 
-          <ul class="mb-2">
-            <li><strong>Level:</strong> National / State</li>
-            <li><strong>Tempoh:</strong> 5 Hari</li>
-            <li><strong>Struktur:</strong></li>
-          </ul>
 
-          <ol class="mb-3">
-            <li>B-Course (Pengetahuan asas: bencana, koordinasi & sistem MyEMT)</li>
-            <li>C-Course (Kemahiran klinikal & operasi lapangan)</li>
-            <li>TTX (Tabletop Exercise)</li>
-            <li>FTX (Field Training Exercise - simulasi lapangan)</li>
-          </ol>
+      <div class="page-content" id="pageContent">
 
-          <div class="alert alert-info mb-0">
-            🎯 Objektif:
-            <ul class="mb-0">
-              <li>Memperkasa kompetensi operasi, klinikal & koordinasi MyEMT</li>
-              <li>Memahami struktur, command system & koordinasi agensi</li>
-            </ul>
-          </div>
+        <!-- =====================================================
+             PROGRAM STRUCTURE
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+          <div class="card-body">
 
-        </div>
-      </div>
+            <h5 class="fw-bold mb-1">Struktur Program Kursus MyEMT</h5>
 
-    <!-- STATUS PERMOHONAN AHLI EMT -->
-    <div class="card shadow-sm mb-3">
+            <p class="text-muted mb-3">
+              Setiap kali program kursus MyEMT dianjurkan oleh KKM, pengguna membuat
+              <strong>satu permohonan untuk satu sesi</strong>. Sesi tersebut merangkumi
+              keempat-empat komponen latihan di bawah.
+            </p>
 
-      <div class="card-header bg-white fw-bold">
-        📋 Status Permohonan Ahli EMT
-      </div>
+            <div class="row g-3">
 
-      <div class="card-body">
+              <div class="col-md-6 col-xl-3">
+                <div class="component-card">
+                  <div class="component-number">1</div>
+                  <h6 class="fw-bold">B-Course</h6>
+                  <div class="small text-muted">
+                    Pengetahuan asas berkaitan bencana, koordinasi dan sistem MyEMT.
+                  </div>
+                </div>
+              </div>
 
-        <!-- MAKLUMAT AHLI -->
-        <h6 class="fw-bold mb-3">Maklumat Ahli</h6>
+              <div class="col-md-6 col-xl-3">
+                <div class="component-card">
+                  <div class="component-number">2</div>
+                  <h6 class="fw-bold">C-Course</h6>
+                  <div class="small text-muted">
+                    Kemahiran klinikal serta operasi lapangan.
+                  </div>
+                </div>
+              </div>
 
-        <div class="row g-3 mb-4">
+              <div class="col-md-6 col-xl-3">
+                <div class="component-card">
+                  <div class="component-number">3</div>
+                  <h6 class="fw-bold">TTX</h6>
+                  <div class="small text-muted">
+                    Tabletop Exercise untuk latihan koordinasi dan pengurusan situasi.
+                  </div>
+                </div>
+              </div>
 
-          <div class="col-md-4">
-            <small class="text-muted d-block">Nama Ahli</small>
-            <div class="fw-semibold">Abdul Rahman Bin Ghazali</div>
-          </div>
+              <div class="col-md-6 col-xl-3">
+                <div class="component-card">
+                  <div class="component-number">4</div>
+                  <h6 class="fw-bold">FTX</h6>
+                  <div class="small text-muted">
+                    Field Training Exercise / simulasi operasi lapangan.
+                  </div>
+                </div>
+              </div>
 
-          <div class="col-md-4">
-            <small class="text-muted d-block">No. Kad Pengenalan</small>
-            <div class="fw-semibold">900101-10-1234</div>
-          </div>
-
-          <div class="col-md-4">
-            <small class="text-muted d-block">Jawatan</small>
-            <div class="fw-semibold">Doktor</div>
-          </div>
-
-          <div class="col-md-4">
-            <small class="text-muted d-block">Fasiliti</small>
-            <div class="fw-semibold">Hospital Kota Bharu</div>
-          </div>
-
-        </div>
-
-        <hr>
-
-        <!-- MAKLUMAT SESI DIPILIH -->
-        <h6 class="fw-bold mb-3">Sesi Dipilih</h6>
-
-        <div class="row g-3 mb-4">
-
-          <div class="col-md-4">
-            <small class="text-muted d-block">Sesi</small>
-            <div class="fw-semibold" id="app-session-name">-</div>
-          </div>
-
-          <div class="col-md-4">
-            <small class="text-muted d-block">Tarikh</small>
-            <div class="fw-semibold">15 - 19 Mac 2026</div>
-          </div>
-
-          <div class="col-md-4">
-            <small class="text-muted d-block">Lokasi</small>
-            <div class="fw-semibold">Kuala Lumpur</div>
-          </div>
-
-          <div class="col-md-4">
-            <small class="text-muted d-block">Level</small>
-            <div class="fw-semibold">National</div>
-          </div>
-
-        </div>
-
-        <hr>
-
-        <!-- STATUS PERMOHONAN -->
-        <h6 class="fw-bold mb-3">Status Permohonan</h6>
-
-        <div class="p-3 border rounded bg-light">
-
-          <div class="d-flex justify-content-between align-items-center">
-
-            <div>
-              <small class="text-muted d-block">Status Semasa</small>
-              <span id="app-status-badge" class="badge bg-secondary fs-6">
-                Tiada Permohonan
-              </span>
             </div>
 
-            <i class="bi bi-hourglass-split fs-3 text-secondary"></i>
+            <div class="alert alert-info mt-3 mb-0">
+              <i class="bi bi-info-circle me-1"></i>
+              Anda <strong>tidak perlu mendaftar B-Course, C-Course, TTX dan FTX secara berasingan</strong>.
+              Pilih satu sesi program kursus yang tersedia di bawah.
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- =====================================================
+             MEMBER ELIGIBILITY
+        ====================================================== -->
+        <div class="card soft-card eligibility-panel mb-4" id="eligibilityCard">
+          <div class="card-body">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+
+              <div>
+                <h5 class="fw-bold mb-1">Kelayakan Pendaftaran Kursus</h5>
+                <small class="text-muted">
+                  Hanya permohonan ahli MyEMT yang telah diluluskan boleh mendaftar sesi kursus.
+                </small>
+              </div>
+
+              <span class="badge bg-secondary fs-6" id="memberStatusBadge">-</span>
+            </div>
+
+
+            <div class="row g-3">
+
+              <div class="col-md-3">
+                <div class="member-info">
+                  <div class="member-label">Nama Ahli</div>
+                  <div class="member-value" id="memberName">-</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="member-info">
+                  <div class="member-label">No. Kad Pengenalan</div>
+                  <div class="member-value" id="memberIc">-</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="member-info">
+                  <div class="member-label">Jawatan</div>
+                  <div class="member-value" id="memberDesignation">-</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="member-info">
+                  <div class="member-label">Fasiliti</div>
+                  <div class="member-value" id="memberFacility">-</div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="small mt-3" id="eligibilityMessage">-</div>
+
+          </div>
+        </div>
+
+
+        <!-- =====================================================
+             LATEST APPLICATION
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+          <div class="card-header bg-white border-0 pt-3">
+            <strong>Status Permohonan Kursus Terkini</strong>
+          </div>
+
+          <div class="card-body">
+
+            <div class="row g-3">
+
+              <div class="col-md-3">
+                <div class="summary-box">
+                  <div class="small text-muted">Sesi</div>
+                  <div class="fw-bold" id="latestSession">Belum Ada</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="summary-box">
+                  <div class="small text-muted">Tarikh</div>
+                  <div class="fw-bold" id="latestDate">-</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="summary-box">
+                  <div class="small text-muted">Lokasi / Level</div>
+                  <div class="fw-bold" id="latestLocation">-</div>
+                </div>
+              </div>
+
+              <div class="col-md-3">
+                <div class="summary-box">
+                  <div class="small text-muted">Status Permohonan</div>
+                  <div id="latestStatus">
+                    <span class="badge bg-secondary">Tiada Permohonan</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="alert alert-light border mt-3 mb-0 d-none" id="latestRemarkBox">
+              <div class="fw-semibold mb-1">
+                <i class="bi bi-chat-left-text me-1"></i>Komen / Maklum Balas Urus Setia
+              </div>
+              <div id="latestRemark">-</div>
+            </div>
+
+            <div class="small text-muted mt-3">
+              Status <strong>Diluluskan</strong> pada halaman ini merujuk kepada
+              <strong>kelulusan permohonan untuk menyertai sesi kursus</strong>.
+            </div>
+
+          </div>
+        </div>
+
+
+        <!-- =====================================================
+             SESSION LIST
+        ====================================================== -->
+        <div class="card soft-card mb-4">
+
+          <div class="card-header bg-white border-0 pt-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+
+            <div>
+              <strong>Senarai Sesi Program Kursus</strong>
+              <div class="small text-muted">
+                Setiap sesi merangkumi B-Course + C-Course + TTX + FTX.
+              </div>
+            </div>
+
+            <span class="badge bg-light text-dark border" id="sessionCount">0 sesi</span>
 
           </div>
 
-        </div>
-
-      </div>
-    </div>
-      
-      <!-- SESSION LIST -->
-      <div class="card shadow-sm mb-3">
-        <div class="card-header bg-white fw-bold">
-          📅 Senarai Sesi Kursus
-        </div>
-
-        <div class="card-body">
 
           <div class="table-responsive">
-            <table class="table table-hover align-middle">
+
+            <table class="table table-hover align-middle mb-0">
 
               <thead class="table-light">
                 <tr>
@@ -230,30 +345,90 @@
                   <th>Tarikh</th>
                   <th>Lokasi</th>
                   <th>Level</th>
-                  <th>Status</th>
+                  <th>Komponen</th>
+                  <th>Status Sesi</th>
+                  <th>Status Permohonan Saya</th>
                   <th class="text-end">Tindakan</th>
                 </tr>
               </thead>
 
-              <tbody id="tbody-sessions">
-                <tr><td colspan="6" class="text-center text-muted">Memuatkan sesi...</td></tr>
+              <tbody id="tbodySessions">
+                <tr>
+                  <td colspan="8" class="text-center text-muted py-4">
+                    Memuatkan sesi...
+                  </td>
+                </tr>
               </tbody>
 
             </table>
+
+          </div>
+        </div>
+
+
+        <!-- =====================================================
+             APPLICATION HISTORY
+        ====================================================== -->
+        <div class="card soft-card">
+
+          <div class="card-header bg-white border-0 pt-3 d-flex flex-wrap justify-content-between align-items-center gap-2">
+
+            <div>
+              <strong>Rekod Permohonan Kursus</strong>
+              <div class="small text-muted">
+                Sejarah permohonan sesi program kursus MyEMT anda.
+              </div>
+            </div>
+
+            <span class="badge bg-light text-dark border" id="applicationCount">0 rekod</span>
+
           </div>
 
+
+          <div class="table-responsive">
+
+            <table class="table align-middle mb-0">
+
+              <thead class="table-light">
+                <tr>
+                  <th>Tarikh Mohon</th>
+                  <th>Sesi</th>
+                  <th>Tarikh Kursus</th>
+                  <th>Status</th>
+                  <th>Komen</th>
+                </tr>
+              </thead>
+
+              <tbody id="tbodyApplications">
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-4">
+                    Belum ada permohonan kursus.
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+
+          </div>
         </div>
+
       </div>
 
     </main>
   </div>
 </div>
 
-<!-- FOOTER -->
 <div id="footer"></div>
 
-<!-- LOAD HEADER / FOOTER / SIDEBAR -->
+
+<script src="assets/js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
 <script>
+/* =====================================================
+   SHARED LAYOUT
+===================================================== */
 fetch("header.html")
   .then(res => res.text())
   .then(data => document.getElementById("header").innerHTML = data);
@@ -264,108 +439,1177 @@ fetch("footer.html")
 
 fetch("sidebar.html")
   .then(res => res.text())
-  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
-</script>
+  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
+  .catch(err => console.error("Sidebar load failed:", err));
 
-<script src="assets/js/config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!--daftar kursus-->
-<script>
+/* =====================================================
+   GLOBAL
+===================================================== */
+const MEMBER_ID =
+  new URLSearchParams(location.search).get("memberId") ||
+  localStorage.getItem("myemt_memberId") ||
+  localStorage.getItem("memberId") ||
+  sessionStorage.getItem("myemt_memberId") ||
+  sessionStorage.getItem("memberId") ||
+  "";
 
-const MEMBER_ID = localStorage.getItem('myemt_memberId') || '';
+const COURSE_COMPONENTS = [
+  "B-Course",
+  "C-Course",
+  "TTX",
+  "FTX"
+];
 
-async function loadSessions() {
-  try {
-    const res = await fetch(`${API}/api/sessions`);
-    const { data: sessions } = await res.json();
-    const tbody = document.getElementById('tbody-sessions');
-    if (!tbody) return;
+let member = null;
+let sessions = [];
+let applications = [];
+let memberEligible = false;
 
-    tbody.innerHTML = sessions.map(s => {
-      const isOpen = s.status === 'Dibuka' || s.status === 'Hampir Penuh';
-      const badgeClass = s.status === 'Dibuka' ? 'bg-success' : s.status === 'Hampir Penuh' ? 'bg-warning text-dark' : 'bg-secondary';
-      const btn = isOpen
-        ? `<button onclick="daftarKursus('${s.id}','${s.name}')" class="btn btn-sm btn-outline-primary">Daftar</button>`
-        : `<button class="btn btn-sm btn-outline-secondary" disabled>Tidak Tersedia</button>`;
-      return `<tr>
-        <td>${s.name}</td>
-        <td>${fmtDateRange(s.startDate, s.endDate)}</td>
-        <td>${s.location}</td>
-        <td>${s.level}</td>
-        <td><span class="badge ${badgeClass}">${s.status}</span></td>
-        <td class="text-end">${btn}</td>
-      </tr>`;
-    }).join('');
-  } catch (err) {
-    console.error('Gagal muatkan sesi:', err);
-  }
+
+/* =====================================================
+   HELPERS
+===================================================== */
+function esc(value) {
+
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
+
+
+function normalizeStatus(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
+
+function fmtDate(value) {
+
+  if (!value) return "-";
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return String(value);
+  }
+
+  return date.toLocaleDateString(
+    "ms-MY",
+    {
+      day:"2-digit",
+      month:"short",
+      year:"numeric"
+    }
+  );
+}
+
 
 function fmtDateRange(start, end) {
-  if (!start) return '-';
-  const opts = { day: 'numeric', month: 'short', year: 'numeric' };
-  const s = new Date(start).toLocaleDateString('ms-MY', opts);
-  const e = end ? new Date(end).toLocaleDateString('ms-MY', opts) : '';
-  return e ? `${s} – ${e}` : s;
+
+  if (!start) return "-";
+
+  const startText = fmtDate(start);
+
+  if (!end) return startText;
+
+  return `${startText} – ${fmtDate(end)}`;
 }
 
-async function loadMyApplicationStatus() {
-  if (!MEMBER_ID) return;
+
+function memberStatusInfo(status) {
+
+  const s = normalizeStatus(status);
+
+  const map = {
+    pending:["bg-warning text-dark", "Dalam Semakan"],
+    approved:["bg-success", "Keahlian Diluluskan"],
+    rejected:["bg-danger", "Ditolak"]
+  };
+
+  return map[s] || [
+    "bg-secondary",
+    status || "Tidak Diketahui"
+  ];
+}
+
+
+function applicationStatusInfo(status) {
+
+  const s = normalizeStatus(status);
+
+  const map = {
+    pending:["bg-warning text-dark", "Dalam Semakan"],
+    approved:["bg-success", "Diluluskan"],
+    rejected:["bg-danger", "Ditolak"],
+    completed:["bg-success", "Selesai"],
+    passed:["bg-success", "Lulus"]
+  };
+
+  return map[s] || [
+    "bg-secondary",
+    status || "Tidak Diketahui"
+  ];
+}
+
+
+function sessionStatusInfo(status) {
+
+  const s = normalizeStatus(status);
+
+  if (s === "dibuka") {
+    return ["bg-success", status];
+  }
+
+  if (s === "hampir penuh") {
+    return ["bg-warning text-dark", status];
+  }
+
+  if (
+    s === "ditutup" ||
+    s === "penuh" ||
+    s === "selesai"
+  ) {
+    return ["bg-secondary", status];
+  }
+
+  return [
+    "bg-light text-dark border",
+    status || "-"
+  ];
+}
+
+
+function isSessionOpen(session) {
+
+  const status =
+    normalizeStatus(session.status);
+
+  return (
+    status === "dibuka" ||
+    status === "hampir penuh"
+  );
+}
+
+
+function applicationForSession(sessionId) {
+
+  return applications
+    .filter(app =>
+      String(app.sessionId || "") ===
+      String(sessionId || "")
+    )
+    .sort((a, b) =>
+      String(
+        b.submittedAt ||
+        b.createdAt ||
+        ""
+      )
+      .localeCompare(
+        String(
+          a.submittedAt ||
+          a.createdAt ||
+          ""
+        )
+      )
+    )[0] || null;
+}
+
+
+function sessionById(sessionId) {
+
+  return sessions.find(session =>
+    String(session.id) ===
+    String(sessionId)
+  ) || null;
+}
+
+
+async function safeJson(url) {
+
   try {
-    const res = await fetch(`${API}/api/course-applications?memberId=${MEMBER_ID}`);
-    const { data } = await res.json();
-    if (!data || !data.length) return;
 
-    const latest = data[data.length - 1];
-    const statusMap = { pending: 'bg-warning text-dark', approved: 'bg-success', rejected: 'bg-danger' };
-    const labelMap  = { pending: 'Menunggu Kelulusan', approved: 'Diluluskan', rejected: 'Ditolak' };
+    const res = await fetch(url);
 
-    document.getElementById('app-session-name').textContent = latest.sessionName || '-';
-    document.getElementById('app-status-badge').className   = `badge fs-6 ${statusMap[latest.status] || 'bg-secondary'}`;
-    document.getElementById('app-status-badge').textContent = labelMap[latest.status] || latest.status;
-
-    if (latest.remark) {
-      const remarkEl = document.getElementById('app-remark');
-      if (remarkEl) remarkEl.textContent = latest.remark;
+    if (!res.ok) {
+      return null;
     }
+
+    return await res.json();
+
   } catch (err) {
-    console.error('Gagal muatkan status permohonan:', err);
+
+    console.warn("API error:", url, err);
+    return null;
   }
 }
 
-async function daftarKursus(sessionId, sessionName) {
+
+/* =====================================================
+   ACCESS / MEMBER
+===================================================== */
+function renderAccessMessage(type, html) {
+
+  const box =
+    document.getElementById(
+      "accessMessage"
+    );
+
+  box.className =
+    `application-empty show alert ${type}`;
+
+  box.innerHTML =
+    html;
+
+  document.getElementById(
+    "pageContent"
+  ).classList.remove(
+    "show"
+  );
+}
+
+
+async function loadMember() {
+
   if (!MEMBER_ID) {
-    alert('Sila daftar sebagai ahli MyEMT terlebih dahulu melalui emt_form.html');
+
+    renderAccessMessage(
+      "alert-warning",
+      `
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+
+          <div>
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            <strong>Keahlian MyEMT tidak dijumpai.</strong>
+            Sila daftar sebagai ahli MyEMT terlebih dahulu.
+          </div>
+
+          <a href="emt_form.html" class="btn btn-warning btn-sm">
+            Daftar MyEMT
+          </a>
+
+        </div>
+      `
+    );
+
+    return false;
+  }
+
+
+  const json =
+    await safeJson(
+      `${API}/api/members/${encodeURIComponent(MEMBER_ID)}`
+    );
+
+
+  if (!json?.data) {
+
+    renderAccessMessage(
+      "alert-danger",
+      `
+        <strong>Maklumat ahli MyEMT tidak dapat dimuatkan.</strong>
+        Sila kembali ke halaman MyEMT dan cuba semula.
+      `
+    );
+
+    return false;
+  }
+
+
+  member =
+    json.data;
+
+
+  const status =
+    normalizeStatus(
+      member.status
+    );
+
+
+  memberEligible =
+    status === "approved";
+
+
+  const [
+    badgeClass,
+    badgeLabel
+  ] =
+    memberStatusInfo(
+      member.status
+    );
+
+
+  document.getElementById(
+    "memberStatusBadge"
+  ).className =
+    `badge ${badgeClass} fs-6`;
+
+  document.getElementById(
+    "memberStatusBadge"
+  ).textContent =
+    badgeLabel;
+
+
+  document.getElementById(
+    "memberName"
+  ).textContent =
+    member.full_name ||
+    member.fullName ||
+    member.name ||
+    "-";
+
+
+  document.getElementById(
+    "memberIc"
+  ).textContent =
+    member.identification_number ||
+    member.identificationNumber ||
+    member.ic ||
+    "-";
+
+
+  document.getElementById(
+    "memberDesignation"
+  ).textContent =
+    member.designation ||
+    member.position ||
+    "-";
+
+
+  document.getElementById(
+    "memberFacility"
+  ).textContent =
+    member.workplace ||
+    member.facility ||
+    "-";
+
+
+  const card =
+    document.getElementById(
+      "eligibilityCard"
+    );
+
+
+  card.classList.remove(
+    "approved",
+    "pending",
+    "rejected"
+  );
+
+
+  if (status === "approved") {
+
+    card.classList.add(
+      "approved"
+    );
+
+    document.getElementById(
+      "eligibilityMessage"
+    ).innerHTML =
+      '<span class="text-success"><i class="bi bi-check-circle me-1"></i>Keahlian MyEMT telah diluluskan. Anda boleh memilih sesi program kursus yang tersedia.</span>';
+
+  } else if (status === "pending") {
+
+    card.classList.add(
+      "pending"
+    );
+
+    document.getElementById(
+      "eligibilityMessage"
+    ).innerHTML =
+      '<span class="text-warning-emphasis"><i class="bi bi-hourglass-split me-1"></i>Permohonan keahlian masih dalam semakan. Pendaftaran kursus belum dibuka untuk akaun ini.</span>';
+
+  } else if (status === "rejected") {
+
+    card.classList.add(
+      "rejected"
+    );
+
+    document.getElementById(
+      "eligibilityMessage"
+    ).innerHTML =
+      '<span class="text-danger"><i class="bi bi-x-circle me-1"></i>Permohonan keahlian belum diluluskan. Sila selesaikan permohonan MyEMT terlebih dahulu.</span>';
+
+  } else {
+
+    document.getElementById(
+      "eligibilityMessage"
+    ).textContent =
+      "Status keahlian tidak membenarkan pendaftaran kursus buat masa ini.";
+  }
+
+
+  document.getElementById(
+    "pageContent"
+  ).classList.add(
+    "show"
+  );
+
+
+  return true;
+}
+
+
+/* =====================================================
+   LOAD DATA
+===================================================== */
+async function loadSessions() {
+
+  const json =
+    await safeJson(
+      `${API}/api/sessions`
+    );
+
+
+  sessions =
+    Array.isArray(json?.data)
+      ? json.data
+      : [];
+
+
+  renderSessions();
+}
+
+
+async function loadApplications() {
+
+  if (!MEMBER_ID) {
+    applications = [];
     return;
   }
 
-  const memberName = localStorage.getItem('myemt_memberName') || '';
-  if (!confirm(`Sahkan pendaftaran untuk ${sessionName}?`)) return;
 
-  try {
-    const res = await fetch(`${API}/api/course-applications`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ memberId: MEMBER_ID, memberName, sessionId, sessionName })
-    });
-    const result = await res.json();
+  const json =
+    await safeJson(
+      `${API}/api/course-applications?memberId=${encodeURIComponent(MEMBER_ID)}`
+    );
 
-    if (result.success) {
-      alert('✅ ' + result.message);
-      loadMyApplicationStatus();
-    } else {
-      alert('❌ ' + result.message);
-    }
-  } catch (err) {
-    alert('❌ Gagal menghubungi pelayan.');
+
+  applications =
+    Array.isArray(json?.data)
+      ? json.data.filter(app =>
+          !app.memberId ||
+          String(app.memberId) ===
+          String(MEMBER_ID)
+        )
+      : [];
+
+
+  applications.sort((a, b) =>
+    String(
+      b.submittedAt ||
+      b.createdAt ||
+      ""
+    )
+    .localeCompare(
+      String(
+        a.submittedAt ||
+        a.createdAt ||
+        ""
+      )
+    )
+  );
+
+
+  renderLatestApplication();
+  renderApplicationHistory();
+}
+
+
+/* =====================================================
+   LATEST APPLICATION
+===================================================== */
+function renderLatestApplication() {
+
+  const latest =
+    applications[0];
+
+
+  if (!latest) {
+
+    document.getElementById(
+      "latestSession"
+    ).textContent =
+      "Belum Ada";
+
+    document.getElementById(
+      "latestDate"
+    ).textContent =
+      "-";
+
+    document.getElementById(
+      "latestLocation"
+    ).textContent =
+      "-";
+
+    document.getElementById(
+      "latestStatus"
+    ).innerHTML =
+      '<span class="badge bg-secondary">Tiada Permohonan</span>';
+
+    return;
+  }
+
+
+  const session =
+    sessionById(
+      latest.sessionId
+    );
+
+
+  document.getElementById(
+    "latestSession"
+  ).textContent =
+    latest.sessionName ||
+    session?.name ||
+    "-";
+
+
+  document.getElementById(
+    "latestDate"
+  ).textContent =
+    session
+      ? fmtDateRange(
+          session.startDate,
+          session.endDate
+        )
+      : "-";
+
+
+  document.getElementById(
+    "latestLocation"
+  ).textContent =
+    [
+      session?.location,
+      session?.level
+    ]
+    .filter(Boolean)
+    .join(" • ") ||
+    "-";
+
+
+  const [
+    statusClass,
+    statusLabel
+  ] =
+    applicationStatusInfo(
+      latest.status
+    );
+
+
+  document.getElementById(
+    "latestStatus"
+  ).innerHTML =
+    `<span class="badge ${statusClass}">${esc(statusLabel)}</span>`;
+
+
+  const remark =
+    latest.remark ||
+    latest.comment ||
+    latest.comments ||
+    latest.adminComment ||
+    "";
+
+
+  const remarkBox =
+    document.getElementById(
+      "latestRemarkBox"
+    );
+
+
+  if (remark) {
+
+    remarkBox.classList.remove(
+      "d-none"
+    );
+
+    document.getElementById(
+      "latestRemark"
+    ).textContent =
+      remark;
+
+  } else {
+
+    remarkBox.classList.add(
+      "d-none"
+    );
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  loadSessions();
-  loadMyApplicationStatus();
-});
+
+/* =====================================================
+   SESSION TABLE
+===================================================== */
+function renderSessions() {
+
+  const tbody =
+    document.getElementById(
+      "tbodySessions"
+    );
+
+
+  document.getElementById(
+    "sessionCount"
+  ).textContent =
+    `${sessions.length} sesi`;
+
+
+  if (!sessions.length) {
+
+    tbody.innerHTML =
+      `
+        <tr>
+          <td colspan="8" class="text-center text-muted py-4">
+            Tiada sesi kursus tersedia buat masa ini.
+          </td>
+        </tr>
+      `;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    sessions
+      .slice()
+      .sort((a, b) =>
+        String(a.startDate || "")
+          .localeCompare(
+            String(b.startDate || "")
+          )
+      )
+      .map(session => {
+
+        const application =
+          applicationForSession(
+            session.id
+          );
+
+
+        const [
+          sessionBadgeClass,
+          sessionBadgeLabel
+        ] =
+          sessionStatusInfo(
+            session.status
+          );
+
+
+        let applicationHtml =
+          '<span class="badge bg-light text-dark border">Belum Mohon</span>';
+
+
+        if (application) {
+
+          const [
+            appClass,
+            appLabel
+          ] =
+            applicationStatusInfo(
+              application.status
+            );
+
+          applicationHtml =
+            `<span class="badge ${appClass}">${esc(appLabel)}</span>`;
+        }
+
+
+        const actionHtml =
+          buildSessionAction(
+            session,
+            application
+          );
+
+
+        return `
+          <tr>
+
+            <td class="fw-semibold">
+              ${esc(session.name || session.id || "-")}
+            </td>
+
+            <td>
+              ${esc(
+                fmtDateRange(
+                  session.startDate,
+                  session.endDate
+                )
+              )}
+            </td>
+
+            <td>
+              ${esc(session.location || "-")}
+            </td>
+
+            <td>
+              ${esc(session.level || "-")}
+            </td>
+
+            <td>
+              <div class="d-flex flex-wrap gap-1">
+                ${COURSE_COMPONENTS.map(component =>
+                  `<span class="badge bg-light text-dark border component-badge">${esc(component)}</span>`
+                ).join("")}
+              </div>
+            </td>
+
+            <td>
+              <span class="badge ${sessionBadgeClass}">
+                ${esc(sessionBadgeLabel)}
+              </span>
+            </td>
+
+            <td>
+              ${applicationHtml}
+            </td>
+
+            <td class="text-end">
+              ${actionHtml}
+            </td>
+
+          </tr>
+        `;
+      })
+      .join("");
+}
+
+
+function buildSessionAction(
+  session,
+  application
+) {
+
+  if (!memberEligible) {
+
+    return `
+      <button class="btn btn-sm btn-outline-secondary" disabled>
+        Keahlian Belum Diluluskan
+      </button>
+    `;
+  }
+
+
+  if (!isSessionOpen(session)) {
+
+    return `
+      <button class="btn btn-sm btn-outline-secondary" disabled>
+        Tidak Tersedia
+      </button>
+    `;
+  }
+
+
+  if (application) {
+
+    const status =
+      normalizeStatus(
+        application.status
+      );
+
+
+    if (status === "pending") {
+
+      return `
+        <button class="btn btn-sm btn-warning text-dark" disabled>
+          Dalam Semakan
+        </button>
+      `;
+    }
+
+
+    if (
+      status === "approved" ||
+      status === "completed" ||
+      status === "passed"
+    ) {
+
+      return `
+        <button class="btn btn-sm btn-success" disabled>
+          Telah Diluluskan
+        </button>
+      `;
+    }
+
+
+    if (status === "rejected") {
+
+      return `
+        <button
+          type="button"
+          class="btn btn-sm btn-outline-danger course-apply-btn"
+          data-session-id="${esc(session.id || "")}"
+          data-session-name="${esc(session.name || "")}"
+        >
+          Mohon Semula
+        </button>
+      `;
+    }
+  }
+
+
+  return `
+    <button
+      type="button"
+      class="btn btn-sm btn-outline-primary course-apply-btn"
+      data-session-id="${esc(session.id || "")}"
+      data-session-name="${esc(session.name || "")}"
+    >
+      Daftar
+    </button>
+  `;
+}
+
+
+/* =====================================================
+   APPLICATION HISTORY
+===================================================== */
+function renderApplicationHistory() {
+
+  const tbody =
+    document.getElementById(
+      "tbodyApplications"
+    );
+
+
+  document.getElementById(
+    "applicationCount"
+  ).textContent =
+    `${applications.length} rekod`;
+
+
+  if (!applications.length) {
+
+    tbody.innerHTML =
+      `
+        <tr>
+          <td colspan="5" class="text-center text-muted py-4">
+            Belum ada permohonan kursus.
+          </td>
+        </tr>
+      `;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    applications
+      .map(application => {
+
+        const session =
+          sessionById(
+            application.sessionId
+          );
+
+
+        const [
+          statusClass,
+          statusLabel
+        ] =
+          applicationStatusInfo(
+            application.status
+          );
+
+
+        const remark =
+          application.remark ||
+          application.comment ||
+          application.comments ||
+          application.adminComment ||
+          "-";
+
+
+        return `
+          <tr>
+
+            <td>
+              ${esc(
+                fmtDate(
+                  application.submittedAt ||
+                  application.createdAt
+                )
+              )}
+            </td>
+
+            <td>
+              <div class="fw-semibold">
+                ${esc(
+                  application.sessionName ||
+                  session?.name ||
+                  "-"
+                )}
+              </div>
+
+              <small class="text-muted">
+                B-Course + C-Course + TTX + FTX
+              </small>
+            </td>
+
+            <td>
+              ${esc(
+                session
+                  ? fmtDateRange(
+                      session.startDate,
+                      session.endDate
+                    )
+                  : "-"
+              )}
+            </td>
+
+            <td>
+              <span class="badge ${statusClass}">
+                ${esc(statusLabel)}
+              </span>
+            </td>
+
+            <td class="text-muted">
+              ${esc(remark)}
+            </td>
+
+          </tr>
+        `;
+      })
+      .join("");
+}
+
+
+/* =====================================================
+   APPLY
+===================================================== */
+async function daftarKursus(
+  sessionId,
+  sessionName
+) {
+
+  if (!memberEligible) {
+
+    alert(
+      "Keahlian MyEMT anda belum diluluskan."
+    );
+
+    return;
+  }
+
+
+  const session =
+    sessionById(
+      sessionId
+    );
+
+
+  if (
+    !session ||
+    !isSessionOpen(session)
+  ) {
+
+    alert(
+      "Sesi ini tidak tersedia untuk pendaftaran."
+    );
+
+    return;
+  }
+
+
+  const existing =
+    applicationForSession(
+      sessionId
+    );
+
+
+  if (existing) {
+
+    const status =
+      normalizeStatus(
+        existing.status
+      );
+
+
+    if (
+      status === "pending" ||
+      status === "approved" ||
+      status === "completed" ||
+      status === "passed"
+    ) {
+
+      alert(
+        "Anda telah mempunyai permohonan aktif untuk sesi ini."
+      );
+
+      return;
+    }
+  }
+
+
+  const memberName =
+    member?.full_name ||
+    member?.fullName ||
+    member?.name ||
+    localStorage.getItem(
+      "myemt_memberName"
+    ) ||
+    localStorage.getItem(
+      "memberName"
+    ) ||
+    "";
+
+
+  const confirmed =
+    confirm(
+      `Sahkan pendaftaran untuk "${sessionName}"?\n\nProgram ini merangkumi B-Course, C-Course, TTX dan FTX.`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  const buttons =
+    document.querySelectorAll(
+      ".course-apply-btn"
+    );
+
+
+  buttons.forEach(button =>
+    button.disabled = true
+  );
+
+
+  try {
+
+    const res =
+      await fetch(
+        `${API}/api/course-applications`,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            memberId:MEMBER_ID,
+            memberName,
+            sessionId,
+            sessionName,
+            programName:"Program Kursus MyEMT",
+            components:COURSE_COMPONENTS,
+            status:"pending",
+            submittedAt:new Date().toISOString()
+          })
+        }
+      );
+
+
+    const result =
+      await res.json();
+
+
+    if (
+      !res.ok ||
+      !result.success
+    ) {
+
+      throw new Error(
+        result.message ||
+        "Pendaftaran kursus gagal."
+      );
+    }
+
+
+    alert(
+      "Permohonan Program Kursus MyEMT berjaya dihantar dan kini Dalam Semakan."
+    );
+
+
+    await loadApplications();
+    renderSessions();
+
+
+  } catch (err) {
+
+    console.error(err);
+
+    alert(
+      err.message ||
+      "Gagal menghubungi pelayan."
+    );
+
+  } finally {
+
+    document.querySelectorAll(
+      ".course-apply-btn"
+    )
+    .forEach(button =>
+      button.disabled = false
+    );
+  }
+}
+
+
+/* =====================================================
+   EVENT DELEGATION
+===================================================== */
+document.getElementById(
+  "tbodySessions"
+)
+.addEventListener(
+  "click",
+  event => {
+
+    const button =
+      event.target.closest(
+        ".course-apply-btn"
+      );
+
+
+    if (!button) {
+      return;
+    }
+
+
+    daftarKursus(
+      button.dataset.sessionId,
+      button.dataset.sessionName
+    );
+  }
+);
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+document.addEventListener(
+  "DOMContentLoaded",
+  async () => {
+
+    const memberLoaded =
+      await loadMember();
+
+
+    if (!memberLoaded) {
+      return;
+    }
+
+
+    await Promise.all([
+      loadSessions(),
+      loadApplications()
+    ]);
+
+
+    /*
+     * Re-render sessions after applications have loaded
+     * so each session can show the user's application status.
+     */
+    renderSessions();
+    renderLatestApplication();
+    renderApplicationHistory();
+  }
+);
 </script>
 
 </body>

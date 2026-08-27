@@ -1,546 +1,2111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <title>EMT Misi</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Maklumat Misi EMT</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<link href="assets/css/main.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Main CSS -->
-    <link href="assets/css/main.css" rel="stylesheet">
-
-    <style>
-    .mds-card{
-        border:1px solid #dee2e6;
-        border-radius:12px;
-        overflow:hidden;
-        margin-bottom:1rem;
-        box-shadow:0 .125rem .25rem rgba(0,0,0,.075);
-    }
-
-    .mds-card .card-header{
-        background:#0d6efd;
-        color:#fff;
-        font-weight:600;
-        padding:.75rem 1rem;
-    }
-
-    .mds-card .card-body{
-        background:#fff;
-        padding:1rem;
-    }
-
-    .form-check{
-        margin-bottom:.5rem;
-    }
-
-    .form-label{
-        font-weight:600;
-    }
-
-    .badge-soft{
-        background:#e9ecef;
-        color:#495057;
-        font-weight:500;
-    }
-
-    .section-title{
-        font-size:1.1rem;
-        font-weight:700;
-        margin-bottom:1rem;
-        padding-bottom:.5rem;
-        border-bottom:2px solid #dee2e6;
-    }
-
-    textarea{
-        resize:vertical;
-    }
-    </style>
-
+<style>
+body{background:#f4f6f9}
+.card-soft{border:0;border-radius:14px;box-shadow:0 .25rem .75rem rgba(0,0,0,.06)}
+.metric-card{border:1px solid #e3e7ed;border-radius:12px;padding:1rem;background:#fff;height:100%}
+.metric-label{font-size:.8rem;color:#6c757d}
+.metric-value{font-size:1.65rem;font-weight:800;line-height:1.2}
+.info-box{border:1px solid #e3e7ed;border-radius:10px;padding:.75rem;background:#f8f9fa;height:100%}
+.info-label{font-size:.78rem;color:#6c757d}
+.info-value{font-weight:700;word-break:break-word}
+.section-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.75rem;margin-bottom:1rem}
+.section-title{font-weight:800;margin:0}
+.section-subtitle{font-size:.86rem;color:#6c757d;margin:0}
+.readonly-note{border:1px solid #dee2e6;background:#f8f9fa;border-radius:10px;padding:.75rem 1rem}
+.pic-only{display:none}
+.pic-only.show{display:block}
+.non-pic-note{display:none}
+.non-pic-note.show{display:block}
+.storage-warning{display:none}
+.storage-warning.show{display:block}
+.daily-form-section{border:1px solid #e4e8ee;border-radius:12px;padding:1rem;background:#fff}
+.daily-form-section+.daily-form-section{margin-top:1rem}
+.daily-form-title{font-weight:800;margin-bottom:.8rem}
+.risk-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.55rem}
+.risk-item{border:1px solid #e3e7ed;border-radius:9px;padding:.65rem .75rem;background:#fff}
+.risk-code{display:inline-flex;min-width:32px;font-weight:800;color:#0d6efd}
+.history-date-btn{padding:0;border:0;background:none;color:#0d6efd;text-decoration:underline;font-weight:700}
+.hr-category-row{cursor:pointer}
+.hr-category-row:hover{background:#f8f9fa}
+.hr-detail-row>td{background:#f8f9fa}
+.chart-wrap{min-height:260px;position:relative}
+.badge-status{font-size:.75rem}
+textarea{resize:vertical}
+@media(max-width:767px){
+  .page-action{width:100%}
+  .page-action .btn{width:100%}
+}
+</style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div id="header"></div>
 
 <div class="container-fluid">
-  <div class="row">
-
-    <!-- SIDEBAR -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
-
-    <!-- MAIN CONTENT -->
-    <main class="col-md-9 col-lg-10 px-4 py-4">
-
-        <!-- PAGE HEADER -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-            <h4 class="mb-0">Maklumat Misi EMT</h4>
-            <small class="text-muted">
-                Maklumat operasi dan Misi EMT oleh Kementerian Kerajaan Malaysia.
-            </small>
-            </div>
-
-            <a href="user_misilist.html" class="btn btn-primary">
-            <i class="bi bi-arrow-left me-1"></i> Kembali
-            </a>
-        </div>
-
-        <!-- ================= MISSION INFO ================= -->
-        <div class="card shadow-sm mb-4">
-        <div class="card-body">
-
-            <!-- HEADER -->
-            <div class="mb-4">
-            <h5 class="fw-bold mb-1">Maklumat Misi</h5>
-            <small class="text-muted">Butiran lengkap operasi EMT</small>
-            </div>
-
-            <!-- SECTION 1 -->
-            <div class="mb-4">
-            <h6 class="fw-semibold border-bottom pb-2 mb-3">Maklumat Asas Misi</h6>
-
-            <div class="row g-3">
-                <div class="col-md-6">
-                <small class="text-muted">Nama Misi</small>
-                <div class="fw-semibold" id="ud-name">-</div>
-                </div>
-
-                <div class="col-md-3">
-                <small class="text-muted">Tarikh Mula</small>
-                <div class="fw-semibold" id="ud-start">-</div>
-                </div>
-
-                <div class="col-md-3">
-                <small class="text-muted">Anggaran Tamat</small>
-                <div class="fw-semibold" id="ud-est-end">-</div>
-                </div>
-
-                <div class="col-md-3">
-                <small class="text-muted">Tarikh Selesai</small>
-                <div class="fw-semibold text-muted" id="ud-actual-end">-</div>
-                </div>
-
-                <div class="col-md-3">
-                <small class="text-muted">Status</small><br>
-                <span class="badge bg-secondary px-3 py-2" id="ud-status">-</span>
-                </div>
-            </div>
-            </div>
-
-            <hr class="my-4">
-
-            <!-- SECTION 2 -->
-            <div>
-            <h6 class="fw-semibold border-bottom pb-2 mb-3">Butiran Operasi</h6>
-
-            <div class="row g-3">
-
-                <div class="col-md-6">
-                <small class="text-muted">Jenis Misi</small>
-                <div class="fw-semibold" id="ud-type">-</div>
-                </div>
-
-                <div class="col-md-6">
-                <small class="text-muted">Ketua Misi</small>
-                <div class="fw-semibold" id="ud-leader">-</div>
-                </div>
-
-                <div class="col-md-6">
-                <small class="text-muted">Lokasi</small>
-                <div class="fw-semibold" id="ud-location">-</div>
-                </div>
-
-                <div class="col-md-6">
-                <small class="text-muted">Catatan</small>
-                <div class="fw-semibold text-dark" id="ud-notes">-</div>
-                </div>
-
-            </div>
-            </div>
-
-        </div>
-        </div>
-
-        <!-- ================= MDS ================= -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-
-            <div class="d-flex justify-content-between align-items-center mb-3">
-
-            <div>
-                <h5 class="fw-bold mb-1">Laporan MDS</h5>
-                <small class="text-muted">
-                Rekod harian data pesakit dan aktiviti klinikal EMT.
-                </small>
-            </div>
-
-            <a href="emt_healthform2.html" class="btn btn-outline-secondary rounded-pill shadow-sm px-3">
-                <i class="bi bi-plus-circle me-1"></i>
-                Tambah Rekod
-            </a>
-
-            </div>
-
-            <div class="table-responsive border rounded"
-                style="max-height: 450px; overflow-y: auto;">
-                <table class="table table-bordered align-middle">
-
-                    <thead class="table-light">
-                        <tr>
-                            <th>Tarikh</th>
-                            <th>ID EMT MDS</th>
-                            <th>Nama</th>
-                            <th>Umur</th>
-                            <th>Jantina</th>
-                            <th>Diagnosis</th>
-                            <th>Hasil Rawatan</th>
-                            <th class="text-center">Tindakan</th>
-                        </tr>
-                    </thead>
-
-                    <tbody id="tbody-mds-detail">
-                        <tr>
-                            <td colspan="8" class="text-center text-muted py-3">Memuatkan...</td>
-                        </tr>
-                    </tbody>
-
-                </table>
-            </div>
-
-            </div>
-        </div>
-
-        <!-- ================= HR ================= -->
-        <div class="card shadow-sm mb-4">
-        <div class="card-body">
-
-            <div class="d-flex justify-content-between align-items-center mb-3">
-            <div>
-                <h5 class="fw-bold mb-0">Maklumat Human Resource EMT</h5>
-                <small class="text-muted">Read Only</small>
-            </div>
-            </div>
-
-            <div class="row g-4">
-
-            <!-- CHART -->
-            <div class="col-md-5">
-                <canvas id="chartHR"></canvas>
-            </div>
-
-            <!-- TABLE -->
-            <div class="col-md-7">
-
-                <table class="table table-sm align-middle">
-                <tbody>
-
-                    <tr>
-                    <td class="text-muted">Doktor</td>
-                    <td class="text-end fw-semibold">0</td>
-                    </tr>
-
-                    <tr>
-                    <td class="text-muted">Jururawat</td>
-                    <td class="text-end fw-semibold">0</td>
-                    </tr>
-
-                    <tr>
-                    <td class="text-muted">Paramedik</td>
-                    <td class="text-end fw-semibold">0</td>
-                    </tr>
-
-                    <tr>
-                    <td class="text-muted">Pegawai Farmasi</td>
-                    <td class="text-end fw-semibold">0</td>
-                    </tr>
-
-                    <tr>
-                    <td class="text-muted">Pegawai Kesihatan Awam</td>
-                    <td class="text-end fw-semibold">0</td>
-                    </tr>
-
-                    <tr>
-                    <td class="text-muted">Staf Sokongan</td>
-                    <td class="text-end fw-semibold">0</td>
-                    </tr>
-
-                    <tr>
-                    <td class="text-muted">Lain-lain</td>
-                    <td class="text-end fw-semibold">0</td>
-                    </tr>
-
-                    <tr class="table-light fw-bold">
-                    <td>Jumlah Keseluruhan</td>
-                    <td class="text-end text-primary">0</td>
-                    </tr>
-
-                </tbody>
-                </table>
-
-            </div>
-
-            </div>
-
-        </div>
-        </div>
-
-        <!-- ================= ASSET ================= -->
-        <div class="card shadow-sm mb-4">
-            <div class="card-body">
-
-            <h5 class="fw-bold mb-3">Asset EMT</h5>
-
-            <div class="row">
-                <div class="col-md-6">
-                <canvas id="chartAsset"></canvas>
-                </div>
-
-                <div class="col-md-6">
-                    <h6 class="fw-semibold mb-2">Senarai Aset EMT</h6>
-
-                    <table class="table table-sm">
-                        <tr><td colspan="2" class="text-center text-muted py-2">Tiada aset berdaftar</td></tr>
-                    </table>
-                </div>
-            </div>
-
-            </div>
-        </div>
-
-
-
-
-        <!-- ================= LOGISTICS ================= -->
-        <div class="card shadow-sm mb-4">
-        <div class="card-body">
-
-            <div class="mb-3">
-            <h5 class="fw-bold mb-0">Maklumat Logistik EMT</h5>
-            <small class="text-muted">Pengangkutan & penyimpanan aset logistik</small>
-            </div>
-
-            <div class="row g-4">
-
-            <!-- CHART -->
-            <div class="col-md-4">
-                <canvas id="chartLogistik"></canvas>
-            </div>
-
-            <!-- SUMMARY -->
-            <div class="col-md-8">
-
-                <!-- ================= TRANSPORT ================= -->
-                <div class="mb-4">
-                <h6 class="fw-semibold border-bottom pb-2">Pengangkutan EMT</h6>
-
-                <table class="table table-sm align-middle">
-                    <thead>
-                    <tr class="text-muted">
-                        <th>Kenderaan</th>
-                        <th>No. Pendaftaran</th>
-                        <th>Kapasiti</th>
-                        <th>Status</th>
-                        <th>Pemandu</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    <tr>
-                        <td colspan="5" class="text-center text-muted py-2">Tiada pengangkutan berdaftar</td>
-                    </tr>
-                    </tbody>
-                </table>
-                </div>
-
-                <!-- ================= STORAGE ================= -->
-                <div>
-                <h6 class="fw-semibold border-bottom pb-2">Penyimpanan / Crates</h6>
-
-                <table class="table table-sm align-middle">
-                    <thead>
-                    <tr class="text-muted">
-                        <th>ID Crate</th>
-                        <th>Jenis</th>
-                        <th>Lokasi</th>
-                        <th>Status</th>
-                    </tr>
-                    </thead>
-
-                    <tbody>
-                    <tr>
-                        <td colspan="4" class="text-center text-muted py-2">Tiada penyimpanan berdaftar</td>
-                    </tr>
-                    </tbody>
-                </table>
-
-                </div>
-
-            </div>
-            </div>
-
-        </div>
-        </div>
-    </main>
-
+<div class="row">
+
+<aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+
+<main class="col-md-9 col-lg-10 px-4 py-4">
+
+  <!-- PAGE HEADER -->
+  <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+    <div>
+      <h4 class="mb-1 fw-bold">Maklumat Misi EMT</h4>
+      <small class="text-muted">
+        Paparan operasi, klinikal dan informatik misi EMT oleh Kementerian Kesihatan Malaysia.
+      </small>
+    </div>
+
+    <div class="page-action">
+      <a href="user_misilist.html" class="btn btn-primary">
+        <i class="bi bi-arrow-left me-1"></i>Kembali
+      </a>
+    </div>
   </div>
+
+  <!-- MISSION HEADER -->
+  <div class="card card-soft mb-4">
+    <div class="card-body">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+        <div>
+          <h5 class="fw-bold mb-1" id="hdrName">-</h5>
+          <small class="text-muted" id="hdrMissionId">ID Misi: -</small>
+        </div>
+
+        <div class="text-end">
+          <span class="badge bg-secondary fs-6" id="hdrStatus">-</span>
+          <div class="small text-muted mt-1" id="accessLabel">Paparan pengguna</div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-sm-6 col-xl-2">
+          <div class="info-box">
+            <div class="info-label">Tarikh Mula</div>
+            <div class="info-value" id="hdrStartDate">-</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-2">
+          <div class="info-box">
+            <div class="info-label">Anggaran Tamat</div>
+            <div class="info-value" id="hdrEstimatedEnd">-</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-2">
+          <div class="info-box">
+            <div class="info-label">Tarikh Sebenar Tamat</div>
+            <div class="info-value" id="hdrActualEnd">-</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-2">
+          <div class="info-box">
+            <div class="info-label">PIC Misi</div>
+            <div class="info-value" id="hdrPic">-</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-2">
+          <div class="info-box">
+            <div class="info-label">Jenis Misi</div>
+            <div class="info-value" id="hdrType">-</div>
+          </div>
+        </div>
+
+        <div class="col-sm-6 col-xl-2">
+          <div class="info-box">
+            <div class="info-label">Lokasi</div>
+            <div class="info-value" id="hdrLocation">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFORMATICS KPI -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-lg-2">
+      <div class="metric-card">
+        <div class="metric-label">Rekod MDS</div>
+        <div class="metric-value" id="kpiMds">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-2">
+      <div class="metric-card">
+        <div class="metric-label">Anggota EMT</div>
+        <div class="metric-value" id="kpiHr">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-2">
+      <div class="metric-card">
+        <div class="metric-label">Laporan Harian</div>
+        <div class="metric-value" id="kpiDaily">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-2">
+      <div class="metric-card">
+        <div class="metric-label">Draft</div>
+        <div class="metric-value" id="kpiDraft">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-2">
+      <div class="metric-card">
+        <div class="metric-label">Needs & Risks Aktif</div>
+        <div class="metric-value" id="kpiRisks">0</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-2">
+      <div class="metric-card">
+        <div class="metric-label">Aset + Logistik</div>
+        <div class="metric-value" id="kpiResources">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INFORMATICS OVERVIEW -->
+  <div class="card card-soft mb-4">
+    <div class="card-body">
+      <div class="section-head">
+        <div>
+          <h5 class="section-title">Ringkasan Informatik Operasi</h5>
+          <p class="section-subtitle">Trend aktiviti misi berdasarkan rekod MDS dan laporan harian.</p>
+        </div>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-7">
+          <div class="border rounded p-3 bg-white h-100">
+            <h6 class="fw-semibold mb-3">Trend Rekod MDS Mengikut Hari</h6>
+            <div class="chart-wrap">
+              <canvas id="chartMdsTrend"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="border rounded p-3 bg-white h-100">
+            <h6 class="fw-semibold mb-3">Status Laporan Harian</h6>
+            <div class="chart-wrap">
+              <canvas id="chartDailyStatus"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-4 mt-1">
+        <div class="col-lg-7">
+          <div class="border rounded p-3 bg-white h-100">
+            <h6 class="fw-semibold mb-3">Needs & Risks Paling Kerap Dilaporkan</h6>
+            <div class="chart-wrap">
+              <canvas id="chartRiskFrequency"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="border rounded p-3 bg-white h-100">
+            <h6 class="fw-semibold mb-3">Aktiviti Harian Terkini</h6>
+            <div class="table-responsive">
+              <table class="table table-sm align-middle mb-0">
+                <thead>
+                  <tr class="text-muted">
+                    <th>Tarikh</th>
+                    <th>MDS</th>
+                    <th>Laporan</th>
+                    <th>Pasukan</th>
+                  </tr>
+                </thead>
+                <tbody id="dailyOpsSummaryBody">
+                  <tr><td colspan="4" class="text-center text-muted py-3">Memuatkan...</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MISSION INFO -->
+  <div class="card card-soft mb-4">
+    <div class="card-body">
+      <div class="section-head">
+        <div>
+          <h5 class="section-title">Maklumat Misi</h5>
+          <p class="section-subtitle">Butiran operasi yang ditetapkan oleh Admin KKM.</p>
+        </div>
+        <span class="badge bg-light text-dark border">Read Only</span>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <small class="text-muted">Nama Misi</small>
+          <div class="fw-semibold" id="mName">-</div>
+        </div>
+
+        <div class="col-md-3">
+          <small class="text-muted">Status</small><br>
+          <span class="badge bg-secondary" id="mStatus">-</span>
+        </div>
+
+        <div class="col-md-3">
+          <small class="text-muted">Jenis Misi</small>
+          <div class="fw-semibold" id="mType">-</div>
+        </div>
+
+        <div class="col-md-4">
+          <small class="text-muted">PIC Misi</small>
+          <div class="fw-semibold" id="mPic">-</div>
+        </div>
+
+        <div class="col-md-4">
+          <small class="text-muted">Jawatan / Peranan PIC</small>
+          <div class="fw-semibold" id="mPicRole">-</div>
+        </div>
+
+        <div class="col-md-4">
+          <small class="text-muted">Fasiliti / Organisasi PIC</small>
+          <div class="fw-semibold" id="mPicFacility">-</div>
+        </div>
+
+        <div class="col-md-4">
+          <small class="text-muted">Tarikh Mula</small>
+          <div class="fw-semibold" id="mStart">-</div>
+        </div>
+
+        <div class="col-md-4">
+          <small class="text-muted">Anggaran Tamat</small>
+          <div class="fw-semibold" id="mEstimatedEnd">-</div>
+        </div>
+
+        <div class="col-md-4">
+          <small class="text-muted">Tarikh Sebenar Tamat</small>
+          <div class="fw-semibold" id="mActualEnd">-</div>
+        </div>
+
+        <div class="col-md-6">
+          <small class="text-muted">Lokasi</small>
+          <div class="fw-semibold" id="mLocation">-</div>
+        </div>
+
+        <div class="col-md-6">
+          <small class="text-muted">Catatan</small>
+          <div class="fw-semibold" id="mNotes">-</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MDS -->
+  <div class="card card-soft mb-4">
+    <div class="card-body">
+      <div class="section-head">
+        <div>
+          <h5 class="section-title">Rekod MDS</h5>
+          <p class="section-subtitle">Rekod klinikal pesakit bagi misi ini.</p>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2">
+          <a href="emt_mdsdaily.html" class="btn btn-outline-primary" id="btnMdsDaily">
+            <i class="bi bi-calendar3 me-1"></i>Laporan / Tally MDS
+          </a>
+
+          <a href="emt_healthform.html" class="btn btn-primary" id="btnAddMds">
+            <i class="bi bi-plus-circle me-1"></i>Tambah Rekod
+          </a>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-3">
+        <div class="col-md-4">
+          <div class="metric-card">
+            <div class="metric-label">Jumlah Rekod</div>
+            <div class="metric-value" id="mdsCount">0</div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="metric-card">
+            <div class="metric-label">Kemasukan</div>
+            <div class="metric-value" id="mdsAdmission">0</div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <div class="metric-card">
+            <div class="metric-label">Rujukan</div>
+            <div class="metric-value" id="mdsReferral">0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-responsive border rounded" style="max-height:470px;overflow-y:auto">
+        <table class="table table-hover table-bordered align-middle mb-0">
+          <thead class="table-light sticky-top">
+            <tr>
+              <th>Tarikh</th>
+              <th>ID EMT MDS</th>
+              <th>Nama</th>
+              <th>Umur</th>
+              <th>Jantina</th>
+              <th>Diagnosis</th>
+              <th>Hasil Rawatan</th>
+              <th class="text-center">Tindakan</th>
+            </tr>
+          </thead>
+
+          <tbody id="tbodyMds">
+            <tr><td colspan="8" class="text-center text-muted py-4">Memuatkan...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY REPORT -->
+  <div class="card card-soft mb-4">
+    <div class="card-body">
+
+      <div class="section-head">
+        <div>
+          <h5 class="section-title">Basic / Team Daily Report</h5>
+          <p class="section-subtitle">Team information, WASH, Needs & Risks dan kekangan operasi harian.</p>
+        </div>
+        <span class="badge bg-info text-dark border">Draft & Submitted boleh dilihat</span>
+      </div>
+
+      <div class="storage-warning alert alert-warning" id="dailyStorageWarning">
+        <i class="bi bi-exclamation-triangle me-1"></i>
+        Endpoint <code>/api/daily-reports</code> belum tersedia. Data fallback hanya boleh dilihat pada pelayar yang sama.
+      </div>
+
+      <div class="non-pic-note alert alert-secondary" id="nonPicNote">
+        <i class="bi bi-eye me-1"></i>
+        Anda boleh melihat semua laporan harian termasuk <strong>Draft</strong> dan <strong>Submitted</strong>.
+        Hanya PIC misi boleh menambah atau mengemaskini laporan harian.
+      </div>
+
+      <!-- PIC FORM -->
+      <div class="pic-only mb-4" id="picFormBox">
+        <div class="alert alert-primary">
+          <i class="bi bi-person-check me-1"></i>
+          Anda ialah <strong>PIC misi</strong>. Form ini digunakan untuk kemaskini laporan operasi harian semasa berada di lokasi.
+        </div>
+
+        <div class="d-flex justify-content-end mb-3">
+          <button class="btn btn-outline-primary" type="button"
+                  data-bs-toggle="collapse" data-bs-target="#dailyFormCollapse">
+            <i class="bi bi-pencil-square me-1"></i>Buka / Tutup Form Laporan Harian
+          </button>
+        </div>
+
+        <div class="collapse show" id="dailyFormCollapse">
+          <form id="dailyReportForm">
+
+            <div class="daily-form-section">
+              <div class="daily-form-title">A. Maklumat Asas Laporan</div>
+
+              <div class="row g-3">
+                <div class="col-md-4">
+                  <label class="form-label">Tarikh Aktiviti *</label>
+                  <input type="date" class="form-control" id="dailyDate" required>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">Masa Laporan *</label>
+                  <input type="time" class="form-control" id="dailyReportTime" required>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">Anggaran Tarikh Berlepas</label>
+                  <input type="date" class="form-control" id="dailyDepartureDate">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Nama Organisasi *</label>
+                  <input type="text" class="form-control" id="dailyOrganization" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Nama Pasukan *</label>
+                  <input type="text" class="form-control" id="dailyTeamName" required>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">Jenis EMT *</label>
+                  <select class="form-select" id="dailyEmtType" required>
+                    <option value="">-- Pilih Jenis EMT --</option>
+                    <option value="Type 1 mobile">Type 1 Mobile</option>
+                    <option value="Type 1 fixed">Type 1 Fixed</option>
+                    <option value="Type 2">Type 2</option>
+                    <option value="Type 3">Type 3</option>
+                    <option value="Specialized cell">Specialized Cell</option>
+                  </select>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">Contact Person / PIC *</label>
+                  <input type="text" class="form-control" id="dailyContactPerson" required>
+                </div>
+
+                <div class="col-md-4">
+                  <label class="form-label">No. Telefon</label>
+                  <input type="text" class="form-control" id="dailyPhone">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Email</label>
+                  <input type="email" class="form-control" id="dailyEmail">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Lokasi Aktiviti *</label>
+                  <input type="text" class="form-control" id="dailyLocation" required>
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">Nama Fasiliti</label>
+                  <input type="text" class="form-control" id="dailyFacility">
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Latitude</label>
+                  <input type="text" class="form-control" id="dailyLatitude">
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Longitude</label>
+                  <input type="text" class="form-control" id="dailyLongitude">
+                </div>
+              </div>
+            </div>
+
+            <div class="daily-form-section">
+              <div class="daily-form-title">B. Rujukan MDS Pada Tarikh Sama</div>
+
+              <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                  <div class="metric-card">
+                    <div class="metric-label">Rekod MDS Tarikh Ini</div>
+                    <div class="metric-value" id="dailyMdsCount">0</div>
+                  </div>
+                </div>
+
+                <div class="col-md-8 small text-muted">
+                  Nilai ini dikira daripada rekod MDS bagi misi dan tarikh yang sama. Ia hanya rujukan dan tidak mengubah Basic / Team Daily Report.
+                </div>
+              </div>
+            </div>
+
+            <div class="daily-form-section">
+              <div class="daily-form-title">C. Immediate Report</div>
+              <div class="risk-grid">
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="51"><span class="risk-code">51.</span>Unexpected death</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="52"><span class="risk-code">52.</span>Notifiable disease</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="53"><span class="risk-code">53.</span>Protection issues</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="54"><span class="risk-code">54.</span>Critical incident to EMT and/or community</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="55"><span class="risk-code">55.</span>Any other issue requiring immediate reporting</label>
+              </div>
+            </div>
+
+            <div class="daily-form-section">
+              <div class="daily-form-title">D. Community Risks</div>
+              <div class="risk-grid">
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="56"><span class="risk-code">56.</span>WASH</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="57"><span class="risk-code">57.</span>Community / suspected infectious disease</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="58"><span class="risk-code">58.</span>Environmental risk / exposure</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="59"><span class="risk-code">59.</span>Shelter / Non-food items</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="60"><span class="risk-code">60.</span>Food insecurity</label>
+              </div>
+            </div>
+
+            <div class="daily-form-section">
+              <div class="daily-form-title">E. Operational Constraints</div>
+              <div class="risk-grid">
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="61"><span class="risk-code">61.</span>Logistics / operational support</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="62"><span class="risk-code">62.</span>Supply</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="63"><span class="risk-code">63.</span>Human resources</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="64"><span class="risk-code">64.</span>Finance</label>
+                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="65"><span class="risk-code">65.</span>Others</label>
+              </div>
+
+              <div class="mt-3">
+                <label class="form-label">Komen / Butiran Lanjut</label>
+                <textarea class="form-control" id="dailyComments" rows="4"
+                  placeholder="Nyatakan keperluan, risiko atau kekangan operasi."></textarea>
+              </div>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-end gap-2 mt-3">
+              <span class="small text-muted align-self-center me-auto" id="dailyFormStatus"></span>
+
+              <button type="button" class="btn btn-outline-secondary" id="btnNewDaily">
+                <i class="bi bi-file-earmark-plus me-1"></i>Laporan Baharu
+              </button>
+
+              <button type="button" class="btn btn-outline-primary" id="btnSaveDraft">
+                <i class="bi bi-save me-1"></i>Simpan Draft
+              </button>
+
+              <button type="submit" class="btn btn-primary" id="btnSubmitDaily">
+                <i class="bi bi-send-check me-1"></i>Hantar Laporan
+              </button>
+            </div>
+
+          </form>
+        </div>
+      </div>
+
+      <!-- DAILY HISTORY -->
+      <div class="border rounded mt-3">
+        <div class="p-3 border-bottom bg-light d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <div>
+            <strong>Rekod Laporan Harian</strong>
+            <div class="small text-muted">Semua rekod Draft dan Submitted boleh dilihat oleh pengguna.</div>
+          </div>
+
+          <span class="badge bg-secondary" id="dailyHistoryCount">0 laporan</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Tarikh</th>
+                <th>Pasukan</th>
+                <th>Jenis EMT</th>
+                <th>Lokasi / Fasiliti</th>
+                <th>Needs & Risks</th>
+                <th>Status</th>
+                <th class="text-end">Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="dailyHistoryBody">
+              <tr><td colspan="7" class="text-center text-muted py-4">Memuatkan...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- DAILY DETAIL -->
+      <div class="border rounded p-3 mt-3 d-none" id="dailyDetailBox">
+        <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
+          <div>
+            <h6 class="fw-bold mb-1">Butiran Laporan Harian</h6>
+            <small class="text-muted" id="dailyDetailSub">-</small>
+          </div>
+
+          <button class="btn btn-sm btn-outline-secondary" type="button" id="btnCloseDailyDetail">
+            Tutup
+          </button>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-3">
+            <small class="text-muted">Tarikh</small>
+            <div class="fw-semibold" id="ddDate">-</div>
+          </div>
+
+          <div class="col-md-3">
+            <small class="text-muted">Status</small>
+            <div id="ddStatus">-</div>
+          </div>
+
+          <div class="col-md-3">
+            <small class="text-muted">Pasukan</small>
+            <div class="fw-semibold" id="ddTeam">-</div>
+          </div>
+
+          <div class="col-md-3">
+            <small class="text-muted">Jenis EMT</small>
+            <div class="fw-semibold" id="ddType">-</div>
+          </div>
+
+          <div class="col-md-4">
+            <small class="text-muted">Contact Person</small>
+            <div class="fw-semibold" id="ddContact">-</div>
+          </div>
+
+          <div class="col-md-4">
+            <small class="text-muted">Lokasi</small>
+            <div class="fw-semibold" id="ddLocation">-</div>
+          </div>
+
+          <div class="col-md-4">
+            <small class="text-muted">Fasiliti</small>
+            <div class="fw-semibold" id="ddFacility">-</div>
+          </div>
+        </div>
+
+        <h6 class="fw-bold border-bottom pb-2">Needs & Risks Yang Ditanda</h6>
+        <div id="ddRisks" class="mb-3">-</div>
+
+        <h6 class="fw-bold border-bottom pb-2">Komen / Butiran Lanjut</h6>
+        <div id="ddComments">-</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- HR -->
+  <div class="card card-soft mb-4">
+    <div class="card-body">
+      <div class="section-head">
+        <div>
+          <h5 class="section-title">Maklumat Human Resource EMT</h5>
+          <p class="section-subtitle">Komposisi anggota yang dipautkan kepada misi.</p>
+        </div>
+        <span class="badge bg-light text-dark border">Read Only</span>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="chart-wrap">
+            <canvas id="chartHR"></canvas>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <tbody id="hrTableBody">
+                <tr><td colspan="2" class="text-center text-muted py-4">Memuatkan...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSET -->
+  <div class="card card-soft mb-4">
+    <div class="card-body">
+      <div class="section-head">
+        <div>
+          <h5 class="section-title">Aset EMT</h5>
+          <p class="section-subtitle">Peralatan dan aset yang dipautkan kepada misi.</p>
+        </div>
+        <span class="badge bg-light text-dark border">Read Only</span>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-5">
+          <div class="chart-wrap">
+            <canvas id="chartAsset"></canvas>
+          </div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Aset</th>
+                  <th>Kategori</th>
+                  <th>Kuantiti</th>
+                  <th>Status</th>
+                  <th>Lokasi</th>
+                </tr>
+              </thead>
+
+              <tbody id="assetTableBody">
+                <tr><td colspan="5" class="text-center text-muted py-4">Memuatkan...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGISTICS -->
+  <div class="card card-soft mb-4">
+    <div class="card-body">
+      <div class="section-head">
+        <div>
+          <h5 class="section-title">Maklumat Logistik EMT</h5>
+          <p class="section-subtitle">Pengangkutan dan penyimpanan misi.</p>
+        </div>
+        <span class="badge bg-light text-dark border">Read Only</span>
+      </div>
+
+      <div class="row g-4">
+        <div class="col-lg-4">
+          <div class="chart-wrap">
+            <canvas id="chartLogistics"></canvas>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <h6 class="fw-semibold border-bottom pb-2">Pengangkutan EMT</h6>
+
+          <div class="table-responsive mb-4">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr class="text-muted">
+                  <th>Kenderaan</th>
+                  <th>No. Pendaftaran</th>
+                  <th>Kapasiti</th>
+                  <th>Status</th>
+                  <th>Pemandu</th>
+                </tr>
+              </thead>
+
+              <tbody id="transportTableBody">
+                <tr><td colspan="5" class="text-center text-muted py-2">Memuatkan...</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h6 class="fw-semibold border-bottom pb-2">Penyimpanan / Crates</h6>
+
+          <div class="table-responsive">
+            <table class="table table-sm align-middle">
+              <thead>
+                <tr class="text-muted">
+                  <th>ID Crate</th>
+                  <th>Jenis</th>
+                  <th>Lokasi</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+
+              <tbody id="storageTableBody">
+                <tr><td colspan="4" class="text-center text-muted py-2">Memuatkan...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISPENSARY -->
+  <div class="card card-soft mb-4">
+    <div class="card-body">
+      <div class="section-head">
+        <div>
+          <h5 class="section-title">Dispensari Ubat</h5>
+          <p class="section-subtitle">Rujukan pesakit dan maklumat ubat daripada rekod MDS.</p>
+        </div>
+        <span class="badge bg-light text-dark border">Paparan</span>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>ID MDS</th>
+              <th>Nama Pesakit</th>
+              <th>Umur</th>
+              <th>Jantina</th>
+              <th>Diagnosis / Indikasi</th>
+              <th>Maklumat Ubat Dari MDS</th>
+            </tr>
+          </thead>
+
+          <tbody id="dispensaryBody">
+            <tr><td colspan="6" class="text-center text-muted py-4">Memuatkan...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</main>
+</div>
 </div>
 
-<!-- FOOTER -->
 <div id="footer"></div>
 
-<!-- LOAD HEADER / FOOTER / SIDEBAR -->
 <script>
-fetch("header.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("header").innerHTML = data);
-
-fetch("footer.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("footer").innerHTML = data);
-
-fetch("sidebar.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
+fetch("header.html").then(r=>r.text()).then(t=>document.getElementById("header").innerHTML=t);
+fetch("footer.html").then(r=>r.text()).then(t=>document.getElementById("footer").innerHTML=t);
+fetch("sidebar.html").then(r=>r.text()).then(t=>document.getElementById("sidebar-placeholder").innerHTML=t);
 </script>
 
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
-<!-- ══ LIVE MISSION DATA ══ -->
-<script>
-(async function () {
-  const id = new URLSearchParams(window.location.search).get('id');
-  if (!id) return;
-
-  try {
-    const res  = await fetch(`${API}/api/missions/` + id);
-    const json = await res.json();
-    if (!json.success || !json.data) { document.getElementById('ud-name').textContent = 'Misi tidak dijumpai.'; return; }
-    const m = json.data;
-
-    const STATUS_CLS = { 'Selesai': 'bg-success', 'Sedang Dijalankan': 'bg-primary', 'Perancangan': 'bg-warning text-dark' };
-    document.getElementById('ud-name').textContent       = m.name         || '-';
-    document.getElementById('ud-start').textContent      = m.startDate    || '-';
-    document.getElementById('ud-est-end').textContent    = m.estimatedEnd || '-';
-    document.getElementById('ud-actual-end').textContent = m.actualEnd    || '-';
-    const statusEl = document.getElementById('ud-status');
-    statusEl.textContent  = m.status || '-';
-    statusEl.className    = `badge ${STATUS_CLS[m.status] || 'bg-secondary'} px-3 py-2`;
-    document.getElementById('ud-type').textContent     = m.type     || m.state    || '-';
-    document.getElementById('ud-leader').textContent   = m.leader   || '-';
-    document.getElementById('ud-location').textContent = m.location || m.state    || '-';
-    document.getElementById('ud-notes').textContent    = m.notes    || '-';
-    // Pass mission ID to the MDS form link
-    const mdsLink = document.querySelector('a[href="emt_healthform2.html"]');
-    if (mdsLink) mdsLink.href = `emt_healthform2.html?missionId=${id}`;
-
-    // Load MDS records for this mission
-    try {
-      const mdsRes  = await fetch(`${API}/api/mds?missionId=${encodeURIComponent(id)}`);
-      const mdsJson = await mdsRes.json();
-      const mdsList = mdsJson.data || [];
-      const tbody   = document.getElementById('tbody-mds-detail');
-      if (tbody) {
-        tbody.innerHTML = mdsList.length
-          ? mdsList.map(r => `<tr>
-              <td>${r.date || '-'}</td>
-              <td>${r.patientName || '-'}</td>
-              <td>${r.age ? r.age + ' Thn' : '-'}</td>
-              <td>${r.gender || '-'}</td>
-              <td>${r.clinicalClass || '-'}</td>
-              <td>${r.outcome || '-'}</td>
-              <td class="text-center">
-                <a href="emt_mdsview.html?id=${r.id}" class="btn btn-sm btn-outline-primary">Lihat</a>
-              </td>
-            </tr>`).join('')
-          : '<tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod MDS</td></tr>';
-      }
-    } catch (e) { console.error('Gagal muatkan MDS:', e); }
-
-  } catch (e) { console.error('Gagal muatkan misi:', e); }
-})();
-</script>
-
-
-
-<!-- ================= CHART JS ================= -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-  new Chart(document.getElementById('chartAsset'), {
-    type: 'bar',
-    data: {
-      labels: [],
-      datasets: [{ data: [] }]
+const missionId=new URLSearchParams(location.search).get("id");
+
+const STATUS_BADGE={
+  "Selesai":"bg-success",
+  "Sedang Dijalankan":"bg-primary",
+  "Perancangan":"bg-warning text-dark"
+};
+
+const DAILY_RISK_LABELS={
+  "51":"Unexpected death",
+  "52":"Notifiable disease",
+  "53":"Protection issues",
+  "54":"Critical incident to EMT and/or community",
+  "55":"Any other issue requiring immediate reporting",
+  "56":"WASH",
+  "57":"Community / suspected infectious disease",
+  "58":"Environmental risk / exposure",
+  "59":"Shelter / Non-food items",
+  "60":"Food insecurity",
+  "61":"Logistics / operational support",
+  "62":"Supply",
+  "63":"Human resources",
+  "64":"Finance",
+  "65":"Others"
+};
+
+const DAILY_STORAGE_KEY="myemt_daily_reports_v1";
+
+let missionData=null;
+let isMissionPic=false;
+let currentDailyReportId=null;
+let dailyBackendAvailable=true;
+
+let data={
+  mds:[],
+  members:[],
+  missionApps:[],
+  hrMembers:[],
+  assets:[],
+  transport:[],
+  storage:[],
+  dailyReports:[]
+};
+
+let chartMdsTrend=null;
+let chartDailyStatus=null;
+let chartRiskFrequency=null;
+let chartHR=null;
+let chartAsset=null;
+let chartLogistics=null;
+
+
+function esc(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function formatDate(value){
+  if(!value) return "-";
+  const p=String(value).split("-");
+  return p.length===3 ? `${p[2]}/${p[1]}/${p[0]}` : String(value);
+}
+
+function diagnosis(record){
+  return record.diagnosis ||
+         record.clinicalNotes ||
+         record.diseaseType ||
+         record.traumaType ||
+         record.emergency ||
+         "-";
+}
+
+function outcome(record){
+  if(Array.isArray(record.outcomes) && record.outcomes.length){
+    return record.outcomes.join(", ");
+  }
+  return record.outcome || "-";
+}
+
+function medication(record){
+  if(Array.isArray(record.medications) && record.medications.length){
+    return record.medications
+      .map(m=>[m.namaUbat,m.dos,m.kekerapan].filter(Boolean).join(" "))
+      .filter(Boolean)
+      .join("; ") || "-";
+  }
+  return record.currentMedication || "-";
+}
+
+function missionSpecific(list,id){
+  return (list||[]).filter(x=>
+    String(x.missionId || x.missionID || x.mission_id || "")===String(id)
+  );
+}
+
+function approvedApplication(app){
+  const s=String(app.status||"").trim().toLowerCase();
+  if(!s) return true;
+  return ["approved","diluluskan","accepted","active","aktif"].includes(s);
+}
+
+async function safeApi(path){
+  try{
+    const res=await fetch(`${API}${path}`);
+    if(!res.ok) return [];
+    const json=await res.json();
+    return json.success && Array.isArray(json.data) ? json.data : [];
+  }catch(err){
+    console.warn("API load failed:",path,err);
+    return [];
+  }
+}
+
+
+function currentUserIdentity(){
+  const qs=new URLSearchParams(location.search);
+
+  return {
+    id:
+      localStorage.getItem("memberId") ||
+      localStorage.getItem("userId") ||
+      sessionStorage.getItem("memberId") ||
+      sessionStorage.getItem("userId") ||
+      qs.get("userId") ||
+      qs.get("memberId") ||
+      "",
+
+    name:
+      localStorage.getItem("userName") ||
+      localStorage.getItem("memberName") ||
+      sessionStorage.getItem("userName") ||
+      sessionStorage.getItem("memberName") ||
+      qs.get("userName") ||
+      ""
+  };
+}
+
+function determinePicAccess(){
+  const user=currentUserIdentity();
+
+  const missionPicId=String(missionData?.picId || "");
+  const missionPicName=String(missionData?.picName || missionData?.leader || "")
+    .trim()
+    .toLowerCase();
+
+  const userId=String(user.id || "");
+  const userName=String(user.name || "").trim().toLowerCase();
+
+  isMissionPic=
+    (!!missionPicId && !!userId && missionPicId===userId) ||
+    (!!missionPicName && !!userName && missionPicName===userName);
+
+  document.getElementById("picFormBox").classList.toggle("show",isMissionPic);
+  document.getElementById("nonPicNote").classList.toggle("show",!isMissionPic);
+
+  document.getElementById("accessLabel").textContent=
+    isMissionPic
+      ? "Akses pengguna: PIC Misi"
+      : "Akses pengguna: Paparan & Rekod MDS";
+
+  if(isMissionPic) applyMissionDefaultsToDailyForm();
+}
+
+
+function wireLinks(){
+  if(!missionId) return;
+
+  document.getElementById("btnAddMds").href=
+    `emt_healthform.html?missionId=${encodeURIComponent(missionId)}`;
+
+  document.getElementById("btnMdsDaily").href=
+    `emt_mdsdaily.html?missionId=${encodeURIComponent(missionId)}`;
+}
+
+
+async function loadMission(){
+  if(!missionId){
+    alert("ID misi tidak dijumpai.");
+    location.href="user_misilist.html";
+    return false;
+  }
+
+  try{
+    const res=await fetch(`${API}/api/missions/${encodeURIComponent(missionId)}`);
+    const json=await res.json();
+
+    if(!json.success || !json.data){
+      throw new Error(json.message || "Misi tidak dijumpai.");
     }
+
+    missionData=json.data;
+    renderMission();
+    determinePicAccess();
+
+    return true;
+
+  }catch(err){
+    console.error(err);
+    alert(err.message || "Gagal memuatkan maklumat misi.");
+    return false;
+  }
+}
+
+function renderMission(){
+  const m=missionData;
+  const badge=STATUS_BADGE[m.status] || "bg-secondary";
+  const pic=m.picName || m.leader || "-";
+
+  document.getElementById("hdrName").textContent=m.name || "-";
+  document.getElementById("hdrMissionId").textContent=`ID Misi: ${m.id || missionId || "-"}`;
+  document.getElementById("hdrStartDate").textContent=formatDate(m.startDate);
+  document.getElementById("hdrEstimatedEnd").textContent=formatDate(m.estimatedEnd);
+  document.getElementById("hdrActualEnd").textContent=formatDate(m.actualEnd);
+  document.getElementById("hdrPic").textContent=pic;
+  document.getElementById("hdrType").textContent=m.type || "-";
+  document.getElementById("hdrLocation").textContent=m.location || "-";
+
+  const hdrStatus=document.getElementById("hdrStatus");
+  hdrStatus.textContent=m.status || "-";
+  hdrStatus.className=`badge fs-6 ${badge}`;
+
+  document.getElementById("mName").textContent=m.name || "-";
+  document.getElementById("mType").textContent=m.type || "-";
+  document.getElementById("mPic").textContent=pic;
+  document.getElementById("mPicRole").textContent=m.picRole || "-";
+  document.getElementById("mPicFacility").textContent=m.picFacility || "-";
+  document.getElementById("mStart").textContent=formatDate(m.startDate);
+  document.getElementById("mEstimatedEnd").textContent=formatDate(m.estimatedEnd);
+  document.getElementById("mActualEnd").textContent=formatDate(m.actualEnd);
+  document.getElementById("mLocation").textContent=m.location || "-";
+  document.getElementById("mNotes").textContent=m.notes || "-";
+
+  const mStatus=document.getElementById("mStatus");
+  mStatus.textContent=m.status || "-";
+  mStatus.className=`badge ${badge}`;
+
+  if(m.startDate) document.getElementById("dailyDate").min=m.startDate;
+  if(m.actualEnd || m.estimatedEnd){
+    document.getElementById("dailyDate").max=m.actualEnd || m.estimatedEnd;
+  }
+}
+
+
+async function loadOperationalData(){
+  const [
+    mds,
+    members,
+    apps,
+    assets,
+    transport,
+    storage
+  ]=await Promise.all([
+    safeApi(`/api/mds?missionId=${encodeURIComponent(missionId)}`),
+    safeApi("/api/members"),
+    safeApi(`/api/mission-applications?missionId=${encodeURIComponent(missionId)}`),
+    safeApi("/api/assets"),
+    safeApi("/api/transport"),
+    safeApi("/api/storage")
+  ]);
+
+  data.mds=mds;
+  data.members=members;
+  data.missionApps=apps.filter(approvedApplication);
+  data.assets=missionSpecific(assets,missionId);
+  data.transport=missionSpecific(transport,missionId);
+  data.storage=missionSpecific(storage,missionId);
+
+  const memberMap=Object.fromEntries(
+    members.map(m=>[String(m.id),m])
+  );
+
+  data.hrMembers=data.missionApps.map(app=>({
+    ...app,
+    member:memberMap[String(app.memberId)] || null
+  }));
+
+  renderMds();
+  renderHr();
+  renderAsset();
+  renderLogistics();
+  renderDispensary();
+  updateDailyMdsCount();
+  updateAllInformatics();
+}
+
+
+function renderMds(){
+  const body=document.getElementById("tbodyMds");
+
+  document.getElementById("mdsCount").textContent=data.mds.length;
+
+  document.getElementById("mdsAdmission").textContent=
+    data.mds.filter(r=>{
+      const s=outcome(r).toLowerCase();
+      return s.includes("admission") || s.includes("kemasukan");
+    }).length;
+
+  document.getElementById("mdsReferral").textContent=
+    data.mds.filter(r=>{
+      const s=outcome(r).toLowerCase();
+      return s.includes("referral") || s.includes("rujukan");
+    }).length;
+
+  if(!data.mds.length){
+    body.innerHTML=
+      `<tr><td colspan="8" class="text-center text-muted py-4">Tiada rekod MDS.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML=data.mds
+    .slice()
+    .sort((a,b)=>String(b.date||"").localeCompare(String(a.date||"")))
+    .map(r=>`
+      <tr>
+        <td>${esc(formatDate(r.date))}</td>
+        <td><span class="badge bg-light text-dark border">${esc(r.id||"-")}</span></td>
+        <td>${esc(r.patientName||"-")}</td>
+        <td>${esc(r.age ?? "-")}</td>
+        <td>${esc(r.gender||"-")}</td>
+        <td>${esc(diagnosis(r))}</td>
+        <td>${esc(outcome(r))}</td>
+        <td class="text-center">
+          <a href="emt_mdsview.html?id=${encodeURIComponent(r.id||"")}"
+             class="btn btn-sm btn-outline-primary">Lihat</a>
+        </td>
+      </tr>
+    `).join("");
+}
+
+
+function hrCategory(designation){
+  const d=String(designation||"").toLowerCase();
+
+  if(d.includes("doktor") || d.includes("doctor") || d.includes("medical officer")) return "Doktor";
+  if(d.includes("jururawat") || d.includes("nurse")) return "Jururawat";
+  if(d.includes("paramedik") || d.includes("paramedic") || d.includes("assistant medical officer") || d.includes("penolong pegawai perubatan")) return "Paramedik";
+  if(d.includes("farmasi") || d.includes("pharmac")) return "Pegawai Farmasi";
+  if(d.includes("kesihatan awam") || d.includes("public health")) return "Pegawai Kesihatan Awam";
+  if(d.includes("sokongan") || d.includes("support")) return "Staf Sokongan";
+
+  return "Lain-lain";
+}
+
+function renderHr(){
+  const categories=[
+    "Doktor",
+    "Jururawat",
+    "Paramedik",
+    "Pegawai Farmasi",
+    "Pegawai Kesihatan Awam",
+    "Staf Sokongan",
+    "Lain-lain"
+  ];
+
+  const grouped=Object.fromEntries(categories.map(c=>[c,[]]));
+
+  data.hrMembers.forEach(x=>{
+    const designation=
+      x.member?.designation ||
+      x.member?.position ||
+      x.designation ||
+      "";
+
+    grouped[hrCategory(designation)].push(x);
   });
 
-    new Chart(document.getElementById('chartHR'), {
-    type: 'doughnut',
-    data: {
-        labels: [
-        'Doktor',
-        'Jururawat',
-        'Paramedik',
-        'Pegawai Farmasi',
-        'Pegawai Kesihatan Awam',
-        'Staf Sokongan',
-        'Lain-lain'
-        ],
-        datasets: [{
-        data: [0, 0, 0, 0, 0, 0, 0]
-        }]
-    },
-    options: {
-        plugins: {
-        legend: {
-            position: 'bottom'
-        }
-        },
-        cutout: '60%'
-    }
-    });
+  document.getElementById("hrTableBody").innerHTML=
+    categories.map((cat,index)=>{
+      const list=grouped[cat];
+      const collapseId=`hrDetail${index}`;
 
-    new Chart(document.getElementById('chartLogistik'), {
-    type: 'doughnut',
-    data: {
-        labels: ['Pengangkutan', 'Penyimpanan'],
-        datasets: [{
-        data: [0, 0]
-        }]
+      return `
+        <tr class="hr-category-row"
+            data-bs-toggle="collapse"
+            data-bs-target="#${collapseId}">
+          <td class="ps-3">${esc(cat)}</td>
+          <td class="text-end fw-semibold pe-3">${list.length}</td>
+        </tr>
+
+        <tr class="hr-detail-row">
+          <td colspan="2" class="p-0 border-0">
+            <div class="collapse" id="${collapseId}">
+              <div class="px-4 py-2 bg-light border-top border-bottom">
+                ${list.length ? `
+                  <div class="table-responsive">
+                    <table class="table table-sm table-borderless mb-0">
+                      <thead>
+                        <tr class="small text-muted">
+                          <th>Nama</th>
+                          <th>ID</th>
+                          <th>Jawatan</th>
+                          <th>Fasiliti</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        ${list.map(x=>`
+                          <tr>
+                            <td>${esc(x.member?.name || x.memberName || "-")}</td>
+                            <td>${esc(x.member?.id || x.memberId || "-")}</td>
+                            <td>${esc(x.member?.designation || x.member?.position || x.designation || "-")}</td>
+                            <td>${esc(x.member?.facility || x.facility || "-")}</td>
+                          </tr>
+                        `).join("")}
+                      </tbody>
+                    </table>
+                  </div>
+                ` : `<div class="small text-muted py-2">Tiada anggota.</div>`}
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join("") +
+    `<tr class="table-light fw-bold">
+      <td class="ps-3">Jumlah Keseluruhan</td>
+      <td class="text-end text-primary pe-3">${data.hrMembers.length}</td>
+    </tr>`;
+
+  if(chartHR) chartHR.destroy();
+
+  chartHR=new Chart(document.getElementById("chartHR"),{
+    type:"doughnut",
+    data:{
+      labels:categories,
+      datasets:[{
+        data:categories.map(c=>grouped[c].length)
+      }]
     },
-    options: {
-        plugins: {
-        legend: {
-            position: 'bottom'
-        }
-        },
-        cutout: '60%'
+    options:{
+      plugins:{legend:{position:"bottom"}},
+      cutout:"60%"
     }
+  });
+}
+
+
+function renderAsset(){
+  const body=document.getElementById("assetTableBody");
+
+  if(!data.assets.length){
+    body.innerHTML=
+      `<tr><td colspan="5" class="text-center text-muted py-4">Tiada aset yang dipautkan kepada misi ini.</td></tr>`;
+  }else{
+    body.innerHTML=data.assets.map(a=>`
+      <tr>
+        <td>${esc(a.name || a.id || "-")}</td>
+        <td>${esc(a.category || "-")}</td>
+        <td>${esc(a.quantity ?? "-")}</td>
+        <td>${esc(a.status || "-")}</td>
+        <td>${esc(a.location || "-")}</td>
+      </tr>
+    `).join("");
+  }
+
+  const categoryCount={};
+
+  data.assets.forEach(a=>{
+    const cat=a.category || "Lain-lain";
+    categoryCount[cat]=(categoryCount[cat]||0)+(Number(a.quantity)||1);
+  });
+
+  if(chartAsset) chartAsset.destroy();
+
+  chartAsset=new Chart(document.getElementById("chartAsset"),{
+    type:"bar",
+    data:{
+      labels:Object.keys(categoryCount),
+      datasets:[{
+        label:"Kuantiti",
+        data:Object.values(categoryCount)
+      }]
+    },
+    options:{
+      plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true,ticks:{precision:0}}}
+    }
+  });
+}
+
+
+function renderLogistics(){
+  const tBody=document.getElementById("transportTableBody");
+  const sBody=document.getElementById("storageTableBody");
+
+  tBody.innerHTML=data.transport.length
+    ? data.transport.map(v=>`
+        <tr>
+          <td>${esc(v.name || v.vehicleName || "-")}</td>
+          <td>${esc(v.plate || v.registrationNo || "-")}</td>
+          <td>${esc(v.passengerCapacity ?? v.loadCapacity ?? "-")}</td>
+          <td>${esc(v.status || "-")}</td>
+          <td>${esc(v.driver || "-")}</td>
+        </tr>
+      `).join("")
+    : `<tr><td colspan="5" class="text-center text-muted py-2">Tiada pengangkutan berdaftar.</td></tr>`;
+
+  sBody.innerHTML=data.storage.length
+    ? data.storage.map(s=>`
+        <tr>
+          <td>${esc(s.id || "-")}</td>
+          <td>${esc(s.type || s.name || "-")}</td>
+          <td>${esc(s.location || "-")}</td>
+          <td>${esc(s.status || "-")}</td>
+        </tr>
+      `).join("")
+    : `<tr><td colspan="4" class="text-center text-muted py-2">Tiada penyimpanan berdaftar.</td></tr>`;
+
+  if(chartLogistics) chartLogistics.destroy();
+
+  chartLogistics=new Chart(document.getElementById("chartLogistics"),{
+    type:"doughnut",
+    data:{
+      labels:["Pengangkutan","Penyimpanan"],
+      datasets:[{
+        data:[data.transport.length,data.storage.length]
+      }]
+    },
+    options:{
+      plugins:{legend:{position:"bottom"}},
+      cutout:"60%"
+    }
+  });
+}
+
+
+function renderDispensary(){
+  const body=document.getElementById("dispensaryBody");
+
+  if(!data.mds.length){
+    body.innerHTML=
+      `<tr><td colspan="6" class="text-center text-muted py-4">Tiada rekod MDS untuk dirujuk.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML=data.mds.map(r=>`
+    <tr>
+      <td>${esc(r.id||"-")}</td>
+      <td>${esc(r.patientName||"-")}</td>
+      <td>${esc(r.age ?? "-")}</td>
+      <td>${esc(r.gender||"-")}</td>
+      <td>${esc(diagnosis(r))}</td>
+      <td>${esc(medication(r))}</td>
+    </tr>
+  `).join("");
+}
+
+
+function readLocalDaily(){
+  try{
+    const list=JSON.parse(localStorage.getItem(DAILY_STORAGE_KEY)||"[]");
+    return Array.isArray(list) ? list : [];
+  }catch{
+    return [];
+  }
+}
+
+function writeLocalDaily(list){
+  localStorage.setItem(DAILY_STORAGE_KEY,JSON.stringify(list));
+}
+
+async function loadDailyReports(){
+  let backendLoaded=false;
+
+  try{
+    const res=await fetch(`${API}/api/daily-reports?missionId=${encodeURIComponent(missionId)}`);
+
+    if(res.ok){
+      const json=await res.json();
+
+      if(json.success && Array.isArray(json.data)){
+        data.dailyReports=json.data;
+        dailyBackendAvailable=true;
+        backendLoaded=true;
+      }
+    }
+  }catch(err){
+    console.warn("Daily report backend unavailable:",err);
+  }
+
+  if(!backendLoaded){
+    dailyBackendAvailable=false;
+
+    data.dailyReports=readLocalDaily()
+      .filter(r=>String(r.missionId||"")===String(missionId));
+
+    document.getElementById("dailyStorageWarning").classList.add("show");
+  }else{
+    document.getElementById("dailyStorageWarning").classList.remove("show");
+  }
+
+  data.dailyReports.sort((a,b)=>
+    String(b.reportDate||"").localeCompare(String(a.reportDate||""))
+  );
+
+  renderDailyHistory();
+  updateAllInformatics();
+
+  if(isMissionPic){
+    applyMissionDefaultsToDailyForm();
+
+    const date=document.getElementById("dailyDate").value;
+    const existing=findDailyByDate(date);
+
+    if(existing) populateDailyForm(existing);
+  }
+}
+
+async function persistDaily(report){
+  if(dailyBackendAvailable){
+    try{
+      const existing=data.dailyReports.some(r=>String(r.id)===String(report.id));
+
+      const url=existing
+        ? `${API}/api/daily-reports/${encodeURIComponent(report.id)}`
+        : `${API}/api/daily-reports`;
+
+      const res=await fetch(url,{
+        method:existing ? "PATCH" : "POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(report)
+      });
+
+      const json=await res.json();
+
+      if(res.ok && json.success){
+        return json.data || report;
+      }
+
+      throw new Error(json.message || "Daily report endpoint failed.");
+
+    }catch(err){
+      console.warn("Using local fallback:",err);
+      dailyBackendAvailable=false;
+      document.getElementById("dailyStorageWarning").classList.add("show");
+    }
+  }
+
+  const all=readLocalDaily();
+  const index=all.findIndex(r=>String(r.id)===String(report.id));
+
+  if(index>=0) all[index]=report;
+  else all.push(report);
+
+  writeLocalDaily(all);
+  return report;
+}
+
+
+function applyMissionDefaultsToDailyForm(){
+  if(!missionData || !isMissionPic) return;
+
+  if(!document.getElementById("dailyOrganization").value){
+    document.getElementById("dailyOrganization").value="Kementerian Kesihatan Malaysia (KKM)";
+  }
+
+  if(!document.getElementById("dailyContactPerson").value){
+    document.getElementById("dailyContactPerson").value=
+      missionData.picName || missionData.leader || "";
+  }
+
+  if(!document.getElementById("dailyLocation").value){
+    document.getElementById("dailyLocation").value=missionData.location || "";
+  }
+
+  if(!document.getElementById("dailyDate").value){
+    const today=new Date().toISOString().slice(0,10);
+    const start=missionData.startDate || "";
+    const end=missionData.actualEnd || missionData.estimatedEnd || "";
+
+    if((!start || today>=start) && (!end || today<=end)){
+      document.getElementById("dailyDate").value=today;
+    }else if(start){
+      document.getElementById("dailyDate").value=start;
+    }
+  }
+
+  if(!document.getElementById("dailyReportTime").value){
+    document.getElementById("dailyReportTime").value=
+      new Date().toTimeString().slice(0,5);
+  }
+
+  updateDailyMdsCount();
+}
+
+function selectedRisks(){
+  return [...document.querySelectorAll(".daily-risk:checked")]
+    .map(x=>String(x.dataset.code));
+}
+
+function setRisks(codes){
+  const set=new Set((codes||[]).map(String));
+
+  document.querySelectorAll(".daily-risk").forEach(x=>{
+    x.checked=set.has(String(x.dataset.code));
+  });
+}
+
+function findDailyByDate(date){
+  return data.dailyReports.find(r=>
+    String(r.reportDate||"")===String(date||"")
+  );
+}
+
+function populateDailyForm(report){
+  if(!isMissionPic) return;
+
+  currentDailyReportId=report.id;
+
+  document.getElementById("dailyDate").value=report.reportDate || "";
+  document.getElementById("dailyReportTime").value=report.reportTime || "";
+  document.getElementById("dailyDepartureDate").value=report.estimatedDepartureDate || "";
+  document.getElementById("dailyOrganization").value=report.organizationName || "";
+  document.getElementById("dailyTeamName").value=report.teamName || "";
+  document.getElementById("dailyEmtType").value=report.emtType || "";
+  document.getElementById("dailyContactPerson").value=report.contactPerson || "";
+  document.getElementById("dailyPhone").value=report.phone || "";
+  document.getElementById("dailyEmail").value=report.email || "";
+  document.getElementById("dailyLocation").value=report.location || "";
+  document.getElementById("dailyFacility").value=report.facilityName || "";
+  document.getElementById("dailyLatitude").value=report.latitude || "";
+  document.getElementById("dailyLongitude").value=report.longitude || "";
+  document.getElementById("dailyComments").value=report.comments || "";
+
+  setRisks(
+    report.riskCodes ||
+    Object.keys(report.needsRisks||{}).filter(k=>report.needsRisks[k])
+  );
+
+  document.getElementById("dailyFormStatus").textContent=
+    `Laporan dimuatkan — Status: ${report.status || "Draft"}`;
+
+  updateDailyMdsCount();
+}
+
+function resetDailyForm(keepDate=true){
+  if(!isMissionPic) return;
+
+  const date=keepDate ? document.getElementById("dailyDate").value : "";
+
+  document.getElementById("dailyReportForm").reset();
+  currentDailyReportId=null;
+
+  if(keepDate){
+    document.getElementById("dailyDate").value=date;
+  }
+
+  setRisks([]);
+  applyMissionDefaultsToDailyForm();
+
+  document.getElementById("dailyFormStatus").textContent="Laporan baharu.";
+}
+
+function validateDailyDate(){
+  const date=document.getElementById("dailyDate").value;
+
+  if(!date) return false;
+
+  if(missionData?.startDate && date<missionData.startDate){
+    alert("Tarikh Aktiviti tidak boleh lebih awal daripada Tarikh Mula misi.");
+    return false;
+  }
+
+  const end=missionData?.actualEnd || missionData?.estimatedEnd;
+
+  if(end && date>end){
+    alert("Tarikh Aktiviti tidak boleh melebihi tempoh misi.");
+    return false;
+  }
+
+  return true;
+}
+
+function buildDailyPayload(status){
+  const riskCodes=selectedRisks();
+
+  const needsRisks=Object.fromEntries(
+    Object.keys(DAILY_RISK_LABELS)
+      .map(code=>[code,riskCodes.includes(code)])
+  );
+
+  return {
+    id:currentDailyReportId || `DR-${Date.now()}`,
+
+    missionId,
+    missionName:missionData?.name || "",
+    picId:missionData?.picId || null,
+    picName:missionData?.picName || missionData?.leader || "",
+
+    reportDate:document.getElementById("dailyDate").value,
+    reportTime:document.getElementById("dailyReportTime").value,
+    estimatedDepartureDate:document.getElementById("dailyDepartureDate").value,
+
+    organizationName:document.getElementById("dailyOrganization").value.trim(),
+    teamName:document.getElementById("dailyTeamName").value.trim(),
+    emtType:document.getElementById("dailyEmtType").value,
+
+    contactPerson:document.getElementById("dailyContactPerson").value.trim(),
+    phone:document.getElementById("dailyPhone").value.trim(),
+    email:document.getElementById("dailyEmail").value.trim(),
+
+    location:document.getElementById("dailyLocation").value.trim(),
+    facilityName:document.getElementById("dailyFacility").value.trim(),
+    latitude:document.getElementById("dailyLatitude").value.trim(),
+    longitude:document.getElementById("dailyLongitude").value.trim(),
+
+    riskCodes,
+    needsRisks,
+    comments:document.getElementById("dailyComments").value.trim(),
+
+    status,
+    updatedAt:new Date().toISOString(),
+    submittedAt:status==="Submitted" ? new Date().toISOString() : null
+  };
+}
+
+async function saveDaily(status){
+  if(!isMissionPic){
+    alert("Hanya PIC misi boleh mengemaskini laporan harian.");
+    return;
+  }
+
+  const form=document.getElementById("dailyReportForm");
+
+  if(!form.checkValidity()){
+    form.reportValidity();
+    return;
+  }
+
+  if(!validateDailyDate()) return;
+
+  const payload=buildDailyPayload(status);
+  const sameDate=findDailyByDate(payload.reportDate);
+
+  if(sameDate && String(sameDate.id)!==String(payload.id)){
+    payload.id=sameDate.id;
+    currentDailyReportId=sameDate.id;
+  }
+
+  document.getElementById("btnSaveDraft").disabled=true;
+  document.getElementById("btnSubmitDaily").disabled=true;
+  document.getElementById("dailyFormStatus").textContent="Menyimpan...";
+
+  try{
+    const saved=await persistDaily(payload);
+
+    const index=data.dailyReports.findIndex(r=>String(r.id)===String(saved.id));
+
+    if(index>=0) data.dailyReports[index]=saved;
+    else data.dailyReports.push(saved);
+
+    data.dailyReports.sort((a,b)=>
+      String(b.reportDate||"").localeCompare(String(a.reportDate||""))
+    );
+
+    currentDailyReportId=saved.id;
+
+    renderDailyHistory();
+    updateAllInformatics();
+
+    document.getElementById("dailyFormStatus").textContent=
+      status==="Submitted"
+        ? "Laporan berjaya dihantar."
+        : "Draft berjaya disimpan.";
+
+  }catch(err){
+    console.error(err);
+    alert(err.message || "Gagal menyimpan laporan harian.");
+    document.getElementById("dailyFormStatus").textContent="Gagal menyimpan.";
+
+  }finally{
+    document.getElementById("btnSaveDraft").disabled=false;
+    document.getElementById("btnSubmitDaily").disabled=false;
+  }
+}
+
+function updateDailyMdsCount(){
+  const date=document.getElementById("dailyDate").value;
+
+  const count=data.mds.filter(r=>
+    !date || String(r.date||"")===String(date)
+  ).length;
+
+  document.getElementById("dailyMdsCount").textContent=count;
+}
+
+
+function reportRiskCodes(report){
+  return (
+    report.riskCodes ||
+    Object.keys(report.needsRisks||{}).filter(k=>report.needsRisks[k])
+  ).map(String);
+}
+
+function renderDailyHistory(){
+  document.getElementById("dailyHistoryCount").textContent=
+    `${data.dailyReports.length} laporan`;
+
+  const body=document.getElementById("dailyHistoryBody");
+
+  if(!data.dailyReports.length){
+    body.innerHTML=
+      `<tr><td colspan="7" class="text-center text-muted py-4">Belum ada laporan harian.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML=data.dailyReports.map(r=>{
+    const risks=reportRiskCodes(r);
+
+    const statusClass=
+      r.status==="Submitted"
+        ? "bg-success"
+        : "bg-warning text-dark";
+
+    return `
+      <tr>
+        <td>
+          <button type="button"
+                  class="history-date-btn"
+                  onclick="showDailyDetail('${esc(r.id)}')">
+            ${esc(formatDate(r.reportDate))}
+          </button>
+        </td>
+
+        <td>${esc(r.teamName||"-")}</td>
+        <td>${esc(r.emtType||"-")}</td>
+
+        <td>
+          ${esc(r.location||"-")}
+          ${r.facilityName ? `<div class="small text-muted">${esc(r.facilityName)}</div>` : ""}
+        </td>
+
+        <td>
+          <span class="badge ${risks.length ? "bg-danger" : "bg-light text-dark border"}">
+            ${risks.length} ditanda
+          </span>
+        </td>
+
+        <td>
+          <span class="badge ${statusClass} badge-status">
+            ${esc(r.status||"Draft")}
+          </span>
+        </td>
+
+        <td class="text-end">
+          <button type="button"
+                  class="btn btn-sm btn-outline-primary"
+                  onclick="showDailyDetail('${esc(r.id)}')">
+            Lihat
+          </button>
+
+          ${isMissionPic ? `
+            <button type="button"
+                    class="btn btn-sm btn-outline-secondary ms-1"
+                    onclick="editDailyAsPic('${esc(r.id)}')">
+              Kemaskini
+            </button>
+          ` : ""}
+        </td>
+      </tr>
+    `;
+  }).join("");
+}
+
+window.showDailyDetail=function(reportId){
+  const report=data.dailyReports.find(r=>
+    String(r.id)===String(reportId)
+  );
+
+  if(!report) return;
+
+  const risks=reportRiskCodes(report);
+
+  document.getElementById("ddDate").textContent=formatDate(report.reportDate);
+  document.getElementById("ddTeam").textContent=report.teamName || "-";
+  document.getElementById("ddType").textContent=report.emtType || "-";
+  document.getElementById("ddContact").textContent=report.contactPerson || "-";
+  document.getElementById("ddLocation").textContent=report.location || "-";
+  document.getElementById("ddFacility").textContent=report.facilityName || "-";
+  document.getElementById("ddComments").textContent=report.comments || "-";
+
+  const statusClass=
+    report.status==="Submitted"
+      ? "bg-success"
+      : "bg-warning text-dark";
+
+  document.getElementById("ddStatus").innerHTML=
+    `<span class="badge ${statusClass}">${esc(report.status||"Draft")}</span>`;
+
+  document.getElementById("ddRisks").innerHTML=
+    risks.length
+      ? risks.map(code=>`
+          <span class="badge bg-light text-dark border me-1 mb-1">
+            ${esc(code)}. ${esc(DAILY_RISK_LABELS[code] || code)}
+          </span>
+        `).join("")
+      : `<span class="text-muted">Tiada Needs & Risks ditanda.</span>`;
+
+  document.getElementById("dailyDetailSub").textContent=
+    `${formatDate(report.reportDate)} • ${report.teamName || "-"}`;
+
+  document.getElementById("dailyDetailBox").classList.remove("d-none");
+  document.getElementById("dailyDetailBox").scrollIntoView({behavior:"smooth",block:"start"});
+};
+
+window.editDailyAsPic=function(reportId){
+  if(!isMissionPic) return;
+
+  const report=data.dailyReports.find(r=>
+    String(r.id)===String(reportId)
+  );
+
+  if(!report) return;
+
+  populateDailyForm(report);
+
+  const collapseEl=document.getElementById("dailyFormCollapse");
+  bootstrap.Collapse.getOrCreateInstance(collapseEl,{toggle:false}).show();
+
+  document.getElementById("picFormBox").scrollIntoView({behavior:"smooth",block:"start"});
+};
+
+
+function updateAllInformatics(){
+  const riskSet=new Set();
+
+  data.dailyReports.forEach(r=>{
+    reportRiskCodes(r).forEach(code=>riskSet.add(code));
+  });
+
+  document.getElementById("kpiMds").textContent=data.mds.length;
+  document.getElementById("kpiHr").textContent=data.hrMembers.length;
+  document.getElementById("kpiDaily").textContent=data.dailyReports.length;
+  document.getElementById("kpiDraft").textContent=
+    data.dailyReports.filter(r=>String(r.status||"").toLowerCase()==="draft").length;
+  document.getElementById("kpiRisks").textContent=riskSet.size;
+  document.getElementById("kpiResources").textContent=
+    data.assets.length + data.transport.length + data.storage.length;
+
+  renderMdsTrendChart();
+  renderDailyStatusChart();
+  renderRiskFrequencyChart();
+  renderDailyOpsSummary();
+}
+
+function renderMdsTrendChart(){
+  const countByDate={};
+
+  data.mds.forEach(r=>{
+    const date=r.date || "Tiada Tarikh";
+    countByDate[date]=(countByDate[date]||0)+1;
+  });
+
+  const labels=Object.keys(countByDate).sort();
+  const values=labels.map(d=>countByDate[d]);
+
+  if(chartMdsTrend) chartMdsTrend.destroy();
+
+  chartMdsTrend=new Chart(document.getElementById("chartMdsTrend"),{
+    type:"line",
+    data:{
+      labels:labels.map(formatDate),
+      datasets:[{
+        label:"Rekod MDS",
+        data:values,
+        tension:.25
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true,ticks:{precision:0}}}
+    }
+  });
+}
+
+function renderDailyStatusChart(){
+  const draft=data.dailyReports.filter(r=>
+    String(r.status||"").toLowerCase()==="draft"
+  ).length;
+
+  const submitted=data.dailyReports.filter(r=>
+    String(r.status||"").toLowerCase()==="submitted"
+  ).length;
+
+  if(chartDailyStatus) chartDailyStatus.destroy();
+
+  chartDailyStatus=new Chart(document.getElementById("chartDailyStatus"),{
+    type:"doughnut",
+    data:{
+      labels:["Draft","Submitted"],
+      datasets:[{
+        data:[draft,submitted]
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{position:"bottom"}},
+      cutout:"60%"
+    }
+  });
+}
+
+function renderRiskFrequencyChart(){
+  const counts={};
+
+  data.dailyReports.forEach(r=>{
+    reportRiskCodes(r).forEach(code=>{
+      counts[code]=(counts[code]||0)+1;
     });
+  });
+
+  const sorted=Object.entries(counts)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,8);
+
+  const labels=sorted.map(([code])=>`${code}. ${DAILY_RISK_LABELS[code] || code}`);
+  const values=sorted.map(([,count])=>count);
+
+  if(chartRiskFrequency) chartRiskFrequency.destroy();
+
+  chartRiskFrequency=new Chart(document.getElementById("chartRiskFrequency"),{
+    type:"bar",
+    data:{
+      labels,
+      datasets:[{
+        label:"Bilangan Laporan",
+        data:values
+      }]
+    },
+    options:{
+      indexAxis:"y",
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{beginAtZero:true,ticks:{precision:0}}}
+    }
+  });
+}
+
+function renderDailyOpsSummary(){
+  const dateSet=new Set();
+
+  data.mds.forEach(r=>{
+    if(r.date) dateSet.add(r.date);
+  });
+
+  data.dailyReports.forEach(r=>{
+    if(r.reportDate) dateSet.add(r.reportDate);
+  });
+
+  const dates=[...dateSet].sort().reverse().slice(0,7);
+  const body=document.getElementById("dailyOpsSummaryBody");
+
+  if(!dates.length){
+    body.innerHTML=
+      `<tr><td colspan="4" class="text-center text-muted py-3">Belum ada aktiviti harian.</td></tr>`;
+    return;
+  }
+
+  body.innerHTML=dates.map(date=>{
+    const mdsCount=data.mds.filter(r=>String(r.date||"")===String(date)).length;
+    const report=findDailyByDate(date);
+
+    const status=report
+      ? `<span class="badge ${report.status==="Submitted" ? "bg-success" : "bg-warning text-dark"}">${esc(report.status||"Draft")}</span>`
+      : `<span class="text-muted">-</span>`;
+
+    return `
+      <tr>
+        <td>${esc(formatDate(date))}</td>
+        <td>${mdsCount}</td>
+        <td>${status}</td>
+        <td>${esc(report?.teamName || "-")}</td>
+      </tr>
+    `;
+  }).join("");
+}
+
+
+document.getElementById("dailyDate").addEventListener("change",()=>{
+  if(!isMissionPic) return;
+  if(!validateDailyDate()) return;
+
+  const date=document.getElementById("dailyDate").value;
+  const existing=findDailyByDate(date);
+
+  if(existing){
+    populateDailyForm(existing);
+  }else{
+    currentDailyReportId=null;
+
+    document.getElementById("dailyTeamName").value="";
+    document.getElementById("dailyEmtType").value="";
+    document.getElementById("dailyFacility").value="";
+    document.getElementById("dailyLatitude").value="";
+    document.getElementById("dailyLongitude").value="";
+    document.getElementById("dailyComments").value="";
+
+    setRisks([]);
+    applyMissionDefaultsToDailyForm();
+
+    document.getElementById("dailyFormStatus").textContent=
+      "Belum ada laporan untuk tarikh ini.";
+
+    updateDailyMdsCount();
+  }
+});
+
+document.getElementById("btnNewDaily").addEventListener("click",()=>{
+  resetDailyForm(false);
+});
+
+document.getElementById("btnSaveDraft").addEventListener("click",()=>{
+  saveDaily("Draft");
+});
+
+document.getElementById("dailyReportForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  saveDaily("Submitted");
+});
+
+document.getElementById("btnCloseDailyDetail").addEventListener("click",()=>{
+  document.getElementById("dailyDetailBox").classList.add("d-none");
+});
+
+
+document.addEventListener("DOMContentLoaded",async()=>{
+  wireLinks();
+
+  const ok=await loadMission();
+  if(!ok) return;
+
+  await loadOperationalData();
+  await loadDailyReports();
+
+  determinePicAccess();
+
+  if(isMissionPic){
+    applyMissionDefaultsToDailyForm();
+
+    const date=document.getElementById("dailyDate").value;
+    const existing=findDailyByDate(date);
+
+    if(existing) populateDailyForm(existing);
+  }
+
+  renderDailyHistory();
+  updateAllInformatics();
+});
 </script>
-
-
-
-
-
-<!--
-TO UPDATE XTREMAX
-
-1. LAPORAN MDS - PATIENT UNIQUE ID  
-
-*/
-
--->>
-
-
 
 </body>
 </html>

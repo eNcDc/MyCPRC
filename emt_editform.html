@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Kemaskini Maklumat MyEMT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
+
+  <style>
+    body{background:#f4f6f9}
+
+    .form-shell{
+      border:0;
+      border-radius:14px;
+      box-shadow:0 .25rem .75rem rgba(0,0,0,.06);
+    }
+
+    .wizard-step{display:none}
+    .wizard-step.active{display:block}
+
+    #stepNav{
+      gap:.35rem;
+      flex-wrap:wrap;
+    }
+
+    #stepNav .nav-link{
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      padding:0;
+      display:grid;
+      place-items:center;
+      font-weight:700;
+    }
+
+    #stepNav .nav-link.completed{
+      background:#198754;
+      color:#fff;
+    }
+
+    #stepNav .nav-link.locked{
+      opacity:.45;
+      pointer-events:none;
+    }
+
+    .step-caption{
+      font-size:.78rem;
+      color:#6c757d;
+      margin-top:.35rem;
+      text-align:center;
+    }
+
+    .section-card{
+      border:1px solid #e3e7ed;
+      border-radius:12px;
+      padding:1rem;
+      background:#fff;
+    }
+
+    .required::after{
+      content:" *";
+      color:#dc3545;
+    }
+
+    .small-help{
+      font-size:.8rem;
+      color:#6c757d;
+    }
+
+    .existing-file{
+      border:1px solid #dee2e6;
+      border-radius:10px;
+      padding:.75rem 1rem;
+      background:#f8f9fa;
+    }
+
+    .loading-panel{
+      min-height:280px;
+      display:grid;
+      place-items:center;
+    }
+
+    textarea{resize:vertical}
+  </style>
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+
+    <main class="col-md-9 col-lg-10 p-4">
+
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+        <div>
+          <h4 class="mb-1 fw-bold">Kemaskini Maklumat MyEMT</h4>
+          <small class="text-muted">
+            Kemaskini maklumat pendaftaran, profesional, kesihatan dan dokumen MyEMT anda.
+          </small>
+        </div>
+
+        <a href="emt_submitform.html" class="btn btn-primary" id="btnBack">
+          <i class="bi bi-arrow-left me-1"></i>Kembali
+        </a>
+      </div>
+
+
+      <div class="card form-shell">
+
+        <!-- LOADING -->
+        <div class="card-body loading-panel" id="loadingPanel">
+          <div class="text-center">
+            <div class="spinner-border text-primary mb-3"></div>
+            <div class="text-muted">Memuatkan maklumat MyEMT...</div>
+          </div>
+        </div>
+
+
+        <!-- FORM CONTENT -->
+        <div class="d-none" id="formContent">
+
+          <div class="card-body border-bottom">
+
+            <div class="d-flex flex-wrap justify-content-between align-items-start gap-3">
+              <div>
+                <h5 class="mb-1" id="memberTitle">-</h5>
+                <div class="small text-muted">
+                  ID Ahli: <span class="fw-semibold" id="memberIdLabel">-</span>
+                </div>
+              </div>
+
+              <div class="text-end">
+                <div class="small text-muted mb-1">Status Permohonan</div>
+                <span class="badge bg-secondary" id="statusBadge">-</span>
+              </div>
+            </div>
+
+            <div class="alert alert-info mt-3 mb-0">
+              <i class="bi bi-info-circle me-1"></i>
+              Maklumat sedia ada telah dimuatkan. Ubah hanya bahagian yang perlu dan tekan
+              <strong>Simpan Perubahan</strong>.
+            </div>
+
+          </div>
+
+
+          <div class="card-body">
+
+            <!-- WIZARD NAV -->
+            <div class="d-flex justify-content-center mb-4">
+              <div>
+                <ul class="nav nav-pills justify-content-center" id="stepNav">
+                  <li class="nav-item"><button class="nav-link active" type="button" data-step="0">1</button></li>
+                  <li class="nav-item"><button class="nav-link locked" type="button" data-step="1">2</button></li>
+                  <li class="nav-item"><button class="nav-link locked" type="button" data-step="2">3</button></li>
+                  <li class="nav-item"><button class="nav-link locked" type="button" data-step="3">4</button></li>
+                  <li class="nav-item"><button class="nav-link locked" type="button" data-step="4">5</button></li>
+                  <li class="nav-item"><button class="nav-link locked" type="button" data-step="5">6</button></li>
+                </ul>
+
+                <div class="d-flex justify-content-between gap-2 mt-1">
+                  <div class="step-caption">Pemohon</div>
+                  <div class="step-caption">Kecemasan</div>
+                  <div class="step-caption">Profesional</div>
+                  <div class="step-caption">Kesihatan</div>
+                  <div class="step-caption">Deklarasi</div>
+                  <div class="step-caption">Sokongan</div>
+                </div>
+              </div>
+            </div>
+
+
+            <form id="myemtEditForm" novalidate>
+
+              <!-- =====================================================
+                   STEP 1
+              ====================================================== -->
+              <section class="wizard-step active">
+                <h5 class="mb-3">1. Maklumat Pemohon</h5>
+
+                <div class="section-card">
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="full_name">Nama Penuh</label>
+                    <input type="text" class="form-control" id="full_name" name="full_name" required>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label fw-bold required" for="identification_number">
+                        No. Pengenalan (Tanpa -)
+                      </label>
+
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="identification_number"
+                        name="identification_number"
+                        inputmode="numeric"
+                        minlength="12"
+                        maxlength="12"
+                        pattern="[0-9]{12}"
+                        required
+                      >
+
+                      <div class="small-help mt-1">
+                        No. pengenalan dikekalkan sebagai identifier utama ahli.
+                      </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label fw-bold required" for="age">Umur</label>
+                      <input type="number" class="form-control" id="age" name="age" min="18" max="100" required>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="gender">Jantina</label>
+                    <select class="form-select" id="gender" name="gender" required>
+                      <option value="">Sila pilih</option>
+                      <option value="Lelaki">Lelaki</option>
+                      <option value="Perempuan">Perempuan</option>
+                    </select>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="designationSelect">Jawatan</label>
+                    <select class="form-select" id="designationSelect" name="designation" required>
+                      <option value="">Sila Pilih Jawatan</option>
+                      <option value="Emergency Physician">Emergency Physician</option>
+                      <option value="Public Health Medicine Specialist">Public Health Medicine Specialist</option>
+                      <option value="Family Medicine Specialist (FMS)">Family Medicine Specialist (FMS)</option>
+                      <option value="Medical Officer (MO)">Medical Officer (MO)</option>
+                      <option value="Assistant Medical Officer (AMO)">Assistant Medical Officer (AMO)</option>
+                      <option value="Staff Nurse">Staff Nurse</option>
+                      <option value="Pharmacist">Pharmacist</option>
+                      <option value="Environmental Health Assistant">Environmental Health Assistant</option>
+                      <option value="Assistant Environmental Health Assistant">Assistant Environmental Health Assistant</option>
+                      <option value="Psychologist">Psychologist</option>
+                      <option value="Engineer">Engineer</option>
+                      <option value="Other">Lain-lain (Sila Nyatakan)</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-3 d-none" id="otherDesignationWrapper">
+                    <label class="form-label fw-bold required" for="otherDesignationInput">Sila Nyatakan Jawatan</label>
+                    <input type="text" class="form-control" id="otherDesignationInput" name="other_designation">
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="grade">Gred</label>
+                    <input type="text" class="form-control" id="grade" name="grade" required>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="service_period">Tempoh Perkhidmatan</label>
+                    <select class="form-select" id="service_period" name="service_period" required>
+                      <option value="">Sila pilih</option>
+                      <option value="< 5 tahun">&lt; 5 tahun</option>
+                      <option value="5 - 10 tahun">5 - 10 tahun</option>
+                      <option value="11 - 15 tahun">11 - 15 tahun</option>
+                      <option value="> 15 tahun">&gt; 15 tahun</option>
+                    </select>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="state">Negeri</label>
+                    <select class="form-select" id="state" name="state" required>
+                      <option value="">Sila Pilih Negeri</option>
+                      <option>Johor</option>
+                      <option>Kedah</option>
+                      <option>Kelantan</option>
+                      <option>Melaka</option>
+                      <option>Negeri Sembilan</option>
+                      <option>Pahang</option>
+                      <option>Perak</option>
+                      <option>Perlis</option>
+                      <option>Pulau Pinang</option>
+                      <option>Sabah</option>
+                      <option>Sarawak</option>
+                      <option>Selangor</option>
+                      <option>Terengganu</option>
+                      <option>WP Kuala Lumpur</option>
+                      <option>WP Putrajaya</option>
+                      <option>WP Labuan</option>
+                    </select>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="facilitySelect">Jenis Fasiliti</label>
+                    <select class="form-select" id="facilitySelect" name="facility_type" required>
+                      <option value="">Sila Pilih Jenis Fasiliti</option>
+                      <option value="Hospital">Hospital</option>
+                      <option value="Klinik Kesihatan">Klinik Kesihatan</option>
+                      <option value="Jabatan Kesihatan Negeri">Jabatan Kesihatan Negeri</option>
+                      <option value="Pejabat Kesihatan Daerah">Pejabat Kesihatan Daerah</option>
+                      <option value="IPKKM">Ibu Pejabat KKM (IPKKM)</option>
+                      <option value="Others">Lain-lain</option>
+                    </select>
+
+                    <div id="facility_other_field" class="mt-2 d-none">
+                      <label class="form-label required" for="facility_other">Sila nyatakan jenis fasiliti</label>
+                      <input type="text" class="form-control" id="facility_other" name="facility_other">
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="workplace">Tempat Bekerja</label>
+                    <input type="text" class="form-control" id="workplace" name="workplace" required>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="home_address">Alamat Rumah</label>
+                    <textarea class="form-control" id="home_address" name="home_address" rows="3" required></textarea>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="office_email">Emel Pejabat</label>
+                    <input type="email" class="form-control" id="office_email" name="office_email" required>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="personal_email">Emel Peribadi</label>
+                    <input type="email" class="form-control" id="personal_email" name="personal_email" required>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="phone">Nombor Telefon</label>
+                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                  </div>
+
+
+                  <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-primary next-step">
+                      Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                  </div>
+
+                </div>
+              </section>
+
+
+              <!-- =====================================================
+                   STEP 2
+              ====================================================== -->
+              <section class="wizard-step">
+                <h5 class="mb-3">2. Maklumat Kecemasan</h5>
+
+                <div class="section-card">
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="emergency_name">Nama Waris (Next of Kin)</label>
+                    <input type="text" class="form-control" id="emergency_name" name="emergency_name" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required">Hubungan</label>
+
+                    <div class="form-check">
+                      <input class="form-check-input relationRadio" type="radio" name="relation" value="Ibu/Bapa" required>
+                      <label class="form-check-label">Ibu / Bapa</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input relationRadio" type="radio" name="relation" value="Suami/Isteri">
+                      <label class="form-check-label">Suami / Isteri</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input relationRadio" type="radio" name="relation" value="Other">
+                      <label class="form-check-label">Lain-lain</label>
+                    </div>
+
+                    <div id="relation_other_field" class="mt-2 d-none">
+                      <input type="text" class="form-control" name="relation_other_text"
+                             id="relation_other_text" placeholder="Sila nyatakan">
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="emergency_address">Alamat Rumah Waris</label>
+                    <textarea class="form-control" id="emergency_address" name="emergency_address" rows="3" required></textarea>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required" for="emergency_phone">Nombor Telefon Waris</label>
+                    <input type="tel" class="form-control" id="emergency_phone" name="emergency_phone" required>
+                  </div>
+
+
+                  <div class="d-flex justify-content-between gap-2">
+                    <button type="button" class="btn btn-secondary prev-step">
+                      <i class="bi bi-arrow-left me-1"></i>Kembali
+                    </button>
+
+                    <button type="button" class="btn btn-primary next-step">
+                      Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                  </div>
+
+                </div>
+              </section>
+
+
+              <!-- =====================================================
+                   STEP 3
+              ====================================================== -->
+              <section class="wizard-step">
+                <h5 class="mb-3">3. Latar Belakang Profesional</h5>
+
+                <div class="section-card">
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">APC / Sijil Amalan / Dokumen Kelayakan Profesional</label>
+
+                    <div class="existing-file mb-2" id="existingApcBox">
+                      <div class="small text-muted">Dokumen Semasa</div>
+                      <div class="fw-semibold" id="existingApcName">Tiada dokumen</div>
+                      <a class="btn btn-sm btn-outline-primary mt-2 d-none"
+                         id="existingApcLink" target="_blank" rel="noopener">
+                        Lihat Dokumen
+                      </a>
+                    </div>
+
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="apc_file"
+                      name="apc_file"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                    >
+
+                    <div class="small-help mt-1">
+                      Biarkan kosong jika tidak mahu menukar dokumen semasa. PDF/JPG/PNG, maksimum 3 MB.
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required">
+                      Pernah menghadiri latihan bencana atau respons kecemasan?
+                    </label>
+
+                    <div class="form-check">
+                      <input class="form-check-input trainingRadio" type="radio"
+                             name="attended_training" value="Ya" required>
+                      <label class="form-check-label">Ya</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input trainingRadio" type="radio"
+                             name="attended_training" value="Tidak">
+                      <label class="form-check-label">Tidak</label>
+                    </div>
+
+                    <div id="training_details_field" class="mt-2 d-none">
+                      <label class="form-label required" for="training_details">
+                        Jika Ya, sila nyatakan latihan
+                      </label>
+                      <textarea class="form-control" id="training_details" name="training_details" rows="3"></textarea>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required">
+                      Pengalaman penugasan antarabangsa / misi kemanusiaan?
+                    </label>
+
+                    <div class="form-check">
+                      <input class="form-check-input missionRadio" type="radio"
+                             name="international_experience" value="Ya" required>
+                      <label class="form-check-label">Ya</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input missionRadio" type="radio"
+                             name="international_experience" value="Tidak">
+                      <label class="form-check-label">Tidak</label>
+                    </div>
+
+                    <div id="mission_details_field" class="mt-2 d-none">
+                      <label class="form-label required" for="mission_details">
+                        Jika Ya, sila nyatakan pengalaman
+                      </label>
+                      <textarea class="form-control" id="mission_details" name="mission_details" rows="3"></textarea>
+                    </div>
+                  </div>
+
+
+                  <div class="d-flex justify-content-between gap-2">
+                    <button type="button" class="btn btn-secondary prev-step">
+                      <i class="bi bi-arrow-left me-1"></i>Kembali
+                    </button>
+
+                    <button type="button" class="btn btn-primary next-step">
+                      Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                  </div>
+
+                </div>
+              </section>
+
+
+              <!-- =====================================================
+                   STEP 4
+              ====================================================== -->
+              <section class="wizard-step">
+                <h5 class="mb-3">4. Deklarasi Kesihatan & Kecergasan</h5>
+
+                <div class="section-card">
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required">
+                      Adakah anda mempunyai sebarang keadaan perubatan yang boleh menjejaskan
+                      keupayaan bekerja dalam persekitaran bencana atau kecemasan?
+                    </label>
+
+                    <div class="form-check">
+                      <input class="form-check-input medConditionRadio" type="radio"
+                             name="medical_condition" value="Tidak" required>
+                      <label class="form-check-label">Tidak</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input medConditionRadio" type="radio"
+                             name="medical_condition" value="Ya">
+                      <label class="form-check-label">Ya</label>
+                    </div>
+
+                    <div id="medical_condition_field" class="mt-2 d-none">
+                      <label class="form-label required" for="medical_condition_details">
+                        Jika Ya, sila nyatakan
+                      </label>
+                      <textarea class="form-control" id="medical_condition_details"
+                                name="medical_condition_details" rows="3"></textarea>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required">
+                      Pernahkah anda menerima rawatan profesional atau kaunseling berkaitan kesihatan mental?
+                    </label>
+
+                    <div class="form-check">
+                      <input class="form-check-input mentalRadio" type="radio"
+                             name="mental_health" value="Tidak" required>
+                      <label class="form-check-label">Tidak</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input mentalRadio" type="radio"
+                             name="mental_health" value="Ya">
+                      <label class="form-check-label">Ya</label>
+                    </div>
+
+                    <div id="mental_health_field" class="mt-2 d-none">
+                      <label class="form-label required" for="mental_health_details">
+                        Jika Ya, sila nyatakan
+                      </label>
+                      <textarea class="form-control" id="mental_health_details"
+                                name="mental_health_details" rows="3"></textarea>
+                    </div>
+                  </div>
+
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold required">Adakah anda mempunyai sebarang alahan?</label>
+
+                    <div class="form-check">
+                      <input class="form-check-input allergyRadio" type="radio"
+                             name="allergies" value="Tidak" required>
+                      <label class="form-check-label">Tidak</label>
+                    </div>
+
+                    <div class="form-check">
+                      <input class="form-check-input allergyRadio" type="radio"
+                             name="allergies" value="Ya">
+                      <label class="form-check-label">Ya</label>
+                    </div>
+
+                    <div id="allergy_field" class="mt-2 d-none">
+                      <label class="form-label required" for="allergy_details">
+                        Jika Ya, sila nyatakan
+                      </label>
+                      <textarea class="form-control" id="allergy_details"
+                                name="allergy_details" rows="3"></textarea>
+                    </div>
+                  </div>
+
+
+                  <div class="row">
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label fw-bold required" for="weight">Berat (kg)</label>
+                      <input type="number" class="form-control" id="weight" name="weight"
+                             min="20" max="300" step="0.1" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                      <label class="form-label fw-bold required" for="height">Tinggi (cm)</label>
+                      <input type="number" class="form-control" id="height" name="height"
+                             min="100" max="250" step="0.1" required>
+                    </div>
+                  </div>
+
+
+                  <div class="d-flex justify-content-between gap-2">
+                    <button type="button" class="btn btn-secondary prev-step">
+                      <i class="bi bi-arrow-left me-1"></i>Kembali
+                    </button>
+
+                    <button type="button" class="btn btn-primary next-step">
+                      Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                  </div>
+
+                </div>
+              </section>
+
+
+              <!-- =====================================================
+                   STEP 5
+              ====================================================== -->
+              <section class="wizard-step">
+                <h5 class="mb-3">5. Komitmen & Deklarasi</h5>
+
+                <div class="section-card">
+
+                  <p class="fw-bold">Saya faham bahawa ahli MyEMT mungkin dikehendaki untuk:</p>
+
+                  <ul>
+                    <li>Menyertai latihan dan aktiviti kesiapsiagaan secara berkala.</li>
+                    <li>Bersedia untuk panggilan kecemasan bagi tujuan penempatan.</li>
+                    <li>Bekerja dalam pasukan pelbagai disiplin semasa operasi respons bencana.</li>
+                    <li>Ditempatkan ke kawasan terjejas bencana di Malaysia atau peringkat antarabangsa.</li>
+                  </ul>
+
+                  <div class="form-check mt-4">
+                    <input class="form-check-input" type="checkbox"
+                           id="commitment" name="commitment" value="Ya" required>
+
+                    <label class="form-check-label fw-semibold required" for="commitment">
+                      Saya mengesahkan bahawa maklumat yang dikemaskini adalah benar dan saya bersedia
+                      menyertai proses pemilihan, latihan serta operasi MyEMT.
+                    </label>
+                  </div>
+
+
+                  <div class="d-flex justify-content-between gap-2 mt-4">
+                    <button type="button" class="btn btn-secondary prev-step">
+                      <i class="bi bi-arrow-left me-1"></i>Kembali
+                    </button>
+
+                    <button type="button" class="btn btn-primary next-step">
+                      Seterusnya <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                  </div>
+
+                </div>
+              </section>
+
+
+              <!-- =====================================================
+                   STEP 6
+              ====================================================== -->
+              <section class="wizard-step">
+                <h5 class="mb-3">6. Kebenaran & Sokongan Ketua Jabatan</h5>
+
+                <div class="section-card">
+
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">Borang Sokongan Ketua Jabatan</label>
+
+                    <div class="existing-file mb-2">
+                      <div class="small text-muted">Dokumen Semasa</div>
+                      <div class="fw-semibold" id="existingSupportName">Tiada dokumen</div>
+
+                      <a class="btn btn-sm btn-outline-primary mt-2 d-none"
+                         id="existingSupportLink" target="_blank" rel="noopener">
+                        Lihat Dokumen
+                      </a>
+                    </div>
+
+                    <input
+                      type="file"
+                      class="form-control"
+                      id="lampiran_ketua_jabatan"
+                      name="lampiran_ketua_jabatan"
+                      accept=".pdf,.jpg,.jpeg,.png"
+                    >
+
+                    <div class="small-help mt-1">
+                      Biarkan kosong jika tidak mahu menukar dokumen semasa.
+                    </div>
+                  </div>
+
+
+                  <div class="alert alert-warning d-none" id="rejectedNotice">
+                    <i class="bi bi-exclamation-triangle me-1"></i>
+                    Permohonan sebelum ini ditolak. Apabila perubahan disimpan, status akan dihantar
+                    semula sebagai <strong>Dalam Semakan</strong>.
+                  </div>
+
+
+                  <div class="d-flex justify-content-between gap-2">
+                    <button type="button" class="btn btn-secondary prev-step">
+                      <i class="bi bi-arrow-left me-1"></i>Kembali
+                    </button>
+
+                    <button type="submit" class="btn btn-success" id="submitBtn">
+                      <i class="bi bi-save me-1"></i>Simpan Perubahan
+                    </button>
+                  </div>
+
+                </div>
+              </section>
+
+            </form>
+
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<div id="footer"></div>
+
+
+<script src="assets/js/config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+/* =====================================================
+   SHARED LAYOUT
+===================================================== */
+fetch("header.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("header").innerHTML = data);
+
+fetch("footer.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("footer").innerHTML = data);
+
+fetch("sidebar.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
+  .catch(err => console.error("Sidebar load failed:", err));
+
+
+/* =====================================================
+   MEMBER
+===================================================== */
+const MEMBER_ID =
+  new URLSearchParams(location.search).get("memberId") ||
+  localStorage.getItem("myemt_memberId") ||
+  localStorage.getItem("memberId") ||
+  sessionStorage.getItem("myemt_memberId") ||
+  sessionStorage.getItem("memberId") ||
+  "";
+
+let currentMember = null;
+
+
+/* =====================================================
+   CONDITIONAL FIELDS
+===================================================== */
+const form = document.getElementById("myemtEditForm");
+
+function setupConditionalRadio(selector, expectedValue, wrapperId, inputSelector) {
+  document.querySelectorAll(selector).forEach(radio => {
+    radio.addEventListener("change", function() {
+      const wrapper = document.getElementById(wrapperId);
+      const input = wrapper.querySelector(inputSelector);
+      const show = this.value === expectedValue;
+
+      wrapper.classList.toggle("d-none", !show);
+      input.required = show;
+
+      if (!show) input.value = "";
+    });
+  });
+}
+
+
+const designationSelect = document.getElementById("designationSelect");
+const otherDesignationWrapper = document.getElementById("otherDesignationWrapper");
+const otherDesignationInput = document.getElementById("otherDesignationInput");
+
+designationSelect.addEventListener("change", function() {
+  const show = this.value === "Other";
+  otherDesignationWrapper.classList.toggle("d-none", !show);
+  otherDesignationInput.required = show;
+  if (!show) otherDesignationInput.value = "";
+});
+
+
+const facilitySelect = document.getElementById("facilitySelect");
+const facilityOtherField = document.getElementById("facility_other_field");
+const facilityOtherInput = document.getElementById("facility_other");
+
+facilitySelect.addEventListener("change", function() {
+  const show = this.value === "Others";
+  facilityOtherField.classList.toggle("d-none", !show);
+  facilityOtherInput.required = show;
+  if (!show) facilityOtherInput.value = "";
+});
+
+
+setupConditionalRadio(".relationRadio", "Other", "relation_other_field", "input");
+setupConditionalRadio(".trainingRadio", "Ya", "training_details_field", "textarea");
+setupConditionalRadio(".missionRadio", "Ya", "mission_details_field", "textarea");
+setupConditionalRadio(".medConditionRadio", "Ya", "medical_condition_field", "textarea");
+setupConditionalRadio(".mentalRadio", "Ya", "mental_health_field", "textarea");
+setupConditionalRadio(".allergyRadio", "Ya", "allergy_field", "textarea");
+
+
+/* =====================================================
+   WIZARD
+===================================================== */
+const steps = [...document.querySelectorAll(".wizard-step")];
+const navButtons = [...document.querySelectorAll("#stepNav .nav-link")];
+
+let currentStep = 0;
+let maxUnlockedStep = 0;
+
+
+function showStep(index) {
+  if (index < 0 || index >= steps.length) return;
+
+  steps.forEach((step, i) => {
+    step.classList.toggle("active", i === index);
+  });
+
+  navButtons.forEach((button, i) => {
+    button.classList.toggle("active", i === index);
+    button.classList.toggle("completed", i < index);
+    button.classList.toggle("locked", i > maxUnlockedStep);
+  });
+
+  currentStep = index;
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+
+function validateCurrentStep() {
+  const fields = [
+    ...steps[currentStep].querySelectorAll("input, select, textarea")
+  ];
+
+  for (const field of fields) {
+    if (field.disabled || field.type === "hidden") continue;
+
+    if (!field.checkValidity()) {
+      field.reportValidity();
+      field.focus();
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+document.querySelectorAll(".next-step").forEach(button => {
+  button.addEventListener("click", () => {
+    if (!validateCurrentStep()) return;
+
+    if (currentStep < steps.length - 1) {
+      maxUnlockedStep = Math.max(maxUnlockedStep, currentStep + 1);
+      showStep(currentStep + 1);
+    }
+  });
+});
+
+
+document.querySelectorAll(".prev-step").forEach(button => {
+  button.addEventListener("click", () => {
+    if (currentStep > 0) showStep(currentStep - 1);
+  });
+});
+
+
+navButtons.forEach(button => {
+  button.addEventListener("click", function() {
+    const target = Number(this.dataset.step);
+
+    if (target > maxUnlockedStep) return;
+
+    if (target > currentStep && !validateCurrentStep()) return;
+
+    showStep(target);
+  });
+});
+
+
+/* =====================================================
+   FILES
+===================================================== */
+const MAX_FILE_SIZE = 3 * 1024 * 1024;
+
+function validateFile(file) {
+  if (!file) return true;
+
+  const allowed = [
+    "application/pdf",
+    "image/jpeg",
+    "image/png"
+  ];
+
+  if (!allowed.includes(file.type)) {
+    alert(`Fail "${file.name}" tidak disokong. Gunakan PDF, JPG atau PNG.`);
+    return false;
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    alert(`Fail "${file.name}" melebihi had 3 MB.`);
+    return false;
+  }
+
+  return true;
+}
+
+
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    if (!file) {
+      resolve(null);
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error(`Gagal membaca fail ${file.name}`));
+
+    reader.readAsDataURL(file);
+  });
+}
+
+
+function renderExistingFile(nameId, linkId, fileName, fileData) {
+  const nameEl = document.getElementById(nameId);
+  const linkEl = document.getElementById(linkId);
+
+  nameEl.textContent = fileName || "Tiada dokumen";
+
+  if (fileData) {
+    linkEl.href = fileData;
+    linkEl.classList.remove("d-none");
+  } else {
+    linkEl.classList.add("d-none");
+  }
+}
+
+
+/* =====================================================
+   FIELD HELPERS
+===================================================== */
+function setField(name, value) {
+  if (value === undefined || value === null || value === "") return;
+
+  const field = form.elements[name];
+  if (!field) return;
+
+  if (field instanceof RadioNodeList) {
+    [...field].forEach(input => {
+      input.checked = String(input.value) === String(value);
+    });
+    return;
+  }
+
+  if (field.type === "checkbox") {
+    field.checked =
+      value === true ||
+      value === "true" ||
+      value === "Ya";
+    return;
+  }
+
+  field.value = value;
+}
+
+
+function setRadioValue(name, value) {
+  const radios = form.querySelectorAll(`input[type="radio"][name="${name}"]`);
+  let matched = false;
+
+  radios.forEach(radio => {
+    radio.checked = String(radio.value) === String(value);
+    if (radio.checked) matched = true;
+  });
+
+  return matched;
+}
+
+
+function detectDesignation(member) {
+  const known = [...designationSelect.options].map(o => o.value).filter(Boolean);
+
+  if (known.includes(member.designation)) {
+    return {
+      value: member.designation,
+      other: member.other_designation || ""
+    };
+  }
+
+  if (member.designation) {
+    return {
+      value: "Other",
+      other: member.designation
+    };
+  }
+
+  return {
+    value: "",
+    other: ""
+  };
+}
+
+
+function detectFacility(member) {
+  const raw =
+    member.facility_type ||
+    member.facilityType ||
+    "";
+
+  const known = [...facilitySelect.options].map(o => o.value).filter(Boolean);
+
+  if (known.includes(raw)) {
+    return {
+      value: raw,
+      other: member.facility_other || ""
+    };
+  }
+
+  if (raw) {
+    return {
+      value: "Others",
+      other: raw
+    };
+  }
+
+  return {
+    value: "",
+    other: ""
+  };
+}
+
+
+function prefillMember(member) {
+  setField("full_name", member.full_name || member.fullName || member.name);
+  setField("identification_number", member.identification_number || member.identificationNumber || member.ic);
+  setField("age", member.age);
+  setField("gender", member.gender);
+  setField("grade", member.grade);
+  setField("service_period", member.service_period || member.servicePeriod);
+  setField("state", member.state);
+  setField("workplace", member.workplace || member.facility);
+  setField("home_address", member.home_address || member.address);
+  setField("office_email", member.office_email || member.officeEmail);
+  setField("personal_email", member.personal_email || member.personalEmail);
+  setField("phone", member.phone);
+
+  const designation = detectDesignation(member);
+  designationSelect.value = designation.value;
+  designationSelect.dispatchEvent(new Event("change"));
+  otherDesignationInput.value = designation.other;
+
+  const facility = detectFacility(member);
+  facilitySelect.value = facility.value;
+  facilitySelect.dispatchEvent(new Event("change"));
+  facilityOtherInput.value = facility.other;
+
+  setField("emergency_name", member.emergency_name);
+
+  const relation =
+    member.relation ||
+    member.emergency_relation ||
+    "";
+
+  if (!setRadioValue("relation", relation) && relation) {
+    setRadioValue("relation", "Other");
+    setField("relation_other_text", relation);
+  }
+
+  setField("emergency_address", member.emergency_address);
+  setField("emergency_phone", member.emergency_phone);
+
+  setRadioValue(
+    "attended_training",
+    member.attended_training || member.disaster_training
+  );
+  setField("training_details", member.training_details);
+
+  setRadioValue(
+    "international_experience",
+    member.international_experience
+  );
+  setField("mission_details", member.mission_details);
+
+  setRadioValue("medical_condition", member.medical_condition);
+  setField("medical_condition_details", member.medical_condition_details);
+
+  setRadioValue("mental_health", member.mental_health);
+  setField("mental_health_details", member.mental_health_details);
+
+  setRadioValue("allergies", member.allergies || member.allergy);
+  setField("allergy_details", member.allergy_details);
+
+  setField("weight", member.weight);
+  setField("height", member.height);
+
+  setField("commitment", member.commitment || "Ya");
+
+  document.querySelectorAll(
+    ".relationRadio, .trainingRadio, .missionRadio, .medConditionRadio, .mentalRadio, .allergyRadio"
+  ).forEach(input => {
+    if (input.checked) input.dispatchEvent(new Event("change"));
+  });
+
+  renderExistingFile(
+    "existingApcName",
+    "existingApcLink",
+    member.apc_file_name,
+    member.apc_file_data
+  );
+
+  renderExistingFile(
+    "existingSupportName",
+    "existingSupportLink",
+    member.lampiran_ketua_jabatan_name,
+    member.lampiran_ketua_jabatan_data
+  );
+}
+
+
+/* =====================================================
+   STATUS
+===================================================== */
+function renderStatus(status) {
+  const s = String(status || "").toLowerCase();
+
+  const map = {
+    pending:["bg-warning text-dark", "Dalam Semakan"],
+    approved:["bg-success", "Diluluskan"],
+    rejected:["bg-danger", "Ditolak"]
+  };
+
+  const [cls, label] = map[s] || ["bg-secondary", status || "Tidak Diketahui"];
+
+  const badge = document.getElementById("statusBadge");
+  badge.className = `badge ${cls}`;
+  badge.textContent = label;
+
+  if (s === "rejected") {
+    document.getElementById("rejectedNotice").classList.remove("d-none");
+  }
+}
+
+
+/* =====================================================
+   LOAD MEMBER
+===================================================== */
+async function loadMember() {
+  if (!MEMBER_ID) {
+    alert("ID ahli MyEMT tidak dijumpai.");
+    location.href = "landingMyemt.html";
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/api/members/${encodeURIComponent(MEMBER_ID)}`);
+    const json = await res.json();
+
+    if (!res.ok || !json.success || !json.data) {
+      throw new Error(json.message || "Maklumat ahli tidak dijumpai.");
+    }
+
+    currentMember = json.data;
+
+    document.getElementById("memberTitle").textContent =
+      currentMember.full_name ||
+      currentMember.fullName ||
+      currentMember.name ||
+      "Ahli MyEMT";
+
+    document.getElementById("memberIdLabel").textContent =
+      currentMember.id || MEMBER_ID;
+
+    renderStatus(currentMember.status);
+    prefillMember(currentMember);
+
+    document.getElementById("btnBack").href =
+      `emt_submitform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+    document.getElementById("loadingPanel").classList.add("d-none");
+    document.getElementById("formContent").classList.remove("d-none");
+
+    maxUnlockedStep = steps.length - 1;
+    showStep(0);
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Gagal memuatkan maklumat MyEMT.");
+    location.href = "landingMyemt.html";
+  }
+}
+
+
+/* =====================================================
+   BUILD PAYLOAD
+===================================================== */
+async function buildPayload() {
+  const payload = {};
+
+  new FormData(form).forEach((value, key) => {
+    if (!(value instanceof File)) {
+      payload[key] = value;
+    }
+  });
+
+  if (payload.designation === "Other") {
+    payload.designation =
+      payload.other_designation ||
+      currentMember?.designation ||
+      "Lain-lain";
+  }
+
+  if (payload.facility_type === "Others") {
+    payload.facility_type =
+      payload.facility_other ||
+      currentMember?.facility_type ||
+      "Lain-lain";
+  }
+
+  if (payload.relation === "Other") {
+    payload.relation =
+      payload.relation_other_text ||
+      currentMember?.relation ||
+      "Lain-lain";
+  }
+
+  payload.name = payload.full_name;
+  payload.facility = payload.workplace;
+
+  payload.updatedAt = new Date().toISOString();
+
+  /*
+   * Status:
+   * - rejected -> edit acts as resubmission, so set pending.
+   * - pending/approved -> preserve current status.
+   */
+  const currentStatus =
+    String(currentMember?.status || "").toLowerCase();
+
+  payload.status =
+    currentStatus === "rejected"
+      ? "pending"
+      : currentMember?.status || "pending";
+
+  if (currentStatus === "rejected") {
+    payload.resubmittedAt = new Date().toISOString();
+  }
+
+  /* Preserve existing documents unless a replacement is uploaded */
+  payload.apc_file_name = currentMember?.apc_file_name || "";
+  payload.apc_file_type = currentMember?.apc_file_type || "";
+  payload.apc_file_data = currentMember?.apc_file_data || "";
+
+  payload.lampiran_ketua_jabatan_name =
+    currentMember?.lampiran_ketua_jabatan_name || "";
+
+  payload.lampiran_ketua_jabatan_type =
+    currentMember?.lampiran_ketua_jabatan_type || "";
+
+  payload.lampiran_ketua_jabatan_data =
+    currentMember?.lampiran_ketua_jabatan_data || "";
+
+  const apcFile = document.getElementById("apc_file").files[0];
+
+  if (apcFile) {
+    if (!validateFile(apcFile)) {
+      throw new Error("Fail APC / kelayakan profesional tidak sah.");
+    }
+
+    payload.apc_file_name = apcFile.name;
+    payload.apc_file_type = apcFile.type;
+    payload.apc_file_data = await fileToBase64(apcFile);
+  }
+
+  const supportFile =
+    document.getElementById("lampiran_ketua_jabatan").files[0];
+
+  if (supportFile) {
+    if (!validateFile(supportFile)) {
+      throw new Error("Fail sokongan Ketua Jabatan tidak sah.");
+    }
+
+    payload.lampiran_ketua_jabatan_name = supportFile.name;
+    payload.lampiran_ketua_jabatan_type = supportFile.type;
+    payload.lampiran_ketua_jabatan_data = await fileToBase64(supportFile);
+  }
+
+  return payload;
+}
+
+
+/* =====================================================
+   SUBMIT / PATCH
+===================================================== */
+form.addEventListener("submit", async function(e) {
+  e.preventDefault();
+
+  if (!validateCurrentStep()) return;
+
+  if (!form.checkValidity()) {
+    form.classList.add("was-validated");
+
+    const invalid = form.querySelector(":invalid");
+
+    if (invalid) {
+      const stepIndex = steps.findIndex(step => step.contains(invalid));
+
+      if (stepIndex >= 0) {
+        maxUnlockedStep = Math.max(maxUnlockedStep, stepIndex);
+        showStep(stepIndex);
+      }
+
+      invalid.reportValidity();
+    }
+
+    return;
+  }
+
+  const submitBtn = document.getElementById("submitBtn");
+  const originalText = submitBtn.innerHTML;
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML =
+    '<span class="spinner-border spinner-border-sm me-1"></span>Menyimpan...';
+
+  try {
+    const payload = await buildPayload();
+
+    const res = await fetch(
+      `${API}/api/members/${encodeURIComponent(MEMBER_ID)}`,
+      {
+        method:"PATCH",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(payload)
+      }
+    );
+
+    const result = await res.json();
+
+    if (!res.ok || !result.success) {
+      throw new Error(result.message || "Maklumat gagal dikemaskini.");
+    }
+
+    const saved = result.data || {
+      ...currentMember,
+      ...payload
+    };
+
+    localStorage.setItem("myemt_memberId", MEMBER_ID);
+    localStorage.setItem("memberId", MEMBER_ID);
+
+    localStorage.setItem(
+      "myemt_memberName",
+      saved.full_name || saved.name || payload.full_name || ""
+    );
+
+    localStorage.setItem(
+      "memberName",
+      saved.full_name || saved.name || payload.full_name || ""
+    );
+
+    alert("Maklumat MyEMT berjaya dikemaskini.");
+
+    window.location.href =
+      `emt_submitform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message || "Gagal mengemaskini maklumat MyEMT.");
+
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = originalText;
+  }
+});
+
+
+/* =====================================================
+   INIT
+===================================================== */
+document.addEventListener("DOMContentLoaded", loadMember);
+</script>
+
+</body>
+</html>

@@ -1,234 +1,331 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>EMT CRUD</title>
+    <title>Pengurusan Misi EMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Main CSS -->
     <link href="assets/css/main.css" rel="stylesheet">
 
     <style>
-    .mds-card{
-        border:1px solid #dee2e6;
-        border-radius:12px;
-        overflow:hidden;
-        margin-bottom:1rem;
-        box-shadow:0 .125rem .25rem rgba(0,0,0,.075);
-    }
-
-    .mds-card .card-header{
-        background:#0d6efd;
-        color:#fff;
-        font-weight:600;
-        padding:.75rem 1rem;
-    }
-
-    .mds-card .card-body{
-        background:#fff;
-        padding:1rem;
-    }
-
-    .form-check{
-        margin-bottom:.5rem;
-    }
-
-    .form-label{
-        font-weight:600;
-    }
-
-    .badge-soft{
-        background:#e9ecef;
-        color:#495057;
-        font-weight:500;
-    }
-
-    .section-title{
-        font-size:1.1rem;
-        font-weight:700;
-        margin-bottom:1rem;
-        padding-bottom:.5rem;
-        border-bottom:2px solid #dee2e6;
-    }
-
-    textarea{
-        resize:vertical;
-    }
+      body{background:#f4f6f9}
+      .nav-pills .nav-link{font-weight:700;color:#536579}
+      .nav-pills .nav-link.active{background:#0d6efd}
+      .metric-card{border:0;border-radius:14px;box-shadow:0 .25rem .75rem rgba(0,0,0,.06)}
+      .metric-value{font-size:2rem;font-weight:800;line-height:1}
+      .metric-icon{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:1.35rem}
+      .chart-card{border:0;border-radius:14px;box-shadow:0 .25rem .75rem rgba(0,0,0,.06)}
+      .chart-wrap{height:320px;position:relative}
+      .table-card{border:0;border-radius:14px;box-shadow:0 .25rem .75rem rgba(0,0,0,.06);overflow:hidden}
+      .section-subtitle{color:#6c757d;font-size:.9rem}
+      .filter-row{background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:1rem}
     </style>
-
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div id="header"></div>
 
 <div class="container-fluid">
   <div class="row">
 
-    <!-- SIDEBAR -->
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-    <!-- MAIN CONTENT -->
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
-        <!-- PAGE HEADER -->
-        <div class="d-flex justify-content-between align-items-start mb-4">
+      <div class="d-flex justify-content-between align-items-start mb-4">
+        <div>
+          <h4 class="mb-1">Pengurusan Misi EMT</h4>
+          <small class="text-muted">Dashboard analitik dan senarai rekod misi EMT.</small>
+        </div>
 
-            <div>
-            <h4 class="mb-1">Pengurusan Misi EMT CRUD</h4>
-            <small class="text-muted">
-                Pengurusan operasi dan Misi EMT oleh Kementerian Kerajaan Malaysia.
-            </small>
+        <a href="landingMyemtAdmin_mission.html" class="btn btn-primary">
+          <i class="bi bi-arrow-left me-1"></i> Kembali
+        </a>
+      </div>
+
+      <!-- WIZARD / TAB -->
+      <ul class="nav nav-pills bg-white p-2 rounded-3 shadow-sm mb-4" id="emtCrudTabs">
+        <li class="nav-item">
+          <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#dashboardTab" type="button">
+            <i class="bi bi-speedometer2 me-1"></i> 1. Dashboard
+          </button>
+        </li>
+        <li class="nav-item">
+          <button class="nav-link" data-bs-toggle="pill" data-bs-target="#recordsTab" type="button">
+            <i class="bi bi-table me-1"></i> 2. Senarai Rekod
+          </button>
+        </li>
+      </ul>
+
+      <div class="tab-content">
+
+        <!-- =====================================================
+             TAB 1 - DASHBOARD
+        ====================================================== -->
+        <section class="tab-pane fade show active" id="dashboardTab">
+
+          <!-- KPI -->
+          <div class="row g-3 mb-4">
+
+            <div class="col-6 col-xl-3">
+              <div class="card metric-card h-100">
+                <div class="card-body d-flex justify-content-between align-items-start">
+                  <div>
+                    <small class="text-muted">Jumlah Misi</small>
+                    <div class="metric-value mt-2" id="countTotal">0</div>
+                  </div>
+                  <div class="metric-icon bg-primary-subtle text-primary">
+                    <i class="bi bi-briefcase-fill"></i>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            <!-- SINGLE BACK BUTTON -->
+            <div class="col-6 col-xl-3">
+              <div class="card metric-card h-100">
+                <div class="card-body d-flex justify-content-between align-items-start">
+                  <div>
+                    <small class="text-muted">Misi Selesai</small>
+                    <div class="metric-value mt-2" id="countCompleted">0</div>
+                  </div>
+                  <div class="metric-icon bg-success-subtle text-success">
+                    <i class="bi bi-check-circle-fill"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-3">
+              <div class="card metric-card h-100">
+                <div class="card-body d-flex justify-content-between align-items-start">
+                  <div>
+                    <small class="text-muted">Sedang Dijalankan</small>
+                    <div class="metric-value mt-2" id="countActive">0</div>
+                  </div>
+                  <div class="metric-icon bg-warning-subtle text-warning">
+                    <i class="bi bi-activity"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 col-xl-3">
+              <div class="card metric-card h-100">
+                <div class="card-body d-flex justify-content-between align-items-start">
+                  <div>
+                    <small class="text-muted">Perancangan</small>
+                    <div class="metric-value mt-2" id="countPlanning">0</div>
+                  </div>
+                  <div class="metric-icon bg-secondary-subtle text-secondary">
+                    <i class="bi bi-calendar2-week-fill"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row g-3 mb-4">
+
+            <div class="col-md-4">
+              <div class="card metric-card h-100">
+                <div class="card-body">
+                  <small class="text-muted">Ahli EMT Diluluskan</small>
+                  <div class="metric-value mt-2" id="countMembers">0</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card metric-card h-100">
+                <div class="card-body">
+                  <small class="text-muted">Jumlah Pemohon Misi</small>
+                  <div class="metric-value mt-2" id="countApplicants">0</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="card metric-card h-100">
+                <div class="card-body">
+                  <small class="text-muted">Misi Dengan Pemohon</small>
+                  <div class="metric-value mt-2" id="countMissionWithApplicants">0</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- CHARTS -->
+          <div class="row g-3 mb-4">
+
+            <div class="col-lg-6">
+              <div class="card chart-card h-100">
+                <div class="card-body">
+                  <h6 class="fw-bold mb-1">Status Misi</h6>
+                  <div class="section-subtitle mb-3">Bilangan misi mengikut status semasa.</div>
+                  <div class="chart-wrap">
+                    <canvas id="missionStatusChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="card chart-card h-100">
+                <div class="card-body">
+                  <h6 class="fw-bold mb-1">Misi Mengikut Negeri / Lokasi</h6>
+                  <div class="section-subtitle mb-3">Jumlah misi berdasarkan negeri atau lokasi yang direkodkan.</div>
+                  <div class="chart-wrap">
+                    <canvas id="missionStateChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row g-3 mb-4">
+
+            <div class="col-lg-6">
+              <div class="card chart-card h-100">
+                <div class="card-body">
+                  <h6 class="fw-bold mb-1">Jenis Misi</h6>
+                  <div class="section-subtitle mb-3">Pecahan jenis operasi EMT.</div>
+                  <div class="chart-wrap">
+                    <canvas id="missionTypeChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="card chart-card h-100">
+                <div class="card-body">
+                  <h6 class="fw-bold mb-1">Pemohon Mengikut Misi</h6>
+                  <div class="section-subtitle mb-3">Bilangan permohonan penyertaan bagi setiap misi.</div>
+                  <div class="chart-wrap">
+                    <canvas id="missionApplicantsChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RINGKASAN -->
+          <div class="card table-card mb-4">
+            <div class="card-header bg-white">
+              <strong>Ringkasan Misi Terkini</strong>
+            </div>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Nama Misi</th>
+                    <th>Status</th>
+                    <th>Lokasi</th>
+                    <th>Pemohon</th>
+                    <th>Tarikh Mula</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardRecentTable"></tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             TAB 2 - SENARAI REKOD
+        ====================================================== -->
+        <section class="tab-pane fade" id="recordsTab">
+
+          <div class="d-flex justify-content-between align-items-center mb-3">
             <div>
-            <a href="landingMyemtAdmin_mission.html" class="btn btn-primary">
-                <i class="bi bi-arrow-left me-1"></i> Kembali
+              <h5 class="mb-1 fw-semibold">Senarai Rekod Misi EMT</h5>
+              <small class="text-muted">Semua rekod misi yang tersedia dalam sistem.</small>
+            </div>
+
+            <a href="mission_add.html" class="btn btn-primary">
+              <i class="bi bi-plus-circle me-1"></i> Tambah Misi Baru
             </a>
+          </div>
+
+          <div class="filter-row mb-3">
+            <div class="row g-3">
+              <div class="col-md-4">
+                <label class="form-label">Carian Misi</label>
+                <input type="text" id="searchMission" class="form-control" placeholder="Cari nama misi / lokasi">
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">Status</label>
+                <select id="filterStatus" class="form-select">
+                  <option value="">Semua Status</option>
+                  <option value="Perancangan">Perancangan</option>
+                  <option value="Sedang Dijalankan">Sedang Dijalankan</option>
+                  <option value="Selesai">Selesai</option>
+                </select>
+              </div>
+
+              <div class="col-md-3">
+                <label class="form-label">Jenis Misi</label>
+                <select id="filterType" class="form-select">
+                  <option value="">Semua Jenis</option>
+                </select>
+              </div>
+
+              <div class="col-md-2 d-flex align-items-end">
+                <button type="button" id="btnResetFilter" class="btn btn-outline-secondary w-100">Set Semula</button>
+              </div>
             </div>
+          </div>
 
-        </div>
-
-        <!-- ACTION BUTTONS (DROPDOWN VERSION) 
-        <div class="d-flex justify-content-end mb-3">
-
-        <div class="dropdown">
-
-            <button class="btn btn-outline-dark rounded-pill px-3 shadow-sm dropdown-toggle"
-                    type="button"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false">
-
-            <i class="bi bi-grid-3x3-gap me-1"></i>
-            Modul EMT
-            </button>
-
-            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-
-            <li>
-                <a class="dropdown-item" href="mission_add.html">
-                <i class="bi bi-plus-circle me-2"></i>
-                Tambah Misi Baru
-                </a>
-            </li>
-
-            <li>
-                <a class="dropdown-item" href="emt_mdsdaily.html">
-                <i class="bi bi-clipboard-data me-2"></i>
-                Laporan Harian MDS
-                </a>
-            </li>
-
-            </ul>
-
-        </div>
-
-        </div>
-        -->
-
-        <!-- ================= DASHBOARD ================= -->
-        <div class="row g-3 mb-4">
-
-            <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <small class="text-muted">Misi Berjaya</small>
-                    <h4 class="mb-0" id="countCompleted">-</h4>
-                </div>
-                <i class="bi bi-check-circle-fill fs-2 text-success"></i>
-                </div>
-            </div>
-            </div>
-
-            <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <small class="text-muted">Sedang Berjalan</small>
-                    <h4 class="mb-0" id="countActive">-</h4>
-                </div>
-                <i class="bi bi-activity fs-2 text-warning"></i>
-                </div>
-            </div>
-            </div>
-
-            <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body d-flex justify-content-between align-items-center">
-                <div>
-                    <small class="text-muted">Ahli Berdaftar</small>
-                    <h4 class="mb-0" id="countMembers">-</h4>
-                </div>
-                <i class="bi bi-people-fill fs-2 text-primary"></i>
-                </div>
-            </div>
-            </div>
-
-        </div>
-
-        <!-- ================= TABLE CARD ================= -->
-        <div class="card shadow-sm border-0">
-
+          <div class="card table-card">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
-
-            <strong>Senarai Misi EMT</strong>
-
-            <a href="mission_add.html"
-                class="btn btn-sm btn-outline-primary px-3">
-                + Tambah Misi Baru
-            </a>
-
+              <strong>Senarai Misi EMT</strong>
+              <span class="badge bg-primary" id="recordCount">0 rekod</span>
             </div>
-
-            <div class="card-body p-0">
 
             <div class="table-responsive">
-
-                <table class="table table-hover align-middle mb-0">
-
+              <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
-                    <tr>
+                  <tr>
                     <th>Nama Misi</th>
+                    <th>Jenis</th>
+                    <th>Lokasi</th>
                     <th>Tarikh Mula</th>
                     <th>Anggaran Tamat</th>
                     <th>Tarikh Sebenar Tamat</th>
                     <th>Status</th>
                     <th>Pemohon</th>
                     <th class="text-center">Tindakan</th>
-                    </tr>
+                  </tr>
                 </thead>
 
                 <tbody id="tbodyMissions">
-                    <tr>
-                      <td colspan="7" class="text-center text-muted py-3">Tiada misi berdaftar</td>
-                    </tr>
+                  <tr>
+                    <td colspan="9" class="text-center text-muted py-4">Memuatkan...</td>
+                  </tr>
                 </tbody>
-
-                </table>
-
+              </table>
             </div>
+          </div>
 
-            </div>
+        </section>
 
-        </div>
-
+      </div>
     </main>
   </div>
 </div>
 
-<!-- FOOTER -->
 <div id="footer"></div>
 
-<!-- LOAD HEADER / FOOTER / SIDEBAR -->
 <script>
 fetch("header.html")
   .then(res => res.text())
@@ -245,48 +342,260 @@ fetch("sidebar.html")
 
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
 
 <script>
+Chart.register(ChartDataLabels);
+
 const MISSION_STATUS = {
-  'Selesai':           { badge: 'bg-success',  label: 'Selesai' },
-  'Sedang Dijalankan': { badge: 'bg-primary',  label: 'Sedang Dijalankan' },
-  'Perancangan':       { badge: 'bg-secondary', label: 'Perancangan' }
+  'Selesai':           { badge:'bg-success', label:'Selesai' },
+  'Sedang Dijalankan': { badge:'bg-primary', label:'Sedang Dijalankan' },
+  'Perancangan':       { badge:'bg-secondary', label:'Perancangan' }
 };
 
-async function loadDashboard() {
-  const [mRes, aRes] = await Promise.all([
-    fetch(`${API}/api/missions`),
-    fetch(`${API}/api/members`)
-  ]);
-  const missions = (await mRes.json()).data || [];
-  const members  = (await aRes.json()).data || [];
+let missions = [];
+let members = [];
+let missionApplications = [];
+let charts = {};
 
-  document.getElementById('countCompleted').textContent = missions.filter(m => m.status === 'Selesai').length;
-  document.getElementById('countActive').textContent    = missions.filter(m => m.status === 'Sedang Dijalankan').length;
-  document.getElementById('countMembers').textContent   = members.filter(m => m.status === 'approved').length;
+function esc(value){
+  return String(value ?? '-')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#039;");
+}
+
+function countBy(list, keyFn){
+  return list.reduce((acc,item)=>{
+    const key = keyFn(item) || 'Tidak dinyatakan';
+    acc[key] = (acc[key] || 0) + 1;
+    return acc;
+  },{});
+}
+
+function getApplicantCount(missionId){
+  return missionApplications.filter(a => a.missionId === missionId).length;
+}
+
+function createChart(id, type, labels, data, label='Bilangan'){
+  if (charts[id]) charts[id].destroy();
+
+  charts[id] = new Chart(document.getElementById(id),{
+    type,
+    data:{
+      labels,
+      datasets:[{
+        label,
+        data,
+        borderWidth:0,
+        borderRadius:type === 'bar' ? 5 : 0
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      layout:{padding:{top:type === 'bar' ? 22 : 10}},
+      plugins:{
+        legend:{
+          display:type !== 'bar',
+          position:'bottom'
+        },
+        datalabels:{
+          display:true,
+          color:type === 'bar' ? '#24364b' : '#fff',
+          font:{weight:'700',size:12},
+          anchor:type === 'bar' ? 'end' : 'center',
+          align:type === 'bar' ? 'top' : 'center',
+          clamp:true,
+          formatter:value => value
+        }
+      },
+      scales:type === 'bar'
+        ?{
+            y:{beginAtZero:true,ticks:{precision:0}},
+            x:{grid:{display:false}}
+          }
+        :{}
+    }
+  });
+}
+
+function renderDashboard(){
+  const completed = missions.filter(m => m.status === 'Selesai');
+  const active = missions.filter(m => m.status === 'Sedang Dijalankan');
+  const planning = missions.filter(m => m.status === 'Perancangan');
+  const approvedMembers = members.filter(m => m.status === 'approved');
+
+  document.getElementById('countTotal').textContent = missions.length;
+  document.getElementById('countCompleted').textContent = completed.length;
+  document.getElementById('countActive').textContent = active.length;
+  document.getElementById('countPlanning').textContent = planning.length;
+  document.getElementById('countMembers').textContent = approvedMembers.length;
+  document.getElementById('countApplicants').textContent = missionApplications.length;
+
+  const missionWithApplicants = new Set(
+    missionApplications.map(a => a.missionId).filter(Boolean)
+  );
+  document.getElementById('countMissionWithApplicants').textContent = missionWithApplicants.size;
+
+  createChart(
+    'missionStatusChart',
+    'doughnut',
+    ['Selesai','Sedang Dijalankan','Perancangan'],
+    [completed.length, active.length, planning.length],
+    'Misi'
+  );
+
+  const byState = countBy(missions, m => m.state || m.location);
+  createChart(
+    'missionStateChart',
+    'bar',
+    Object.keys(byState),
+    Object.values(byState),
+    'Misi'
+  );
+
+  const byType = countBy(missions, m => m.type || 'Tidak dinyatakan');
+  createChart(
+    'missionTypeChart',
+    'doughnut',
+    Object.keys(byType),
+    Object.values(byType),
+    'Misi'
+  );
+
+  createChart(
+    'missionApplicantsChart',
+    'bar',
+    missions.map(m => m.name || m.id),
+    missions.map(m => getApplicantCount(m.id)),
+    'Pemohon'
+  );
+
+  const recent = [...missions]
+    .sort((a,b)=>String(b.startDate || '').localeCompare(String(a.startDate || '')))
+    .slice(0,5);
+
+  document.getElementById('dashboardRecentTable').innerHTML = recent.length
+    ? recent.map(m=>{
+        const s = MISSION_STATUS[m.status] || {badge:'bg-secondary',label:m.status || '-'};
+        return `
+          <tr>
+            <td class="fw-semibold">${esc(m.name || '-')}</td>
+            <td><span class="badge ${s.badge}">${esc(s.label)}</span></td>
+            <td>${esc(m.location || m.state || '-')}</td>
+            <td>${getApplicantCount(m.id)}</td>
+            <td>${esc(m.startDate || '-')}</td>
+          </tr>`;
+      }).join('')
+    : `<tr><td colspan="5" class="text-center text-muted py-4">Tiada rekod misi.</td></tr>`;
+}
+
+function populateTypeFilter(){
+  const types = [...new Set(
+    missions.map(m=>m.type).filter(Boolean)
+  )].sort();
+
+  document.getElementById('filterType').innerHTML =
+    '<option value="">Semua Jenis</option>' +
+    types.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
+}
+
+function renderRecords(){
+  const search = document.getElementById('searchMission').value.trim().toLowerCase();
+  const status = document.getElementById('filterStatus').value;
+  const type = document.getElementById('filterType').value;
+
+  const filtered = missions.filter(m=>{
+    const text = `${m.name || ''} ${m.location || ''} ${m.state || ''}`.toLowerCase();
+    return (!search || text.includes(search))
+      && (!status || m.status === status)
+      && (!type || m.type === type);
+  });
+
+  document.getElementById('recordCount').textContent = `${filtered.length} rekod`;
 
   const tbody = document.getElementById('tbodyMissions');
-  if (missions.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted py-3">Tiada misi berdaftar</td></tr>';
+
+  if (!filtered.length){
+    tbody.innerHTML = `<tr><td colspan="9" class="text-center text-muted py-4">Tiada rekod ditemui.</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = missions.map(m => {
-    const s = MISSION_STATUS[m.status] || { badge: 'bg-secondary', label: m.status };
-    return `<tr>
-      <td class="fw-semibold">${m.name || '-'}</td>
-      <td>${m.startDate || '-'}</td>
-      <td>${m.estimatedEnd || '-'}</td>
-      <td>${m.actualEnd || '<span class="text-muted">-</span>'}</td>
-      <td><span class="badge ${s.badge}">${s.label}</span></td>
-      <td>-</td>
-      <td class="text-center">
-        <a href="mission_detail.html?id=${m.id}" class="btn btn-sm btn-outline-primary me-1">Papar</a>
-        <a href="mission_edit.html?id=${m.id}" class="btn btn-sm btn-outline-secondary">Edit</a>
-      </td>
-    </tr>`;
+  tbody.innerHTML = filtered.map(m=>{
+    const s = MISSION_STATUS[m.status] || {badge:'bg-secondary',label:m.status || '-'};
+
+    const actualEnd =
+      m.status === 'Selesai'
+        ? (m.actualEnd || '<span class="text-muted">Belum ditetapkan</span>')
+        : '<span class="text-muted">-</span>';
+
+    return `
+      <tr>
+        <td class="fw-semibold">${esc(m.name || '-')}</td>
+        <td>${esc(m.type || '-')}</td>
+        <td>${esc(m.location || m.state || '-')}</td>
+        <td>${esc(m.startDate || '-')}</td>
+        <td>${esc(m.estimatedEnd || '-')}</td>
+        <td>${actualEnd}</td>
+        <td><span class="badge ${s.badge}">${esc(s.label)}</span></td>
+        <td>${getApplicantCount(m.id)}</td>
+        <td class="text-center">
+          <a href="mission_detail.html?id=${encodeURIComponent(m.id)}"
+             class="btn btn-sm btn-outline-primary me-1">
+             Papar
+          </a>
+          <a href="mission_edit.html?id=${encodeURIComponent(m.id)}"
+             class="btn btn-sm btn-outline-secondary">
+             Kemaskini
+          </a>
+        </td>
+      </tr>`;
   }).join('');
 }
+
+async function loadDashboard(){
+  try{
+    const [mRes, memberRes, appRes] = await Promise.all([
+      fetch(`${API}/api/missions`),
+      fetch(`${API}/api/members`),
+      fetch(`${API}/api/mission-applications`)
+    ]);
+
+    missions = (await mRes.json()).data || [];
+    members = (await memberRes.json()).data || [];
+    missionApplications = (await appRes.json()).data || [];
+
+    populateTypeFilter();
+    renderDashboard();
+    renderRecords();
+
+  }catch(err){
+    console.error(err);
+    document.getElementById('tbodyMissions').innerHTML =
+      `<tr><td colspan="9" class="text-center text-danger py-4">Gagal memuatkan data.</td></tr>`;
+  }
+}
+
+document.getElementById('searchMission').addEventListener('input', renderRecords);
+document.getElementById('filterStatus').addEventListener('change', renderRecords);
+document.getElementById('filterType').addEventListener('change', renderRecords);
+
+document.getElementById('btnResetFilter').addEventListener('click', ()=>{
+  document.getElementById('searchMission').value = '';
+  document.getElementById('filterStatus').value = '';
+  document.getElementById('filterType').value = '';
+  renderRecords();
+});
+
+document.querySelectorAll('#emtCrudTabs button[data-bs-toggle="pill"]').forEach(btn=>{
+  btn.addEventListener('shown.bs.tab', ()=>{
+    Object.values(charts).forEach(c=>c.resize());
+  });
+});
 
 document.addEventListener('DOMContentLoaded', loadDashboard);
 </script>

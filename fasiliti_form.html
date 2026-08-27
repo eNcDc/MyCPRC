@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <title>Fasiliti Kesiapsiagaan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Main CSS -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+
+    <style>
+        body {
+            background-color: #f5f6f8;
+        }
+
+        .form-container {
+            max-width: 1000px;
+            margin: 40px auto;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+        }
+
+        .section-title {
+            font-weight: 600;
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .required::after {
+            content: " *";
+            color: red;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .section-divider {
+            border-top: 1px solid #dee2e6;
+            margin: 30px 0;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<div id="header"></div>
+
+<div class="container-fluid">
+  <div class="row">
+
+    <aside class="col-md-3 col-lg-2 p-0 sidebar" id="sidebar-placeholder"></aside>
+
+    <main class="col-md-9 col-lg-10 p-4">
+
+        <div class="card shadow-sm">
+
+            <!-- HEADER -->
+            <div class="card-body border-bottom">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+                        <h4 class="fw-bold mb-1">
+                            <i class="bi bi-file-earmark-medical me-2"></i>
+                            Fasiliti Kesiapsiagaan
+                        </h4>
+
+                        <small class="text-muted">
+                            Fasiliti kesihatan yang berpotensi untuk respon terhadap insiden kimia dan fasiliti berisiko bagi setiap negeri.
+                        </small>
+                    </div>
+
+                    <!--BUTTON BACK-->
+                    <div class="mb-3 d-flex justify-content-end">
+                        <a href="landingFasiliti.html" class="btn btn-primary">
+                        <i class="bi bi-arrow-left me-1"></i> Kembali
+                        </a>
+                    </div>     
+
+                </div>
+
+            </div>
+
+            <div class="card-body">
+
+                <!-- =====================================================
+                    BUTTON PILIH FORM
+                ====================================================== -->
+
+                <div class="d-flex gap-2 mb-4">
+
+                    <button
+                        type="button"
+                        class="btn btn-primary"
+                        id="btnDekon"
+                        onclick="showForm('dekon')"
+                    >
+                        Fasiliti Kesihatan Berpotensi Respon
+                        Terhadap Insiden Kimia
+                    </button>
+
+                    <button
+                        type="button"
+                        class="btn btn-outline-primary"
+                        id="btnRisiko"
+                        onclick="showForm('risiko')"
+                    >
+                        Fasiliti Berisiko Bagi Setiap Negeri
+                    </button>
+
+                </div>
+
+
+                <!-- =====================================================
+                    FORM 1
+                    FASILITI KESIHATAN BERPOTENSI RESPON TERHADAP
+                    INSIDEN KIMIA
+                ====================================================== -->
+
+                <div id="dekonFormContainer">
+
+                    <h5 class="mb-4">
+                        Fasiliti Kesihatan Berpotensi Respon Terhadap
+                        Insiden Kimia
+                    </h5>
+
+                    <form id="dekonForm">
+
+                        <!-- 1. NEGERI -->
+                        <div class="mb-3">
+
+                            <label for="dekon_negeri" class="form-label">
+                                Negeri
+                            </label>
+
+                            <select
+                                id="dekon_negeri"
+                                name="negeri"
+                                class="form-select"
+                                required
+                            >
+                                <option value="">
+                                    -- Pilih Negeri --
+                                </option>
+
+                                <option value="Johor">Johor</option>
+                                <option value="Kedah">Kedah</option>
+                                <option value="Kelantan">Kelantan</option>
+                                <option value="Melaka">Melaka</option>
+                                <option value="Negeri Sembilan">
+                                    Negeri Sembilan
+                                </option>
+                                <option value="Pahang">Pahang</option>
+                                <option value="Perak">Perak</option>
+                                <option value="Perlis">Perlis</option>
+                                <option value="Pulau Pinang">
+                                    Pulau Pinang
+                                </option>
+                                <option value="Sabah">Sabah</option>
+                                <option value="Sarawak">Sarawak</option>
+                                <option value="Selangor">Selangor</option>
+                                <option value="Terengganu">Terengganu</option>
+                                <option value="Kuala Lumpur">
+                                    W.P. Kuala Lumpur
+                                </option>
+                                <option value="Putrajaya">
+                                    W.P. Putrajaya
+                                </option>
+                                <option value="Labuan">
+                                    W.P. Labuan
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 2. DAERAH -->
+                        <div class="mb-3">
+
+                            <label for="dekon_daerah" class="form-label">
+                                Daerah
+                            </label>
+
+                            <select
+                                id="dekon_daerah"
+                                name="daerah"
+                                class="form-select"
+                                required
+                                disabled
+                            >
+
+                                <option value="">
+                                    -- Pilih Negeri Terlebih Dahulu --
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 3. JENIS FASILITI -->
+                        <div class="mb-3">
+
+                            <label
+                                for="dekon_jenisFasiliti"
+                                class="form-label"
+                            >
+                                Jenis Fasiliti
+                            </label>
+
+                            <select
+                                id="dekon_jenisFasiliti"
+                                name="jenisFasiliti"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Pilih Jenis Fasiliti --
+                                </option>
+
+                                <option value="Klinik Kesihatan">
+                                    Klinik Kesihatan
+                                </option>
+
+                                <option value="Hospital">
+                                    Hospital
+                                </option>
+
+                                <option value="Lain-lain">
+                                    Lain-lain
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 3A. LAIN-LAIN -->
+                        <div
+                            class="mb-3"
+                            id="dekon_lainLainContainer"
+                            style="display:none;"
+                        >
+
+                            <label
+                                for="dekon_jenisFasilitiLain"
+                                class="form-label"
+                            >
+                                Nyatakan Jenis Fasiliti
+                            </label>
+
+                            <input
+                                type="text"
+                                id="dekon_jenisFasilitiLain"
+                                name="jenisFasilitiLain"
+                                class="form-control"
+                                placeholder="Masukkan jenis fasiliti"
+                            >
+
+                        </div>
+
+
+                        <!-- 4. NAMA FASILITI -->
+                        <div class="mb-3">
+
+                            <label
+                                for="dekon_namaFasiliti"
+                                class="form-label"
+                            >
+                                Nama Fasiliti
+                            </label>
+
+                            <input
+                                type="text"
+                                id="dekon_namaFasiliti"
+                                name="namaFasiliti"
+                                class="form-control"
+                                placeholder="Masukkan nama fasiliti"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- 5. ALAMAT -->
+                        <div class="mb-3">
+
+                            <label
+                                for="dekon_alamatFasiliti"
+                                class="form-label"
+                            >
+                                Alamat Fasiliti
+                            </label>
+
+                            <textarea
+                                id="dekon_alamatFasiliti"
+                                name="alamatFasiliti"
+                                class="form-control"
+                                rows="4"
+                                placeholder="Masukkan alamat fasiliti"
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- 6. DEKON -->
+                        <div class="mb-3">
+
+                            <label
+                                for="dekon_fasilitiDekon"
+                                class="form-label"
+                            >
+                                Fasiliti yang Dicadangkan untuk
+                                Kawasan/Kesiapsiagaan Dekon
+                            </label>
+
+                            <select
+                                id="dekon_fasilitiDekon"
+                                name="fasilitiDekon"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Pilih --
+                                </option>
+
+                                <option value="Ya">
+                                    Ya
+                                </option>
+
+                                <option value="Tidak">
+                                    Tidak
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 7. PPE -->
+                        <div class="mb-3">
+
+                            <label
+                                for="dekon_ppeDicadangkan"
+                                class="form-label"
+                            >
+                                PPE yang Dicadangkan
+                            </label>
+
+                            <select
+                                id="dekon_ppeDicadangkan"
+                                name="ppeDicadangkan"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Pilih PPE --
+                                </option>
+
+                                <option value="Type C">
+                                    Type C
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+
+                            <button
+                                type="reset"
+                                class="btn btn-secondary"
+                            >
+                                Reset
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Simpan
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+
+                <!-- =====================================================
+                    FORM 2
+                    FASILITI BERISIKO BAGI SETIAP NEGERI
+                ====================================================== -->
+
+                <div
+                    id="risikoFormContainer"
+                    style="display:none;"
+                >
+
+                    <h5 class="mb-4">
+                        Fasiliti Berisiko Bagi Setiap Negeri
+                    </h5>
+
+                    <form id="facilityForm">
+
+                        <!-- 1. NEGERI -->
+                        <div class="mb-3">
+
+                            <label
+                                for="risiko_negeri"
+                                class="form-label"
+                            >
+                                Negeri
+                            </label>
+
+                            <select
+                                id="risiko_negeri"
+                                name="negeri"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Pilih Negeri --
+                                </option>
+
+                                <option value="Johor">Johor</option>
+                                <option value="Kedah">Kedah</option>
+                                <option value="Kelantan">Kelantan</option>
+                                <option value="Melaka">Melaka</option>
+                                <option value="Negeri Sembilan">
+                                    Negeri Sembilan
+                                </option>
+                                <option value="Pahang">Pahang</option>
+                                <option value="Perak">Perak</option>
+                                <option value="Perlis">Perlis</option>
+                                <option value="Pulau Pinang">
+                                    Pulau Pinang
+                                </option>
+                                <option value="Sabah">Sabah</option>
+                                <option value="Sarawak">Sarawak</option>
+                                <option value="Selangor">Selangor</option>
+                                <option value="Terengganu">Terengganu</option>
+                                <option value="Kuala Lumpur">
+                                    W.P. Kuala Lumpur
+                                </option>
+                                <option value="Putrajaya">
+                                    W.P. Putrajaya
+                                </option>
+                                <option value="Labuan">
+                                    W.P. Labuan
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 2. DAERAH -->
+                        <div class="mb-3">
+
+                            <label
+                                for="risiko_daerah"
+                                class="form-label"
+                            >
+                                Daerah
+                            </label>
+
+                            <select
+                                id="risiko_daerah"
+                                name="daerah"
+                                class="form-select"
+                                required
+                                disabled
+                            >
+
+                                <option value="">
+                                    -- Pilih Negeri Terlebih Dahulu --
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 3. KATEGORI FASILITI -->
+                        <div class="mb-3">
+
+                            <label
+                                for="kategoriFasiliti"
+                                class="form-label"
+                            >
+                                Kategori Fasiliti Kesihatan
+                            </label>
+
+                            <select
+                                id="kategoriFasiliti"
+                                name="kategoriFasiliti"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Pilih Kategori --
+                                </option>
+
+                                <option value="JKN">
+                                    Jabatan Kesihatan Negeri (JKN)
+                                </option>
+
+                                <option value="PKD">
+                                    Pejabat Kesihatan Daerah (PKD)
+                                </option>
+
+                                <option value="KKom">
+                                    Klinik Komuniti (KKom)
+                                </option>
+
+                                <option value="Klinik Pergigian">
+                                    Klinik Pergigian
+                                </option>
+
+                                <option value="KK">
+                                    Klinik Kesihatan (KK)
+                                </option>
+
+                                <option value="KKIA">
+                                    Klinik Kesihatan Ibu dan Anak (KKIA)
+                                </option>
+
+                                <option value="Hospital">
+                                    Hospital
+                                </option>
+
+                                <option value="KD">
+                                    Klinik Desa (KD)
+                                </option>
+
+                                <option value="PKP">
+                                    Pejabat Kesihatan Pergigian Kawasan
+                                </option>
+
+                                <option value="PSS">
+                                    Pejabat Sub-Sektor (PSS)
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 4. NAMA FASILITI -->
+                        <div class="mb-3">
+
+                            <label
+                                for="risiko_namaFasiliti"
+                                class="form-label"
+                            >
+                                Nama Fasiliti Kesihatan
+                            </label>
+
+                            <input
+                                type="text"
+                                id="risiko_namaFasiliti"
+                                name="namaFasiliti"
+                                class="form-control"
+                                placeholder="Masukkan nama fasiliti kesihatan"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- RISIKO BANJIR -->
+
+                        <hr class="my-4">
+
+                        <h6 class="mb-3">
+                            Risiko Banjir
+                        </h6>
+
+
+                        <!-- 5. RISIKO BANJIR -->
+                        <div class="mb-3">
+
+                            <label
+                                for="risikoBanjir"
+                                class="form-label"
+                            >
+                                Fasiliti Berisiko Banjir
+                            </label>
+
+                            <select
+                                id="risikoBanjir"
+                                name="risikoBanjir"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Pilih --
+                                </option>
+
+                                <option value="Ya">Ya</option>
+                                <option value="Tidak">Tidak</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 6. PERNAH BANJIR -->
+                        <div class="mb-3">
+
+                            <label
+                                for="pernahBanjir"
+                                class="form-label"
+                            >
+                                Pernah Berlaku Kejadian Banjir yang
+                                Melibatkan Fasiliti
+                                (Dalam Tempoh Dua (2) Tahun yang Lalu)
+                            </label>
+
+                            <select
+                                id="pernahBanjir"
+                                name="pernahBanjir"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Pilih --
+                                </option>
+
+                                <option value="Ya">Ya</option>
+                                <option value="Tidak">Tidak</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 7. ALTERNATIF BANJIR -->
+                        <div class="mb-3">
+
+                            <label
+                                for="alternatifBanjir"
+                                class="form-label"
+                            >
+                                Nama Fasiliti Kesihatan Alternatif
+                            </label>
+
+                            <input
+                                type="text"
+                                id="alternatifBanjir"
+                                name="alternatifBanjir"
+                                class="form-control"
+                                placeholder="Masukkan nama fasiliti alternatif"
+                            >
+
+                        </div>
+
+
+                        <!-- RISIKO TANAH RUNTUH -->
+
+                        <hr class="my-4">
+
+                        <h6 class="mb-3">
+                            Risiko Tanah Runtuh
+                        </h6>
+
+
+                        <!-- 8. RISIKO TANAH RUNTUH -->
+                        <div class="mb-3">
+
+                            <label
+                                for="risikoTanahRuntuh"
+                                class="form-label"
+                            >
+                                Fasiliti Berisiko Tanah Runtuh
+                            </label>
+
+                            <select
+                                id="risikoTanahRuntuh"
+                                name="risikoTanahRuntuh"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Pilih --
+                                </option>
+
+                                <option value="Ya">Ya</option>
+                                <option value="Tidak">Tidak</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 9. PERNAH TANAH RUNTUH -->
+                        <div class="mb-3">
+
+                            <label
+                                for="pernahTanahRuntuh"
+                                class="form-label"
+                            >
+                                Pernah Berlaku Kejadian Tanah Runtuh
+                                yang Melibatkan Fasiliti
+                                (Dalam Tempoh Dua (2) Tahun yang Lalu)
+                            </label>
+
+                            <select
+                                id="pernahTanahRuntuh"
+                                name="pernahTanahRuntuh"
+                                class="form-select"
+                                required
+                            >
+
+                                <option value="">
+                                    -- Pilih --
+                                </option>
+
+                                <option value="Ya">Ya</option>
+                                <option value="Tidak">Tidak</option>
+
+                            </select>
+
+                        </div>
+
+
+                        <!-- 10. ALTERNATIF TANAH RUNTUH -->
+                        <div class="mb-3">
+
+                            <label
+                                for="alternatifTanahRuntuh"
+                                class="form-label"
+                            >
+                                Nama Fasiliti Kesihatan Alternatif
+                            </label>
+
+                            <input
+                                type="text"
+                                id="alternatifTanahRuntuh"
+                                name="alternatifTanahRuntuh"
+                                class="form-control"
+                                placeholder="Masukkan nama fasiliti alternatif"
+                            >
+
+                        </div>
+
+
+                        <!-- 11. MITIGASI -->
+
+                        <hr class="my-4">
+
+                        <div class="mb-3">
+
+                            <label
+                                for="mitigasi"
+                                class="form-label"
+                            >
+                                Isu / Tindakan Mitigasi yang Pernah Diambil
+                            </label>
+
+                            <textarea
+                                id="mitigasi"
+                                name="mitigasi"
+                                class="form-control"
+                                rows="5"
+                                placeholder="Masukkan isu atau tindakan mitigasi yang pernah diambil"
+                            ></textarea>
+
+                        </div>
+
+
+                        <!-- BUTTON -->
+
+                        <div class="d-flex justify-content-end gap-2 mt-4">
+
+                            <button
+                                type="reset"
+                                class="btn btn-secondary"
+                            >
+                                Reset
+                            </button>
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary"
+                            >
+                                Simpan
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+  </div>
+</div>
+
+
+<!-- Load Header & Footer -->
+<script>
+  fetch("header.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("header").innerHTML = data);
+
+  fetch("footer.html")
+    .then(res => res.text())
+    .then(data => document.getElementById("footer").innerHTML = data);
+</script>
+
+<!-- Load Sidebar -->
+<script>
+  fetch("sidebar.html")
+  .then(res => res.text())
+  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
+  .catch(err => console.error("Sidebar load failed:", err));
+</script>
+
+
+<script>
+
+    /* =====================================================
+       SHOW / HIDE FORM
+    ====================================================== */
+
+    function showForm(formType) {
+
+        const dekonContainer =
+            document.getElementById("dekonFormContainer");
+
+        const risikoContainer =
+            document.getElementById("risikoFormContainer");
+
+        const btnDekon =
+            document.getElementById("btnDekon");
+
+        const btnRisiko =
+            document.getElementById("btnRisiko");
+
+
+        if (formType === "dekon") {
+
+            // Show Dekon
+            dekonContainer.style.display = "block";
+
+            // Hide Risiko
+            risikoContainer.style.display = "none";
+
+            // Button active
+            btnDekon.classList.remove("btn-outline-primary");
+            btnDekon.classList.add("btn-primary");
+
+            btnRisiko.classList.remove("btn-primary");
+            btnRisiko.classList.add("btn-outline-primary");
+
+        }
+
+
+        else if (formType === "risiko") {
+
+            // Hide Dekon
+            dekonContainer.style.display = "none";
+
+            // Show Risiko
+            risikoContainer.style.display = "block";
+
+            // Button active
+            btnRisiko.classList.remove("btn-outline-primary");
+            btnRisiko.classList.add("btn-primary");
+
+            btnDekon.classList.remove("btn-primary");
+            btnDekon.classList.add("btn-outline-primary");
+
+        }
+
+    }
+
+
+    /* =====================================================
+       DEFAULT FORM
+    ====================================================== */
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        showForm("dekon");
+
+    });
+
+
+    /* =====================================================
+       DATA DAERAH
+    ====================================================== */
+
+    const daerahData = {
+
+        "Johor": [
+            "Batu Pahat",
+            "Johor Bahru",
+            "Kluang",
+            "Kota Tinggi",
+            "Mersing",
+            "Muar",
+            "Pontian",
+            "Segamat",
+            "Tangkak"
+        ],
+
+        "Kedah": [
+            "Baling",
+            "Bandar Baharu",
+            "Kota Setar",
+            "Kubang Pasu",
+            "Kulim",
+            "Langkawi",
+            "Padang Terap",
+            "Pendang",
+            "Sik",
+            "Yan"
+        ],
+
+        "Kelantan": [
+            "Bachok",
+            "Gua Musang",
+            "Jeli",
+            "Kota Bharu",
+            "Kuala Krai",
+            "Machang",
+            "Pasir Mas",
+            "Pasir Puteh",
+            "Tanah Merah",
+            "Tumpat"
+        ],
+
+        "Melaka": [
+            "Alor Gajah",
+            "Jasin",
+            "Melaka Tengah"
+        ],
+
+        "Negeri Sembilan": [
+            "Jelebu",
+            "Jempol",
+            "Kuala Pilah",
+            "Port Dickson",
+            "Rembau",
+            "Seremban",
+            "Tampin"
+        ],
+
+        "Pahang": [
+            "Bentong",
+            "Bera",
+            "Cameron Highlands",
+            "Jerantut",
+            "Kuantan",
+            "Lipis",
+            "Maran",
+            "Pekan",
+            "Raub",
+            "Rompin",
+            "Temerloh"
+        ],
+
+        "Perak": [
+            "Bagan Datuk",
+            "Batang Padang",
+            "Hilir Perak",
+            "Hulu Perak",
+            "Kampar",
+            "Kerian",
+            "Kinta",
+            "Kuala Kangsar",
+            "Manjung",
+            "Muallim",
+            "Perak Tengah"
+        ],
+
+        "Perlis": [
+            "Arau",
+            "Kangar",
+            "Padang Besar"
+        ],
+
+        "Pulau Pinang": [
+            "Barat Daya",
+            "Seberang Perai Selatan",
+            "Seberang Perai Tengah",
+            "Seberang Perai Utara",
+            "Timur Laut"
+        ],
+
+        "Sabah": [
+            "Beaufort",
+            "Beluran",
+            "Keningau",
+            "Kinabatangan",
+            "Kota Belud",
+            "Kota Kinabalu",
+            "Kota Marudu",
+            "Kuala Penyu",
+            "Kudat",
+            "Kunak",
+            "Lahad Datu",
+            "Nabawan",
+            "Papar",
+            "Penampang",
+            "Pitas",
+            "Ranau",
+            "Sandakan",
+            "Semporna",
+            "Sipitang",
+            "Tambunan",
+            "Tawau",
+            "Telupid",
+            "Tenom",
+            "Tongod",
+            "Tuaran"
+        ],
+
+        "Sarawak": [
+            "Betong",
+            "Bintulu",
+            "Kapit",
+            "Kuching",
+            "Limbang",
+            "Miri",
+            "Mukah",
+            "Samarahan",
+            "Sarikei",
+            "Sibu",
+            "Sri Aman"
+        ],
+
+        "Selangor": [
+            "Gombak",
+            "Hulu Langat",
+            "Hulu Selangor",
+            "Klang",
+            "Kuala Langat",
+            "Kuala Selangor",
+            "Petaling",
+            "Sabak Bernam",
+            "Sepang"
+        ],
+
+        "Terengganu": [
+            "Besut",
+            "Dungun",
+            "Hulu Terengganu",
+            "Kemaman",
+            "Kuala Nerus",
+            "Kuala Terengganu",
+            "Marang",
+            "Setiu"
+        ],
+
+        "Kuala Lumpur": [
+            "Kuala Lumpur"
+        ],
+
+        "Putrajaya": [
+            "Putrajaya"
+        ],
+
+        "Labuan": [
+            "Labuan"
+        ]
+
+    };
+
+
+    /* =====================================================
+       FUNCTION UNTUK SET DAERAH
+    ====================================================== */
+
+    function setupDaerah(negeriId, daerahId) {
+
+        const negeri =
+            document.getElementById(negeriId);
+
+        const daerah =
+            document.getElementById(daerahId);
+
+
+        negeri.addEventListener("change", function () {
+
+            const selectedNegeri = this.value;
+
+            daerah.innerHTML = "";
+
+            if (!selectedNegeri) {
+
+                daerah.disabled = true;
+
+                daerah.innerHTML = `
+                    <option value="">
+                        -- Pilih Negeri Terlebih Dahulu --
+                    </option>
+                `;
+
+                return;
+            }
+
+
+            daerah.disabled = false;
+
+            daerah.innerHTML = `
+                <option value="">
+                    -- Pilih Daerah --
+                </option>
+            `;
+
+
+            if (daerahData[selectedNegeri]) {
+
+                daerahData[selectedNegeri].forEach(
+                    function (namaDaerah) {
+
+                        const option =
+                            document.createElement("option");
+
+                        option.value = namaDaerah;
+
+                        option.textContent = namaDaerah;
+
+                        daerah.appendChild(option);
+
+                    }
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       SETUP DAERAH UNTUK KEDUA-DUA FORM
+    ====================================================== */
+
+    setupDaerah(
+        "dekon_negeri",
+        "dekon_daerah"
+    );
+
+    setupDaerah(
+        "risiko_negeri",
+        "risiko_daerah"
+    );
+
+
+    /* =====================================================
+       JENIS FASILITI → LAIN-LAIN
+    ====================================================== */
+
+    document
+        .getElementById("dekon_jenisFasiliti")
+        .addEventListener("change", function () {
+
+            const container =
+                document.getElementById(
+                    "dekon_lainLainContainer"
+                );
+
+            const input =
+                document.getElementById(
+                    "dekon_jenisFasilitiLain"
+                );
+
+
+            if (this.value === "Lain-lain") {
+
+                container.style.display = "block";
+
+                input.required = true;
+
+            }
+
+            else {
+
+                container.style.display = "none";
+
+                input.required = false;
+
+                input.value = "";
+
+            }
+
+        });
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard Fasiliti Kesihatan</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    :root{--primary:#0b5ed7;--navy:#16345b;--ink:#24364b;--muted:#64748b;--bg:#f3f6fa;--line:#e4eaf1}
+    body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+    .sidebar{min-height:calc(100vh - 60px);background:#fff;border-right:1px solid var(--line)}
+    .page-title{font-weight:750;color:var(--navy)}
+    .subtle{color:var(--muted)}
+    .card{border:0;border-radius:14px;box-shadow:0 3px 14px rgba(15,42,75,.07)}
+    .metric{height:100%;overflow:hidden;position:relative}
+    .metric::after{content:"";position:absolute;width:80px;height:80px;border-radius:50%;right:-28px;top:-28px;background:currentColor;opacity:.08}
+    .metric-icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:1.2rem}
+    .metric-value{font-size:1.75rem;font-weight:800;line-height:1}
+    .chart-wrap{height:290px;position:relative}
+    .nav-pills .nav-link{color:#536579;font-weight:600}
+    .nav-pills .nav-link.active{background:var(--primary)}
+    .table thead th{font-size:.76rem;text-transform:uppercase;letter-spacing:.035em;color:#52657a;background:#f7f9fc;white-space:nowrap}
+    .table td{vertical-align:middle;font-size:.9rem}
+    .badge-soft-success{background:#dcfce7;color:#166534}.badge-soft-danger{background:#fee2e2;color:#991b1b}
+    .badge-soft-warning{background:#fef3c7;color:#92400e}.badge-soft-info{background:#dbeafe;color:#1e40af}
+    .filter-bar{background:#fff;border:1px solid var(--line);border-radius:14px}
+    .demo-note{background:#fff7df;border:1px solid #f8d679;color:#79570b;border-radius:10px}
+    @media(max-width:767px){.sidebar{min-height:auto}.chart-wrap{height:250px}}
+    @media print{#header,.sidebar,.filter-bar,.no-print,.demo-note{display:none!important}.col-md-9{width:100%}.card{box-shadow:none;border:1px solid #ddd}}
+  </style>
+</head>
+<body>
+<div id="header"></div>
+<div class="container-fluid">
+  <div class="row">
+    <aside class="col-md-3 col-lg-2 p-0 sidebar" id="sidebar-placeholder"></aside>
+    <main class="col-md-9 col-lg-10 ms-sm-auto px-3 px-lg-4 py-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+        <div><h2 class="page-title mb-1">Dashboard Fasiliti Kesihatan</h2><p class="subtle mb-0">Analitik kesiapsiagaan insiden kimia dan risiko bencana fasiliti</p></div>
+        <div class="d-flex gap-2 no-print">
+          <a class="btn btn-success" href="fasiliti_form.html"><i class="bi bi-plus-circle me-1"></i> Isi Borang Baharu</a>
+          <button class="btn btn-outline-primary" id="btnExport"><i class="bi bi-download me-1"></i> Eksport CSV</button>
+          <button class="btn btn-primary" onclick="window.print()"><i class="bi bi-printer me-1"></i> Cetak Laporan</button>
+        </div>
+      </div>
+
+      <div id="demoNote" class="demo-note px-3 py-2 mb-3 small"><i class="bi bi-info-circle-fill me-1"></i> Paparan menggunakan data contoh kerana borang asal belum disambungkan kepada storan data.</div>
+
+      <div class="filter-bar p-3 mb-4 no-print">
+        <div class="row g-3 align-items-end">
+          <div class="col-md-4"><label class="form-label small fw-semibold">Negeri</label><select id="filterNegeri" class="form-select"><option value="">Semua negeri</option></select></div>
+          <div class="col-md-4"><label class="form-label small fw-semibold">Daerah</label><select id="filterDaerah" class="form-select"><option value="">Semua daerah</option></select></div>
+          <div class="col-md-4 d-flex gap-2"><button id="btnTapis" class="btn btn-primary flex-grow-1">Tapis</button><button id="btnReset" class="btn btn-outline-secondary">Set Semula</button></div>
+        </div>
+      </div>
+
+      <div class="row g-3 mb-4" id="kpiRow"></div>
+
+      <ul class="nav nav-pills bg-white p-2 rounded-3 shadow-sm mb-4 no-print" id="dashboardTabs">
+        <li class="nav-item"><button class="nav-link active" data-view="ringkasan">Ringkasan</button></li>
+        <li class="nav-item"><button class="nav-link" data-view="dekon">Kesiapsiagaan Dekon</button></li>
+        <li class="nav-item"><button class="nav-link" data-view="risiko">Risiko Bencana</button></li>
+      </ul>
+
+      <section id="ringkasanView" class="dash-view">
+        <div class="row g-3 mb-4">
+          <div class="col-xl-7"><div class="card p-3 h-100"><h6 class="fw-bold mb-1">Jumlah Fasiliti Mengikut Negeri</h6><p class="subtle small">Gabungan kedua-dua borang</p><div class="chart-wrap"><canvas id="stateChart"></canvas></div></div></div>
+          <div class="col-xl-5"><div class="card p-3 h-100"><h6 class="fw-bold mb-1">Profil Risiko Semasa</h6><p class="subtle small">Bilangan rekod mengikut jenis risiko</p><div class="chart-wrap"><canvas id="riskChart"></canvas></div></div></div>
+        </div>
+        <div class="card p-3"><h6 class="fw-bold mb-3">Keutamaan Tindakan</h6><div id="priorityList"></div></div>
+      </section>
+
+      <section id="dekonView" class="dash-view d-none">
+        <div class="row g-3 mb-4">
+          <div class="col-lg-6"><div class="card p-3 h-100"><h6 class="fw-bold">Jenis Fasiliti</h6><div class="chart-wrap"><canvas id="facilityTypeChart"></canvas></div></div></div>
+          <div class="col-lg-6"><div class="card p-3 h-100"><h6 class="fw-bold">Cadangan Kawasan/Kesiapsiagaan Dekon</h6><div class="chart-wrap"><canvas id="dekonChart"></canvas></div></div></div>
+        </div>
+        <div class="card"><div class="p-3 border-bottom d-flex justify-content-between"><h6 class="fw-bold mb-0">Senarai Fasiliti Berpotensi Respon Insiden Kimia</h6><span id="dekonCount" class="badge text-bg-primary"></span></div><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Negeri / Daerah</th><th>Fasiliti</th><th>Jenis</th><th>Dekon</th><th>PPE</th></tr></thead><tbody id="dekonTable"></tbody></table></div></div>
+      </section>
+
+      <section id="risikoView" class="dash-view d-none">
+        <div class="row g-3 mb-4">
+          <div class="col-lg-6"><div class="card p-3 h-100"><h6 class="fw-bold">Risiko Mengikut Negeri</h6><div class="chart-wrap"><canvas id="riskStateChart"></canvas></div></div></div>
+          <div class="col-lg-6"><div class="card p-3 h-100"><h6 class="fw-bold">Kategori Fasiliti Berisiko</h6><div class="chart-wrap"><canvas id="categoryChart"></canvas></div></div></div>
+        </div>
+        <div class="card"><div class="p-3 border-bottom d-flex justify-content-between"><h6 class="fw-bold mb-0">Senarai Fasiliti Berisiko</h6><span id="riskCount" class="badge text-bg-danger"></span></div><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Negeri / Daerah</th><th>Fasiliti</th><th>Kategori</th><th>Banjir</th><th>Tanah Runtuh</th><th>Fasiliti Alternatif</th><th>Mitigasi</th></tr></thead><tbody id="riskTable"></tbody></table></div></div>
+      </section>
+    </main>
+  </div>
+</div>
+<div id="footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<script>
+const contohDekon=[
+ {negeri:'Selangor',daerah:'Petaling',jenisFasiliti:'Hospital',namaFasiliti:'Hospital Shah Alam',alamatFasiliti:'Persiaran Kayangan, Shah Alam',fasilitiDekon:'Ya',ppeDicadangkan:'Type C'},
+ {negeri:'Johor',daerah:'Johor Bahru',jenisFasiliti:'Hospital',namaFasiliti:'Hospital Sultanah Aminah',alamatFasiliti:'Johor Bahru',fasilitiDekon:'Ya',ppeDicadangkan:'Type C'},
+ {negeri:'Pahang',daerah:'Kuantan',jenisFasiliti:'Klinik Kesihatan',namaFasiliti:'Klinik Kesihatan Beserah',alamatFasiliti:'Kuantan',fasilitiDekon:'Tidak',ppeDicadangkan:'Type C'},
+ {negeri:'Sabah',daerah:'Kota Kinabalu',jenisFasiliti:'Hospital',namaFasiliti:'Hospital Queen Elizabeth',alamatFasiliti:'Kota Kinabalu',fasilitiDekon:'Ya',ppeDicadangkan:'Type C'},
+ {negeri:'Sarawak',daerah:'Kuching',jenisFasiliti:'Klinik Kesihatan',namaFasiliti:'Klinik Kesihatan Jalan Masjid',alamatFasiliti:'Kuching',fasilitiDekon:'Tidak',ppeDicadangkan:'Type C'},
+ {negeri:'Putrajaya',daerah:'Putrajaya',jenisFasiliti:'Hospital',namaFasiliti:'Hospital Putrajaya',alamatFasiliti:'Presint 7',fasilitiDekon:'Ya',ppeDicadangkan:'Type C'}
+];
+const contohRisiko=[
+ {negeri:'Kelantan',daerah:'Kota Bharu',kategoriFasiliti:'Hospital',namaFasiliti:'Hospital Raja Perempuan Zainab II',risikoBanjir:'Ya',pernahBanjir:'Ya',alternatifBanjir:'Hospital Universiti Sains Malaysia',risikoTanahRuntuh:'Tidak',pernahTanahRuntuh:'Tidak',alternatifTanahRuntuh:'',mitigasi:'Pelan pemindahan dan stok kecemasan dikemas kini.'},
+ {negeri:'Pahang',daerah:'Cameron Highlands',kategoriFasiliti:'KK',namaFasiliti:'Klinik Kesihatan Tanah Rata',risikoBanjir:'Tidak',pernahBanjir:'Tidak',alternatifBanjir:'',risikoTanahRuntuh:'Ya',pernahTanahRuntuh:'Ya',alternatifTanahRuntuh:'Hospital Sultanah Hajjah Kalsom',mitigasi:'Pemantauan cerun dan laluan alternatif dikenal pasti.'},
+ {negeri:'Johor',daerah:'Segamat',kategoriFasiliti:'KK',namaFasiliti:'Klinik Kesihatan Segamat',risikoBanjir:'Ya',pernahBanjir:'Ya',alternatifBanjir:'Hospital Segamat',risikoTanahRuntuh:'Tidak',pernahTanahRuntuh:'Tidak',alternatifTanahRuntuh:'',mitigasi:'Peralatan kritikal dipindahkan ke aras lebih tinggi.'},
+ {negeri:'Sabah',daerah:'Ranau',kategoriFasiliti:'KD',namaFasiliti:'Klinik Desa Kundasang',risikoBanjir:'Tidak',pernahBanjir:'Tidak',alternatifBanjir:'',risikoTanahRuntuh:'Ya',pernahTanahRuntuh:'Tidak',alternatifTanahRuntuh:'Hospital Ranau',mitigasi:'Latihan pemindahan dan semakan laluan akses.'},
+ {negeri:'Terengganu',daerah:'Kemaman',kategoriFasiliti:'PKD',namaFasiliti:'Pejabat Kesihatan Daerah Kemaman',risikoBanjir:'Ya',pernahBanjir:'Ya',alternatifBanjir:'Klinik Kesihatan Chukai',risikoTanahRuntuh:'Tidak',pernahTanahRuntuh:'Tidak',alternatifTanahRuntuh:'',mitigasi:'Senarai kontak kecemasan dan aset sokongan disahkan.'},
+ {negeri:'Selangor',daerah:'Hulu Langat',kategoriFasiliti:'KK',namaFasiliti:'Klinik Kesihatan Hulu Langat',risikoBanjir:'Ya',pernahBanjir:'Tidak',alternatifBanjir:'Klinik Kesihatan Batu 9',risikoTanahRuntuh:'Ya',pernahTanahRuntuh:'Tidak',alternatifTanahRuntuh:'Hospital Kajang',mitigasi:''}
+];
+
+function bacaArray(keys){for(const key of keys){try{const v=JSON.parse(localStorage.getItem(key));if(Array.isArray(v)&&v.length)return v}catch(e){}}return null}
+let dekonData=bacaArray(['fasilitiDekonData','dekonData','dekonRecords'])||contohDekon;
+let risikoData=bacaArray(['fasilitiRisikoData','facilityData','risikoData','facilityRecords'])||contohRisiko;
+const gunaContoh=dekonData===contohDekon&&risikoData===contohRisiko;
+if(!gunaContoh)document.getElementById('demoNote').classList.add('d-none');
+Chart.register(ChartDataLabels);
+let charts={};
+const warna=['#0b5ed7','#12a594','#f59e0b','#e64b5d','#7758c7','#38a3db','#7a8ba3'];
+const kira=(arr,key)=>arr.reduce((a,x)=>(a[x[key]||'Tidak dinyatakan']=(a[x[key]||'Tidak dinyatakan']||0)+1,a),{});
+const badge=v=>`<span class="badge ${v==='Ya'?'badge-soft-danger':'badge-soft-success'}">${v||'-'}</span>`;
+const selamat=v=>String(v??'-').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+function chart(id,type,labels,data,colors=warna){
+  if(charts[id]) charts[id].destroy();
+
+  charts[id]=new Chart(document.getElementById(id),{
+    type,
+    data:{
+      labels,
+      datasets:[{
+        data,
+        backgroundColor:colors,
+        borderWidth:0,
+        borderRadius:type==='bar'?5:0
+      }]
+    },
+    options:{
+      responsive:true,
+      maintainAspectRatio:false,
+      layout:{padding:{top:type==='bar'?22:10}},
+      plugins:{
+        legend:{display:type!=='bar',position:'bottom'},
+        datalabels:{
+          display:true,
+          color:type==='bar'?'#24364b':'#ffffff',
+          font:{weight:'700',size:12},
+          anchor:type==='bar'?'end':'center',
+          align:type==='bar'?'top':'center',
+          offset:type==='bar'?2:0,
+          clamp:true,
+          formatter:(value)=>value
+        }
+      },
+      scales:type==='bar'
+        ?{
+            y:{beginAtZero:true,ticks:{precision:0}},
+            x:{grid:{display:false}}
+          }
+        :{}
+    }
+  });
+}
+
+function filtered(){const n=document.getElementById('filterNegeri').value,d=document.getElementById('filterDaerah').value;return{d:dekonData.filter(x=>(!n||x.negeri===n)&&(!d||x.daerah===d)),r:risikoData.filter(x=>(!n||x.negeri===n)&&(!d||x.daerah===d))}}
+function render(){const {d,r}=filtered(),banjir=r.filter(x=>x.risikoBanjir==='Ya'),runtuh=r.filter(x=>x.risikoTanahRuntuh==='Ya'),kritikal=r.filter(x=>x.risikoBanjir==='Ya'&&x.risikoTanahRuntuh==='Ya'),dekon=d.filter(x=>x.fasilitiDekon==='Ya');
+ document.getElementById('kpiRow').innerHTML=[
+  ['Jumlah Fasiliti',d.length+r.length,'bi-buildings','#0b5ed7','#dbeafe'],['Sedia Dekon',dekon.length,'bi-shield-check','#138a72','#dff7ef'],['Risiko Banjir',banjir.length,'bi-water','#d97706','#fef3c7'],['Risiko Tanah Runtuh',runtuh.length,'bi-exclamation-triangle','#dc3545','#fee2e2'],['Dua Risiko',kritikal.length,'bi-exclamation-octagon','#7758c7','#eee8ff']
+ ].map(x=>`<div class="col-6 col-xl"><div class="card metric p-3" style="color:${x[3]}"><div class="d-flex justify-content-between align-items-start"><div><div class="metric-value">${x[1]}</div><div class="small fw-semibold mt-2" style="color:#50647a">${x[0]}</div></div><div class="metric-icon" style="background:${x[4]}"><i class="bi ${x[2]}"></i></div></div></div></div>`).join('');
+ const states=[...new Set([...d,...r].map(x=>x.negeri))], totals=states.map(s=>d.filter(x=>x.negeri===s).length+r.filter(x=>x.negeri===s).length);chart('stateChart','bar',states,totals);
+ chart('riskChart','doughnut',['Risiko banjir','Risiko tanah runtuh','Pernah banjir','Pernah tanah runtuh'],[banjir.length,runtuh.length,r.filter(x=>x.pernahBanjir==='Ya').length,r.filter(x=>x.pernahTanahRuntuh==='Ya').length],['#38a3db','#e64b5d','#7758c7','#f59e0b']);
+ const priorities=[...r].filter(x=>x.risikoBanjir==='Ya'||x.risikoTanahRuntuh==='Ya').sort((a,b)=>((b.risikoBanjir==='Ya')+(b.risikoTanahRuntuh==='Ya')+(b.pernahBanjir==='Ya')+(b.pernahTanahRuntuh==='Ya'))-((a.risikoBanjir==='Ya')+(a.risikoTanahRuntuh==='Ya')+(a.pernahBanjir==='Ya')+(a.pernahTanahRuntuh==='Ya'))).slice(0,5);
+ document.getElementById('priorityList').innerHTML=priorities.length?priorities.map((x,i)=>`<div class="d-flex gap-3 align-items-center py-2 ${i?'border-top':''}"><span class="badge rounded-pill text-bg-${x.risikoBanjir==='Ya'&&x.risikoTanahRuntuh==='Ya'?'danger':'warning'}">${i+1}</span><div class="flex-grow-1"><div class="fw-semibold">${selamat(x.namaFasiliti)}</div><small class="subtle">${selamat(x.daerah)}, ${selamat(x.negeri)}</small></div><small>${x.risikoBanjir==='Ya'?'Banjir ':''}${x.risikoTanahRuntuh==='Ya'?'Tanah runtuh':''}</small></div>`).join(''):'<div class="text-center subtle py-4">Tiada fasiliti berisiko bagi pilihan ini.</div>';
+ const types=kira(d,'jenisFasiliti');chart('facilityTypeChart','doughnut',Object.keys(types),Object.values(types));chart('dekonChart','doughnut',['Ya','Tidak'],[dekon.length,d.length-dekon.length],['#12a594','#dbe3ec']);
+ document.getElementById('dekonCount').textContent=d.length+' rekod';document.getElementById('dekonTable').innerHTML=d.length?d.map(x=>`<tr><td><b>${selamat(x.negeri)}</b><br><small class="subtle">${selamat(x.daerah)}</small></td><td>${selamat(x.namaFasiliti)}<br><small class="subtle">${selamat(x.alamatFasiliti)}</small></td><td>${selamat(x.jenisFasiliti==='Lain-lain'?x.jenisFasilitiLain:x.jenisFasiliti)}</td><td>${badge(x.fasilitiDekon)}</td><td>${selamat(x.ppeDicadangkan)}</td></tr>`).join(''):'<tr><td colspan="5" class="text-center subtle py-4">Tiada rekod ditemui.</td></tr>';
+ const rs=[...new Set(r.map(x=>x.negeri))],ban=rs.map(s=>r.filter(x=>x.negeri===s&&x.risikoBanjir==='Ya').length),tan=rs.map(s=>r.filter(x=>x.negeri===s&&x.risikoTanahRuntuh==='Ya').length);if(charts.riskStateChart) charts.riskStateChart.destroy();
+ charts.riskStateChart=new Chart(document.getElementById('riskStateChart'),{
+   type:'bar',
+   data:{
+     labels:rs,
+     datasets:[
+       {label:'Banjir',data:ban,backgroundColor:'#38a3db'},
+       {label:'Tanah runtuh',data:tan,backgroundColor:'#e64b5d'}
+     ]
+   },
+   options:{
+     responsive:true,
+     maintainAspectRatio:false,
+     layout:{padding:{top:22}},
+     plugins:{
+       legend:{position:'bottom'},
+       datalabels:{
+         display:true,
+         color:'#24364b',
+         font:{weight:'700',size:12},
+         anchor:'end',
+         align:'top',
+         offset:2,
+         clamp:true,
+         formatter:(value)=>value
+       }
+     },
+     scales:{
+       y:{beginAtZero:true,ticks:{precision:0}},
+       x:{grid:{display:false}}
+     }
+   }
+ });
+ const cats=kira(r,'kategoriFasiliti');chart('categoryChart','doughnut',Object.keys(cats),Object.values(cats));document.getElementById('riskCount').textContent=r.length+' rekod';document.getElementById('riskTable').innerHTML=r.length?r.map(x=>`<tr><td><b>${selamat(x.negeri)}</b><br><small class="subtle">${selamat(x.daerah)}</small></td><td>${selamat(x.namaFasiliti)}</td><td>${selamat(x.kategoriFasiliti)}</td><td>${badge(x.risikoBanjir)}</td><td>${badge(x.risikoTanahRuntuh)}</td><td><small><b>Banjir:</b> ${selamat(x.alternatifBanjir)}<br><b>Tanah runtuh:</b> ${selamat(x.alternatifTanahRuntuh)}</small></td><td style="min-width:220px"><small>${selamat(x.mitigasi)}</small></td></tr>`).join(''):'<tr><td colspan="7" class="text-center subtle py-4">Tiada rekod ditemui.</td></tr>';
+}
+function isiPenapis(){const negeri=[...new Set([...dekonData,...risikoData].map(x=>x.negeri))].sort();document.getElementById('filterNegeri').insertAdjacentHTML('beforeend',negeri.map(x=>`<option>${selamat(x)}</option>`).join(''));kemasDaerah()}
+function kemasDaerah(){const n=document.getElementById('filterNegeri').value,el=document.getElementById('filterDaerah'),old=el.value;const ds=[...new Set([...dekonData,...risikoData].filter(x=>!n||x.negeri===n).map(x=>x.daerah))].sort();el.innerHTML='<option value="">Semua daerah</option>'+ds.map(x=>`<option>${selamat(x)}</option>`).join('');if(ds.includes(old))el.value=old}
+document.getElementById('filterNegeri').addEventListener('change',kemasDaerah);document.getElementById('btnTapis').addEventListener('click',render);document.getElementById('btnReset').addEventListener('click',()=>{document.getElementById('filterNegeri').value='';kemasDaerah();render()});
+document.querySelectorAll('#dashboardTabs .nav-link').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('#dashboardTabs .nav-link').forEach(x=>x.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.dash-view').forEach(x=>x.classList.add('d-none'));document.getElementById(btn.dataset.view+'View').classList.remove('d-none');setTimeout(()=>Object.values(charts).forEach(c=>c.resize()),50)}));
+document.getElementById('btnExport').addEventListener('click',()=>{const {d,r}=filtered(),rows=[['BORANG','NEGERI','DAERAH','NAMA FASILITI','KATEGORI/JENIS','RISIKO BANJIR','RISIKO TANAH RUNTUH','SEDIA DEKON'],...d.map(x=>['Dekon',x.negeri,x.daerah,x.namaFasiliti,x.jenisFasiliti,'','',x.fasilitiDekon]),...r.map(x=>['Risiko',x.negeri,x.daerah,x.namaFasiliti,x.kategoriFasiliti,x.risikoBanjir,x.risikoTanahRuntuh,''])];const csv='\ufeff'+rows.map(row=>row.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='laporan_fasiliti.csv';a.click();URL.revokeObjectURL(a.href)});
+['header','footer'].forEach(id=>fetch(id+'.html').then(r=>r.ok?r.text():'').then(t=>document.getElementById(id).innerHTML=t).catch(()=>{}));fetch('sidebar.html').then(r=>r.ok?r.text():'').then(t=>document.getElementById('sidebar-placeholder').innerHTML=t).catch(()=>{});
+isiPenapis();render();
+</script>
+</body>
+</html>
