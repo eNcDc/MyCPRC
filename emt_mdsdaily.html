@@ -43,6 +43,175 @@ body{background:#f4f6f9}
 .history-badge{
   font-size:.75rem;
 }
+
+/* =========================================================
+   TABLE DESIGN
+========================================================= */
+.table-scroll{
+  width:100%;
+  max-width:100%;
+  overflow-x:auto !important;
+  overflow-y:hidden;
+  -webkit-overflow-scrolling:touch;
+  border:1px solid #e2e7ed;
+  border-radius:12px;
+  background:#fff;
+}
+
+.table-scroll::-webkit-scrollbar{
+  height:10px;
+}
+
+.table-scroll::-webkit-scrollbar-track{
+  background:#f1f3f5;
+  border-radius:999px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb{
+  background:#adb5bd;
+  border-radius:999px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb:hover{
+  background:#868e96;
+}
+
+.mds-data-table{
+  margin-bottom:0!important;
+  width:100%;
+  min-width:1180px;
+  --bs-table-hover-bg:#f7faff;
+}
+
+.mds-data-table thead th{
+  background:#f4f7fb!important;
+  color:#5d6c7d;
+  font-size:.76rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.025em;
+  white-space:nowrap;
+  padding:.8rem .75rem;
+  vertical-align:middle;
+  border-bottom:1px solid #dfe5ec;
+}
+
+.mds-data-table tbody td{
+  padding:.82rem .75rem;
+  vertical-align:middle;
+  border-color:#edf0f4;
+}
+
+.mds-data-table tbody tr:last-child td{
+  border-bottom:0;
+}
+
+.patient-record-table{
+  min-width:1450px;
+}
+
+.history-table{
+  min-width:1150px;
+}
+
+.tally-table{
+  min-width:1180px;
+}
+
+.table-main{
+  font-weight:750;
+  color:#1f2937;
+}
+
+.table-sub{
+  font-size:.76rem;
+  color:#7b8794;
+  margin-top:.15rem;
+}
+
+.id-chip{
+  display:inline-flex;
+  align-items:center;
+  padding:.3rem .55rem;
+  border-radius:7px;
+  background:#f4f6f8;
+  border:1px solid #dce2e8;
+  color:#495057;
+  font-size:.78rem;
+  font-weight:750;
+  white-space:nowrap;
+}
+
+.soft-pill{
+  display:inline-flex;
+  align-items:center;
+  padding:.3rem .55rem;
+  border-radius:999px;
+  background:#f3f5f7;
+  border:1px solid #e0e5ea;
+  font-size:.75rem;
+  font-weight:700;
+}
+
+.clinical-pill{
+  display:inline-block;
+  margin:0 .2rem .2rem 0;
+  padding:.3rem .5rem;
+  border-radius:999px;
+  font-size:.72rem;
+  font-weight:700;
+  white-space:nowrap;
+}
+
+/* =========================================================
+   CLICKABLE KPI CARDS
+========================================================= */
+.metric-card.metric-clickable{
+  cursor:pointer;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  border:1px solid transparent;
+}
+
+.metric-card.metric-clickable:hover{
+  transform:translateY(-2px);
+  box-shadow:0 .45rem 1rem rgba(0,0,0,.09);
+  border-color:#d7e3f4;
+}
+
+.metric-card.metric-clickable:focus{
+  outline:3px solid rgba(13,110,253,.18);
+  outline-offset:2px;
+}
+
+.metric-card .metric-hint{
+  font-size:.72rem;
+  color:#8a96a3;
+  margin-top:.35rem;
+}
+
+/* =========================================================
+   FILTER FEEDBACK
+========================================================= */
+.filter-status-line{
+  font-size:.78rem;
+  color:#6c757d;
+  margin-top:.65rem;
+}
+
+.filter-status-line strong{
+  color:#212529;
+}
+
+/* =========================================================
+   KPI MODAL
+========================================================= */
+#metricDetailModal .modal-dialog{
+  max-width:980px;
+}
+
+.metric-modal-table{
+  min-width:850px;
+}
 </style>
 </head>
 <body>
@@ -85,15 +254,20 @@ body{background:#f4f6f9}
         </button>
 </div>
 </div>
+
+<div class="filter-status-line" id="filterStatusLine">
+  Menunjukkan rekod berdasarkan penapis semasa.
+</div>
 </div>
 <!-- SUMMARY -->
 <div class="row g-3 mb-4">
 <div class="col-6 col-xl-3">
-<div class="card metric-card">
+<div class="card metric-card metric-clickable" role="button" tabindex="0" data-metric="all" aria-label="Papar maklumat Jumlah Pesakit">
 <div class="card-body d-flex justify-content-between">
 <div>
 <small class="text-muted">Jumlah Pesakit</small>
 <div class="metric-value mt-2" id="summaryPatients">0</div>
+<div class="metric-hint"><i class="bi bi-hand-index me-1"></i>Klik untuk lihat rekod</div>
 </div>
 <div class="metric-icon bg-primary-subtle text-primary">
 <i class="bi bi-person-fill"></i>
@@ -102,11 +276,12 @@ body{background:#f4f6f9}
 </div>
 </div>
 <div class="col-6 col-xl-3">
-<div class="card metric-card">
+<div class="card metric-card metric-clickable" role="button" tabindex="0" data-metric="trauma" aria-label="Papar maklumat Trauma">
 <div class="card-body d-flex justify-content-between">
 <div>
 <small class="text-muted">Trauma</small>
 <div class="metric-value mt-2" id="summaryTrauma">0</div>
+<div class="metric-hint"><i class="bi bi-hand-index me-1"></i>Klik untuk lihat rekod</div>
 </div>
 <div class="metric-icon bg-danger-subtle text-danger">
 <i class="bi bi-bandaid-fill"></i>
@@ -115,11 +290,12 @@ body{background:#f4f6f9}
 </div>
 </div>
 <div class="col-6 col-xl-3">
-<div class="card metric-card">
+<div class="card metric-card metric-clickable" role="button" tabindex="0" data-metric="infectious" aria-label="Papar maklumat Penyakit Berjangkit">
 <div class="card-body d-flex justify-content-between">
 <div>
 <small class="text-muted">Penyakit Berjangkit</small>
 <div class="metric-value mt-2" id="summaryInfectious">0</div>
+<div class="metric-hint"><i class="bi bi-hand-index me-1"></i>Klik untuk lihat rekod</div>
 </div>
 <div class="metric-icon bg-warning-subtle text-warning">
 <i class="bi bi-virus"></i>
@@ -128,11 +304,12 @@ body{background:#f4f6f9}
 </div>
 </div>
 <div class="col-6 col-xl-3">
-<div class="card metric-card">
+<div class="card metric-card metric-clickable" role="button" tabindex="0" data-metric="emergency" aria-label="Papar maklumat Kecemasan">
 <div class="card-body d-flex justify-content-between">
 <div>
 <small class="text-muted">Kecemasan</small>
 <div class="metric-value mt-2" id="summaryEmergency">0</div>
+<div class="metric-hint"><i class="bi bi-hand-index me-1"></i>Klik untuk lihat rekod</div>
 </div>
 <div class="metric-icon bg-success-subtle text-success">
 <i class="bi bi-hospital-fill"></i>
@@ -173,8 +350,8 @@ body{background:#f4f6f9}
 </div>
 <span class="badge bg-primary" id="recordCount">0 rekod</span>
 </div>
-<div class="table-responsive">
-<table class="table table-hover align-middle mb-0">
+<div class="table-responsive table-scroll">
+<table class="table mds-data-table patient-record-table table-hover align-middle mb-0">
 <thead class="table-light">
 <tr>
 <th>Misi</th>
@@ -184,7 +361,7 @@ body{background:#f4f6f9}
 <th>Umur</th>
 <th>Jantina</th>
 <th>Pengelasan Klinikal</th>
-<th>Hasil</th>
+<th>Hasil Rawatan</th>
 <th>Konteks</th>
 <th class="text-center">Tindakan</th>
 </tr>
@@ -239,8 +416,8 @@ body{background:#f4f6f9}
 </div>
 </div>
 <div class="card page-card">
-<div class="table-responsive">
-<table class="table table-bordered tally-table mb-0">
+<div class="table-responsive table-scroll">
+<table class="table mds-data-table tally-table table-bordered mb-0">
 <thead class="table-light text-center">
 <tr>
 <th style="min-width:110px">Kategori</th>
@@ -284,8 +461,8 @@ body{background:#f4f6f9}
 </div>
 <span class="badge bg-secondary" id="historyCount">0 laporan</span>
 </div>
-<div class="table-responsive">
-<table class="table table-hover align-middle mb-0">
+<div class="table-responsive table-scroll">
+<table class="table mds-data-table history-table table-hover align-middle mb-0">
 <thead class="table-light">
 <tr>
 <th>Tarikh</th>
@@ -294,7 +471,7 @@ body{background:#f4f6f9}
 <th>Trauma</th>
 <th>Penyakit Berjangkit</th>
 <th>Kecemasan</th>
-<th>Hasil Utama</th>
+<th>Hasil Rawatan Utama</th>
 <th class="text-center">Tindakan</th>
 </tr>
 </thead>
@@ -314,6 +491,63 @@ body{background:#f4f6f9}
 </main>
 </div>
 </div>
+
+<!-- KPI DETAIL MODAL -->
+<div class="modal fade" id="metricDetailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <div>
+          <h5 class="modal-title fw-bold" id="metricModalTitle">Maklumat Rekod</h5>
+          <div class="small text-muted" id="metricModalSubtitle">-</div>
+        </div>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="small text-muted">
+            Rekod berdasarkan penapis semasa.
+          </div>
+
+          <span class="badge bg-primary" id="metricModalCount">
+            0 rekod
+          </span>
+        </div>
+
+        <div class="table-scroll">
+          <table class="table mds-data-table metric-modal-table table-hover align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Tarikh</th>
+                <th>ID MDS</th>
+                <th>Pesakit</th>
+                <th>Umur / Jantina</th>
+                <th>Pengelasan Klinikal</th>
+                <th>Hasil Rawatan</th>
+                <th class="text-center">Tindakan</th>
+              </tr>
+            </thead>
+
+            <tbody id="metricModalBody">
+              <tr>
+                <td colspan="7" class="text-center text-muted py-4">
+                  Tiada rekod.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div id="footer"></div>
 <script>
 fetch("header.html")
@@ -425,6 +659,122 @@ function genderLabel(v){
   return v || '-';
 }
 
+const OUTCOME_BM={
+  "Discharge without medical follow-up":"Discaj tanpa susulan perubatan",
+  "Discharge with medical follow-up":"Discaj dengan susulan perubatan",
+  "Discharge against medical advice":"Discaj bertentangan nasihat perubatan",
+  "Referral":"Rujukan",
+  "Admission":"Kemasukan ke wad",
+  "Dead on arrival":"Kematian semasa ketibaan",
+  "Death within facility *":"Kematian dalam fasiliti",
+  "Death within facility":"Kematian dalam fasiliti",
+  "Requiring long term rehabilitation *":"Memerlukan pemulihan jangka panjang",
+  "Requiring long term rehabilitation":"Memerlukan pemulihan jangka panjang"
+};
+
+const CONTEXT_BM={
+  "Directly related to event":"Berkaitan secara langsung dengan kejadian",
+  "Indirectly related to event":"Berkaitan secara tidak langsung dengan kejadian",
+  "Not related to event":"Tidak berkaitan dengan kejadian"
+};
+
+function translateOutcome(v){
+  const raw=String(v||'').trim();
+  if(!raw || raw==='-') return '-';
+  return OUTCOME_BM[raw] || raw;
+}
+
+function translateContext(v){
+  const raw=String(v||'').trim();
+  if(!raw || raw==='-') return '-';
+  return CONTEXT_BM[raw] || raw;
+}
+
+function recordOutcomeText(r){
+  const values=Array.isArray(r.outcomes) && r.outcomes.length
+    ? r.outcomes
+    : (r.outcome && r.outcome!=='-' ? [r.outcome] : []);
+
+  return values.length
+    ? values.map(translateOutcome).join(', ')
+    : '-';
+}
+
+function recordContextText(r){
+  const values=Array.isArray(r.contextValues) && r.contextValues.length
+    ? r.contextValues
+    : (r.context && r.context!=='-' ? [r.context] : []);
+
+  return values.length
+    ? values.map(translateContext).join(', ')
+    : '-';
+}
+
+function normalizeArray(v){
+  if(Array.isArray(v)) return v.filter(Boolean);
+
+  if(v===undefined || v===null || v==='' || v==='-'){
+    return [];
+  }
+
+  if(typeof v==='string'){
+    const trimmed=v.trim();
+
+    try{
+      const parsed=JSON.parse(trimmed);
+      if(Array.isArray(parsed)) return parsed.filter(Boolean);
+    }catch(_){}
+
+    return trimmed ? [trimmed] : [];
+  }
+
+  return [v];
+}
+
+function clinicalCategories(r){
+  const labels=[];
+
+  if(normalizeArray(r.trauma).length) labels.push('Trauma');
+  if(normalizeArray(r.infectiousDiseases).length) labels.push('Penyakit Berjangkit');
+  if(normalizeArray(r.additionalCases).length) labels.push('Kes Tambahan');
+  if(r.emergency && String(r.emergency)!=='-') labels.push('Kecemasan');
+  if(normalizeArray(r.otherKeyDiseases).length) labels.push('Penyakit Penting Lain');
+
+  if(!labels.length && r.clinicalClass && r.clinicalClass!=='-'){
+    labels.push(r.clinicalClass);
+  }
+
+  return [...new Set(labels)];
+}
+
+function clinicalClassForTable(r){
+  const labels=clinicalCategories(r);
+  return labels.length ? labels.join(', ') : '-';
+}
+
+function clinicalPillsHtml(r){
+  const classMap={
+    'Trauma':'bg-danger-subtle text-danger border border-danger-subtle',
+    'Penyakit Berjangkit':'bg-warning-subtle text-warning-emphasis border border-warning-subtle',
+    'Kes Tambahan':'bg-info-subtle text-info-emphasis border border-info-subtle',
+    'Kecemasan':'bg-primary-subtle text-primary border border-primary-subtle',
+    'Penyakit Penting Lain':'bg-secondary-subtle text-secondary border border-secondary-subtle'
+  };
+
+  const labels=clinicalCategories(r);
+
+  if(!labels.length){
+    return '<span class="text-muted">-</span>';
+  }
+
+  return labels.map(label=>`
+    <span class="clinical-pill ${classMap[label] || 'bg-light text-dark border'}">
+      ${esc(label)}
+    </span>
+  `).join('');
+}
+
+
 function ageText(r){
   if(r.age===null || r.age===undefined || r.age==='') return '-';
   const unit=String(r.ageUnit||'Year').toLowerCase().startsWith('month') ? 'Bulan' : 'Tahun';
@@ -496,28 +846,63 @@ function countItem(item,list,ageGroup=null){
 }
 
 function filteredRecords(){
-  const mission=document.getElementById('missionFilter').value;
-  const date=document.getElementById('dateFilter').value;
+  const mission=String(document.getElementById('missionFilter').value || '').trim();
+  const date=String(document.getElementById('dateFilter').value || '').trim();
   const q=document.getElementById('searchInput').value.trim().toLowerCase();
 
   return allMds.filter(r=>{
-    const missionName=missionMap[r.missionId]?.name || r.missionName || '';
-    const searchable=`${r.id||''} ${r.patientName||''} ${missionName}`.toLowerCase();
+    const recordMission=String(r.missionId || '').trim();
+    const recordDate=String(r.date || '').slice(0,10);
 
-    return (!mission || r.missionId===mission)
-      && (!date || r.date===date)
-      && (!q || searchable.includes(q));
+    const missionName=
+      missionMap[recordMission]?.name ||
+      r.missionName ||
+      recordMission ||
+      '';
+
+    const searchable=`
+      ${r.id||''}
+      ${r.patientName||''}
+      ${r.nickname||''}
+      ${missionName}
+      ${recordMission}
+    `.toLowerCase();
+
+    const missionMatch=
+      !mission ||
+      (mission==='NO-MISSION'
+        ? !recordMission
+        : recordMission===mission);
+
+    const dateMatch=
+      !date ||
+      recordDate===date;
+
+    const searchMatch=
+      !q ||
+      searchable.includes(q);
+
+    return missionMatch && dateMatch && searchMatch;
   });
+}
+
+function isTraumaRecord(r){
+  return r.clinicalClass==='Trauma' || normalizeArray(r.trauma).length>0;
+}
+
+function isInfectiousRecord(r){
+  return r.clinicalClass==='Penyakit Berjangkit' || normalizeArray(r.infectiousDiseases).length>0;
+}
+
+function isEmergencyRecord(r){
+  return r.clinicalClass==='Kecemasan' || !!r.emergency;
 }
 
 function updateSummary(list){
   document.getElementById('summaryPatients').textContent=list.length;
-  document.getElementById('summaryTrauma').textContent=
-    list.filter(r=>r.clinicalClass==='Trauma' || (r.trauma||[]).length).length;
-  document.getElementById('summaryInfectious').textContent=
-    list.filter(r=>r.clinicalClass==='Penyakit Berjangkit' || (r.infectiousDiseases||[]).length).length;
-  document.getElementById('summaryEmergency').textContent=
-    list.filter(r=>r.clinicalClass==='Kecemasan' || !!r.emergency).length;
+  document.getElementById('summaryTrauma').textContent=list.filter(isTraumaRecord).length;
+  document.getElementById('summaryInfectious').textContent=list.filter(isInfectiousRecord).length;
+  document.getElementById('summaryEmergency').textContent=list.filter(isEmergencyRecord).length;
 }
 
 function renderPatients(list){
@@ -526,31 +911,73 @@ function renderPatients(list){
   const tbody=document.getElementById('patientTable');
 
   if(!list.length){
-    tbody.innerHTML=`<tr><td colspan="10" class="text-center text-muted py-4">Tiada rekod ditemui.</td></tr>`;
+    tbody.innerHTML=`<tr><td colspan="10" class="text-center text-muted py-4">Tiada rekod ditemui berdasarkan penapis semasa.</td></tr>`;
     return;
   }
 
   tbody.innerHTML=[...list]
     .sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')))
     .map(r=>{
-      const mission=missionMap[r.missionId]?.name || r.missionName || r.missionId || '-';
+      const mission=
+        missionMap[String(r.missionId||'')]?.name ||
+        r.missionName ||
+        r.missionId ||
+        'Tiada Misi';
+
+      const viewParams=new URLSearchParams();
+      viewParams.set('id',r.id||'');
+      if(r.missionId) viewParams.set('missionId',r.missionId);
 
       return `
-      <tr>
-        <td class="fw-semibold">${esc(mission)}</td>
-        <td><span class="badge bg-light text-dark border">${esc(r.id||'-')}</span></td>
-        <td>${esc(formatDate(r.date))}</td>
-        <td>${esc(r.patientName||'-')}</td>
-        <td>${esc(ageText(r))}</td>
-        <td>${esc(genderLabel(r.gender))}</td>
-        <td>${esc(r.clinicalClass||'-')}</td>
-        <td>${esc(r.outcome||((r.outcomes||[])[0])||'-')}</td>
-        <td>${esc(r.context||((r.contextValues||[])[0])||'-')}</td>
-        <td class="text-center">
-          <a href="emt_mdsview.html?id=${encodeURIComponent(r.id)}"
-             class="btn btn-sm btn-outline-primary">Lihat</a>
-        </td>
-      </tr>`;
+        <tr>
+          <td>
+            <div class="table-main">${esc(mission)}</div>
+            ${
+              r.missionId
+                ? `<div class="table-sub">${esc(r.missionId)}</div>`
+                : ''
+            }
+          </td>
+
+          <td>
+            <span class="id-chip">${esc(r.id||'-')}</span>
+          </td>
+
+          <td>
+            <div class="table-main">${esc(formatDate(r.date))}</div>
+          </td>
+
+          <td>
+            <div class="table-main">${esc(r.patientName||'-')}</div>
+            ${
+              r.nickname
+                ? `<div class="table-sub">Nama panggilan: ${esc(r.nickname)}</div>`
+                : ''
+            }
+          </td>
+
+          <td>
+            <div class="table-main">${esc(ageText(r))}</div>
+            <div class="table-sub">${esc(normalizedAgeGroup(r)||'-')}</div>
+          </td>
+
+          <td>${esc(genderLabel(r.gender))}</td>
+
+          <td>${clinicalPillsHtml(r)}</td>
+
+          <td>
+            <span class="soft-pill">${esc(recordOutcomeText(r))}</span>
+          </td>
+
+          <td>${esc(recordContextText(r))}</td>
+
+          <td class="text-center">
+            <a href="emt_mdsview.html?${viewParams.toString()}"
+               class="btn btn-sm btn-outline-primary">
+              <i class="bi bi-eye me-1"></i>Papar
+            </a>
+          </td>
+        </tr>`;
     }).join('');
 }
 
@@ -630,7 +1057,7 @@ function dominantOutcome(list){
   });
 
   const entries=Object.entries(counter).sort((a,b)=>b[1]-a[1]);
-  return entries.length ? entries[0][0] : '-';
+  return entries.length ? translateOutcome(entries[0][0]) : '-';
 }
 
 function buildDailyHistory(){
@@ -710,7 +1137,7 @@ function renderHistory(){
             <i class="bi bi-calendar3 me-1"></i>${esc(formatDate(item.date))}
           </button>
         </td>
-        <td>${esc(missionName)}</td>
+        <td><div class="table-main">${esc(missionName)}</div><div class="table-sub">${esc(item.missionId === "NO-MISSION" ? "Tiada Misi" : item.missionId)}</div></td>
         <td>
           <span class="badge bg-primary history-badge">
             ${list.length}
@@ -719,7 +1146,7 @@ function renderHistory(){
         <td>${trauma}</td>
         <td>${infectious}</td>
         <td>${emergency}</td>
-        <td>${esc(dominantOutcome(list))}</td>
+        <td><span class="soft-pill">${esc(dominantOutcome(list))}</span></td>
         <td class="text-center">
           <button
             type="button"
@@ -760,26 +1187,73 @@ function openHistoricalReport(missionId,date){
   },150);
 }
 
+function updateFilterStatus(){
+  const mission=document.getElementById('missionFilter').value;
+  const date=document.getElementById('dateFilter').value;
+  const q=document.getElementById('searchInput').value.trim();
+
+  const parts=[];
+
+  if(mission){
+    parts.push(
+      mission==='NO-MISSION'
+        ? 'Misi: Tiada Misi'
+        : `Misi: ${missionMap[mission]?.name || mission}`
+    );
+  }
+
+  if(date){
+    parts.push(`Tarikh: ${formatDate(date)}`);
+  }
+
+  if(q){
+    parts.push(`Carian: "${q}"`);
+  }
+
+  document.getElementById('filterStatusLine').innerHTML=
+    parts.length
+      ? `Penapis aktif — <strong>${esc(parts.join(' • '))}</strong> • ${currentFiltered.length} rekod ditemui`
+      : `Tiada penapis aktif • ${currentFiltered.length} rekod ditemui`;
+}
+
+
 function applyFilters(){
   currentFiltered=filteredRecords();
   updateSummary(currentFiltered);
   renderPatients(currentFiltered);
   renderTally(currentFiltered);
   updateReportHeader(currentFiltered);
+  updateFilterStatus();
 }
 
 function populateMissions(){
   const select=document.getElementById('missionFilter');
 
-  select.innerHTML=`<option value="">Semua Misi</option>`+
-    allMissions.map(m=>`<option value="${esc(m.id)}">${esc(m.name||m.id)}</option>`).join('');
+  const hasNoMission=allMds.some(r=>!String(r.missionId||'').trim());
+
+  select.innerHTML=
+    `<option value="">Semua Misi</option>`+
+    (hasNoMission ? `<option value="NO-MISSION">Tiada Misi</option>` : '')+
+    allMissions.map(m=>`
+      <option value="${esc(String(m.id||''))}">
+        ${esc(m.name||m.id)}
+      </option>
+    `).join('');
 
   const params=new URLSearchParams(location.search);
-  const missionId=params.get('missionId') || params.get('id') || '';
+  const requestedMission=String(params.get('missionId') || params.get('id') || '').trim();
   const date=params.get('date') || '';
 
-  if(missionId && allMissions.some(m=>m.id===missionId)) select.value=missionId;
-  if(date) document.getElementById('dateFilter').value=date;
+  if(
+    requestedMission &&
+    [...select.options].some(o=>String(o.value)===requestedMission)
+  ){
+    select.value=requestedMission;
+  }
+
+  if(date){
+    document.getElementById('dateFilter').value=date;
+  }
 }
 
 async function loadData(){
@@ -798,11 +1272,30 @@ async function loadData(){
 
     populateMissions();
 
-    // If no explicit date was supplied, use the latest available record date
-    // so the page behaves as a true DAILY report by default.
+    // Jika URL tidak menetapkan tarikh, pilih tarikh terkini
+    // berdasarkan misi yang sedang dipilih. Jika tiada misi dipilih,
+    // gunakan tarikh terkini keseluruhan.
     if(!document.getElementById('dateFilter').value && allMds.length){
-      const latest=[...new Set(allMds.map(r=>r.date).filter(Boolean))].sort().pop();
-      if(latest) document.getElementById('dateFilter').value=latest;
+      const selectedMission=String(document.getElementById('missionFilter').value || '');
+
+      const candidates=allMds.filter(r=>{
+        const recordMission=String(r.missionId||'');
+
+        if(!selectedMission) return true;
+        if(selectedMission==='NO-MISSION') return !recordMission;
+
+        return recordMission===selectedMission;
+      });
+
+      const latest=[
+        ...new Set(
+          candidates.map(r=>String(r.date||'').slice(0,10)).filter(Boolean)
+        )
+      ].sort().pop();
+
+      if(latest){
+        document.getElementById('dateFilter').value=latest;
+      }
     }
 
     applyFilters();
@@ -815,7 +1308,33 @@ async function loadData(){
   }
 }
 
-document.getElementById('missionFilter').addEventListener('change',applyFilters);
+document.getElementById('missionFilter').addEventListener('change',()=>{
+  const selectedMission=String(document.getElementById('missionFilter').value || '');
+  const dateInput=document.getElementById('dateFilter');
+
+  // Bila misi berubah, jika tarikh semasa tidak mempunyai rekod
+  // untuk misi tersebut, kosongkan tarikh supaya rekod misi tetap dipaparkan.
+  if(dateInput.value){
+    const hasRecordOnCurrentDate=allMds.some(r=>{
+      const recordMission=String(r.missionId||'');
+      const missionMatch=
+        !selectedMission ||
+        (selectedMission==='NO-MISSION'
+          ? !recordMission
+          : recordMission===selectedMission);
+
+      return missionMatch &&
+        String(r.date||'').slice(0,10)===dateInput.value;
+    });
+
+    if(!hasRecordOnCurrentDate){
+      dateInput.value='';
+    }
+  }
+
+  applyFilters();
+});
+
 document.getElementById('dateFilter').addEventListener('change',applyFilters);
 document.getElementById('searchInput').addEventListener('input',applyFilters);
 
@@ -825,6 +1344,113 @@ document.getElementById('resetFilter').addEventListener('click',()=>{
   document.getElementById('searchInput').value='';
   applyFilters();
 });
+
+function recordsForMetric(type){
+  if(type==='trauma') return currentFiltered.filter(isTraumaRecord);
+  if(type==='infectious') return currentFiltered.filter(isInfectiousRecord);
+  if(type==='emergency') return currentFiltered.filter(isEmergencyRecord);
+  return currentFiltered;
+}
+
+function metricTitle(type){
+  const map={
+    all:'Jumlah Pesakit',
+    trauma:'Rekod Trauma',
+    infectious:'Rekod Penyakit Berjangkit',
+    emergency:'Rekod Kecemasan'
+  };
+
+  return map[type] || 'Maklumat Rekod';
+}
+
+function openMetricModal(type){
+  const records=[...recordsForMetric(type)]
+    .sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+
+  document.getElementById('metricModalTitle').textContent=metricTitle(type);
+  document.getElementById('metricModalSubtitle').textContent=
+    document.getElementById('filterStatusLine').textContent || 'Berdasarkan penapis semasa.';
+
+  document.getElementById('metricModalCount').textContent=
+    `${records.length} rekod`;
+
+  const body=document.getElementById('metricModalBody');
+
+  if(!records.length){
+    body.innerHTML=`
+      <tr>
+        <td colspan="7" class="text-center text-muted py-4">
+          Tiada rekod untuk kategori ini berdasarkan penapis semasa.
+        </td>
+      </tr>
+    `;
+  }else{
+    body.innerHTML=records.map(r=>{
+      const viewParams=new URLSearchParams();
+      viewParams.set('id',r.id||'');
+      if(r.missionId) viewParams.set('missionId',r.missionId);
+
+      return `
+        <tr>
+          <td>${esc(formatDate(r.date))}</td>
+
+          <td>
+            <span class="id-chip">${esc(r.id||'-')}</span>
+          </td>
+
+          <td>
+            <div class="table-main">${esc(r.patientName||'-')}</div>
+            ${
+              r.nickname
+                ? `<div class="table-sub">${esc(r.nickname)}</div>`
+                : ''
+            }
+          </td>
+
+          <td>
+            <div class="table-main">${esc(ageText(r))}</div>
+            <div class="table-sub">${esc(genderLabel(r.gender))}</div>
+          </td>
+
+          <td>${clinicalPillsHtml(r)}</td>
+
+          <td>
+            <span class="soft-pill">${esc(recordOutcomeText(r))}</span>
+          </td>
+
+          <td class="text-center">
+            <a href="emt_mdsview.html?${viewParams.toString()}"
+               class="btn btn-sm btn-outline-primary">
+              <i class="bi bi-eye me-1"></i>Papar
+            </a>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  }
+
+  bootstrap.Modal
+    .getOrCreateInstance(
+      document.getElementById('metricDetailModal')
+    )
+    .show();
+}
+
+document.querySelectorAll('.metric-card[data-metric]').forEach(card=>{
+  const activate=()=>{
+    openMetricModal(card.dataset.metric || 'all');
+  };
+
+  card.addEventListener('click',activate);
+
+  card.addEventListener('keydown',event=>{
+    if(event.key==='Enter' || event.key===' '){
+      event.preventDefault();
+      activate();
+    }
+  });
+});
+
 
 document.getElementById('printReportBtn').addEventListener('click',()=>{
   const reportTabButton=document.querySelector('[data-bs-target="#reportTab"]');

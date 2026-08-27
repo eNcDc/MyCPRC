@@ -1,200 +1,1593 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <title>EMT pemohon</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <title>Permohonan Penyertaan Misi EMT</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
 
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Main CSS -->
-    <link href="assets/css/main.css" rel="stylesheet">
-
-    <style>
-    .mds-card{
-        border:1px solid #dee2e6;
-        border-radius:12px;
-        overflow:hidden;
-        margin-bottom:1rem;
-        box-shadow:0 .125rem .25rem rgba(0,0,0,.075);
+  <style>
+    body{
+      background:#f4f6f9;
     }
 
-    .mds-card .card-header{
-        background:#0d6efd;
-        color:#fff;
-        font-weight:600;
-        padding:.75rem 1rem;
+    .page-card{
+      border:0;
+      border-radius:15px;
+      box-shadow:0 .25rem .8rem rgba(0,0,0,.06);
     }
 
-    .mds-card .card-body{
-        background:#fff;
-        padding:1rem;
+    .page-heading{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:1rem;
+      margin-bottom:1.5rem;
     }
 
-    .form-check{
-        margin-bottom:.5rem;
+    .page-heading h4{
+      font-weight:800;
+      margin-bottom:.25rem;
     }
 
-    .form-label{
-        font-weight:600;
+    /* KPI */
+    .kpi-card{
+      border:1px solid transparent;
+      border-radius:14px;
+      box-shadow:0 .2rem .7rem rgba(0,0,0,.055);
+      cursor:pointer;
+      height:100%;
+      transition:.15s ease;
+      background:#fff;
     }
 
-    .badge-soft{
-        background:#e9ecef;
-        color:#495057;
-        font-weight:500;
+    .kpi-card:hover{
+      transform:translateY(-2px);
+      border-color:#d8e3f1;
+      box-shadow:0 .4rem .9rem rgba(0,0,0,.08);
     }
 
-    .section-title{
-        font-size:1.1rem;
-        font-weight:700;
-        margin-bottom:1rem;
-        padding-bottom:.5rem;
-        border-bottom:2px solid #dee2e6;
+    .kpi-card.active{
+      border-color:#0d6efd;
+      box-shadow:0 0 0 3px rgba(13,110,253,.08);
     }
 
-    textarea{
-        resize:vertical;
+    .kpi-label{
+      color:#6c757d;
+      font-size:.82rem;
     }
-    </style>
 
+    .kpi-value{
+      font-size:1.7rem;
+      font-weight:800;
+      line-height:1;
+      margin-top:.4rem;
+    }
+
+    .kpi-icon{
+      width:44px;
+      height:44px;
+      border-radius:12px;
+      display:grid;
+      place-items:center;
+      font-size:1.15rem;
+    }
+
+    /* Filter */
+    .filter-box{
+      background:#fff;
+      border:1px solid #e0e5ea;
+      border-radius:13px;
+      padding:1rem;
+      margin-bottom:1rem;
+    }
+
+    /* Table */
+    .table-shell{
+      width:100%;
+      max-width:100%;
+      overflow-x:auto;
+      border:1px solid #e3e8ee;
+      border-radius:12px;
+      background:#fff;
+    }
+
+    .application-table{
+      min-width:1180px;
+      margin-bottom:0!important;
+      --bs-table-hover-bg:#f8fbff;
+    }
+
+    .application-table thead th{
+      background:#f4f7fb!important;
+      color:#5d6b7a;
+      font-size:.76rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+      white-space:nowrap;
+      padding:.8rem .75rem;
+      border-bottom:1px solid #dce3ea;
+      vertical-align:middle;
+    }
+
+    .application-table tbody td{
+      padding:.85rem .75rem;
+      vertical-align:middle;
+      border-color:#edf0f3;
+    }
+
+    .name-main{
+      font-weight:800;
+      color:#202833;
+    }
+
+    .sub-text{
+      font-size:.76rem;
+      color:#7b8794;
+      margin-top:.15rem;
+    }
+
+    .id-chip{
+      display:inline-flex;
+      align-items:center;
+      padding:.28rem .5rem;
+      border-radius:7px;
+      background:#f4f6f8;
+      border:1px solid #dde2e7;
+      color:#495057;
+      font-size:.75rem;
+      font-weight:700;
+    }
+
+    .mission-block{
+      min-width:200px;
+    }
+
+    .mission-name{
+      font-weight:800;
+      color:#1f2937;
+    }
+
+    .status-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:.35rem;
+      padding:.35rem .6rem;
+      border-radius:999px;
+      font-size:.76rem;
+      font-weight:750;
+      white-space:nowrap;
+    }
+
+    .status-pending{
+      background:#fff3cd;
+      color:#8a6700;
+      border:1px solid #ffe69c;
+    }
+
+    .status-approved{
+      background:#d1e7dd;
+      color:#146c43;
+      border:1px solid #a3cfbb;
+    }
+
+    .status-rejected{
+      background:#f8d7da;
+      color:#b02a37;
+      border:1px solid #f1aeb5;
+    }
+
+    .status-other{
+      background:#e9ecef;
+      color:#495057;
+      border:1px solid #dee2e6;
+    }
+
+    /* Modal */
+    .review-section{
+      border:1px solid #e3e8ee;
+      border-radius:12px;
+      padding:1rem;
+      background:#fff;
+      height:100%;
+    }
+
+    .review-title{
+      font-size:.82rem;
+      color:#6c757d;
+      margin-bottom:.6rem;
+      font-weight:700;
+    }
+
+    .detail-row{
+      display:grid;
+      grid-template-columns:145px minmax(0,1fr);
+      gap:.65rem;
+      margin-bottom:.55rem;
+      font-size:.88rem;
+    }
+
+    .detail-row:last-child{
+      margin-bottom:0;
+    }
+
+    .detail-label{
+      color:#6c757d;
+    }
+
+    .detail-value{
+      font-weight:650;
+      word-break:break-word;
+    }
+
+    .review-hero{
+      background:#f5f9ff;
+      border:1px solid #dbe9ff;
+      border-radius:12px;
+      padding:1rem;
+    }
+
+    @media(max-width:768px){
+      .detail-row{
+        grid-template-columns:1fr;
+        gap:.1rem;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- HEADER -->
 <div id="header"></div>
 
 <div class="container-fluid">
   <div class="row">
 
-    <!-- SIDEBAR -->
     <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-    <!-- MAIN CONTENT -->
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
-        <!-- PAGE HEADER -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h4 class="mb-0">Senarai Anggota</h4>
-                <small class="text-muted">
-                    Berikut adalah senarai anggota yang telah berdaftar untuk menyertai operasi MyEMT.
-                </small>
-            </div>
+      <!-- PAGE HEADER -->
+      <div class="page-heading">
 
-            <a href="emt_crud.html" class="btn btn-primary">
-                <i class="bi bi-arrow-left me-1"></i> Kembali
-            </a>
+        <div>
+          <h4>Permohonan Penyertaan Misi EMT</h4>
+          <div class="text-muted">
+            Semak dan urus permohonan anggota MyEMT yang ingin menyertai misi EMT.
+          </div>
         </div>
 
-        <!-- CARD SENARAI ANGGOTA -->
-        <div class="card shadow-sm border-0">
+        <a href="emt_crud.html" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left me-1"></i>
+          Kembali
+        </a>
 
-            <!-- HEADER -->
-            <div class="card-header bg-white fw-bold">
-                📊 Senarai Anggota MyEMT
+      </div>
+
+
+      <!-- KPI -->
+      <div class="row g-3 mb-4">
+
+        <div class="col-6 col-xl-3">
+          <div class="card kpi-card active" data-status="">
+            <div class="card-body d-flex justify-content-between align-items-start">
+              <div>
+                <div class="kpi-label">Jumlah Permohonan</div>
+                <div class="kpi-value" id="kpiTotal">0</div>
+              </div>
+              <div class="kpi-icon bg-primary-subtle text-primary">
+                <i class="bi bi-people-fill"></i>
+              </div>
             </div>
+          </div>
+        </div>
 
-            <!-- BODY -->
-            <div class="card-body">
-
-                <div class="table-responsive">
-
-<table class="table table-bordered align-middle text-center">
-
-    <thead class="table-light">
-        <tr>
-            <th>Nama Pemohon</th>
-
-            <th>Status Permohonan MyEMT</th>
-
-            <th>B-Course & C-Course</th>
-
-            <th>Status EMT</th>
-
-            <th>Tindakan</th>
-        </tr>
-    </thead>
-
-    <tbody id="tbody-pemohon">
-        <tr><td colspan="5" class="text-center text-muted py-3">Memuatkan...</td></tr>
-    </tbody>
-
-</table>
-
-                </div>
-
-                <p class="text-muted mt-3 mb-0">
-                    Semua pemohon dalam senarai ini telah melepasi B-Course dan C-Course serta layak menyertai aktiviti EMT.
-                </p>
-
+        <div class="col-6 col-xl-3">
+          <div class="card kpi-card" data-status="pending">
+            <div class="card-body d-flex justify-content-between align-items-start">
+              <div>
+                <div class="kpi-label">Dalam Semakan</div>
+                <div class="kpi-value" id="kpiPending">0</div>
+              </div>
+              <div class="kpi-icon bg-warning-subtle text-warning">
+                <i class="bi bi-hourglass-split"></i>
+              </div>
             </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-xl-3">
+          <div class="card kpi-card" data-status="approved">
+            <div class="card-body d-flex justify-content-between align-items-start">
+              <div>
+                <div class="kpi-label">Diluluskan</div>
+                <div class="kpi-value" id="kpiApproved">0</div>
+              </div>
+              <div class="kpi-icon bg-success-subtle text-success">
+                <i class="bi bi-check-circle-fill"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 col-xl-3">
+          <div class="card kpi-card" data-status="rejected">
+            <div class="card-body d-flex justify-content-between align-items-start">
+              <div>
+                <div class="kpi-label">Ditolak</div>
+                <div class="kpi-value" id="kpiRejected">0</div>
+              </div>
+              <div class="kpi-icon bg-danger-subtle text-danger">
+                <i class="bi bi-x-circle-fill"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- FILTER -->
+      <div class="filter-box">
+
+        <div class="row g-3 align-items-end">
+
+          <div class="col-md-4">
+            <label class="form-label fw-semibold">Carian Pemohon</label>
+            <input
+              type="text"
+              id="searchInput"
+              class="form-control"
+              placeholder="Nama / ID ahli / ID permohonan"
+            >
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Misi</label>
+            <select id="missionFilter" class="form-select">
+              <option value="">Semua Misi</option>
+            </select>
+          </div>
+
+          <div class="col-md-3">
+            <label class="form-label fw-semibold">Status</label>
+            <select id="statusFilter" class="form-select">
+              <option value="">Semua Status</option>
+              <option value="pending">Dalam Semakan</option>
+              <option value="approved">Diluluskan</option>
+              <option value="rejected">Ditolak</option>
+            </select>
+          </div>
+
+          <div class="col-md-2">
+            <button
+              class="btn btn-outline-secondary w-100"
+              id="resetFilter"
+              type="button"
+            >
+              Set Semula
+            </button>
+          </div>
 
         </div>
+
+      </div>
+
+
+      <!-- TABLE CARD -->
+      <div class="card page-card">
+
+        <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
+
+          <div>
+            <h5 class="mb-1 fw-bold">Senarai Permohonan Misi</h5>
+            <div class="small text-muted">
+              Klik Semak untuk melihat maklumat pemohon dan misi sebelum membuat keputusan.
+            </div>
+          </div>
+
+          <span class="badge bg-primary" id="recordCount">
+            0 rekod
+          </span>
+
+        </div>
+
+        <div class="card-body">
+
+          <div class="table-shell">
+
+            <table class="table application-table table-hover align-middle">
+
+              <thead>
+                <tr>
+                  <th>Tarikh Mohon</th>
+                  <th>Pemohon</th>
+                  <th>Misi Dipohon</th>
+                  <th>Lokasi / Tempoh</th>
+                  <th>Status</th>
+                  <th class="text-center">Tindakan</th>
+                </tr>
+              </thead>
+
+              <tbody id="tbody-pemohon">
+                <tr>
+                  <td colspan="6" class="text-center text-muted py-4">
+                    Memuatkan permohonan...
+                  </td>
+                </tr>
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </div>
 
     </main>
   </div>
 </div>
 
-<!-- FOOTER -->
+
+<!-- REVIEW MODAL -->
+<div class="modal fade" id="reviewModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+
+      <div class="modal-header">
+
+        <div>
+          <h5 class="modal-title fw-bold">Semakan Permohonan Misi</h5>
+          <div class="small text-muted" id="reviewApplicationId">-</div>
+        </div>
+
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+      </div>
+
+      <div class="modal-body">
+
+        <div class="review-hero mb-3">
+
+          <div class="row g-3 align-items-center">
+
+            <div class="col-md-6">
+              <div class="small text-muted">Pemohon</div>
+              <div class="fw-bold fs-5" id="reviewMemberName">-</div>
+              <div class="small text-muted" id="reviewMemberId">-</div>
+            </div>
+
+            <div class="col-md-4">
+              <div class="small text-muted">Misi Dipohon</div>
+              <div class="fw-bold" id="reviewMissionName">-</div>
+              <div class="small text-muted" id="reviewMissionId">-</div>
+            </div>
+
+            <div class="col-md-2 text-md-end">
+              <span id="reviewStatus"></span>
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="row g-3">
+
+          <div class="col-lg-6">
+            <div class="review-section">
+
+              <div class="review-title">
+                <i class="bi bi-person-vcard me-1"></i>
+                Maklumat Pemohon
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">Nama</div>
+                <div class="detail-value" id="detailName">-</div>
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">Jawatan</div>
+                <div class="detail-value" id="detailDesignation">-</div>
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">Fasiliti / Tempat Kerja</div>
+                <div class="detail-value" id="detailWorkplace">-</div>
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">Negeri</div>
+                <div class="detail-value" id="detailState">-</div>
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">No. Telefon</div>
+                <div class="detail-value" id="detailPhone">-</div>
+              </div>
+
+              <div class="mt-3">
+                <a
+                  href="#"
+                  target="_blank"
+                  id="viewMemberBtn"
+                  class="btn btn-sm btn-outline-primary"
+                >
+                  <i class="bi bi-person-lines-fill me-1"></i>
+                  Lihat Profil MyEMT
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="col-lg-6">
+            <div class="review-section">
+
+              <div class="review-title">
+                <i class="bi bi-flag me-1"></i>
+                Maklumat Misi
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">Nama Misi</div>
+                <div class="detail-value" id="detailMissionName">-</div>
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">Jenis</div>
+                <div class="detail-value" id="detailMissionType">-</div>
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">Lokasi</div>
+                <div class="detail-value" id="detailMissionLocation">-</div>
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">Tarikh Mula</div>
+                <div class="detail-value" id="detailMissionStart">-</div>
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">Anggaran Tamat</div>
+                <div class="detail-value" id="detailMissionEnd">-</div>
+              </div>
+
+              <div class="detail-row">
+                <div class="detail-label">PIC Misi</div>
+                <div class="detail-value" id="detailMissionPic">-</div>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="col-12">
+
+            <div class="review-section">
+
+              <div class="review-title">
+                Maklumat Permohonan
+              </div>
+
+              <div class="row g-3">
+
+                <div class="col-md-4">
+                  <div class="small text-muted">Tarikh Permohonan</div>
+                  <div class="fw-semibold" id="detailSubmittedAt">-</div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="small text-muted">Tarikh Semakan</div>
+                  <div class="fw-semibold" id="detailReviewedAt">-</div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="small text-muted">Catatan Admin</div>
+                  <div class="fw-semibold" id="detailRemark">-</div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="modal-footer" id="reviewActions">
+
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          Tutup
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-outline-danger"
+          id="rejectBtn"
+        >
+          <i class="bi bi-x-circle me-1"></i>
+          Tolak
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-success"
+          id="approveBtn"
+        >
+          <i class="bi bi-check-circle me-1"></i>
+          Lulus
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- REJECT MODAL -->
+<div class="modal fade" id="rejectModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title fw-bold">Tolak Permohonan Misi</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+
+        <label class="form-label fw-semibold">
+          Sebab Penolakan
+        </label>
+
+        <textarea
+          id="rejectReason"
+          class="form-control"
+          rows="4"
+          placeholder="Masukkan sebab penolakan..."
+        ></textarea>
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button
+          type="button"
+          class="btn btn-outline-secondary"
+          data-bs-dismiss="modal"
+        >
+          Batal
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-danger"
+          id="confirmRejectBtn"
+        >
+          Sahkan Penolakan
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
 <div id="footer"></div>
 
-<!-- LOAD HEADER / FOOTER / SIDEBAR -->
 <script>
 fetch("header.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("header").innerHTML = data);
+  .then(r => r.text())
+  .then(t => document.getElementById("header").innerHTML = t)
+  .catch(()=>{});
 
 fetch("footer.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("footer").innerHTML = data);
+  .then(r => r.text())
+  .then(t => document.getElementById("footer").innerHTML = t)
+  .catch(()=>{});
 
 fetch("sidebar.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
+  .then(r => r.text())
+  .then(t => document.getElementById("sidebar-placeholder").innerHTML = t)
+  .catch(()=>{});
 </script>
 
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-async function loadPemohon() {
-  try {
-    const [mRes, cRes] = await Promise.all([
-      fetch(`${API}/api/members?status=approved`),
-      fetch(`${API}/api/course-applications?status=approved`)
-    ]);
-    const members     = (await mRes.json()).data || [];
-    const courseApps  = (await cRes.json()).data || [];
-    const approvedIds = new Set(courseApps.map(a => a.memberId));
+let allApplications = [];
+let allMembers = [];
+let allMissions = [];
 
-    const tbody = document.getElementById('tbody-pemohon');
-    const active = members.filter(m => approvedIds.has(m.id));
-    if (!active.length) {
-      tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">Tiada anggota aktif berdaftar</td></tr>';
-      return;
-    }
-    tbody.innerHTML = active.map(m => `
+let memberMap = {};
+let missionMap = {};
+
+let selectedApplication = null;
+
+
+function esc(value){
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+
+function formatDate(value){
+  if(!value) return "-";
+
+  const raw = String(value).slice(0,10);
+  const parts = raw.split("-");
+
+  if(parts.length === 3){
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+
+  return value;
+}
+
+
+function normalizedStatus(value){
+  return String(value || "pending").toLowerCase();
+}
+
+
+function statusLabel(value){
+  const status = normalizedStatus(value);
+
+  if(status === "approved") return "Diluluskan";
+  if(status === "rejected") return "Ditolak";
+  if(status === "pending") return "Dalam Semakan";
+
+  return value || "-";
+}
+
+
+function statusHtml(value){
+  const status = normalizedStatus(value);
+
+  const cls =
+    status === "approved"
+      ? "status-approved"
+      : status === "rejected"
+        ? "status-rejected"
+        : status === "pending"
+          ? "status-pending"
+          : "status-other";
+
+  const icon =
+    status === "approved"
+      ? "bi-check-circle"
+      : status === "rejected"
+        ? "bi-x-circle"
+        : "bi-hourglass-split";
+
+  return `
+    <span class="status-pill ${cls}">
+      <i class="bi ${icon}"></i>
+      ${esc(statusLabel(value))}
+    </span>
+  `;
+}
+
+
+function memberName(member,app){
+  return (
+    member?.full_name ||
+    member?.fullName ||
+    member?.name ||
+    app?.memberName ||
+    "-"
+  );
+}
+
+
+function missionName(mission,app){
+  return (
+    mission?.name ||
+    mission?.missionName ||
+    app?.missionName ||
+    app?.missionId ||
+    "-"
+  );
+}
+
+
+function missionLocation(mission){
+  return (
+    mission?.location ||
+    mission?.state ||
+    mission?.negeri ||
+    "-"
+  );
+}
+
+
+function missionPic(mission){
+  return (
+    mission?.picName ||
+    mission?.pic ||
+    mission?.pic_name ||
+    mission?.leaderName ||
+    mission?.leader ||
+    mission?.teamLeader ||
+    "-"
+  );
+}
+
+
+function updateKpi(){
+  document.getElementById("kpiTotal").textContent =
+    allApplications.length;
+
+  document.getElementById("kpiPending").textContent =
+    allApplications.filter(a => normalizedStatus(a.status) === "pending").length;
+
+  document.getElementById("kpiApproved").textContent =
+    allApplications.filter(a => normalizedStatus(a.status) === "approved").length;
+
+  document.getElementById("kpiRejected").textContent =
+    allApplications.filter(a => normalizedStatus(a.status) === "rejected").length;
+}
+
+
+function populateMissionFilter(){
+  const select =
+    document.getElementById("missionFilter");
+
+  select.innerHTML =
+    `<option value="">Semua Misi</option>` +
+    allMissions.map(m => `
+      <option value="${esc(m.id)}">
+        ${esc(m.name || m.id)}
+      </option>
+    `).join("");
+}
+
+
+function filteredApplications(){
+  const search =
+    document.getElementById("searchInput")
+      .value
+      .trim()
+      .toLowerCase();
+
+  const mission =
+    document.getElementById("missionFilter")
+      .value;
+
+  const status =
+    document.getElementById("statusFilter")
+      .value;
+
+
+  return allApplications
+    .filter(app => {
+
+      const member =
+        memberMap[String(app.memberId)] || null;
+
+      const missionObj =
+        missionMap[String(app.missionId)] || null;
+
+      const searchable = `
+        ${app.id || ""}
+        ${app.memberId || ""}
+        ${memberName(member,app)}
+        ${app.missionId || ""}
+        ${missionName(missionObj,app)}
+      `.toLowerCase();
+
+      return (
+        (!search || searchable.includes(search)) &&
+        (!mission || String(app.missionId) === String(mission)) &&
+        (!status || normalizedStatus(app.status) === status)
+      );
+    })
+    .sort((a,b) =>
+      String(b.submittedAt || b.createdAt || "")
+        .localeCompare(
+          String(a.submittedAt || a.createdAt || "")
+        )
+    );
+}
+
+
+function renderApplications(){
+  const list =
+    filteredApplications();
+
+  document.getElementById("recordCount").textContent =
+    `${list.length} rekod`;
+
+  const tbody =
+    document.getElementById("tbody-pemohon");
+
+  if(!list.length){
+    tbody.innerHTML = `
       <tr>
-        <td>${m.full_name || m.name || '-'}</td>
-        <td><span class="badge bg-success">Lulus</span></td>
-        <td><span class="badge bg-success">Lulus</span></td>
-        <td><span class="badge bg-success">Aktif</span></td>
-        <td>
-          <a href="emt_deployform.html?id=${m.id}" class="btn btn-sm btn-outline-primary">Papar</a>
+        <td colspan="6"
+            class="text-center text-muted py-4">
+          Tiada permohonan misi ditemui.
         </td>
-      </tr>`).join('');
-  } catch (e) {
-    document.getElementById('tbody-pemohon').innerHTML = '<tr><td colspan="5" class="text-center text-danger py-3">Gagal memuatkan data.</td></tr>';
+      </tr>
+    `;
+    return;
+  }
+
+
+  tbody.innerHTML =
+    list.map(app => {
+
+      const member =
+        memberMap[String(app.memberId)] || null;
+
+      const mission =
+        missionMap[String(app.missionId)] || null;
+
+
+      return `
+        <tr>
+
+          <td>
+            <div class="name-main">
+              ${esc(formatDate(app.submittedAt || app.createdAt))}
+            </div>
+
+            <div class="sub-text">
+              <span class="id-chip">
+                ${esc(app.id || "-")}
+              </span>
+            </div>
+          </td>
+
+
+          <td>
+            <div class="name-main">
+              ${esc(memberName(member,app))}
+            </div>
+
+            <div class="sub-text">
+              ID Ahli: ${esc(app.memberId || "-")}
+            </div>
+
+            ${
+              member?.designation
+                ? `
+                  <div class="sub-text">
+                    ${esc(member.designation)}
+                  </div>
+                `
+                : ""
+            }
+          </td>
+
+
+          <td>
+            <div class="mission-block">
+
+              <div class="mission-name">
+                ${esc(missionName(mission,app))}
+              </div>
+
+              <div class="sub-text">
+                ${esc(app.missionId || "-")}
+              </div>
+
+            </div>
+          </td>
+
+
+          <td>
+            <div class="name-main">
+              <i class="bi bi-geo-alt me-1 text-primary"></i>
+              ${esc(missionLocation(mission))}
+            </div>
+
+            <div class="sub-text">
+              ${
+                mission?.startDate
+                  ? `${esc(formatDate(mission.startDate))}`
+                  : "-"
+              }
+              —
+              ${
+                mission?.estimatedEnd
+                  ? `${esc(formatDate(mission.estimatedEnd))}`
+                  : "-"
+              }
+            </div>
+          </td>
+
+
+          <td>
+            ${statusHtml(app.status)}
+          </td>
+
+
+          <td class="text-center">
+
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-primary btn-review"
+              data-id="${esc(app.id)}"
+            >
+              <i class="bi bi-eye me-1"></i>
+              Semak
+            </button>
+
+          </td>
+
+        </tr>
+      `;
+    })
+    .join("");
+
+
+  document.querySelectorAll(".btn-review")
+    .forEach(btn => {
+      btn.addEventListener("click", () => {
+        openReview(
+          btn.dataset.id
+        );
+      });
+    });
+}
+
+
+function setText(id,value){
+  const el =
+    document.getElementById(id);
+
+  if(el){
+    el.textContent =
+      value || "-";
   }
 }
 
-document.addEventListener('DOMContentLoaded', loadPemohon);
+
+function openReview(applicationId){
+  const app =
+    allApplications.find(
+      a => String(a.id) === String(applicationId)
+    );
+
+  if(!app) return;
+
+  selectedApplication = app;
+
+  const member =
+    memberMap[String(app.memberId)] || null;
+
+  const mission =
+    missionMap[String(app.missionId)] || null;
+
+
+  setText(
+    "reviewApplicationId",
+    `ID Permohonan: ${app.id || "-"}`
+  );
+
+  setText(
+    "reviewMemberName",
+    memberName(member,app)
+  );
+
+  setText(
+    "reviewMemberId",
+    `ID Ahli: ${app.memberId || "-"}`
+  );
+
+  setText(
+    "reviewMissionName",
+    missionName(mission,app)
+  );
+
+  setText(
+    "reviewMissionId",
+    `ID Misi: ${app.missionId || "-"}`
+  );
+
+
+  document.getElementById("reviewStatus").innerHTML =
+    statusHtml(app.status);
+
+
+  setText(
+    "detailName",
+    memberName(member,app)
+  );
+
+  setText(
+    "detailDesignation",
+    member?.designation ||
+    member?.position ||
+    "-"
+  );
+
+  setText(
+    "detailWorkplace",
+    member?.workplace ||
+    member?.facility ||
+    member?.facility_type ||
+    "-"
+  );
+
+  setText(
+    "detailState",
+    member?.state ||
+    member?.negeri ||
+    "-"
+  );
+
+  setText(
+    "detailPhone",
+    member?.phone ||
+    member?.telephone ||
+    "-"
+  );
+
+
+  const memberBtn =
+    document.getElementById(
+      "viewMemberBtn"
+    );
+
+  memberBtn.href =
+    `emt_deployform.html?id=${encodeURIComponent(app.memberId || "")}`;
+
+
+  setText(
+    "detailMissionName",
+    missionName(mission,app)
+  );
+
+  setText(
+    "detailMissionType",
+    mission?.type || "-"
+  );
+
+  setText(
+    "detailMissionLocation",
+    missionLocation(mission)
+  );
+
+  setText(
+    "detailMissionStart",
+    formatDate(mission?.startDate)
+  );
+
+  setText(
+    "detailMissionEnd",
+    formatDate(
+      mission?.estimatedEnd ||
+      mission?.actualEnd
+    )
+  );
+
+  setText(
+    "detailMissionPic",
+    missionPic(mission)
+  );
+
+
+  setText(
+    "detailSubmittedAt",
+    formatDate(
+      app.submittedAt ||
+      app.createdAt
+    )
+  );
+
+  setText(
+    "detailReviewedAt",
+    formatDate(
+      app.reviewedAt
+    )
+  );
+
+  setText(
+    "detailRemark",
+    app.remark ||
+    app.adminComment ||
+    "-"
+  );
+
+
+  const isPending =
+    normalizedStatus(app.status) === "pending";
+
+  document.getElementById("approveBtn")
+    .classList.toggle(
+      "d-none",
+      !isPending
+    );
+
+  document.getElementById("rejectBtn")
+    .classList.toggle(
+      "d-none",
+      !isPending
+    );
+
+
+  bootstrap.Modal
+    .getOrCreateInstance(
+      document.getElementById(
+        "reviewModal"
+      )
+    )
+    .show();
+}
+
+
+async function updateMissionApplication(
+  status,
+  remark
+){
+  if(!selectedApplication) return;
+
+  const response =
+    await fetch(
+      `${API}/api/mission-applications/${encodeURIComponent(selectedApplication.id)}/status`,
+      {
+        method:"PATCH",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({
+          status,
+          remark:remark || ""
+        })
+      }
+    );
+
+  let json = {};
+
+  try{
+    json =
+      await response.json();
+  }catch(_){}
+
+
+  if(!response.ok){
+    throw new Error(
+      json.message ||
+      "Status permohonan tidak dapat dikemaskini."
+    );
+  }
+
+
+  const index =
+    allApplications.findIndex(
+      a => String(a.id) ===
+        String(selectedApplication.id)
+    );
+
+  if(index !== -1){
+    allApplications[index] = {
+      ...allApplications[index],
+      ...(json.data || {}),
+      status,
+      remark:remark || allApplications[index].remark,
+      reviewedAt:
+        json.data?.reviewedAt ||
+        new Date().toISOString().slice(0,10)
+    };
+  }
+
+
+  updateKpi();
+  renderApplications();
+
+  bootstrap.Modal
+    .getInstance(
+      document.getElementById(
+        "reviewModal"
+      )
+    )
+    ?.hide();
+
+  selectedApplication = null;
+}
+
+
+document.getElementById("approveBtn")
+  .addEventListener("click", async () => {
+
+    if(!selectedApplication) return;
+
+    const member =
+      memberMap[
+        String(
+          selectedApplication.memberId
+        )
+      ] || null;
+
+    const mission =
+      missionMap[
+        String(
+          selectedApplication.missionId
+        )
+      ] || null;
+
+
+    const confirmed =
+      confirm(
+        `Luluskan ${memberName(member,selectedApplication)} untuk menyertai misi "${missionName(mission,selectedApplication)}"?`
+      );
+
+    if(!confirmed) return;
+
+
+    try{
+      await updateMissionApplication(
+        "approved",
+        "Permohonan penyertaan misi diluluskan."
+      );
+
+      alert(
+        "Permohonan misi berjaya diluluskan."
+      );
+
+    }catch(error){
+      console.error(error);
+      alert(error.message);
+    }
+  });
+
+
+document.getElementById("rejectBtn")
+  .addEventListener("click", () => {
+
+    document.getElementById(
+      "rejectReason"
+    ).value = "";
+
+    bootstrap.Modal
+      .getOrCreateInstance(
+        document.getElementById(
+          "rejectModal"
+        )
+      )
+      .show();
+  });
+
+
+document.getElementById("confirmRejectBtn")
+  .addEventListener("click", async () => {
+
+    const reason =
+      document.getElementById(
+        "rejectReason"
+      ).value.trim();
+
+    if(!reason){
+      alert(
+        "Sila masukkan sebab penolakan."
+      );
+      return;
+    }
+
+
+    try{
+      await updateMissionApplication(
+        "rejected",
+        reason
+      );
+
+      bootstrap.Modal
+        .getInstance(
+          document.getElementById(
+            "rejectModal"
+          )
+        )
+        ?.hide();
+
+      alert(
+        "Permohonan misi telah ditolak."
+      );
+
+    }catch(error){
+      console.error(error);
+      alert(error.message);
+    }
+  });
+
+
+function syncKpiActive(status){
+  document.querySelectorAll(
+    ".kpi-card"
+  ).forEach(card => {
+
+    card.classList.toggle(
+      "active",
+      card.dataset.status === status
+    );
+  });
+}
+
+
+document.querySelectorAll(
+  ".kpi-card"
+).forEach(card => {
+
+  card.addEventListener(
+    "click",
+    () => {
+
+      const status =
+        card.dataset.status || "";
+
+      document.getElementById(
+        "statusFilter"
+      ).value = status;
+
+      syncKpiActive(status);
+      renderApplications();
+    }
+  );
+});
+
+
+document.getElementById(
+  "searchInput"
+).addEventListener(
+  "input",
+  renderApplications
+);
+
+
+document.getElementById(
+  "missionFilter"
+).addEventListener(
+  "change",
+  renderApplications
+);
+
+
+document.getElementById(
+  "statusFilter"
+).addEventListener(
+  "change",
+  function(){
+    syncKpiActive(this.value);
+    renderApplications();
+  }
+);
+
+
+document.getElementById(
+  "resetFilter"
+).addEventListener(
+  "click",
+  () => {
+
+    document.getElementById(
+      "searchInput"
+    ).value = "";
+
+    document.getElementById(
+      "missionFilter"
+    ).value = "";
+
+    document.getElementById(
+      "statusFilter"
+    ).value = "";
+
+    syncKpiActive("");
+    renderApplications();
+  }
+);
+
+
+async function loadPemohon(){
+  try{
+
+    const [
+      appRes,
+      memberRes,
+      missionRes
+    ] = await Promise.all([
+      fetch(`${API}/api/mission-applications`),
+      fetch(`${API}/api/members`),
+      fetch(`${API}/api/missions`)
+    ]);
+
+
+    const appJson =
+      await appRes.json();
+
+    const memberJson =
+      await memberRes.json();
+
+    const missionJson =
+      await missionRes.json();
+
+
+    allApplications =
+      appJson.data || [];
+
+    allMembers =
+      memberJson.data || [];
+
+    allMissions =
+      missionJson.data || [];
+
+
+    memberMap =
+      Object.fromEntries(
+        allMembers.map(
+          member => [
+            String(member.id),
+            member
+          ]
+        )
+      );
+
+
+    missionMap =
+      Object.fromEntries(
+        allMissions.map(
+          mission => [
+            String(mission.id),
+            mission
+          ]
+        )
+      );
+
+
+    populateMissionFilter();
+    updateKpi();
+    renderApplications();
+
+  }catch(error){
+
+    console.error(
+      "Gagal memuatkan permohonan misi:",
+      error
+    );
+
+    document.getElementById(
+      "tbody-pemohon"
+    ).innerHTML = `
+      <tr>
+        <td colspan="6"
+            class="text-center text-danger py-4">
+          <i class="bi bi-exclamation-triangle me-1"></i>
+          Gagal memuatkan data permohonan misi.
+        </td>
+      </tr>
+    `;
+  }
+}
+
+
+document.addEventListener(
+  "DOMContentLoaded",
+  loadPemohon
+);
 </script>
 
 </body>
