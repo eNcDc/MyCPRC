@@ -4354,12 +4354,13 @@ function tambahUbat() {
                 const missionQuery = missionId
                     ? `?id=${encodeURIComponent(missionId)}`
                     : "";
-
+                /* 
                 if (userType === "admin") {
                     window.location.href = `mission_detail.html${missionQuery}`;
                 } else {
                     window.location.href = `user_misidetail.html${missionQuery}`;
                 }
+                */    
             } else {
                 alert("Ralat: " + (json.message || "Hantar gagal."));
                 btn.disabled = false;
@@ -4403,9 +4404,12 @@ function tambahUbat() {
 
         if (userType === "admin") {
             window.location.href = `mission_detail.html${missionQuery}`;
-        } else {
+        } 
+        /*
+        else {
             window.location.href = `user_misidetail.html${missionQuery}`;
         }
+        */
     });
 })();
 </script>
