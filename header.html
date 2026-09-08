@@ -2,11 +2,10 @@
   <div class="container-fluid">
 
     <!-- LEFT LOGO – moved slightly right (toward center) -->
-    <div class="d-flex align-items-center" style="margin-left: 55px;">
+    <div class="d-flex align-items-center header-logo-slot">
       <img src="assets/img/cprc.png"
            class="header-logo"
-           alt="CPRC Logo"
-           style="height: 200px; width: auto; max-width: 180px;">
+           alt="Logo CPRC">
     </div>
 
     <!-- CENTER TITLE – perfectly centered -->
@@ -17,11 +16,10 @@
     </div>
 
     <!-- RIGHT LOGO – moved slightly left (toward center) -->
-    <div class="d-flex align-items-center" style="margin-right: 55px;">
+    <div class="d-flex align-items-center header-logo-slot">
       <img src="assets/img/logoencdc-removebg-preview.png"
            class="header-logo"
-           alt="eNCDC Logo"
-           style="height: 200px; width: auto; max-width: 180px;">
+           alt="Logo eNCDC">
     </div>
 
   </div>
@@ -46,5 +44,11 @@
     /* Reduce inward shift on very small screens */
     .d-flex[style*="margin-left"] { margin-left: -5px !important; }
     .d-flex[style*="margin-right"] { margin-right: -5px !important; }
+  }
+  .header-logo { height:70px; max-width:180px; }
+  .header-logo-slot { width:180px; justify-content:center; }
+  @media (max-width:991px) {
+    .header-logo { height:55px; max-width:120px; }
+    .header-logo-slot { width:auto; }
   }
 </style>

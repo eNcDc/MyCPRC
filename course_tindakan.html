@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Tindakan Pemohon</title>
+    <title>Semakan Permohonan Kursus MyEMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
@@ -407,7 +407,7 @@
     <!-- KESESUAIAN DEPLOYMENT -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-white fw-bold">
-            🌍 Kesesuaian Deployment
+                        🌍 Kesesuaian Penugasan
         </div>
 
         <div class="card-body">
@@ -526,7 +526,7 @@
 <div class="card shadow-sm border-success mt-4" id="keputusanCard">
 
     <div class="card-header bg-success-subtle">
-        <strong>Keputusan Permohonan B-Course & C-Course</strong>
+                    <strong>Keputusan Permohonan Kursus B dan Kursus C</strong>
     </div>
 
     <div class="card-body bg-light">
@@ -570,6 +570,22 @@
 
 </div>
 
+<div class="card shadow-sm border-primary mt-4 d-none" id="trainingRecordCard">
+  <div class="card-header bg-primary-subtle"><strong>Rekod Kehadiran & Keputusan Latihan</strong></div>
+  <div class="card-body">
+    <div class="row g-3">
+      <div class="col-md-4"><label class="form-label">Kehadiran</label><select id="trainingAttendance" class="form-select"><option value="not_recorded">Belum direkodkan</option><option value="attended">Hadir</option><option value="absent">Tidak hadir</option></select></div>
+                    <div class="col-md-4"><label class="form-label">Kursus B</label><select id="resultBCourse" class="form-select"><option value="">Belum dinilai</option><option value="pending">Dalam penilaian</option><option value="passed">Lulus</option><option value="failed">Gagal</option></select></div>
+                    <div class="col-md-4"><label class="form-label">Kursus C</label><select id="resultCCourse" class="form-select"><option value="">Belum dinilai</option><option value="pending">Dalam penilaian</option><option value="passed">Lulus</option><option value="failed">Gagal</option></select></div>
+      <div class="col-md-4"><label class="form-label">TTX</label><select id="resultTTX" class="form-select"><option value="">Belum dinilai</option><option value="pending">Dalam penilaian</option><option value="passed">Lulus</option><option value="failed">Gagal</option></select></div>
+      <div class="col-md-4"><label class="form-label">FTX</label><select id="resultFTX" class="form-select"><option value="">Belum dinilai</option><option value="pending">Dalam penilaian</option><option value="passed">Lulus</option><option value="failed">Gagal</option></select></div>
+      <div class="col-md-4 d-flex align-items-end"><button type="button" id="saveTrainingRecord" class="btn btn-primary w-100">Simpan Rekod Latihan</button></div>
+            </div>
+            <div id="attendanceEvidence" class="small text-muted mt-3">Bukti lokasi kehadiran belum direkodkan.</div>
+            <div id="trainingCompletionState" class="small text-muted mt-3">Belum selesai</div>
+  </div>
+</div>
+
 <div class="modal fade" id="lulusModal" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -582,7 +598,7 @@
 
             <div class="modal-body">
                 Adakah anda pasti ingin meluluskan permohonan
-                B-Course & C-Course ini?
+                        Kursus B dan Kursus C ini?
             </div>
 
             <div class="modal-footer">
@@ -664,6 +680,7 @@ fetch("sidebar.html")
 </script>
 
 <script src="assets/js/config.js"></script>
+<script src="assets/js/myemt-health.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
@@ -698,15 +715,43 @@ fetch("sidebar.html")
 
 <script>
 (async function () {
+  MyEMTData.renderHealth(document, {});
   const params = new URLSearchParams(window.location.search);
   const appId  = params.get('id');
   if (!appId) return; // no ID — leave page as-is
 
-  // Load application data to show current status
-  const res  = await fetch(`${API}/api/course-applications`);
+  // Load the selected application first; its memberId is the source of truth.
+  const res  = await fetch(`${API}/api/course-applications/${encodeURIComponent(appId)}`);
   const json = await res.json();
-  const apps = json.data || json;
-  const app  = apps.find(a => a.id === appId);
+  if (!res.ok || !json.success || !json.data) {
+    alert(json.message || 'Permohonan kursus tidak dijumpai.');
+    return;
+  }
+  const app = json.data;
+
+  if (app.memberId) {
+    const memberRes = await fetch(`${API}/api/members/${encodeURIComponent(app.memberId)}`);
+    const memberJson = await memberRes.json();
+    const m = memberJson.data;
+    if (memberRes.ok && m) {
+      const set = (cls, val) => document.querySelectorAll('.' + cls).forEach(el => el.textContent = val || '-');
+      set('cr-name', m.full_name || m.name);
+      set('cr-ic', m.identification_number || m.ic);
+      set('cr-age', m.age ? `${m.age} Tahun` : '-');
+      set('cr-gender', m.gender);
+      set('cr-service', m.service_period);
+      set('cr-phone', m.phone);
+      set('cr-designation', m.designation || m.position);
+      set('cr-facility', m.workplace || m.facility || m.facility_type);
+      set('cr-state', m.state);
+      const memberStatus = {pending:['bg-warning text-dark','Dalam Semakan'],approved:['bg-success','Lulus'],rejected:['bg-danger','Tidak Lulus']}[String(m.status||'').toLowerCase()] || ['bg-secondary',m.status||'-'];
+      document.querySelectorAll('.cr-status-badge').forEach(el=>{el.className=`badge ${memberStatus[0]} fs-6 px-3 py-2 cr-status-badge`;el.textContent=memberStatus[1];});
+      document.querySelectorAll('.cr-status-text').forEach(el=>el.textContent=memberStatus[1]);
+    }
+    const healthRes = await fetch(`${API}/api/members/${encodeURIComponent(app.memberId)}/health`);
+    const healthJson = await healthRes.json();
+    MyEMTData.renderHealth(document, healthRes.ok ? healthJson.data : {});
+  }
 
   if (app) {
     // Update status badge in the Keputusan card
@@ -722,7 +767,22 @@ fetch("sidebar.html")
       document.getElementById('btnConfirmLulus').disabled = true;
       document.getElementById('btnConfirmTolak').disabled = true;
     }
+    if(app.status==='approved'){
+      document.getElementById('trainingRecordCard').classList.remove('d-none');
+document.getElementById('trainingAttendance').value=app.attendance?.status||'not_recorded';
+const attendance=app.attendance||{};document.getElementById('attendanceEvidence').textContent=attendance.checkedInAt?`Daftar hadir: ${new Date(attendance.checkedInAt).toLocaleString('ms-MY')}${attendance.distanceM!=null?` • Jarak ${attendance.distanceM} m dari lokasi latihan`:''}${attendance.accuracy!=null?` • Ketepatan lokasi ±${Math.round(attendance.accuracy)} m`:''}`:'Bukti lokasi kehadiran belum direkodkan.';
+      const resultIds={'B-Course':'resultBCourse','C-Course':'resultCCourse',TTX:'resultTTX',FTX:'resultFTX'};
+      Object.entries(resultIds).forEach(([component,id])=>document.getElementById(id).value=app.componentResults?.[component]?.status||'');
+document.getElementById('trainingCompletionState').textContent=app.completion?.status==='completed'?`Program latihan lengkap${app.completion.completedAt?' pada '+new Date(app.completion.completedAt).toLocaleDateString('ms-MY'):''}.`:'Kehadiran serta kelulusan Kursus B, Kursus C, TTX dan FTX diperlukan dalam sesi ini.';
+    }
   }
+
+  document.getElementById('saveTrainingRecord').addEventListener('click',async function(){
+    const ids={'B-Course':'resultBCourse','C-Course':'resultCCourse',TTX:'resultTTX',FTX:'resultFTX'},componentResults={};
+    Object.entries(ids).forEach(([component,id])=>componentResults[component]={status:document.getElementById(id).value||null,assessedAt:new Date().toISOString().slice(0,10)});
+    this.disabled=true;const original=this.textContent;this.textContent='Menyimpan...';
+    try{const response=await fetch(`${API}/api/course-applications/${encodeURIComponent(app.id)}/training`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({attendance:{status:document.getElementById('trainingAttendance').value},componentResults})}),result=await response.json();if(!response.ok||!result.success)throw new Error(result.message||'Rekod latihan gagal disimpan.');alert('Rekod latihan berjaya disimpan.');location.reload();}catch(error){alert(error.message);this.disabled=false;this.textContent=original;}
+  });
 
   async function patchStatus(status, remark) {
     const r = await fetch(`${API}/api/course-applications/${appId}/status`, {
@@ -730,17 +790,21 @@ fetch("sidebar.html")
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ status, remark: remark || '' })
     });
-    return r.json();
+    const result = await r.json();
+    if (!r.ok || !result.success) throw new Error(result.message || 'Keputusan gagal disimpan.');
+    return result;
   }
 
   document.getElementById('btnConfirmLulus').addEventListener('click', async function () {
     this.disabled = true;
     this.textContent = 'Memuatkan...';
-    const result = await patchStatus('approved');
+    let result;
+    try { result = await patchStatus('approved'); }
+    catch (error) { alert(error.message); this.disabled = false; this.textContent = 'Ya, Luluskan'; return; }
     if (result.success) {
       bootstrap.Modal.getInstance(document.getElementById('lulusModal')).hide();
       alert('✅ Permohonan telah diluluskan.');
-      window.location.href = 'course_application.html';
+      window.location.href = app.sessionId ? `course_application.html?sessionId=${encodeURIComponent(app.sessionId)}` : 'course_application.html';
     } else {
       alert('❌ Ralat: ' + result.message);
       this.disabled = false;
@@ -753,11 +817,13 @@ fetch("sidebar.html")
     if (!remark) { alert('Sila nyatakan sebab penolakan.'); return; }
     this.disabled = true;
     this.textContent = 'Memuatkan...';
-    const result = await patchStatus('rejected', remark);
+    let result;
+    try { result = await patchStatus('rejected', remark); }
+    catch (error) { alert(error.message); this.disabled = false; this.textContent = 'Ya, Tolak Permohonan'; return; }
     if (result.success) {
       bootstrap.Modal.getInstance(document.getElementById('gagalModal')).hide();
       alert('✅ Permohonan telah ditolak.');
-      window.location.href = 'course_application.html';
+      window.location.href = app.sessionId ? `course_application.html?sessionId=${encodeURIComponent(app.sessionId)}` : 'course_application.html';
     } else {
       alert('❌ Ralat: ' + result.message);
       this.disabled = false;

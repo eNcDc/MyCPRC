@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Borang Kesihatan Ahli</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pengurusan Sesi Kursus MyEMT</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,53 +15,323 @@
     <link href="assets/css/main.css" rel="stylesheet">
 
     <style>
-    .mds-card{
-        border:1px solid #dee2e6;
-        border-radius:12px;
-        overflow:hidden;
-        margin-bottom:1rem;
-        box-shadow:0 .125rem .25rem rgba(0,0,0,.075);
-    }
+        :root {
+            --myemt-primary: #0b5ed7;
+            --myemt-primary-dark: #084298;
+            --myemt-surface: #ffffff;
+            --myemt-page: #f5f7fb;
+            --myemt-border: #e4e9f1;
+            --myemt-text: #172033;
+            --myemt-muted: #6c757d;
+        }
 
-    .mds-card .card-header{
-        background:#0d6efd;
-        color:#fff;
-        font-weight:600;
-        padding:.75rem 1rem;
-    }
+        body {
+            background: var(--myemt-page);
+            color: var(--myemt-text);
+        }
 
-    .mds-card .card-body{
-        background:#fff;
-        padding:1rem;
-    }
+        .page-heading {
+            background: linear-gradient(135deg, #0b5ed7 0%, #084298 100%);
+            border-radius: 18px;
+            color: #fff;
+            overflow: hidden;
+            padding: 1.5rem;
+            position: relative;
+        }
 
-    .form-check{
-        margin-bottom:.5rem;
-    }
+        .page-heading::after {
+            background: rgba(255, 255, 255, .08);
+            border-radius: 50%;
+            content: "";
+            height: 180px;
+            position: absolute;
+            right: -50px;
+            top: -85px;
+            width: 180px;
+        }
 
-    .form-label{
-        font-weight:600;
-    }
+        .page-heading .breadcrumb-label {
+            color: rgba(255, 255, 255, .72);
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
 
-    .badge-soft{
-        background:#e9ecef;
-        color:#495057;
-        font-weight:500;
-    }
+        .page-heading p {
+            color: rgba(255, 255, 255, .82);
+        }
 
-    .section-title{
-        font-size:1.1rem;
-        font-weight:700;
-        margin-bottom:1rem;
-        padding-bottom:.5rem;
-        border-bottom:2px solid #dee2e6;
-    }
+        .btn-heading {
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .38);
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
 
-    textarea{
-        resize:vertical;
-    }
+        .btn-heading:hover,
+        .btn-heading:focus {
+            background: #fff;
+            border-color: #fff;
+            color: var(--myemt-primary-dark);
+        }
+
+        .summary-card {
+            background: var(--myemt-surface);
+            border: 1px solid var(--myemt-border);
+            border-radius: 14px;
+            height: 100%;
+            padding: 1rem;
+        }
+
+        .summary-icon {
+            align-items: center;
+            border-radius: 12px;
+            display: flex;
+            flex: 0 0 44px;
+            font-size: 1.2rem;
+            height: 44px;
+            justify-content: center;
+            width: 44px;
+        }
+
+        .summary-label {
+            color: var(--myemt-muted);
+            font-size: .8rem;
+            font-weight: 600;
+            margin-bottom: .15rem;
+        }
+
+        .summary-value {
+            font-size: 1.45rem;
+            font-weight: 750;
+            line-height: 1;
+        }
+
+        .content-card {
+            background: var(--myemt-surface);
+            border: 1px solid var(--myemt-border);
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(31, 45, 61, .04);
+            overflow: hidden;
+        }
+
+        .content-card-header {
+            border-bottom: 1px solid var(--myemt-border);
+            padding: 1.15rem 1.25rem;
+        }
+
+        .section-icon {
+            align-items: center;
+            background: #e7f1ff;
+            border-radius: 10px;
+            color: var(--myemt-primary);
+            display: inline-flex;
+            font-size: 1rem;
+            height: 36px;
+            justify-content: center;
+            width: 36px;
+        }
+
+        .filter-bar {
+            background: #f8fafd;
+            border-bottom: 1px solid var(--myemt-border);
+            padding: .9rem 1.25rem;
+        }
+
+        .filter-control {
+            max-width: 260px;
+        }
+
+        .table > :not(caption) > * > * {
+            border-bottom-color: #edf0f5;
+            padding: .9rem 1rem;
+            vertical-align: middle;
+        }
+
+        .table thead th {
+            background: #fbfcfe;
+            color: #536176;
+            font-size: .76rem;
+            font-weight: 700;
+            letter-spacing: .025em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .session-name {
+            color: #24324a;
+            font-weight: 700;
+        }
+
+        .session-meta {
+            color: var(--myemt-muted);
+            display: none;
+            font-size: .78rem;
+            margin-top: .2rem;
+        }
+
+        .status-badge {
+            border-radius: 50rem;
+            display: inline-flex;
+            font-size: .75rem;
+            font-weight: 700;
+            gap: .35rem;
+            padding: .42rem .65rem;
+            white-space: nowrap;
+        }
+
+        .status-dot {
+            background: currentColor;
+            border-radius: 50%;
+            height: 6px;
+            margin-top: .32rem;
+            width: 6px;
+        }
+
+        .status-open {
+            background: #e8f7ee;
+            color: #198754;
+        }
+
+        .status-warning {
+            background: #fff4d6;
+            color: #997100;
+        }
+
+        .status-closed {
+            background: #eef1f5;
+            color: #657184;
+        }
+
+        .quota-intro {
+            background: linear-gradient(110deg, #eef5ff, #f8fbff);
+            border-bottom: 1px solid #dce9fb;
+            padding: 1rem 1.25rem;
+        }
+
+        .quota-total {
+            color: var(--myemt-primary-dark);
+            font-size: 1.55rem;
+            font-weight: 750;
+        }
+
+        .quota-grid {
+            display: grid;
+            gap: .75rem;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            padding: 1.25rem;
+        }
+
+        .quota-item {
+            align-items: center;
+            background: #fff;
+            border: 1px solid var(--myemt-border);
+            border-radius: 12px;
+            display: flex;
+            gap: .75rem;
+            min-height: 72px;
+            padding: .85rem;
+        }
+
+        .quota-number {
+            align-items: center;
+            background: #e7f1ff;
+            border-radius: 10px;
+            color: var(--myemt-primary);
+            display: flex;
+            flex: 0 0 38px;
+            font-size: 1rem;
+            font-weight: 750;
+            height: 38px;
+            justify-content: center;
+            width: 38px;
+        }
+
+        .quota-state {
+            font-size: .86rem;
+            font-weight: 650;
+            line-height: 1.25;
+        }
+
+        .quota-note {
+            background: #fff9e8;
+            border: 1px solid #ffe49a;
+            border-radius: 12px;
+            color: #6a5100;
+            margin: 0 1.25rem 1.25rem;
+            padding: .9rem 1rem;
+        }
+
+        .empty-state {
+            color: var(--myemt-muted);
+            padding: 2.5rem 1rem !important;
+            text-align: center;
+        }
+
+        .empty-state i {
+            color: #9aa6b7;
+            display: block;
+            font-size: 1.7rem;
+            margin-bottom: .4rem;
+        }
+
+        @media (max-width: 1199.98px) {
+            .quota-grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            main {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+
+            .page-heading {
+                padding: 1.25rem;
+            }
+
+            .page-heading .btn-heading {
+                margin-top: 1rem;
+                width: 100%;
+            }
+
+            .content-card-header .btn {
+                margin-top: .85rem;
+                width: 100%;
+            }
+
+            .filter-control {
+                max-width: none;
+                width: 100%;
+            }
+
+            .quota-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                padding: 1rem;
+            }
+
+            .quota-note {
+                margin: 0 1rem 1rem;
+            }
+
+            .session-meta {
+                display: block;
+            }
+
+            .desktop-detail {
+                display: none;
+            }
+        }
+
+        @media (max-width: 430px) {
+            .quota-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
-
 </head>
 
 <body>
@@ -70,185 +340,173 @@
 <div id="header"></div>
 
 <div class="container-fluid">
-  <div class="row">
+    <div class="row">
 
-    <!-- SIDEBAR -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+        <!-- SIDEBAR -->
+        <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-<!-- MAIN CONTENT -->
-<!-- MAIN CONTENT -->
-<main class="col-md-9 col-lg-10 px-4 py-4">
+        <!-- MAIN CONTENT -->
+        <main class="col-md-9 col-lg-10 px-4 py-4">
 
-    <!-- PAGE HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h4 class="mb-0">Semakan B-Course & C-Course</h4>
-            <small class="text-muted">
-                Semakan Permohonan Menyertai Kursus B-Course & C-Course MyEMT
-            </small>
-        </div>
+            <!-- PAGE HEADER -->
+            <section class="page-heading mb-4">
+                <div class="row align-items-center position-relative" style="z-index: 1;">
+                    <div class="col-md-8">
+                        <div class="breadcrumb-label mb-2">Pentadbiran MyEMT</div>
+                        <h3 class="fw-bold mb-2">Pengurusan Kursus</h3>
+                <p class="mb-0">Urus sesi serta semak permohonan Kursus B dan Kursus C MyEMT.</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <a href="landingMyemtAdmin.html" class="btn btn-heading px-3">
+                            <i class="bi bi-arrow-left me-1"></i> Kembali ke Pentadbiran
+                        </a>
+                    </div>
+                </div>
+            </section>
 
-        <a href="landingMyemtAdmin.html" class="btn btn-primary">
-            <i class="bi bi-arrow-left me-1"></i> Kembali
-        </a>
+            <!-- RINGKASAN -->
+            <section class="row g-3 mb-4" aria-label="Ringkasan sesi kursus">
+                <div class="col-6 col-xl-3">
+                    <div class="summary-card d-flex align-items-center gap-3">
+                        <div class="summary-icon bg-primary-subtle text-primary">
+                            <i class="bi bi-calendar3"></i>
+                        </div>
+                        <div>
+                            <div class="summary-label">Jumlah Sesi</div>
+                            <div class="summary-value" id="total-sessions">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-xl-3">
+                    <div class="summary-card d-flex align-items-center gap-3">
+                        <div class="summary-icon bg-success-subtle text-success">
+                            <i class="bi bi-door-open"></i>
+                        </div>
+                        <div>
+                            <div class="summary-label">Sedang Dibuka</div>
+                            <div class="summary-value" id="open-sessions">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-xl-3">
+                    <div class="summary-card d-flex align-items-center gap-3">
+                        <div class="summary-icon bg-warning-subtle text-warning-emphasis">
+                            <i class="bi bi-people"></i>
+                        </div>
+                        <div>
+                            <div class="summary-label">Hampir Penuh</div>
+                            <div class="summary-value" id="almost-full-sessions">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-xl-3">
+                    <div class="summary-card d-flex align-items-center gap-3">
+                        <div class="summary-icon bg-secondary-subtle text-secondary">
+                            <i class="bi bi-hourglass-split"></i>
+                        </div>
+                        <div>
+                            <div class="summary-label">Belum Dibuka</div>
+                            <div class="summary-value" id="upcoming-sessions">0</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SENARAI SESI KURSUS -->
+            <section class="content-card mb-4">
+                <div class="content-card-header d-md-flex justify-content-between align-items-center">
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="section-icon"><i class="bi bi-mortarboard"></i></span>
+                        <div>
+                            <h5 class="fw-bold mb-1">Senarai Sesi Kursus MyEMT</h5>
+                            <p class="text-muted small mb-0">Semak pemohon atau kemas kini maklumat sesi kursus.</p>
+                        </div>
+                    </div>
+                    <a href="course_sessionadd.html" class="btn btn-primary">
+                        <i class="bi bi-plus-lg me-1"></i> Tambah Sesi Baharu
+                    </a>
+                </div>
+
+                <div class="filter-bar d-flex flex-column flex-md-row gap-2 justify-content-between">
+                    <div class="input-group input-group-sm filter-control">
+                        <span class="input-group-text bg-white border-end-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="search" id="session-search" class="form-control border-start-0"
+                               placeholder="Cari sesi atau tempat..." aria-label="Cari sesi atau tempat">
+                    </div>
+
+                    <select id="status-filter" class="form-select form-select-sm filter-control" aria-label="Tapis mengikut status">
+                        <option value="">Semua status</option>
+                        <option value="Dibuka">Dibuka</option>
+                        <option value="Hampir Penuh">Hampir Penuh</option>
+                        <option value="Belum Dibuka">Belum Dibuka</option>
+                        <option value="Ditutup">Ditutup</option>
+                        <option value="Selesai">Selesai</option>
+                    </select>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Sesi</th>
+                                <th class="desktop-detail">Tempat</th>
+                                <th class="desktop-detail">Tarikh</th>
+                                <th class="desktop-detail">Tempoh</th>
+                                <th>Status</th>
+                                <th class="text-end">Tindakan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-sessions">
+                            <tr>
+                                <td colspan="6" class="empty-state">
+                                    <span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                                    Memuatkan sesi kursus...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- KUOTA PESERTA -->
+            <section class="content-card">
+                <div class="content-card-header d-flex align-items-center gap-3">
+                    <span class="section-icon"><i class="bi bi-map"></i></span>
+                    <div>
+                        <h5 class="fw-bold mb-1">Kuota Pencalonan Mengikut Negeri</h5>
+                        <p class="text-muted small mb-0">Pecahan kuota peserta bagi program Kursus B dan Kursus C MyEMT.</p>
+                    </div>
+                </div>
+
+                <div class="quota-intro d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-2">
+                    <div>
+                        <div class="small text-muted fw-semibold">JUMLAH KESELURUHAN KUOTA</div>
+                        <div class="quota-total">125 peserta</div>
+                    </div>
+                    <span class="badge rounded-pill text-bg-primary px-3 py-2">
+                        <i class="bi bi-geo-alt me-1"></i> 15 Pecahan Negeri / Wilayah
+                    </span>
+                </div>
+
+                <div class="quota-grid" id="quota-grid">
+                    <!-- Data kuota dijana melalui JavaScript. -->
+                </div>
+
+                <!-- NOTA KUOTA: Kekalkan bahagian ini bersama paparan kuota. -->
+                <div class="quota-note d-flex align-items-start gap-2" role="note">
+                    <i class="bi bi-info-circle-fill mt-1" aria-hidden="true"></i>
+                    <div>
+                        <strong>Nota kuota:</strong>
+                        Kuota di atas merupakan kuota pencalonan dan bukan jaminan penerimaan peserta.
+                        Pemilihan akhir serta sebarang perubahan kuota adalah tertakluk kepada ketetapan urus setia MyEMT.
+                    </div>
+                </div>
+            </section>
+
+        </main>
     </div>
-
-
-
-    <!-- ================= SENARAI SESI KURSUS ================= -->
-    <div class="card shadow-sm mb-4">
-
-        <div class="card-header bg-white d-flex justify-content-between align-items-center">
-            <strong>Senarai Sesi Kursus MyEMT</strong>
-
-            <a href="course_sessionadd.html" class="btn btn-sm btn-secondary">
-                <i class="bi bi-plus-circle me-1"></i>
-                Tambah Sesi Baharu
-            </a>
-        </div>
-
-        <div class="card-body">
-
-            <div class="table-responsive">
-
-<table class="table table-hover align-middle">
-
-    <thead class="table-light">
-        <tr>
-            <th>Sesi</th>
-            <th>Tempat</th>
-            <th>Tarikh</th>
-            <th>Tempoh</th>
-            <th>Status</th>
-            <th class="text-end">Tindakan</th>
-        </tr>
-    </thead>
-
-    <tbody id="tbody-sessions">
-        <tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr>
-    </tbody>
-
-</table>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- ================= KUOTA PESERTA MYEMT MENGIKUT NEGERI ================= -->
-    <div class="card shadow-sm mb-4">
-
-        <div class="card-header bg-white fw-bold">
-            Kuota Pencalonan Peserta MyEMT Mengikut Negeri
-        </div>
-
-        <div class="card-body p-0">
-
-            <div class="table-responsive">
-
-                <table class="table table-hover align-middle mb-0">
-
-                    <thead class="table-light">
-                        <tr>
-                            <th>Pecahan Negeri</th>
-                            <th class="text-center">Bilangan</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-                            <td>Selangor</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>Johor</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>Pahang</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>Terengganu</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>Kelantan</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>Kedah</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>Pulau Pinang</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>Perak</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>Sabah</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>Sarawak</td>
-                            <td class="text-center fw-semibold">10</td>
-                        </tr>
-
-                        <tr>
-                            <td>WP Kuala Lumpur & Putrajaya</td>
-                            <td class="text-center fw-semibold">5</td>
-                        </tr>
-
-                        <tr>
-                            <td>Negeri Sembilan</td>
-                            <td class="text-center fw-semibold">5</td>
-                        </tr>
-
-                        <tr>
-                            <td>Melaka</td>
-                            <td class="text-center fw-semibold">5</td>
-                        </tr>
-
-                        <tr>
-                            <td>Perlis</td>
-                            <td class="text-center fw-semibold">5</td>
-                        </tr>
-
-                        <tr>
-                            <td>WP Labuan</td>
-                            <td class="text-center fw-semibold">5</td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-    </div>
-
-</main>
-
-
-
-
-
-  </div>
 </div>
 
 <!-- FOOTER -->
@@ -256,69 +514,243 @@
 
 <!-- LOAD HEADER / FOOTER / SIDEBAR -->
 <script>
-fetch("header.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("header").innerHTML = data);
+    fetch("header.html")
+        .then(res => res.text())
+        .then(data => document.getElementById("header").innerHTML = data)
+        .catch(() => {});
 
-fetch("footer.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("footer").innerHTML = data);
+    fetch("footer.html")
+        .then(res => res.text())
+        .then(data => document.getElementById("footer").innerHTML = data)
+        .catch(() => {});
 
-fetch("sidebar.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
+    fetch("sidebar.html")
+        .then(res => res.text())
+        .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
+        .catch(() => {});
 </script>
 
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-const SESSION_STATUS_BADGE = {
-  'Dibuka':       'bg-success',
-  'Hampir Penuh': 'bg-warning text-dark',
-  'Belum Dibuka': 'bg-secondary'
-};
+    const SESSION_STATUS = {
+        'Dibuka': {
+            className: 'status-open',
+            label: 'Dibuka'
+        },
+        'Hampir Penuh': {
+            className: 'status-warning',
+            label: 'Hampir Penuh'
+        },
+        'Belum Dibuka': {
+            className: 'status-closed',
+            label: 'Belum Dibuka'
+        },
+        'Ditutup': {
+            className: 'status-closed',
+            label: 'Ditutup'
+        },
+        'Selesai': {
+            className: 'status-closed',
+            label: 'Selesai'
+        }
+    };
 
-async function loadSessions() {
-  try {
-    const res  = await fetch(`${API}/api/sessions`);
-    const json = await res.json();
-    const sessions = json.data || [];
-    const tbody = document.getElementById('tbody-sessions');
-    if (!sessions.length) {
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3">Tiada sesi kursus</td></tr>';
-      return;
+    const STATE_QUOTAS = [
+        { state: 'Selangor', quota: 10 },
+        { state: 'Johor', quota: 10 },
+        { state: 'Pahang', quota: 10 },
+        { state: 'Terengganu', quota: 10 },
+        { state: 'Kelantan', quota: 10 },
+        { state: 'Kedah', quota: 10 },
+        { state: 'Pulau Pinang', quota: 10 },
+        { state: 'Perak', quota: 10 },
+        { state: 'Sabah', quota: 10 },
+        { state: 'Sarawak', quota: 10 },
+        { state: 'WP Kuala Lumpur & Putrajaya', quota: 5 },
+        { state: 'Negeri Sembilan', quota: 5 },
+        { state: 'Melaka', quota: 5 },
+        { state: 'Perlis', quota: 5 },
+        { state: 'WP Labuan', quota: 5 }
+    ];
+
+    let allSessions = [];
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#039;');
     }
-    tbody.innerHTML = sessions.map(s => {
-      const badgeCls = SESSION_STATUS_BADGE[s.status] || 'bg-secondary';
-      const canReview = s.status !== 'Belum Dibuka';
-      const reviewBtn = canReview
-        ? `<a href="course_application.html?sesiId=${s.id}" class="btn btn-sm btn-outline-primary me-1">Semakan Pemohon</a>`
-        : `<button class="btn btn-sm btn-outline-secondary me-1" disabled>Semakan Pemohon</button>`;
-      const duration = (s.startDate && s.endDate)
-        ? (() => { const d = Math.round((new Date(s.endDate) - new Date(s.startDate)) / 86400000) + 1; return d + ' Hari'; })()
-        : '-';
-      const dateRange = (s.startDate && s.endDate)
-        ? `${s.startDate} - ${s.endDate}`
-        : (s.startDate || '-');
-      return `<tr>
-        <td>${s.name || s.id}</td>
-        <td>${s.location || '-'}</td>
-        <td>${dateRange}</td>
-        <td>${duration}</td>
-        <td><span class="badge ${badgeCls}">${s.status || '-'}</span></td>
-        <td class="text-end">
-          ${reviewBtn}
-          <a href="course_sessionedit.html?id=${s.id}" class="btn btn-sm btn-outline-dark">Kemaskini</a>
-        </td>
-      </tr>`;
-    }).join('');
-  } catch (e) {
-    document.getElementById('tbody-sessions').innerHTML = '<tr><td colspan="6" class="text-center text-danger py-3">Gagal memuatkan sesi.</td></tr>';
-  }
-}
 
-document.addEventListener('DOMContentLoaded', loadSessions);
+    function formatDate(dateString) {
+        if (!dateString) return '-';
+
+        const dateParts = String(dateString).slice(0, 10).split('-').map(Number);
+        if (dateParts.length !== 3 || dateParts.some(Number.isNaN)) return escapeHtml(dateString);
+
+        const [year, month, day] = dateParts;
+        const date = new Date(year, month - 1, day);
+        return new Intl.DateTimeFormat('ms-MY', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        }).format(date);
+    }
+
+    function getDuration(startDate, endDate) {
+        if (!startDate || !endDate) return '-';
+
+        const start = new Date(`${String(startDate).slice(0, 10)}T00:00:00`);
+        const end = new Date(`${String(endDate).slice(0, 10)}T00:00:00`);
+        const difference = Math.round((end - start) / 86400000) + 1;
+
+        return Number.isFinite(difference) && difference > 0 ? `${difference} Hari` : '-';
+    }
+
+    function getDateRange(session) {
+        if (session.startDate && session.endDate) {
+            return `${formatDate(session.startDate)} – ${formatDate(session.endDate)}`;
+        }
+
+        return formatDate(session.startDate || session.endDate);
+    }
+
+    function updateSummary(sessions) {
+        document.getElementById('total-sessions').textContent = sessions.length;
+        document.getElementById('open-sessions').textContent = sessions.filter(s => s.status === 'Dibuka').length;
+        document.getElementById('almost-full-sessions').textContent = sessions.filter(s => s.status === 'Hampir Penuh').length;
+        document.getElementById('upcoming-sessions').textContent = sessions.filter(s => s.status === 'Belum Dibuka').length;
+    }
+
+    function renderSessions(sessions) {
+        const tbody = document.getElementById('tbody-sessions');
+
+        if (!sessions.length) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        <i class="bi bi-calendar-x"></i>
+                        Tiada sesi kursus yang sepadan.
+                    </td>
+                </tr>`;
+            return;
+        }
+
+        tbody.innerHTML = sessions.map(session => {
+            const status = SESSION_STATUS[session.status] || {
+                className: 'status-closed',
+                label: session.status || '-'
+            };
+            const canReview = session.status !== 'Belum Dibuka';
+            const sessionId = encodeURIComponent(session.id ?? '');
+            const name = escapeHtml(session.name || session.id || '-');
+            const location = escapeHtml(session.location || '-');
+            const dateRange = getDateRange(session);
+            const duration = getDuration(session.startDate, session.endDate);
+
+            const reviewButton = canReview
+                ? `<a href="course_application.html?sessionId=${sessionId}" class="btn btn-sm btn-outline-primary">
+                       <i class="bi bi-person-check me-1"></i><span class="d-none d-xl-inline">Semakan </span>Pemohon
+                   </a>`
+                : `<button type="button" class="btn btn-sm btn-outline-secondary" disabled
+                           title="Permohonan belum dibuka">
+                       <i class="bi bi-lock me-1"></i><span class="d-none d-xl-inline">Semakan </span>Pemohon
+                   </button>`;
+
+            return `
+                <tr>
+                    <td>
+                        <div class="session-name">${name}</div>
+                        <div class="session-meta"><i class="bi bi-geo-alt me-1"></i>${location}</div>
+                        <div class="session-meta"><i class="bi bi-calendar-event me-1"></i>${dateRange}</div>
+                        <div class="session-meta"><i class="bi bi-list-check me-1"></i>${Array.isArray(session.tentative)?session.tentative.length:0} aktiviti tentatif</div>
+                        <div class="session-meta"><i class="bi bi-crosshair me-1"></i>${session.latitude!=null&&session.longitude!=null?`Daftar hadir dalam radius ${escapeHtml(session.attendanceRadiusM||300)} m`:'Lokasi daftar hadir belum ditetapkan'}</div>
+                    </td>
+                    <td class="desktop-detail">${location}</td>
+                    <td class="desktop-detail text-nowrap">${dateRange}</td>
+                    <td class="desktop-detail text-nowrap">${duration}</td>
+                    <td>
+                        <span class="status-badge ${status.className}">
+                            <span class="status-dot"></span>${escapeHtml(status.label)}
+                        </span>
+                    </td>
+                    <td class="text-end text-nowrap">
+                        <div class="d-inline-flex gap-1">
+                            ${reviewButton}
+                            <a href="course_sessionedit.html?id=${sessionId}" class="btn btn-sm btn-light border"
+                               title="Kemas kini sesi" aria-label="Kemas kini ${name}">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>`;
+        }).join('');
+    }
+
+    function applyFilters() {
+        const query = document.getElementById('session-search').value.trim().toLowerCase();
+        const status = document.getElementById('status-filter').value;
+
+        const filteredSessions = allSessions.filter(session => {
+            const searchableText = `${session.name || ''} ${session.id || ''} ${session.location || ''}`.toLowerCase();
+            const matchesQuery = !query || searchableText.includes(query);
+            const matchesStatus = !status || session.status === status;
+            return matchesQuery && matchesStatus;
+        });
+
+        renderSessions(filteredSessions);
+    }
+
+    function renderQuotas() {
+        document.getElementById('quota-grid').innerHTML = STATE_QUOTAS.map(item => `
+            <div class="quota-item">
+                <div class="quota-number">${item.quota}</div>
+                <div>
+                    <div class="quota-state">${escapeHtml(item.state)}</div>
+                    <div class="small text-muted">peserta</div>
+                </div>
+            </div>`).join('');
+    }
+
+    async function loadSessions() {
+        const tbody = document.getElementById('tbody-sessions');
+
+        try {
+            const response = await fetch(`${API}/api/sessions`);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+            const json = await response.json();
+            allSessions = Array.isArray(json.data) ? json.data : [];
+
+            updateSummary(allSessions);
+            renderSessions(allSessions);
+        } catch (error) {
+            console.error('Gagal memuatkan sesi kursus:', error);
+            updateSummary([]);
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty-state text-danger">
+                        <i class="bi bi-exclamation-circle"></i>
+                        <div class="mb-2">Sesi kursus gagal dimuatkan.</div>
+                        <button type="button" class="btn btn-sm btn-outline-danger" onclick="loadSessions()">
+                            <i class="bi bi-arrow-clockwise me-1"></i> Cuba Semula
+                        </button>
+                    </td>
+                </tr>`;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderQuotas();
+        loadSessions();
+
+        document.getElementById('session-search').addEventListener('input', applyFilters);
+        document.getElementById('status-filter').addEventListener('change', applyFilters);
+    });
 </script>
 
 </body>

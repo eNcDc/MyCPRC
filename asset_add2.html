@@ -82,9 +82,9 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
 
             <div>
-            <h4 class="mb-0">Tambah Rekod Asset EMT</h4>
+            <h4 class="mb-0">Tambah Aset Inventori MyEMT</h4>
             <small class="text-muted">
-                Rekod asset dan peralatan EMT
+                Rekod lengkap aset dan stok milik MyEMT
             </small>
             </div>
 
@@ -100,7 +100,7 @@
         <div class="card shadow-sm">
 
             <div class="card-header bg-white">
-            <strong>Maklumat Asset EMT</strong>
+            <strong>Maklumat Aset Inventori MyEMT</strong>
             </div>
 
             <div class="card-body">
@@ -124,6 +124,12 @@
                             min="1"
                             step="1"
                             placeholder="Contoh: 1">
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="form-label">Paras Stok Minimum</label>
+                        <input type="number" class="form-control" min="0" step="1" value="2">
+                        <small class="text-muted">Digunakan untuk amaran stok rendah.</small>
                     </div>
 
                     <!-- SERIAL NUMBER -->
@@ -173,6 +179,11 @@
                     </div>
 
                     <div class="col-md-4">
+                    <label class="form-label">Kategori Perolehan</label>
+                    <select class="form-select"><option value="">-- Pilih --</option><option>Penerimaan Sumbangan</option><option>Pembelian Terus</option></select>
+                    </div>
+
+                    <div class="col-md-4">
                     <label class="form-label">Tarikh Perolehan</label>
                     <input type="date" class="form-control">
                     </div>
@@ -188,6 +199,9 @@
                             placeholder="Nama vendor / syarikat">
                     </div>
 
+                    <div class="col-md-4"><label class="form-label">Tarikh Dikeluarkan</label><input type="date" class="form-control"></div>
+                    <div class="col-md-4"><label class="form-label">Tarikh Luput</label><input type="date" class="form-control"><small class="text-muted">Untuk bahan guna habis atau item bertarikh luput.</small></div>
+
                     <!-- CONDITION & STATUS -->
                     <div class="col-12 mt-3">
                     <h6 class="fw-bold text-muted">Status & Keadaan Aset</h6>
@@ -195,15 +209,21 @@
                     </div>
 
                     <div class="col-md-4">
-                    <label class="form-label">Status Aset</label>
+                    <label class="form-label">Status Semasa Aset</label>
                     <select class="form-select">
                         <option>Tersedia</option>
                         <option>Digunakan</option>
                         <option>Penyelenggaraan</option>
                         <option>Rosak</option>
-                        <option>Hilang / Lupus</option>
                     </select>
                     </div>
+
+                    <div class="col-md-4">
+                    <label class="form-label">Status Akhir Aset</label>
+                    <select class="form-select"><option value="">Belum Ditentukan</option><option>Disumbangkan</option><option>Stok Habis</option><option>Rosak</option><option>Lain-lain</option></select>
+                    </div>
+
+                    <div class="col-md-4"><label class="form-label">Status Akhir Lain</label><input type="text" class="form-control" maxlength="200"></div>
 
                     <div class="col-md-4">
                     <label class="form-label">Keadaan Fizikal</label>
@@ -320,5 +340,7 @@ fetch("sidebar.html")
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/asset-inventory-add.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Pengurusan Misi EMT</title>
+    <title>Pengurusan Misi MyEMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -53,6 +53,10 @@
       .metric-icon{width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:1.35rem}
       .chart-card{border:0;border-radius:14px;box-shadow:0 .25rem .75rem rgba(0,0,0,.06)}
       .chart-wrap{height:320px;position:relative}
+      .chart-wrap-location{height:360px}
+      @media(max-width:1199px){
+        .chart-wrap-location{height:320px}
+      }
       .table-card{border:0;border-radius:14px;box-shadow:0 .25rem .75rem rgba(0,0,0,.06);overflow:hidden}
       .section-subtitle{color:#6c757d;font-size:.9rem}
       .filter-row{background:#fff;border:1px solid #dee2e6;border-radius:12px;padding:1rem}
@@ -151,11 +155,11 @@
 
       <div class="d-flex justify-content-between align-items-start mb-4">
         <div>
-          <h4 class="mb-1">Pengurusan Misi EMT</h4>
-          <small class="text-muted">Dashboard analitik dan senarai rekod misi EMT.</small>
+          <h4 class="mb-1" id="missionPageTitle">Pengurusan Misi MyEMT</h4>
+            <small class="text-muted" id="missionPageSubtitle">Papan pemuka analitik dan senarai rekod misi MyEMT.</small>
         </div>
 
-        <a href="landingMyemtAdmin_mission.html" class="btn btn-primary">
+        <a href="landingMyemtAdmin_mission.html" class="btn btn-primary" id="missionBackLink">
           <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
       </div>
@@ -164,12 +168,12 @@
       <ul class="nav nav-pills bg-white p-2 rounded-3 shadow-sm mb-4" id="emtCrudTabs">
         <li class="nav-item">
           <button class="nav-link active" data-bs-toggle="pill" data-bs-target="#dashboardTab" type="button">
-            <i class="bi bi-speedometer2 me-1"></i> 1. Dashboard
+                <i class="bi bi-speedometer2 me-1"></i> 1. Ringkasan
           </button>
         </li>
         <li class="nav-item">
           <button class="nav-link" data-bs-toggle="pill" data-bs-target="#recordsTab" type="button">
-            <i class="bi bi-table me-1"></i> 2. Senarai Rekod
+            <i class="bi bi-table me-1"></i> 2. Misi
           </button>
         </li>
       </ul>
@@ -242,12 +246,12 @@
 
           </div>
 
-          <div class="row g-3 mb-4">
+          <div class="row g-3 mb-4 admin-only">
 
             <div class="col-md-4">
               <div class="card metric-card h-100">
                 <div class="card-body">
-                  <small class="text-muted">Ahli EMT Diluluskan</small>
+                  <small class="text-muted">Permohonan Menunggu Tindakan</small>
                   <div class="metric-value mt-2" id="countMembers">0</div>
                 </div>
               </div>
@@ -256,7 +260,7 @@
             <div class="col-md-4">
               <div class="card metric-card h-100">
                 <div class="card-body">
-                  <small class="text-muted">Jumlah Pemohon Misi</small>
+                  <small class="text-muted">Permohonan Diluluskan</small>
                   <div class="metric-value mt-2" id="countApplicants">0</div>
                 </div>
               </div>
@@ -265,7 +269,7 @@
             <div class="col-md-4">
               <div class="card metric-card h-100">
                 <div class="card-body">
-                  <small class="text-muted">Misi Dengan Pemohon</small>
+                  <small class="text-muted">Misi Tanpa PIC</small>
                   <div class="metric-value mt-2" id="countMissionWithApplicants">0</div>
                 </div>
               </div>
@@ -276,7 +280,7 @@
           <!-- CHARTS -->
           <div class="row g-3 mb-4">
 
-            <div class="col-lg-6">
+            <div class="col-xl-4">
               <div class="card chart-card h-100">
                 <div class="card-body">
                   <h6 class="fw-bold mb-1">Status Misi</h6>
@@ -288,13 +292,25 @@
               </div>
             </div>
 
-            <div class="col-lg-6">
+            <div class="col-xl-4">
               <div class="card chart-card h-100">
                 <div class="card-body">
-                  <h6 class="fw-bold mb-1">Misi Mengikut Negeri / Lokasi</h6>
-                  <div class="section-subtitle mb-3">Jumlah misi berdasarkan negeri atau lokasi yang direkodkan.</div>
-                  <div class="chart-wrap">
-                    <canvas id="missionStateChart"></canvas>
+                  <h6 class="fw-bold mb-1">Misi Dalam Malaysia</h6>
+                  <div class="section-subtitle mb-3">Bilangan misi dalam Malaysia mengikut negeri.</div>
+                  <div class="chart-wrap chart-wrap-location">
+                    <canvas id="missionMalaysiaStateChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-xl-4">
+              <div class="card chart-card h-100">
+                <div class="card-body">
+                  <h6 class="fw-bold mb-1">Misi Luar Malaysia</h6>
+                  <div class="section-subtitle mb-3">Bilangan misi antarabangsa mengikut negara atau lokasi.</div>
+                  <div class="chart-wrap chart-wrap-location">
+                    <canvas id="missionInternationalChart"></canvas>
                   </div>
                 </div>
               </div>
@@ -344,6 +360,8 @@
                     <th>Lokasi</th>
                     <th>Pemohon</th>
                     <th>Tarikh Mula</th>
+                    <th>PIC Misi</th>
+                    <th class="text-end">Tindakan</th>
                   </tr>
                 </thead>
                 <tbody id="dashboardRecentTable"></tbody>
@@ -365,7 +383,7 @@
               <small class="text-muted">Semua misi EMT yang direkodkan, termasuk PIC, tempoh operasi dan status semasa.</small>
             </div>
 
-            <a href="mission_add.html" class="btn btn-primary">
+            <a href="mission_add.html" class="btn btn-primary admin-only">
               <i class="bi bi-plus-circle me-1"></i> Tambah Misi Baru
             </a>
           </div>
@@ -405,7 +423,7 @@
               <div>
                 <strong>Senarai Misi EMT</strong>
                 <div class="small text-muted">
-                  Disusun mengikut anggaran tamat paling latest.
+                  Disusun mengikut tarikh anggaran tamat yang terkini.
                 </div>
               </div>
               <span class="badge bg-primary" id="recordCount">0 rekod</span>
@@ -467,6 +485,15 @@ fetch("sidebar.html")
 <script>
 Chart.register(ChartDataLabels);
 
+const USER_MISSION_VIEW = new URLSearchParams(location.search).get('paparan') === 'pengguna';
+
+if(USER_MISSION_VIEW){
+  document.querySelectorAll('.admin-only').forEach(element => element.remove());
+  document.getElementById('missionPageTitle').textContent = 'Misi Saya';
+  document.getElementById('missionPageSubtitle').textContent = 'Ringkasan dan senarai misi MyEMT yang telah diluluskan untuk anda.';
+  document.getElementById('missionBackLink').href = 'landingMyemt_mission.html';
+}
+
 const MISSION_STATUS = {
   'Selesai':           { badge:'bg-success', label:'Selesai' },
   'Sedang Dijalankan': { badge:'bg-primary', label:'Sedang Dijalankan' },
@@ -499,10 +526,20 @@ function getApplicantCount(missionId){
   return missionApplications.filter(a => a.missionId === missionId).length;
 }
 
-function createChart(id, type, labels, data, label='Bilangan'){
+function createChart(
+  id,
+  type,
+  labels,
+  data,
+  label='Bilangan',
+  horizontal=false
+){
   if (charts[id]) charts[id].destroy();
 
-  charts[id] = new Chart(document.getElementById(id),{
+  const canvas = document.getElementById(id);
+  if(!canvas) return;
+
+  charts[id] = new Chart(canvas,{
     type,
     data:{
       labels,
@@ -516,7 +553,13 @@ function createChart(id, type, labels, data, label='Bilangan'){
     options:{
       responsive:true,
       maintainAspectRatio:false,
-      layout:{padding:{top:type === 'bar' ? 22 : 10}},
+      indexAxis:type === 'bar' && horizontal ? 'y' : 'x',
+      layout:{
+        padding:{
+          top:type === 'bar' && !horizontal ? 22 : 10,
+          right:type === 'bar' && horizontal ? 28 : 10
+        }
+      },
       plugins:{
         legend:{
           display:type !== 'bar',
@@ -527,38 +570,537 @@ function createChart(id, type, labels, data, label='Bilangan'){
           color:type === 'bar' ? '#24364b' : '#fff',
           font:{weight:'700',size:12},
           anchor:type === 'bar' ? 'end' : 'center',
-          align:type === 'bar' ? 'top' : 'center',
+          align:type === 'bar'
+            ? (horizontal ? 'right' : 'top')
+            : 'center',
           clamp:true,
           formatter:value => value
         }
       },
       scales:type === 'bar'
-        ?{
-            y:{beginAtZero:true,ticks:{precision:0}},
-            x:{grid:{display:false}}
-          }
+        ?(
+            horizontal
+              ?{
+                  x:{
+                    beginAtZero:true,
+                    ticks:{precision:0}
+                  },
+                  y:{
+                    grid:{display:false}
+                  }
+                }
+              :{
+                  y:{
+                    beginAtZero:true,
+                    ticks:{precision:0}
+                  },
+                  x:{
+                    grid:{display:false}
+                  }
+                }
+          )
         :{}
     }
   });
 }
 
+
+const MALAYSIA_STATES = [
+  'Johor',
+  'Kedah',
+  'Kelantan',
+  'Melaka',
+  'Negeri Sembilan',
+  'Pahang',
+  'Pulau Pinang',
+  'Perak',
+  'Perlis',
+  'Sabah',
+  'Sarawak',
+  'Selangor',
+  'Terengganu',
+  'W.P. Kuala Lumpur',
+  'W.P. Labuan',
+  'W.P. Putrajaya'
+];
+
+
+const MALAYSIA_STATE_ALIASES = {
+  'johor':'Johor',
+  'kedah':'Kedah',
+  'kelantan':'Kelantan',
+  'melaka':'Melaka',
+  'malacca':'Melaka',
+  'negeri sembilan':'Negeri Sembilan',
+  'n. sembilan':'Negeri Sembilan',
+  'pahang':'Pahang',
+  'pulau pinang':'Pulau Pinang',
+  'penang':'Pulau Pinang',
+  'perak':'Perak',
+  'perlis':'Perlis',
+  'sabah':'Sabah',
+  'sarawak':'Sarawak',
+  'selangor':'Selangor',
+  'terengganu':'Terengganu',
+  'kuala lumpur':'W.P. Kuala Lumpur',
+  'w.p. kuala lumpur':'W.P. Kuala Lumpur',
+  'wp kuala lumpur':'W.P. Kuala Lumpur',
+  'labuan':'W.P. Labuan',
+  'w.p. labuan':'W.P. Labuan',
+  'wp labuan':'W.P. Labuan',
+  'putrajaya':'W.P. Putrajaya',
+  'w.p. putrajaya':'W.P. Putrajaya',
+  'wp putrajaya':'W.P. Putrajaya'
+};
+
+
+/*
+ * Hint lokasi bandar / kawasan Malaysia.
+ *
+ * Digunakan apabila backend hanya simpan lokasi seperti:
+ * "Markas SMART, Puchong"
+ * tanpa field negeri.
+ */
+const MALAYSIA_LOCATION_STATE_HINTS = {
+
+  // SELANGOR
+  'puchong':'Selangor',
+  'shah alam':'Selangor',
+  'petaling jaya':'Selangor',
+  'subang jaya':'Selangor',
+  'subang':'Selangor',
+  'klang':'Selangor',
+  'sepang':'Selangor',
+  'kajang':'Selangor',
+  'bangi':'Selangor',
+  'cyberjaya':'Selangor',
+  'rawang':'Selangor',
+  'sungai buloh':'Selangor',
+  'kuala selangor':'Selangor',
+  'hulu langat':'Selangor',
+  'gombak':'Selangor',
+
+  // W.P. KUALA LUMPUR
+  'kuala lumpur':'W.P. Kuala Lumpur',
+
+  // W.P. PUTRAJAYA
+  'putrajaya':'W.P. Putrajaya',
+
+  // W.P. LABUAN
+  'labuan':'W.P. Labuan',
+
+  // JOHOR
+  'johor bahru':'Johor',
+  'iskandar puteri':'Johor',
+  'pasir gudang':'Johor',
+  'batu pahat':'Johor',
+  'muar':'Johor',
+
+  // KEDAH
+  'alor setar':'Kedah',
+  'sungai petani':'Kedah',
+  'kulim':'Kedah',
+  'langkawi':'Kedah',
+
+  // KELANTAN
+  'kota bharu':'Kelantan',
+  'kubang kerian':'Kelantan',
+
+  // MELAKA
+  'bandar melaka':'Melaka',
+  'ayer keroh':'Melaka',
+
+  // NEGERI SEMBILAN
+  'seremban':'Negeri Sembilan',
+  'port dickson':'Negeri Sembilan',
+  'nilai':'Negeri Sembilan',
+
+  // PAHANG
+  'kuantan':'Pahang',
+  'temerloh':'Pahang',
+  'bentong':'Pahang',
+  'cameron highlands':'Pahang',
+
+  // PULAU PINANG
+  'george town':'Pulau Pinang',
+  'georgetown':'Pulau Pinang',
+  'bukit mertajam':'Pulau Pinang',
+  'butterworth':'Pulau Pinang',
+
+  // PERAK
+  'ipoh':'Perak',
+  'taiping':'Perak',
+  'teluk intan':'Perak',
+
+  // PERLIS
+  'kangar':'Perlis',
+  'arau':'Perlis',
+
+  // SABAH
+  'kota kinabalu':'Sabah',
+  'sandakan':'Sabah',
+  'tawau':'Sabah',
+  'lahad datu':'Sabah',
+
+  // SARAWAK
+  'kuching':'Sarawak',
+  'miri':'Sarawak',
+  'sibu':'Sarawak',
+  'bintulu':'Sarawak',
+
+  // TERENGGANU
+  'kuala terengganu':'Terengganu',
+  'kemaman':'Terengganu',
+  'dungun':'Terengganu'
+};
+
+
+function cleanMissionText(value){
+  return String(value || '').trim();
+}
+
+
+function normalizeMissionText(value){
+  return cleanMissionText(value).toLowerCase();
+}
+
+
+function malaysiaStateFromMission(mission){
+
+  /*
+   * 1. Cuba field negeri/state dahulu.
+   */
+  const directState =
+    cleanMissionText(
+      mission.state ||
+      mission.negeri
+    );
+
+
+  if(directState){
+
+    const normalized =
+      normalizeMissionText(
+        directState
+      );
+
+
+    if(
+      MALAYSIA_STATE_ALIASES[
+        normalized
+      ]
+    ){
+      return MALAYSIA_STATE_ALIASES[
+        normalized
+      ];
+    }
+  }
+
+
+  /*
+   * 2. Cari nama negeri dalam location.
+   */
+  const location =
+    normalizeMissionText(
+      mission.location
+    );
+
+
+  if(location){
+
+    const stateAliases =
+      Object.entries(
+        MALAYSIA_STATE_ALIASES
+      )
+      .sort(
+        (a,b) =>
+          b[0].length -
+          a[0].length
+      );
+
+
+    for(
+      const [alias,state]
+      of stateAliases
+    ){
+
+      if(
+        location.includes(alias)
+      ){
+        return state;
+      }
+    }
+
+
+    /*
+     * 3. Jika tiada nama negeri,
+     *    cuba bandar / kawasan Malaysia.
+     *
+     * Contoh:
+     * Markas SMART, Puchong
+     * → Selangor
+     */
+    const locationHints =
+      Object.entries(
+        MALAYSIA_LOCATION_STATE_HINTS
+      )
+      .sort(
+        (a,b) =>
+          b[0].length -
+          a[0].length
+      );
+
+
+    for(
+      const [place,state]
+      of locationHints
+    ){
+
+      if(
+        location.includes(place)
+      ){
+        return state;
+      }
+    }
+  }
+
+
+  return '';
+}
+
+
+function missionCountry(mission){
+  return cleanMissionText(
+    mission.country ||
+    mission.negara ||
+    mission.countryName
+  );
+}
+
+
+function isMalaysiaMission(mission){
+
+  const country =
+    normalizeMissionText(
+      missionCountry(mission)
+    );
+
+
+  /*
+   * Jika country memang dinyatakan,
+   * country jadi sumber utama.
+   */
+  if(country){
+
+    return [
+      'malaysia',
+      'mys',
+      'my'
+    ].includes(country);
+  }
+
+
+  /*
+   * Flag international yang explicit.
+   */
+  if(
+    mission.isInternational === true ||
+    mission.international === true
+  ){
+    return false;
+  }
+
+
+  /*
+   * Flag domestic / local jika ada.
+   */
+  if(
+    mission.isInternational === false ||
+    mission.international === false
+  ){
+    return true;
+  }
+
+
+  /*
+   * Nama negeri / bandar Malaysia
+   * berjaya dikenal pasti.
+   */
+  if(
+    malaysiaStateFromMission(mission)
+  ){
+    return true;
+  }
+
+
+  /*
+   * Jika location sendiri menyebut Malaysia.
+   */
+  const location =
+    normalizeMissionText(
+      mission.location
+    );
+
+
+  if(
+    location.includes('malaysia')
+  ){
+    return true;
+  }
+
+
+  /*
+   * PENTING:
+   * Jangan anggap lokasi yang tidak dikenali
+   * sebagai luar Malaysia secara automatik.
+   *
+   * Rekod legacy mungkin hanya simpan:
+   * "Markas SMART"
+   * "Hospital X"
+   * "Pusat Operasi"
+   *
+   * Jadi default = Malaysia,
+   * kecuali ada country / flag international
+   * yang jelas.
+   */
+  return true;
+}
+
+
+function internationalMissionLabel(mission){
+  const country =
+    missionCountry(mission);
+
+  if(country){
+    return country;
+  }
+
+
+  const state =
+    cleanMissionText(
+      mission.state ||
+      mission.negeri
+    );
+
+  if(
+    state &&
+    !malaysiaStateFromMission(mission)
+  ){
+    return state;
+  }
+
+
+  return (
+    cleanMissionText(mission.location) ||
+    'Lokasi tidak dinyatakan'
+  );
+}
+
+
+function malaysiaMissionChartData(){
+  const counts = {};
+
+  missions
+    .filter(isMalaysiaMission)
+    .forEach(mission=>{
+      const state =
+        malaysiaStateFromMission(mission) ||
+        'Negeri tidak dinyatakan';
+
+      counts[state] =
+        (counts[state] || 0) + 1;
+    });
+
+
+  const orderedStates =
+    MALAYSIA_STATES
+      .filter(state => counts[state])
+      .map(state => [
+        state,
+        counts[state]
+      ]);
+
+
+  if(counts['Negeri tidak dinyatakan']){
+    orderedStates.push([
+      'Negeri tidak dinyatakan',
+      counts['Negeri tidak dinyatakan']
+    ]);
+  }
+
+
+  return {
+    labels:
+      orderedStates.map(
+        ([state]) => state
+      ),
+
+    values:
+      orderedStates.map(
+        ([,count]) => count
+      )
+  };
+}
+
+
+function internationalMissionChartData(){
+  const counts = {};
+
+  missions
+    .filter(
+      mission =>
+        !isMalaysiaMission(mission)
+    )
+    .forEach(mission=>{
+      const label =
+        internationalMissionLabel(
+          mission
+        );
+
+      counts[label] =
+        (counts[label] || 0) + 1;
+    });
+
+
+  const sorted =
+    Object.entries(counts)
+      .sort(
+        (a,b) =>
+          b[1] - a[1] ||
+          a[0].localeCompare(b[0])
+      );
+
+
+  return {
+    labels:
+      sorted.map(
+        ([label]) => label
+      ),
+
+    values:
+      sorted.map(
+        ([,count]) => count
+      )
+  };
+}
+
+
 function renderDashboard(){
   const completed = missions.filter(m => m.status === 'Selesai');
   const active = missions.filter(m => m.status === 'Sedang Dijalankan');
   const planning = missions.filter(m => m.status === 'Perancangan');
-  const approvedMembers = members.filter(m => m.status === 'approved');
+  const applicationStatus=a=>String(a.status||'').trim().toLowerCase();
+  const pendingApplications=missionApplications.filter(a=>['pending','menunggu','submitted','dihantar'].includes(applicationStatus(a)));
+  const approvedApplications=missionApplications.filter(a=>['approved','diluluskan'].includes(applicationStatus(a)));
+  const missionsWithoutPic=missions.filter(m=>!String(m.picId||m.picName||m.leader||'').trim());
 
   document.getElementById('countTotal').textContent = missions.length;
   document.getElementById('countCompleted').textContent = completed.length;
   document.getElementById('countActive').textContent = active.length;
   document.getElementById('countPlanning').textContent = planning.length;
-  document.getElementById('countMembers').textContent = approvedMembers.length;
-  document.getElementById('countApplicants').textContent = missionApplications.length;
-
-  const missionWithApplicants = new Set(
-    missionApplications.map(a => a.missionId).filter(Boolean)
-  );
-  document.getElementById('countMissionWithApplicants').textContent = missionWithApplicants.size;
+  document.getElementById('countMembers').textContent = pendingApplications.length;
+  document.getElementById('countApplicants').textContent = approvedApplications.length;
+  document.getElementById('countMissionWithApplicants').textContent = missionsWithoutPic.length;
 
   createChart(
     'missionStatusChart',
@@ -568,13 +1110,29 @@ function renderDashboard(){
     'Misi'
   );
 
-  const byState = countBy(missions, m => m.state || m.location);
+  const malaysiaChart =
+    malaysiaMissionChartData();
+
   createChart(
-    'missionStateChart',
+    'missionMalaysiaStateChart',
     'bar',
-    Object.keys(byState),
-    Object.values(byState),
-    'Misi'
+    malaysiaChart.labels,
+    malaysiaChart.values,
+    'Misi',
+    true
+  );
+
+
+  const internationalChart =
+    internationalMissionChartData();
+
+  createChart(
+    'missionInternationalChart',
+    'bar',
+    internationalChart.labels,
+    internationalChart.values,
+    'Misi',
+    true
   );
 
   const byType = countBy(missions, m => m.type || 'Tidak dinyatakan');
@@ -608,9 +1166,11 @@ function renderDashboard(){
             <td>${esc(m.location || m.state || '-')}</td>
             <td>${getApplicantCount(m.id)}</td>
             <td>${esc(m.startDate || '-')}</td>
+            <td>${esc(m.picName || m.leader || 'Belum ditetapkan')}</td>
+            <td class="text-end"><a class="btn btn-sm btn-outline-primary" href="mission_detail.html?id=${encodeURIComponent(m.id)}">Butiran</a></td>
           </tr>`;
       }).join('')
-    : `<tr><td colspan="5" class="text-center text-muted py-4">Tiada rekod misi.</td></tr>`;
+    : `<tr><td colspan="7" class="text-center text-muted py-4">Tiada rekod misi.</td></tr>`;
 }
 
 function populateTypeFilter(){
@@ -890,20 +1450,21 @@ function renderRecords(){
           <td class="text-center mission-actions">
 
             <a
-              href="mission_detail.html?id=${encodeURIComponent(m.id)}"
+              href="mission_detail.html?id=${encodeURIComponent(m.id)}${USER_MISSION_VIEW ? '&paparan=pengguna' : ''}"
               class="btn btn-sm btn-outline-primary me-1"
             >
-              <i class="bi bi-eye me-1"></i>
+              <i></i>
               Papar
             </a>
-
+            <!--
             <a
               href="mission_edit.html?id=${encodeURIComponent(m.id)}"
               class="btn btn-sm btn-outline-secondary"
             >
               <i class="bi bi-pencil-square me-1"></i>
-              Kemaskini
+                                Kemas Kini
             </a>
+            -->
 
           </td>
 
@@ -916,15 +1477,25 @@ function renderRecords(){
 
 async function loadDashboard(){
   try{
+    const memberId = USER_MISSION_VIEW ? MyEMT.memberId() : '';
+    if(USER_MISSION_VIEW && !memberId) throw new Error('ID ahli MyEMT tidak dijumpai.');
     const [mRes, memberRes, appRes] = await Promise.all([
       fetch(`${API}/api/missions`),
-      fetch(`${API}/api/members`),
-      fetch(`${API}/api/mission-applications`)
+      USER_MISSION_VIEW ? Promise.resolve({json:async()=>({data:[]})}) : fetch(`${API}/api/members`),
+      fetch(`${API}/api/mission-applications${USER_MISSION_VIEW ? `?memberId=${encodeURIComponent(memberId)}` : ''}`)
     ]);
 
     missions = (await mRes.json()).data || [];
     members = (await memberRes.json()).data || [];
     missionApplications = (await appRes.json()).data || [];
+    if(USER_MISSION_VIEW){
+      const approvedMissionIds = new Set(
+        missionApplications
+          .filter(application => application.status === 'approved')
+          .map(application => String(application.missionId))
+      );
+      missions = missions.filter(mission => approvedMissionIds.has(String(mission.id)));
+    }
 
     populateTypeFilter();
     renderDashboard();

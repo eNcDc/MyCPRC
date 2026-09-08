@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Senarai Asset EMT</title>
+    <title>Inventori Aset MyEMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
@@ -60,6 +60,17 @@
     textarea{
         resize:vertical;
     }
+
+    .inventory-table{min-width:940px;}
+    .inventory-table th{color:#475569;font-size:.76rem;font-weight:700;letter-spacing:.035em;padding:.85rem 1rem;text-transform:uppercase;white-space:nowrap;}
+    .inventory-table td{padding:1rem;vertical-align:middle;}
+    .inventory-name{color:#0f172a;font-weight:700;line-height:1.25;}
+    .inventory-meta{color:#64748b;font-size:.78rem;line-height:1.5;}
+    .inventory-stock{font-size:1.15rem;font-weight:700;line-height:1;}
+    .inventory-stock-note{font-size:.75rem;margin-top:.35rem;white-space:nowrap;}
+    .inventory-actions{display:flex;gap:.4rem;justify-content:flex-end;white-space:nowrap;}
+    .inventory-empty{padding:2.5rem 1rem!important;}
+    @media (max-width:767.98px){.inventory-card .card-header{align-items:flex-start!important;flex-direction:column;gap:.25rem;}}
     </style>
 
 </head>
@@ -88,11 +99,7 @@
             </small>
         </div>
 
-        <a href="landingMyemtAdmin_mission.html"
-        class="btn btn-primary">
-            <i class="bi bi-arrow-left me-1"></i>
-            Kembali
-        </a>
+        <div class="d-flex gap-2"><a href="asset_add2.html" class="btn btn-success"><i class="bi bi-plus-circle me-1"></i>Tambah Aset MyEMT</a><a href="landingMyemtAdmin_mission.html" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Kembali</a></div>
 
     </div>
 
@@ -102,7 +109,7 @@
             <div class="col-md-3">
                 <div class="card shadow-sm border-0 border-start border-primary border-4">
                     <div class="card-body">
-                        <small class="text-muted">Jumlah Aset</small>
+                        <small class="text-muted">Jenis Aset</small>
                         <h3 class="fw-bold mb-0" id="kpi-total">...</h3>
                     </div>
                 </div>
@@ -111,7 +118,7 @@
             <div class="col-md-3">
                 <div class="card shadow-sm border-0 border-start border-success border-4">
                     <div class="card-body">
-                        <small class="text-muted">Aset Aktif</small>
+                        <small class="text-muted">Jumlah Unit Dalam Stok</small>
                         <h3 class="fw-bold mb-0" id="kpi-active">...</h3>
                     </div>
                 </div>
@@ -129,7 +136,7 @@
             <div class="col-md-3">
                 <div class="card shadow-sm border-0 border-start border-danger border-4">
                     <div class="card-body">
-                        <small class="text-muted">Aset Kritikal</small>
+                        <small class="text-muted">Stok Rendah / Habis</small>
                         <h3 class="fw-bold mb-0" id="kpi-critical">...</h3>
                     </div>
                 </div>
@@ -138,7 +145,7 @@
         </div>
 
         <!-- CHART SECTION -->
-        <div class="card shadow-sm">
+        <div class="card shadow-sm inventory-card">
 
             <div class="card-header bg-white">
                 <strong>Analisis Aset EMT</strong>
@@ -169,32 +176,36 @@
             </div>
         </div><br>
 
-        <!-- CRITICAL ALERT TABLE -->
+        <!-- INVENTORY TABLE -->
         <div class="card shadow-sm">
 
-            <div class="card-header bg-white">
-                <strong>Aset Kritikal & Perlu Tindakan</strong>
+            <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
+                <div>
+                    <strong class="d-block">Senarai Inventori Aset MyEMT</strong>
+                    <small class="text-muted">Stok pusat MyEMT sahaja; aset yang telah diserahkan kepada misi tidak disenaraikan di sini.</small>
+                </div>
+                <span class="badge text-bg-light border" id="inventory-count">0 jenis aset</span>
             </div>
 
             <div class="card-body">
 
                 <div class="table-responsive">
 
-                    <table class="table table-hover align-middle">
+                    <table class="table table-hover align-middle mb-0 inventory-table">
 
                         <thead class="table-light">
                             <tr>
-                                <th>Nama Aset</th>
-                                <th>Kategori</th>
-                                <th>Status</th>
-                                <th>Tahap</th>
-                                <th>Lokasi</th>
+                                <th>Maklumat Aset</th>
+                                <th>Klasifikasi</th>
+                                <th>Stok</th>
+                                <th>Status dan Keadaan</th>
+                                <th>Penempatan</th>
                                 <th class="text-end">Tindakan</th>
                             </tr>
                         </thead>
 
                         <tbody id="tbody-assets">
-                            <tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr>
+                            <tr><td colspan="6" class="text-center text-muted inventory-empty">Memuatkan inventori...</td></tr>
                         </tbody>
 
                     </table>
@@ -202,6 +213,11 @@
                 </div>
 
             </div>
+        </div>
+
+        <div class="card shadow-sm mt-4">
+          <div class="card-header bg-white"><strong>Rekod Stok Masuk dan Keluar</strong></div>
+          <div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>Tarikh</th><th>Aset</th><th>Pergerakan</th><th class="text-center">Kuantiti</th><th class="text-center">Baki</th><th>Misi / Catatan</th></tr></thead><tbody id="tbody-stock-movements"><tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr></tbody></table></div>
         </div>
 
     </main>
@@ -230,11 +246,14 @@ fetch("sidebar.html")
 
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/asset-lifecycle-alerts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
 const STATUS_BADGE = {
   'Aktif':             'bg-success',
+  'Tersedia':          'bg-success',
+  'Digunakan':         'bg-primary',
   'Penyelenggaraan':   'bg-warning text-dark',
   'Servis Diperlukan': 'bg-warning text-dark',
   'Rosak':             'bg-danger',
@@ -248,36 +267,74 @@ const PRIORITY_BADGE = {
 };
 
 let kategoriChart, statusChart;
+const selectedAssetId = new URLSearchParams(location.search).get('assetId') || '';
+const escapeAssetHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
 
 async function loadAssets() {
-  const [sumRes, listRes] = await Promise.all([
-    fetch(`${API}/api/assets/summary`),
-    fetch(`${API}/api/assets`)
-  ]);
-  const sum  = await sumRes.json();
-  const list = (await listRes.json()).data || [];
+  const listRes = await fetch(`${API}/api/assets`,{cache:'no-store'});
+  const listJson = await listRes.json();
+  if(!listRes.ok||!listJson.success)throw new Error(listJson.message||'Inventori aset gagal dimuatkan.');
+  const allAssets = listJson.data || [];
+  const list = allAssets.filter(asset => !asset.missionId);
+  const statusOf = asset => asset.currentStatus || asset.status || 'Tidak Dinyatakan';
+  const sum = {
+    total:list.length,
+    active:list.reduce((total,asset)=>total+Number(asset.quantity||0),0),
+    maintenance:list.filter(asset=>statusOf(asset)==='Penyelenggaraan').length,
+    critical:list.filter(asset=>Number(asset.quantity||0)<=Number(asset.minimumStockLevel||2)).length,
+    byCategory:list.reduce((result,asset)=>{const key=asset.category||'Tidak Dinyatakan';result[key]=(result[key]||0)+1;return result;},{}),
+    byStatus:list.reduce((result,asset)=>{const key=statusOf(asset);result[key]=(result[key]||0)+1;return result;},{})
+  };
 
   // KPI cards
   document.getElementById('kpi-total').textContent       = sum.total       || 0;
   document.getElementById('kpi-active').textContent      = sum.active      || 0;
   document.getElementById('kpi-maintenance').textContent = sum.maintenance  || 0;
   document.getElementById('kpi-critical').textContent    = sum.critical     || 0;
+  document.getElementById('inventory-count').textContent = `${sum.total} jenis aset`;
 
-  // Critical/attention assets table
-  const critical = list.filter(a => ['Rosak','Servis Diperlukan','Penyelenggaraan'].includes(a.status));
+  // Full MyEMT inventory table
+  const critical = list.slice().sort((a,b)=>{
+    const aLow=Number(a.quantity||0)<=Number(a.minimumStockLevel||2),bLow=Number(b.quantity||0)<=Number(b.minimumStockLevel||2);
+    return Number(bLow)-Number(aLow)||String(a.name||'').localeCompare(String(b.name||''),'ms');
+  });
   const tbody = document.getElementById('tbody-assets');
   tbody.innerHTML = critical.length ? critical.map(a => `
-    <tr>
-      <td class="fw-semibold">${a.name}</td>
-      <td>${a.category}</td>
-      <td><span class="badge ${STATUS_BADGE[a.status] || 'bg-secondary'}">${a.status}</span></td>
-      <td><span class="badge ${PRIORITY_BADGE[a.priority] || 'bg-secondary'}">${a.priority}</span></td>
-      <td>${a.location}</td>
-      <td class="text-end">
-        <a href="asset_view2.html?id=${a.id}" class="btn btn-sm btn-outline-primary">Lihat</a>
-        <a href="asset_edit2.html?id=${a.id}" class="btn btn-sm btn-outline-primary">Kemaskini</a>
+    <tr id="asset-row-${encodeURIComponent(a.id)}" class="${selectedAssetId && String(a.id) === selectedAssetId ? 'table-primary' : ''}">
+      <td>
+        <div class="inventory-name">${escapeAssetHtml(a.name || 'Tanpa nama')}</div>
+        <div class="inventory-meta">ID: ${escapeAssetHtml(a.id || '-')} &bull; No. siri: ${escapeAssetHtml(a.serialNumber || a.serial || 'Belum direkodkan')}</div>
+        <div class="inventory-meta">Perolehan: ${escapeAssetHtml(a.procurementCategory || 'Belum direkodkan')}</div>
       </td>
-    </tr>`).join('') : '<tr><td colspan="6" class="text-center text-muted py-3">Tiada aset kritikal.</td></tr>';
+      <td>
+        <div class="fw-semibold">${escapeAssetHtml(a.category || 'Belum dikategorikan')}</div>
+        <div class="inventory-meta">${escapeAssetHtml(a.subCategory || a.assetType || 'Jenis belum direkodkan')}</div>
+      </td>
+      <td>
+        <div class="inventory-stock">${Number(a.quantity || 0)} <span class="fs-6 fw-normal text-muted">unit</span></div>
+        <div class="inventory-stock-note ${Number(a.quantity||0)<=Number(a.minimumStockLevel||2)?'text-danger fw-semibold':'text-muted'}">${Number(a.quantity||0)<=Number(a.minimumStockLevel||2)?'Stok rendah':'Paras minimum'}: ${Number(a.minimumStockLevel||2)}</div>
+      </td>
+      <td>
+        <span class="badge ${STATUS_BADGE[a.currentStatus || a.status] || 'bg-secondary'}">${escapeAssetHtml(a.currentStatus || a.status || 'Belum direkodkan')}</span>
+        <div class="inventory-meta mt-2">Keadaan: ${escapeAssetHtml(a.physicalCondition || 'Belum direkodkan')}</div>
+      </td>
+      <td>
+        <div class="fw-semibold">${escapeAssetHtml(a.location || 'Belum direkodkan')}</div>
+        <div class="inventory-meta">Pegawai: ${escapeAssetHtml(a.responsibleOfficer || 'Belum ditetapkan')}</div>
+      </td>
+      <td class="text-end">
+        <div class="inventory-actions">
+          <a href="asset_view2.html?id=${encodeURIComponent(a.id)}" class="btn btn-sm btn-outline-secondary">Butiran</a>
+          <a href="asset_edit2.html?id=${encodeURIComponent(a.id)}" class="btn btn-sm btn-primary">Kemas Kini</a>
+        </div>
+      </td>
+    </tr>`).join('') : '<tr><td colspan="6" class="text-center text-muted inventory-empty">Tiada aset dalam inventori MyEMT.</td></tr>';
+
+  const movements=list.flatMap(asset=>(Array.isArray(asset.stockMovements)?asset.stockMovements:[]).map(movement=>({...movement,assetName:asset.name,assetId:asset.id}))).sort((a,b)=>String(b.date||'').localeCompare(String(a.date||'')));
+  const movementBody=document.getElementById('tbody-stock-movements');
+  movementBody.innerHTML=movements.length?movements.map(movement=>`<tr><td>${escapeAssetHtml(movement.date?new Date(movement.date).toLocaleString('ms-MY'):'-')}</td><td><div class="fw-semibold">${escapeAssetHtml(movement.assetName||'-')}</div><small class="text-muted">${escapeAssetHtml(movement.assetId||'-')}</small></td><td><span class="badge ${movement.type==='IN'?'bg-success':'bg-danger'}">${movement.type==='IN'?'Masuk':'Keluar'}</span></td><td class="text-center">${Number(movement.quantity||0)}</td><td class="text-center">${Number(movement.balanceAfter||0)}</td><td>${movement.missionId?`<a href="mission_detail.html?id=${encodeURIComponent(movement.missionId)}">${escapeAssetHtml(movement.missionId)}</a><div class="small text-muted">${escapeAssetHtml(movement.note||'')}</div>`:escapeAssetHtml(movement.note||'-')}</td></tr>`).join(''):'<tr><td colspan="6" class="text-center text-muted py-3">Belum ada pergerakan stok direkodkan.</td></tr>';
+
+  if (selectedAssetId) setTimeout(() => document.getElementById(`asset-row-${encodeURIComponent(selectedAssetId)}`)?.scrollIntoView({behavior:'smooth',block:'center'}), 100);
 
   // Bar chart — by category
   const cats   = Object.keys(sum.byCategory || {});
@@ -300,6 +357,10 @@ async function loadAssets() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', loadAssets);
+document.addEventListener('DOMContentLoaded',()=>loadAssets().catch(error=>{
+  document.getElementById('tbody-assets').innerHTML=`<tr><td colspan="6" class="text-center text-danger inventory-empty">${escapeAssetHtml(error.message||'Inventori aset gagal dimuatkan.')}</td></tr>`;
+  document.getElementById('tbody-stock-movements').innerHTML='<tr><td colspan="6" class="text-center text-danger py-4">Rekod pergerakan stok tidak dapat dimuatkan.</td></tr>';
+  ['kpi-total','kpi-active','kpi-maintenance','kpi-critical'].forEach(id=>document.getElementById(id).textContent='-');
+}));
 </script>
 </html>

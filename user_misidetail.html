@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
 <meta charset="UTF-8">
-<title>Maklumat Misi EMT</title>
+    <title>Butiran Misi MyEMT</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -69,7 +69,7 @@ textarea{resize:vertical}
     </div>
 
     <div class="page-action">
-      <a href="user_misilist.html" class="btn btn-primary">
+            <a href="emt_crud.html?paparan=pengguna" class="btn btn-primary">
         <i class="bi bi-arrow-left me-1"></i>Kembali
       </a>
     </div>
@@ -251,7 +251,7 @@ textarea{resize:vertical}
       <div class="section-head">
         <div>
           <h5 class="section-title">Maklumat Misi</h5>
-          <p class="section-subtitle">Butiran operasi yang ditetapkan oleh Admin KKM.</p>
+                <p class="section-subtitle">Butiran operasi yang ditetapkan oleh pentadbir KKM.</p>
         </div>
         <span class="badge bg-light text-dark border">Read Only</span>
       </div>
@@ -325,7 +325,7 @@ textarea{resize:vertical}
         </div>
 
         <div class="d-flex flex-wrap gap-2">
-          <a href="emt_mdsdaily.html" class="btn btn-outline-primary" id="btnMdsDaily">
+          <a href="emt_mdsdaily_mission.html" class="btn btn-outline-primary" id="btnMdsDaily">
             <i class="bi bi-calendar3 me-1"></i>Laporan / Tally MDS
           </a>
 
@@ -387,7 +387,7 @@ textarea{resize:vertical}
 
       <div class="section-head">
         <div>
-          <h5 class="section-title">Basic / Team Daily Report</h5>
+                <h5 class="section-title">Laporan Harian Asas / Pasukan</h5>
           <p class="section-subtitle">Team information, WASH, Needs & Risks dan kekangan operasi harian.</p>
         </div>
         <span class="badge bg-info text-dark border">Draft & Submitted boleh dilihat</span>
@@ -399,7 +399,7 @@ textarea{resize:vertical}
       </div>
 
       <div class="non-pic-note alert alert-secondary" id="nonPicNote">
-        <i class="bi bi-eye me-1"></i>
+                    <i class="bi bi-file-earmark-text me-1"></i>
         Anda boleh melihat semua laporan harian termasuk <strong>Draft</strong> dan <strong>Submitted</strong>.
         Hanya PIC misi boleh menambah atau mengemaskini laporan harian.
       </div>
@@ -408,13 +408,13 @@ textarea{resize:vertical}
       <div class="pic-only mb-4" id="picFormBox">
         <div class="alert alert-primary">
           <i class="bi bi-person-check me-1"></i>
-          Anda ialah <strong>PIC misi</strong>. Form ini digunakan untuk kemaskini laporan operasi harian semasa berada di lokasi.
+                    Anda ialah <strong>pegawai bertanggungjawab (PIC) misi</strong>. Borang ini digunakan untuk mengemas kini laporan operasi harian semasa berada di lokasi.
         </div>
 
         <div class="d-flex justify-content-end mb-3">
           <button class="btn btn-outline-primary" type="button"
                   data-bs-toggle="collapse" data-bs-target="#dailyFormCollapse">
-            <i class="bi bi-pencil-square me-1"></i>Buka / Tutup Form Laporan Harian
+                <i class="bi bi-pencil-square me-1"></i>Buka / Tutup Borang Laporan Harian
           </button>
         </div>
 
@@ -463,7 +463,7 @@ textarea{resize:vertical}
                 </div>
 
                 <div class="col-md-4">
-                  <label class="form-label">Contact Person / PIC *</label>
+                    <label class="form-label">Pegawai untuk Dihubungi / PIC *</label>
                   <input type="text" class="form-control" id="dailyContactPerson" required>
                 </div>
 
@@ -473,7 +473,7 @@ textarea{resize:vertical}
                 </div>
 
                 <div class="col-md-6">
-                  <label class="form-label">Email</label>
+                    <label class="form-label">E-mel</label>
                   <input type="email" class="form-control" id="dailyEmail">
                 </div>
 
@@ -488,14 +488,15 @@ textarea{resize:vertical}
                 </div>
 
                 <div class="col-md-3">
-                  <label class="form-label">Latitude</label>
-                  <input type="text" class="form-control" id="dailyLatitude">
+                    <label class="form-label">Latitud *</label>
+                  <input type="number" step="any" class="form-control" id="dailyLatitude" required>
                 </div>
 
                 <div class="col-md-3">
-                  <label class="form-label">Longitude</label>
-                  <input type="text" class="form-control" id="dailyLongitude">
+                    <label class="form-label">Longitud *</label>
+                  <input type="number" step="any" class="form-control" id="dailyLongitude" required>
                 </div>
+                <div class="col-md-6"><label class="form-label">ID Lokasi Aktiviti</label><input type="text" class="form-control bg-light" id="dailyActivityLocationId" readonly placeholder="Dijana daripada koordinat"></div>
               </div>
             </div>
 
@@ -511,41 +512,41 @@ textarea{resize:vertical}
                 </div>
 
                 <div class="col-md-8 small text-muted">
-                  Nilai ini dikira daripada rekod MDS bagi misi dan tarikh yang sama. Ia hanya rujukan dan tidak mengubah Basic / Team Daily Report.
+                        Nilai ini dikira daripada rekod MDS bagi misi dan tarikh yang sama. Nilai ini hanya untuk rujukan dan tidak mengubah Laporan Harian Asas / Pasukan.
                 </div>
               </div>
             </div>
 
             <div class="daily-form-section">
-              <div class="daily-form-title">C. Immediate Report</div>
+                    <div class="daily-form-title">C. Laporan Segera</div>
               <div class="risk-grid">
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="51"><span class="risk-code">51.</span>Unexpected death</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="52"><span class="risk-code">52.</span>Notifiable disease</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="53"><span class="risk-code">53.</span>Protection issues</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="54"><span class="risk-code">54.</span>Critical incident to EMT and/or community</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="55"><span class="risk-code">55.</span>Any other issue requiring immediate reporting</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="51"><span class="risk-code">51.</span>Kematian tidak dijangka</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="52"><span class="risk-code">52.</span>Penyakit yang wajib dinotifikasi</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="53"><span class="risk-code">53.</span>Isu perlindungan</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="54"><span class="risk-code">54.</span>Insiden kritikal kepada EMT dan/atau komuniti</label>
+                            <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="55"><span class="risk-code">55.</span>Isu lain yang memerlukan pelaporan segera</label>
               </div>
             </div>
 
             <div class="daily-form-section">
-              <div class="daily-form-title">D. Community Risks</div>
+                    <div class="daily-form-title">D. Risiko Komuniti</div>
               <div class="risk-grid">
                 <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="56"><span class="risk-code">56.</span>WASH</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="57"><span class="risk-code">57.</span>Community / suspected infectious disease</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="58"><span class="risk-code">58.</span>Environmental risk / exposure</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="59"><span class="risk-code">59.</span>Shelter / Non-food items</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="60"><span class="risk-code">60.</span>Food insecurity</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="57"><span class="risk-code">57.</span>Komuniti / disyaki penyakit berjangkit</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="58"><span class="risk-code">58.</span>Risiko / pendedahan persekitaran</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="59"><span class="risk-code">59.</span>Tempat perlindungan / barangan bukan makanan</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="60"><span class="risk-code">60.</span>Ketidakjaminan makanan</label>
               </div>
             </div>
 
             <div class="daily-form-section">
-              <div class="daily-form-title">E. Operational Constraints</div>
+                    <div class="daily-form-title">E. Kekangan Operasi</div>
               <div class="risk-grid">
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="61"><span class="risk-code">61.</span>Logistics / operational support</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="62"><span class="risk-code">62.</span>Supply</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="63"><span class="risk-code">63.</span>Human resources</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="64"><span class="risk-code">64.</span>Finance</label>
-                <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="65"><span class="risk-code">65.</span>Others</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="61"><span class="risk-code">61.</span>Logistik / sokongan operasi</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="62"><span class="risk-code">62.</span>Bekalan</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="63"><span class="risk-code">63.</span>Sumber manusia</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="64"><span class="risk-code">64.</span>Kewangan</label>
+                    <label class="risk-item"><input class="form-check-input me-2 daily-risk" type="checkbox" data-code="65"><span class="risk-code">65.</span>Lain-lain</label>
               </div>
 
               <div class="mt-3">
@@ -563,7 +564,7 @@ textarea{resize:vertical}
               </button>
 
               <button type="button" class="btn btn-outline-primary" id="btnSaveDraft">
-                <i class="bi bi-save me-1"></i>Simpan Draft
+                    <i class="bi bi-save me-1"></i>Simpan Draf
               </button>
 
               <button type="submit" class="btn btn-primary" id="btnSubmitDaily">
@@ -846,6 +847,7 @@ fetch("sidebar.html").then(r=>r.text()).then(t=>document.getElementById("sidebar
 </script>
 
 <script src="assets/js/config.js"></script>
+<script src="assets/js/mds-business-rules.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -859,21 +861,21 @@ const STATUS_BADGE={
 };
 
 const DAILY_RISK_LABELS={
-  "51":"Unexpected death",
-  "52":"Notifiable disease",
-  "53":"Protection issues",
-  "54":"Critical incident to EMT and/or community",
-  "55":"Any other issue requiring immediate reporting",
+  "51":"Kematian tidak dijangka",
+  "52":"Penyakit yang wajib dinotifikasi",
+  "53":"Isu perlindungan",
+  "54":"Insiden kritikal kepada EMT dan/atau komuniti",
+  "55":"Isu lain yang memerlukan pelaporan segera",
   "56":"WASH",
-  "57":"Community / suspected infectious disease",
-  "58":"Environmental risk / exposure",
-  "59":"Shelter / Non-food items",
-  "60":"Food insecurity",
-  "61":"Logistics / operational support",
-  "62":"Supply",
-  "63":"Human resources",
-  "64":"Finance",
-  "65":"Others"
+  "57":"Komuniti / disyaki penyakit berjangkit",
+  "58":"Risiko / pendedahan persekitaran",
+  "59":"Tempat perlindungan / barangan bukan makanan",
+  "60":"Ketidakjaminan makanan",
+  "61":"Logistik / sokongan operasi",
+  "62":"Bekalan",
+  "63":"Sumber manusia",
+  "64":"Kewangan",
+  "65":"Lain-lain"
 };
 
 const DAILY_STORAGE_KEY="myemt_daily_reports_v1";
@@ -1025,14 +1027,14 @@ function wireLinks(){
     `emt_healthform.html?missionId=${encodeURIComponent(missionId)}`;
 
   document.getElementById("btnMdsDaily").href=
-    `emt_mdsdaily.html?missionId=${encodeURIComponent(missionId)}`;
+    `emt_mdsdaily_mission.html?missionId=${encodeURIComponent(missionId)}`;
 }
 
 
 async function loadMission(){
   if(!missionId){
     alert("ID misi tidak dijumpai.");
-    location.href="user_misilist.html";
+    location.href="emt_crud.html?paparan=pengguna";
     return false;
   }
 
@@ -1455,7 +1457,7 @@ async function loadDailyReports(){
     applyMissionDefaultsToDailyForm();
 
     const date=document.getElementById("dailyDate").value;
-    const existing=findDailyByDate(date);
+    const existing=findDailyByContext(date,refreshDailyLocationId());
 
     if(existing) populateDailyForm(existing);
   }
@@ -1482,9 +1484,10 @@ async function persistDaily(report){
         return json.data || report;
       }
 
-      throw new Error(json.message || "Daily report endpoint failed.");
+      const endpointError=new Error(json.message || "Daily report endpoint failed.");endpointError.isHttp=true;throw endpointError;
 
     }catch(err){
+      if(err.isHttp) throw err;
       console.warn("Using local fallback:",err);
       dailyBackendAvailable=false;
       document.getElementById("dailyStorageWarning").classList.add("show");
@@ -1551,11 +1554,12 @@ function setRisks(codes){
   });
 }
 
-function findDailyByDate(date){
+function findDailyByContext(date,activityLocationId){
   return data.dailyReports.find(r=>
-    String(r.reportDate||"")===String(date||"")
+    String(r.activityDate||r.reportDate||"")===String(date||"")&&String(r.activityLocationId||MyEmtMdsRules.canonicalLocationId(r))===String(activityLocationId||"")
   );
 }
+function refreshDailyLocationId(){const id=MyEmtMdsRules.canonicalLocationId({latitude:document.getElementById('dailyLatitude')?.value,longitude:document.getElementById('dailyLongitude')?.value});if(document.getElementById('dailyActivityLocationId'))document.getElementById('dailyActivityLocationId').value=id;return id;}
 
 function populateDailyForm(report){
   if(!isMissionPic) return;
@@ -1575,6 +1579,7 @@ function populateDailyForm(report){
   document.getElementById("dailyFacility").value=report.facilityName || "";
   document.getElementById("dailyLatitude").value=report.latitude || "";
   document.getElementById("dailyLongitude").value=report.longitude || "";
+  document.getElementById("dailyActivityLocationId").value=report.activityLocationId||report.activityLocation?.id||MyEmtMdsRules.canonicalLocationId(report);
   document.getElementById("dailyComments").value=report.comments || "";
 
   setRisks(
@@ -1634,6 +1639,7 @@ function buildDailyPayload(status){
       .map(code=>[code,riskCodes.includes(code)])
   );
 
+  const activityDate=document.getElementById("dailyDate").value,activityLocationId=refreshDailyLocationId(),normalizedStatus=MyEmtMdsRules.normalizeStatus(status);
   return {
     id:currentDailyReportId || `DR-${Date.now()}`,
 
@@ -1642,7 +1648,7 @@ function buildDailyPayload(status){
     picId:missionData?.picId || null,
     picName:missionData?.picName || missionData?.leader || "",
 
-    reportDate:document.getElementById("dailyDate").value,
+    reportDate:activityDate,activityDate,activityLocationId,
     reportTime:document.getElementById("dailyReportTime").value,
     estimatedDepartureDate:document.getElementById("dailyDepartureDate").value,
 
@@ -1663,9 +1669,9 @@ function buildDailyPayload(status){
     needsRisks,
     comments:document.getElementById("dailyComments").value.trim(),
 
-    status,
+    status:normalizedStatus,
     updatedAt:new Date().toISOString(),
-    submittedAt:status==="Submitted" ? new Date().toISOString() : null
+    submittedAt:normalizedStatus==="SUBMITTED" ? new Date().toISOString() : null
   };
 }
 
@@ -1685,7 +1691,8 @@ async function saveDaily(status){
   if(!validateDailyDate()) return;
 
   const payload=buildDailyPayload(status);
-  const sameDate=findDailyByDate(payload.reportDate);
+  if(!payload.activityLocationId){alert('Koordinat lokasi diperlukan untuk menjana ID lokasi aktiviti.');return;}
+  const sameDate=findDailyByContext(payload.reportDate,payload.activityLocationId);
 
   if(sameDate && String(sameDate.id)!==String(payload.id)){
     payload.id=sameDate.id;
@@ -1714,7 +1721,7 @@ async function saveDaily(status){
     updateAllInformatics();
 
     document.getElementById("dailyFormStatus").textContent=
-      status==="Submitted"
+      MyEmtMdsRules.normalizeStatus(status)==="SUBMITTED"
         ? "Laporan berjaya dihantar."
         : "Draft berjaya disimpan.";
 
@@ -1731,9 +1738,10 @@ async function saveDaily(status){
 
 function updateDailyMdsCount(){
   const date=document.getElementById("dailyDate").value;
+  const activityLocationId=refreshDailyLocationId();
 
   const count=data.mds.filter(r=>
-    !date || String(r.date||"")===String(date)
+    (!date || String(r.activityDate||r.date||"").slice(0,10)===String(date))&&(!activityLocationId||String(r.activityLocationId||MyEmtMdsRules.canonicalLocationId(r))===activityLocationId)
   ).length;
 
   document.getElementById("dailyMdsCount").textContent=count;
@@ -1763,7 +1771,7 @@ function renderDailyHistory(){
     const risks=reportRiskCodes(r);
 
     const statusClass=
-      r.status==="Submitted"
+      MyEmtMdsRules.normalizeStatus(r.status)==="SUBMITTED"
         ? "bg-success"
         : "bg-warning text-dark";
 
@@ -1808,7 +1816,7 @@ function renderDailyHistory(){
             <button type="button"
                     class="btn btn-sm btn-outline-secondary ms-1"
                     onclick="editDailyAsPic('${esc(r.id)}')">
-              Kemaskini
+                                Kemas Kini
             </button>
           ` : ""}
         </td>
@@ -1835,7 +1843,7 @@ window.showDailyDetail=function(reportId){
   document.getElementById("ddComments").textContent=report.comments || "-";
 
   const statusClass=
-    report.status==="Submitted"
+    MyEmtMdsRules.normalizeStatus(report.status)==="SUBMITTED"
       ? "bg-success"
       : "bg-warning text-dark";
 
@@ -2017,10 +2025,10 @@ function renderDailyOpsSummary(){
 
   body.innerHTML=dates.map(date=>{
     const mdsCount=data.mds.filter(r=>String(r.date||"")===String(date)).length;
-    const report=findDailyByDate(date);
+    const report=data.dailyReports.find(r=>String(r.activityDate||r.reportDate||'')===String(date));
 
     const status=report
-      ? `<span class="badge ${report.status==="Submitted" ? "bg-success" : "bg-warning text-dark"}">${esc(report.status||"Draft")}</span>`
+      ? `<span class="badge ${MyEmtMdsRules.normalizeStatus(report.status)==="SUBMITTED" ? "bg-success" : "bg-warning text-dark"}">${esc(report.status||"DRAFT")}</span>`
       : `<span class="text-muted">-</span>`;
 
     return `
@@ -2040,7 +2048,7 @@ document.getElementById("dailyDate").addEventListener("change",()=>{
   if(!validateDailyDate()) return;
 
   const date=document.getElementById("dailyDate").value;
-  const existing=findDailyByDate(date);
+  const existing=findDailyByContext(date,refreshDailyLocationId());
 
   if(existing){
     populateDailyForm(existing);
@@ -2069,12 +2077,12 @@ document.getElementById("btnNewDaily").addEventListener("click",()=>{
 });
 
 document.getElementById("btnSaveDraft").addEventListener("click",()=>{
-  saveDaily("Draft");
+  saveDaily("DRAFT");
 });
 
 document.getElementById("dailyReportForm").addEventListener("submit",e=>{
   e.preventDefault();
-  saveDaily("Submitted");
+  saveDaily("SUBMITTED");
 });
 
 document.getElementById("btnCloseDailyDetail").addEventListener("click",()=>{
@@ -2097,7 +2105,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
     applyMissionDefaultsToDailyForm();
 
     const date=document.getElementById("dailyDate").value;
-    const existing=findDailyByDate(date);
+    const existing=findDailyByContext(date,refreshDailyLocationId());
 
     if(existing) populateDailyForm(existing);
   }

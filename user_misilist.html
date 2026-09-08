@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="0; url=emt_crud.html?paparan=pengguna">
     <title>Senarai Misi MyEMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -240,8 +241,13 @@ const STATUS_BADGE = {
 
 async function loadMisiList() {
   try {
-    const res = await fetch(`${API}/api/missions`);
-    const missions = (await res.json()).data || [];
+    const memberId=MyEMT.memberId();
+    if(!memberId)throw new Error('ID ahli MyEMT tidak dijumpai.');
+    const [missionRes,applicationRes]=await Promise.all([fetch(`${API}/api/missions`),fetch(`${API}/api/mission-applications?memberId=${encodeURIComponent(memberId)}`)]);
+    const allMissions=(await missionRes.json()).data||[],applications=(await applicationRes.json()).data||[];
+    const approvedMissionIds=new Set(applications.filter(application=>application.status==='approved').map(application=>String(application.missionId)));
+    const missions=allMissions.filter(mission=>approvedMissionIds.has(String(mission.id)));
+    const esc=MyEMT.escapeHTML;
 
     document.getElementById('cnt-selesai').textContent    = missions.filter(m => m.status === 'Selesai').length;
     document.getElementById('cnt-aktif').textContent      = missions.filter(m => m.status === 'Sedang Dijalankan').length;
@@ -254,17 +260,17 @@ async function loadMisiList() {
     }
     tbody.innerHTML = missions.map(m => `
       <tr>
-        <td class="fw-semibold">${m.name || '-'}</td>
-        <td>${m.startDate || '-'}</td>
-        <td>${m.estimatedEnd || '-'}</td>
+        <td class="fw-semibold">${esc(m.name || '-')}</td>
+        <td>${esc(m.startDate || '-')}</td>
+        <td>${esc(m.estimatedEnd || '-')}</td>
         <td>${
             m.status === 'Selesai'
-            ? (m.actualEnd || '<span class="text-muted">Belum ditetapkan</span>')
+            ? (esc(m.actualEnd) || '<span class="text-muted">Belum ditetapkan</span>')
             : '<span class="text-muted">-</span>'
         }</td>
-        <td><span class="badge ${STATUS_BADGE[m.status] || 'bg-secondary'}">${m.status || '-'}</span></td>
+        <td><span class="badge ${STATUS_BADGE[m.status] || 'bg-secondary'}">${esc(m.status || '-')}</span></td>
         <td class="text-center">
-          <a href="user_misidetail.html?id=${m.id}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Papar Butiran</a>
+          <a href="user_misidetail.html?id=${encodeURIComponent(m.id)}" class="btn btn-sm btn-outline-primary rounded-pill px-3">Papar Butiran</a>
         </td>
       </tr>`).join('');
   } catch (e) {

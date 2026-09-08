@@ -2,11 +2,12 @@
 <html lang="ms">
 <head>
 <meta charset="utf-8">
-<title>Pengurusan Misi EMT</title>
+<title>Butiran Pengurusan Misi MyEMT</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
 <link href="assets/css/main.css" rel="stylesheet">
 
 <style>
@@ -398,7 +399,7 @@ textarea{resize:vertical}
     </div>
 
     <div class="page-actions">
-      <a class="btn btn-primary" href="emt_crud.html">
+      <a class="btn btn-primary" href="emt_crud.html" id="missionListBackLink">
         <i class="bi bi-arrow-left me-1"></i>Kembali
       </a>
     </div>
@@ -531,17 +532,22 @@ textarea{resize:vertical}
   <div class="card shadow-sm border-0">
     <div class="card-body">
 
-      <ul class="nav nav-pills mb-4" id="missionWizard" role="tablist">
+      <ul class="nav nav-pills mb-4 flex-nowrap overflow-auto" id="missionWizard" role="tablist" aria-label="Bahagian pengurusan misi">
         <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#step1" type="button">1. Misi</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step2" type="button">2. Aset</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step3" type="button">3. Sumber Manusia</button></li>
         <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step4" type="button">4. Logistik</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step5" type="button">5. MDS</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step6" type="button">6. Laporan Harian</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step7" type="button">7. Dispensari Ubat</button></li>
-        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step8" type="button">8. Laporan Keseluruhan</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step5" type="button">5. Rekod Perubatan (MDS)</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step6" type="button">6. Dispensari Ubat</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step7" type="button">7. Ruang Observasi</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step9" type="button">8. Borang Notifikasi</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step10" type="button">9. Borang Pelaporan Insiden Pesakit</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step11" type="button">10. Borang Rujukan / Borang Discaj / Rawatan Susulan</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step12" type="button">11. Laporan Harian</button></li>
+        <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#step13" type="button">12. Laporan Keseluruhan</button></li>
       </ul>
 
+      <div id="missionApiAlert" class="alert alert-danger d-none" role="alert"></div>
       <div class="tab-content">
 
         <!-- =====================================================
@@ -555,7 +561,7 @@ textarea{resize:vertical}
             </div>
 
             <a class="btn btn-outline-primary" href="mission_edit.html" id="btnEdit">
-              <i class="bi bi-pencil-square me-1"></i>Kemaskini Misi
+                <i class="bi bi-pencil-square me-1"></i>Kemas Kini Misi
             </a>
           </div>
 
@@ -622,6 +628,10 @@ textarea{resize:vertical}
                   <small class="text-muted">Catatan</small>
                   <div class="fw-semibold" id="s1Notes">-</div>
                 </div>
+                <div class="col-12">
+                  <div id="missionLocationMap" style="height:320px;border-radius:12px;border:1px solid #dfe3e8" aria-label="Peta lokasi misi"></div>
+                  <div class="small text-muted mt-2" id="missionMapStatus">Peta akan dipaparkan berdasarkan lokasi rasmi misi.</div>
+                </div>
               </div>
             </div>
           </div>
@@ -650,14 +660,16 @@ textarea{resize:vertical}
                   <tr>
                     <th>Aset</th>
                     <th>Kategori</th>
+                    <th>Perolehan</th>
                     <th class="text-center">Kuantiti</th>
-                    <th>Status</th>
+                    <th>Status Semasa</th>
+                    <th>Status Akhir</th>
                     <th>Lokasi</th>
                     <th class="text-end">Tindakan</th>
                   </tr>
                 </thead>
                 <tbody id="missionAssetTableBody">
-                  <tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr>
+                  <tr><td colspan="9" class="text-center text-muted py-3">Memuatkan...</td></tr>
                 </tbody>
               </table>
             </div>
@@ -703,7 +715,7 @@ textarea{resize:vertical}
         <section class="tab-pane fade" id="step4">
           <div class="mb-3">
             <h5 class="fw-semibold mb-1">Logistik</h5>
-            <p class="text-muted mb-0">Pengangkutan dan penyimpanan yang digunakan dalam misi.</p>
+            <p class="text-muted mb-0">Pengangkutan, kontena dan kemudahan penyimpanan yang digunakan dalam misi ini.</p>
           </div>
 
           <div class="card shadow-sm border-0 mb-4">
@@ -735,7 +747,7 @@ textarea{resize:vertical}
 
           <div class="card shadow-sm border-0">
             <div class="card-header bg-white d-flex justify-content-between align-items-center">
-              <strong>Penyimpanan / Crates</strong>
+              <strong>Penyimpanan dan Kontena</strong>
               <a class="btn btn-sm btn-outline-secondary" href="logistik_storageAdd.html" id="btnAddStorage">
                 <i class="bi bi-plus-circle me-1"></i>Tambah
               </a>
@@ -774,10 +786,6 @@ textarea{resize:vertical}
             </div>
 
             <div class="d-flex flex-wrap gap-2">
-              <a class="btn btn-outline-primary" href="emt_mdsdaily.html" id="btnDailyMds">
-                <i class="bi bi-calendar3 me-1"></i>Laporan / Tally MDS
-              </a>
-
               <a class="btn btn-primary" href="emt_healthform.html" id="btnAddMds">
                 <i class="bi bi-plus-circle me-1"></i>Tambah Rekod MDS
               </a>
@@ -836,18 +844,21 @@ textarea{resize:vertical}
         <!-- =====================================================
              STEP 6 : BASIC / TEAM DAILY REPORT
         ====================================================== -->
-        <section class="tab-pane fade" id="step6">
+      <section class="tab-pane fade" id="step12">
 
-          <div class="mb-3">
-            <h5 class="fw-semibold mb-1">Laporan Harian Pasukan</h5>
-            <p class="text-muted mb-0">
-              Laporan operasi harian yang dikemaskini oleh PIC Misi. Ia berasingan daripada rekod klinikal MDS.
-            </p>
+          <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+            <div>
+              <h5 class="fw-semibold mb-1">Laporan Harian Pasukan</h5>
+              <p class="text-muted mb-0">Laporan operasi harian oleh PIC misi serta laporan tally harian MDS.</p>
+            </div>
+            <a class="btn btn-outline-primary" href="emt_mdsdaily_mission.html" id="btnDailyMds">
+              <i class="bi bi-calendar3 me-1"></i>Laporan / Tally MDS
+            </a>
           </div>
 
           <div class="alert alert-info">
             <i class="bi bi-info-circle me-1"></i>
-            Satu laporan disediakan bagi setiap <strong>hari aktiviti dan lokasi</strong>.
+            Satu laporan disediakan bagi setiap <strong>misi dan hari aktiviti</strong>. Lokasi pesakit kekal sebagai maklumat rekod dan bukan pemisah laporan.
             Nama pasukan boleh berbeza pada setiap hari tanpa mengubah rekod MDS pesakit.
           </div>
 
@@ -856,7 +867,7 @@ textarea{resize:vertical}
             <div class="card-header bg-white d-flex flex-wrap justify-content-between align-items-center gap-2">
               <div>
                 <strong>Rekod Laporan Harian Terdahulu</strong>
-                <div class="small text-muted">Klik tarikh untuk membuka dan menyemak laporan hari tersebut.</div>
+                <div class="small text-muted">Disusun daripada tarikh terkini. Rekod MDS kekal disenaraikan walaupun maklumat asas laporan belum dihantar.</div>
               </div>
 
               <span class="badge bg-secondary" id="dailyHistoryCount">0 laporan</span>
@@ -866,10 +877,11 @@ textarea{resize:vertical}
               <table class="table mission-data-table table-hover align-middle mb-0">
                 <thead class="table-light">
                   <tr>
+                    <th>Lokasi / Fasiliti</th>
                     <th>Tarikh</th>
+                    <th>Pesakit</th>
                     <th>Pasukan</th>
                     <th>Jenis EMT</th>
-                    <th>Lokasi / Fasiliti</th>
                     <th>Needs & Risks</th>
                     <th>Status</th>
                     <th class="text-end">Tindakan</th>
@@ -877,7 +889,7 @@ textarea{resize:vertical}
                 </thead>
 
                 <tbody id="dailyHistoryBody">
-                  <tr><td colspan="7" class="text-center text-muted py-4">Belum ada laporan harian.</td></tr>
+                  <tr><td colspan="8" class="text-center text-muted py-4">Belum ada laporan harian.</td></tr>
                 </tbody>
               </table>
             </div>
@@ -963,13 +975,29 @@ textarea{resize:vertical}
                 </div>
 
                 <div class="col-md-3">
-                  <label class="form-label">Latitude / Geo-tag</label>
-                  <input type="text" class="form-control" id="dailyLatitude" placeholder="Contoh: 5.9804">
+                  <label class="form-label">Negeri / Wilayah</label>
+                  <input type="text" class="form-control" id="dailyState">
                 </div>
 
                 <div class="col-md-3">
-                  <label class="form-label">Longitude / Geo-tag</label>
-                  <input type="text" class="form-control" id="dailyLongitude" placeholder="Contoh: 116.0735">
+                  <label class="form-label">Daerah</label>
+                  <input type="text" class="form-control" id="dailyDistrict">
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Latitud / Geo-tag *</label>
+                  <input type="number" step="any" class="form-control" id="dailyLatitude" placeholder="Contoh: 5.9804">
+                </div>
+
+                <div class="col-md-3">
+                  <label class="form-label">Longitud / Geo-tag *</label>
+                  <input type="number" step="any" class="form-control" id="dailyLongitude" placeholder="Contoh: 116.0735">
+                </div>
+
+                <div class="col-md-6">
+                  <label class="form-label">ID Lokasi Aktiviti</label>
+                  <input type="text" class="form-control bg-light" id="dailyActivityLocationId" readonly placeholder="Dijana daripada koordinat">
+                  <small class="text-muted">Lokasi disimpan untuk paparan sahaja. Tally dijana menggunakan misi dan tarikh.</small>
                 </div>
 
               </div>
@@ -990,6 +1018,10 @@ textarea{resize:vertical}
                     <div class="report-summary-value" id="dailyMdsReferenceCount">0</div>
                   </div>
                 </div>
+                <div class="col-md-4"><label class="form-label">Jumlah Katil</label><input type="number" min="0" class="form-control" id="dailyTotalBeds" placeholder="Belum direkodkan"></div>
+                <div class="col-md-4"><label class="form-label">Katil Pesakit Dalam Tersedia</label><input type="number" min="0" class="form-control" id="dailyAvailableInpatientBeds" placeholder="Belum direkodkan"></div>
+                <div class="col-md-4"><label class="form-label">Katil ICU Tersedia</label><input type="number" min="0" class="form-control" id="dailyAvailableIcuBeds" placeholder="Belum direkodkan"></div>
+                <div class="col-md-4"><label class="form-label">Kelahiran Hidup</label><input type="number" min="0" class="form-control" id="dailyLiveBirths" placeholder="Belum direkodkan"></div>
 
                 <div class="col-md-8 d-flex align-items-center">
                   <div class="text-muted small">
@@ -1005,7 +1037,7 @@ textarea{resize:vertical}
             <div class="daily-section">
               <div class="daily-section-heading">
                 <i class="bi bi-exclamation-octagon me-1 text-danger"></i>
-                C. Immediate Report
+                            C. Laporan Segera
               </div>
 
               <div class="risk-grid">
@@ -1066,7 +1098,7 @@ textarea{resize:vertical}
               </button>
 
               <button type="button" class="btn btn-outline-primary" id="btnSaveDailyDraft">
-                <i class="bi bi-save me-1"></i>Simpan Draft
+                        <i class="bi bi-save me-1"></i>Simpan Draf
               </button>
 
               <button type="submit" class="btn btn-primary" id="btnSubmitDaily">
@@ -1082,7 +1114,7 @@ textarea{resize:vertical}
         <!-- =====================================================
              STEP 7 : DISPENSARY
         ====================================================== -->
-        <section class="tab-pane fade" id="step7">
+      <section class="tab-pane fade" id="step6">
           <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
             <div>
               <h5 class="fw-semibold mb-1">Dispensari Ubat</h5>
@@ -1122,10 +1154,46 @@ textarea{resize:vertical}
         </section>
 
 
+        <section class="tab-pane fade" id="step7">
+          <div class="mb-3"><h5 class="fw-semibold mb-1">Ruang Observasi</h5><p class="text-muted mb-0">Rekod ditambah melalui tindakan pesakit dalam tab Rekod Perubatan (MDS). Di sini rekod hanya boleh dikemas kini atau dicetak.</p></div>
+          <div class="card mb-3"><div class="card-header bg-light fw-semibold">1. Nota Jururawat</div><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Tarikh / Masa</th><th>Pesakit</th><th>Maklumat</th><th>Jururawat</th><th class="text-end">Tindakan</th></tr></thead><tbody id="nurseNoteTableBody"><tr><td colspan="5" class="text-center text-muted py-4">Memuatkan...</td></tr></tbody></table></div></div>
+          <div class="card"><div class="card-header bg-light fw-semibold">2. Doctor Order Sheet</div><div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Tarikh / Masa</th><th>Pesakit</th><th>Jenis Arahan</th><th>Arahan Doktor</th><th>Doktor</th><th class="text-end">Tindakan</th></tr></thead><tbody id="doctorOrderTableBody"><tr><td colspan="6" class="text-center text-muted py-4">Memuatkan...</td></tr></tbody></table></div></div>
+        </section>
+
+        <section class="tab-pane fade" id="step9">
+          <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+            <div>
+              <h5 class="fw-semibold mb-1">Senarai Rekod Notifikasi MDS</h5>
+              <p class="text-muted mb-0">Rekod penyakit berjangkit yang dinotifikasikan bagi misi ini.</p>
+            </div>
+          </div>
+          <div class="table-responsive border rounded">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr><th>ID Rekod</th><th>Tarikh</th><th>Pesakit</th><th>Penyakit</th><th>Status Diagnosis</th><th>Pegawai Perubatan</th><th class="text-end">Tindakan</th></tr>
+              </thead>
+              <tbody id="notificationTableBody"><tr><td colspan="7" class="text-center text-muted py-4">Memuatkan...</td></tr></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="tab-pane fade" id="step10">
+          <div class="mb-3"><h5 class="fw-semibold mb-1">Senarai Laporan Insiden Keselamatan Pesakit</h5><p class="text-muted mb-0">Rekod ditambah daripada pesakit dalam tab Rekod Perubatan (MDS). Di sini rekod hanya boleh dikemas kini atau dicetak.</p></div>
+          <div class="table-responsive border rounded"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>ID Laporan</th><th>Tarikh Insiden</th><th>Pesakit</th><th>Jenis Insiden</th><th>Kategori</th><th>Tahap Kemudaratan</th><th class="text-end">Tindakan</th></tr></thead><tbody id="incidentTableBody"><tr><td colspan="7" class="text-center text-muted py-4">Memuatkan...</td></tr></tbody></table></div>
+        </section>
+
+        <section class="tab-pane fade" id="step11">
+          <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-3">
+            <div><h5 class="fw-semibold mb-1">Senarai Borang Rujukan / Borang Discaj / Rawatan Susulan</h5><p class="text-muted mb-0">Rekod rujukan ke fasiliti lain, discaj, pemindahan dan rawatan susulan pesakit.</p></div>
+          </div>
+          <div class="table-responsive border rounded"><table class="table table-hover align-middle mb-0"><thead class="table-light"><tr><th>ID Rekod</th><th>Tarikh</th><th>Pesakit</th><th>Fasiliti Penerima</th><th>Jenis Rawatan</th><th>Diagnosis Utama</th><th class="text-end">Tindakan</th></tr></thead><tbody id="dischargeTableBody"><tr><td colspan="7" class="text-center text-muted py-4">Memuatkan...</td></tr></tbody></table></div>
+        </section>
+
+
         <!-- =====================================================
              STEP 8 : OVERALL REPORT
         ====================================================== -->
-        <section class="tab-pane fade" id="step8">
+      <section class="tab-pane fade" id="step13">
           <div class="mb-3">
             <h5 class="fw-semibold mb-1">Laporan Keseluruhan Misi EMT</h5>
             <p class="text-muted mb-0">
@@ -1170,6 +1238,15 @@ textarea{resize:vertical}
             </div>
           </div>
 
+          <div class="row g-3 mb-4">
+            <div class="col-lg-6">
+              <div class="card border h-100"><div class="card-body d-flex flex-column"><div class="d-flex align-items-start gap-3 mb-3"><div class="overview-icon"><i class="bi bi-box-arrow-right"></i></div><div><h6 class="fw-bold mb-1">MDS – Emergency Medical Team Exit Report</h6><p class="small text-muted mb-0">Laporan tamat penugasan, peralihan perkhidmatan, pesakit dan sumbangan pasukan EMT.</p></div></div><div class="mt-auto d-flex align-items-center justify-content-between gap-2"><span class="badge bg-secondary" id="exitReportStatus">Belum dilengkapkan</span><a class="btn btn-outline-primary" id="btnExitReport" href="emt_exitreport.html">Isi / Kemas Kini</a></div></div></div>
+            </div>
+            <div class="col-lg-6">
+              <div class="card border h-100"><div class="card-body d-flex flex-column"><div class="d-flex align-items-start gap-3 mb-3"><div class="overview-icon"><i class="bi bi-journal-check"></i></div><div><h6 class="fw-bold mb-1">Laporan Pengajaran yang Dipelajari</h6><p class="small text-muted mb-0">Penilaian proses penugasan, amalan baik, isu, penyelesaian dan cadangan penambahbaikan.</p></div></div><div class="mt-auto d-flex align-items-center justify-content-between gap-2"><span class="badge bg-secondary" id="lessonsReportStatus">Belum dilengkapkan</span><a class="btn btn-outline-primary" id="btnLessonsReport" href="emt_lessonlearnt.html">Isi / Kemas Kini</a></div></div></div>
+            </div>
+          </div>
+
           <div class="card border-0 shadow-sm">
             <div class="card-body">
               <h6 class="fw-bold">Kandungan Laporan PDF</h6>
@@ -1179,8 +1256,10 @@ textarea{resize:vertical}
                 <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>PIC Misi</div>
                 <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Sumber Manusia</div>
                 <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Aset dan logistik</div>
-                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Rekod MDS</div>
-                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Laporan Harian Pasukans & Needs/Risks</div>
+                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Rekod Perubatan Pesakit (MDS)</div>
+                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Laporan Harian Pasukan, Keperluan dan Risiko</div>
+                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Laporan Penutupan Misi</div>
+                <div class="col-md-6"><i class="bi bi-check-circle me-1"></i>Laporan Pengajaran yang Dipelajari</div>
               </div>
 
               <button class="btn btn-danger" id="btnGenerateMissionPdf" type="button">
@@ -1219,12 +1298,22 @@ fetch("sidebar.html")
 </script>
 
 <script src="assets/js/config.js"></script>
+<script src="assets/js/mds-business-rules.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/asset-lifecycle-alerts.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.2/dist/jspdf.plugin.autotable.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 const missionId = new URLSearchParams(location.search).get("id");
+const USER_MISSION_VIEW = new URLSearchParams(location.search).get("paparan") === "pengguna";
+
+if(USER_MISSION_VIEW){
+  document.getElementById("btnEdit")?.remove();
+  const backLink=document.getElementById("missionListBackLink");
+  if(backLink) backLink.href="emt_crud.html?paparan=pengguna";
+}
 
 const STATUS_BADGE = {
   "Selesai":"bg-success",
@@ -1264,6 +1353,11 @@ let missionReportData = {
   assets:[],
   transport:[],
   storage:[],
+  discharges:[],
+  notifications:[],
+  incidents:[],
+  observations:[],
+  missionReports:[],
   dailyReports:[]
 };
 
@@ -1413,11 +1507,21 @@ function missionSpecific(list,id){
 async function safeApi(path){
   try{
     const res=await fetch(`${API}${path}`);
-    if(!res.ok) return [];
-    const json=await res.json();
-    return json.success && Array.isArray(json.data) ? json.data : [];
+    const json=await res.json().catch(()=>null);
+    if(!res.ok) throw new Error(`HTTP ${res.status}${json?.message?` — ${json.message}`:""}`);
+    if(!json.success || !Array.isArray(json.data)) throw new Error(json.message||"Format respons tidak sah");
+    return json.data;
   }catch(err){
     console.warn("API load failed:",path,err);
+    const alertBox=document.getElementById("missionApiAlert");
+    if(alertBox){
+      const moduleName=path.startsWith('/api/discharges')?'Discaj / Rawatan Susulan':path.startsWith('/api/observations')?'Ruang Observasi':path.startsWith('/api/referrals')?'Borang Rujukan':path.startsWith('/api/transport')?'Pengangkutan':path.startsWith('/api/storage')?'Penyimpanan':path.split('?')[0].replace('/api/','');
+      const deploymentHint=/HTTP 404.*Route tidak dijumpai/i.test(err.message)?' Lambda production belum dikemas kini dengan route modul ini.':'';
+      const item=document.createElement('div');
+      item.textContent=`${moduleName} gagal dimuatkan: ${err.message}.${deploymentHint}`;
+      alertBox.classList.remove("d-none");
+      alertBox.appendChild(item);
+    }
     return [];
   }
 }
@@ -1442,8 +1546,14 @@ function wireMissionLinks(){
     btnAddTransport:`logistik_transportAdd.html?missionId=${encodeURIComponent(missionId)}`,
     btnAddStorage:`logistik_storageAdd.html?missionId=${encodeURIComponent(missionId)}`,
     btnAddMds:`emt_healthform.html?missionId=${encodeURIComponent(missionId)}`,
-    btnDailyMds:`emt_mdsdaily.html?missionId=${encodeURIComponent(missionId)}`,
-    btnAddDispensary:`dispensari_add.html?missionId=${encodeURIComponent(missionId)}`
+    btnDailyMds:`emt_mdsdaily_mission.html?missionId=${encodeURIComponent(missionId)}`,
+    btnAddDispensary:`dispensari_add.html?missionId=${encodeURIComponent(missionId)}`,
+    btnAddDischarge:`discaj_add.html?missionId=${encodeURIComponent(missionId)}`,
+    btnAddNotification:`notifikasi_add.html?missionId=${encodeURIComponent(missionId)}`,
+    btnAddIncident:`insiden_add.html?missionId=${encodeURIComponent(missionId)}`,
+    btnAddObservation:`observasi_add.html?missionId=${encodeURIComponent(missionId)}`,
+    btnExitReport:`emt_exitreport.html?missionId=${encodeURIComponent(missionId)}`,
+    btnLessonsReport:`emt_lessonlearnt.html?missionId=${encodeURIComponent(missionId)}`
   };
 
   Object.entries(links).forEach(([id,url])=>{
@@ -1520,6 +1630,7 @@ function renderMission(){
   document.getElementById("s1PicFacility").textContent=m.picFacility || "-";
   document.getElementById("s1Location").textContent=m.location || "-";
   document.getElementById("s1Notes").textContent=m.notes || "-";
+  renderMissionLocationMap(m);
 
   const s1Status=document.getElementById("s1Status");
   s1Status.textContent=m.status || "-";
@@ -1541,14 +1652,24 @@ async function loadMissionWizardData(){
     missionApps,
     assets,
     transport,
-    storage
+    storage,
+    discharges,
+    notifications,
+    incidents,
+    missionReports,
+    observations
   ]=await Promise.all([
     safeApi(`/api/mds?missionId=${encodeURIComponent(missionId)}`),
     safeApi("/api/members"),
     safeApi(`/api/mission-applications?missionId=${encodeURIComponent(missionId)}`),
-    safeApi("/api/assets"),
-    safeApi("/api/transport"),
-    safeApi("/api/storage")
+    safeApi(`/api/assets?missionId=${encodeURIComponent(missionId)}`),
+    safeApi(`/api/transport?missionId=${encodeURIComponent(missionId)}`),
+    safeApi(`/api/storage?missionId=${encodeURIComponent(missionId)}`),
+    safeApi(`/api/discharges?missionId=${encodeURIComponent(missionId)}`),
+    safeApi(`/api/notifications?missionId=${encodeURIComponent(missionId)}`),
+    safeApi(`/api/incidents?missionId=${encodeURIComponent(missionId)}`),
+    safeApi(`/api/mission-reports?missionId=${encodeURIComponent(missionId)}`),
+    safeApi(`/api/observations?missionId=${encodeURIComponent(missionId)}`)
   ]);
 
   missionReportData.mds=mds;
@@ -1557,6 +1678,11 @@ async function loadMissionWizardData(){
   missionReportData.assets=missionSpecific(assets,missionId);
   missionReportData.transport=missionSpecific(transport,missionId);
   missionReportData.storage=missionSpecific(storage,missionId);
+  missionReportData.discharges=discharges;
+  missionReportData.notifications=notifications;
+  missionReportData.incidents=incidents;
+  missionReportData.missionReports=missionReports;
+  missionReportData.observations=observations;
 
   const memberMap=Object.fromEntries(members.map(m=>[String(m.id),m]));
 
@@ -1570,8 +1696,75 @@ async function loadMissionWizardData(){
   renderHrWizard();
   renderAssetWizard();
   renderLogisticsWizard();
+  renderDischargeWizard();
+  renderNotificationWizard();
+  renderIncidentWizard();
+  renderObservationWizard();
+  renderFinalReportStatus();
   updateDailyMdsReference();
   updateReportSummary();
+}
+
+function renderFinalReportStatus(){
+  for(const [type,id] of [["exit","exitReportStatus"],["lessons","lessonsReportStatus"]]){
+    const badge=document.getElementById(id),report=missionReportData.missionReports.find(item=>item.type===type);if(!badge)continue;
+    badge.textContent=report?`Dikemas kini ${formatDate(String(report.updatedAt||report.createdAt||"").slice(0,10))}`:"Belum dilengkapkan";
+    badge.className=`badge ${report?"bg-success":"bg-secondary"}`;
+  }
+}
+
+let missionLeafletMap=null;
+async function renderMissionLocationMap(mission){
+  const container=document.getElementById('missionLocationMap'),status=document.getElementById('missionMapStatus');
+  if(!container||!window.L)return;
+  let lat=Number(mission.latitude??mission.locationLatitude),lng=Number(mission.longitude??mission.locationLongitude);
+  const hasCoordinates=Number.isFinite(lat)&&Number.isFinite(lng)&&!(lat===0&&lng===0);
+  if(!hasCoordinates&&mission.location){
+    try{
+      status.textContent='Mencari lokasi misi pada peta...';
+      const response=await fetch(`https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=my&q=${encodeURIComponent(mission.location)}`,{headers:{'Accept-Language':'ms'}});
+      const results=await response.json();
+      if(results[0]){lat=Number(results[0].lat);lng=Number(results[0].lon);}
+    }catch(error){console.warn('Geocoding lokasi misi gagal:',error);}
+  }
+  if(!Number.isFinite(lat)||!Number.isFinite(lng)){container.innerHTML='<div class="h-100 d-flex align-items-center justify-content-center text-muted p-3 text-center">Lokasi tidak dapat dipetakan. Kemas kini nama atau koordinat lokasi misi.</div>';status.textContent='Peta tidak tersedia untuk lokasi ini.';return;}
+  if(missionLeafletMap)missionLeafletMap.remove();
+  missionLeafletMap=L.map(container).setView([lat,lng],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(missionLeafletMap);
+  L.marker([lat,lng]).addTo(missionLeafletMap).bindPopup(`<strong>${escHtml(mission.name||'Misi MyEMT')}</strong><br>${escHtml(mission.location||'Lokasi misi')}`).openPopup();
+  status.textContent=`Koordinat peta: ${lat.toFixed(5)}, ${lng.toFixed(5)}`;
+  setTimeout(()=>missionLeafletMap.invalidateSize(),100);
+}
+
+function renderObservationWizard(){const nurseBody=document.getElementById('nurseNoteTableBody'),doctorBody=document.getElementById('doctorOrderTableBody'),list=missionReportData.observations||[];if(!nurseBody||!doctorBody)return;const edit=item=>`observasi_edit.html?id=${encodeURIComponent(item.id)}&missionId=${encodeURIComponent(missionId)}`,nurse=list.filter(item=>(item.recordType||'nurse_note')==='nurse_note'),doctor=list.filter(item=>item.recordType==='doctor_order');nurseBody.innerHTML=nurse.length?nurse.map(item=>`<tr><td>${escHtml(formatDate(item.observationDate))} ${escHtml(item.observationTime||'')}</td><td>${escHtml(item.patientName||'-')}<div class="small text-muted">${escHtml(item.mdsId||'Tiada ID MDS')}</div></td><td>${escHtml(item.information||item.notes||'-')}</td><td>${escHtml(item.recordedBy||'-')}</td><td class="text-end"><a class="btn btn-sm btn-outline-primary" href="${edit(item)}"><i class="bi bi-pencil-square me-1"></i>Kemas Kini</a><a class="btn btn-sm btn-outline-secondary" href="${edit(item)}&print=1"><i class="bi bi-printer me-1"></i>Cetak</a></td></tr>`).join(''):'<tr><td colspan="5" class="text-center text-muted py-4">Tiada nota jururawat.</td></tr>';doctorBody.innerHTML=doctor.length?doctor.map(item=>`<tr><td>${escHtml(formatDate(item.observationDate))} ${escHtml(item.observationTime||'')}</td><td>${escHtml(item.patientName||'-')}<div class="small text-muted">${escHtml(item.mdsId||'Tiada ID MDS')}</div></td><td><span class="badge bg-secondary">${escHtml(item.orderDuration==='continuous'?'Continuous':'One Day')}</span></td><td>${escHtml(item.information||'-')}</td><td>${escHtml(item.doctorName||item.recordedBy||'-')}</td><td class="text-end"><a class="btn btn-sm btn-outline-primary" href="${edit(item)}"><i class="bi bi-pencil-square me-1"></i>Kemas Kini</a><a class="btn btn-sm btn-outline-secondary" href="${edit(item)}&print=1"><i class="bi bi-printer me-1"></i>Cetak</a></td></tr>`).join(''):'<tr><td colspan="6" class="text-center text-muted py-4">Tiada arahan doktor.</td></tr>';}
+
+function renderIncidentWizard(){
+  const body=document.getElementById("incidentTableBody");if(!body)return;const list=missionReportData.incidents||[];
+  if(!list.length){body.innerHTML='<tr><td colspan="7" class="text-center text-muted py-4">Tiada laporan insiden untuk misi ini.</td></tr>';return;}
+  body.innerHTML=list.slice().sort((a,b)=>String(b.incidentDate||b.estimatedIncidentDate||b.createdAt||"").localeCompare(String(a.incidentDate||a.estimatedIncidentDate||a.createdAt||""))).map(item=>{const editUrl=`insiden_edit.html?id=${encodeURIComponent(item.id||"")}&missionId=${encodeURIComponent(missionId)}`;return `<tr><td><span class="table-id-badge">${escHtml(item.id||"-")}</span></td><td>${escHtml(formatDate(item.incidentDate||item.estimatedIncidentDate))}</td><td><div class="table-primary-text">${escHtml(item.patientName||"-")}</div><div class="table-secondary-text">${escHtml(item.patientIdentifier||"Tiada nombor pengenalan")}</div></td><td>${escHtml(item.incidentType||"-")}</td><td>${escHtml(item.incidentCategory||"-")}</td><td>${escHtml(item.harmLevel||"Tidak berkenaan")}</td><td class="text-end"><div class="btn-group"><a class="btn btn-sm btn-outline-primary" href="${editUrl}"><i class="bi bi-pencil-square me-1"></i>Kemas Kini</a><a class="btn btn-sm btn-outline-secondary" href="${editUrl}&print=1"><i class="bi bi-printer me-1"></i>Cetak</a></div></td></tr>`;}).join("");
+}
+
+function renderDischargeWizard(){
+  const body=document.getElementById("dischargeTableBody");if(!body)return;
+  const list=missionReportData.discharges||[];
+  if(!list.length){body.innerHTML='<tr><td colspan="7" class="text-center text-muted py-4">Tiada rekod discaj atau rawatan susulan untuk misi ini.</td></tr>';return;}
+  body.innerHTML=list.slice().sort((a,b)=>String(b.dischargeDate||b.createdAt||"").localeCompare(String(a.dischargeDate||a.createdAt||""))).map(item=>{
+    const diagnoses=[item.primaryDiagnosis1,item.primaryDiagnosis2,item.primaryDiagnosis3].filter(Boolean).join(", ")||"-";
+    const editUrl=`discaj_edit.html?id=${encodeURIComponent(item.id||"")}&missionId=${encodeURIComponent(missionId)}`;
+    return `<tr><td><span class="table-id-badge">${escHtml(item.id||"-")}</span></td><td>${escHtml(formatDate(item.dischargeDate))}</td><td><div class="table-primary-text">${escHtml(item.patientName||"-")}</div><div class="table-secondary-text">${escHtml(item.patientPhone||"Tiada nombor telefon")}</div></td><td>${escHtml(item.receivingFacility||"-")}</td><td>${escHtml(item.referralType||"-")}</td><td>${escHtml(diagnoses)}</td><td class="text-end"><div class="btn-group"><a class="btn btn-sm btn-outline-primary" href="${editUrl}"><i class="bi bi-pencil-square me-1"></i>Kemas Kini</a><a class="btn btn-sm btn-outline-secondary" href="${editUrl}&print=1"><i class="bi bi-printer me-1"></i>Cetak</a></div></td></tr>`;
+  }).join("");
+}
+
+function renderNotificationWizard(){
+  const body=document.getElementById("notificationTableBody");
+  if(!body)return;
+  const list=missionReportData.notifications||[];
+  if(!list.length){body.innerHTML='<tr><td colspan="7" class="text-center text-muted py-4">Tiada rekod notifikasi untuk misi ini.</td></tr>';return;}
+  body.innerHTML=list.slice().sort((a,b)=>String(b.notificationDate||b.createdAt||"").localeCompare(String(a.notificationDate||a.createdAt||""))).map(item=>{
+    const diseases=Array.isArray(item.diseases)?item.diseases.join(", "):(item.diagnosedDisease||"-");
+    const editUrl=`notifikasi_edit.html?id=${encodeURIComponent(item.id||"")}&missionId=${encodeURIComponent(missionId)}`;
+    return `<tr><td><span class="table-id-badge">${escHtml(item.id||"-")}</span></td><td>${escHtml(formatDate(item.notificationDate))}</td><td><div class="table-primary-text">${escHtml(item.patientName||"-")}</div><div class="table-secondary-text">${escHtml(item.identificationNumber||"Tiada nombor dokumen")}</div></td><td>${escHtml(diseases||"-")}</td><td>${escHtml(item.diagnosisStatus||"-")}</td><td>${escHtml(item.medicalOfficerName||"-")}</td><td class="text-end"><div class="btn-group"><a class="btn btn-sm btn-outline-primary" href="${editUrl}"><i class="bi bi-pencil-square me-1"></i>Kemas Kini</a><a class="btn btn-sm btn-outline-secondary" href="${editUrl}&print=1"><i class="bi bi-printer me-1"></i>Cetak</a></div></td></tr>`;
+  }).join("");
 }
 
 
@@ -1611,6 +1804,7 @@ function renderMdsWizard(){
       viewParams.set("id",r.id || "");
       viewParams.set("missionId",r.missionId || missionId || "");
       viewParams.set("userType","admin");
+      const relatedParams=new URLSearchParams({missionId:r.missionId||missionId||"",mdsId:r.id||"",patientName:r.patientName||""});
 
       return `
         <tr>
@@ -1649,10 +1843,7 @@ function renderMdsWizard(){
           </td>
 
           <td class="text-end">
-            <a class="btn btn-sm btn-outline-primary"
-               href="emt_mdsview.html?${viewParams.toString()}">
-              <i class="bi bi-eye me-1"></i>Papar
-            </a>
+            <div class="dropdown"><button class="btn btn-sm btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" type="button">Tindakan</button><ul class="dropdown-menu dropdown-menu-end"><li><a class="dropdown-item" href="emt_mdsview.html?${viewParams.toString()}">Papar Rekod MDS</a></li><li><hr class="dropdown-divider"></li><li><a class="dropdown-item" href="observasi_add.html?${relatedParams.toString()}">Tambah Rekod Observasi</a></li><li><a class="dropdown-item" href="notifikasi_add.html?${relatedParams.toString()}">Tambah Borang Notifikasi</a></li><li><a class="dropdown-item" href="insiden_add.html?${relatedParams.toString()}">Tambah Laporan Insiden</a></li><li><a class="dropdown-item" href="discaj_add.html?${relatedParams.toString()}">Tambah Borang Rujukan / Discaj</a></li></ul></div>
           </td>
         </tr>
       `;
@@ -1829,7 +2020,7 @@ function renderAssetWizard(){
   const list=missionReportData.assets;
 
   if(!list.length){
-    body.innerHTML=`<tr><td colspan="6" class="text-center text-muted py-3">Tiada aset yang dipautkan kepada misi ini.</td></tr>`;
+    body.innerHTML=`<tr><td colspan="9" class="text-center text-muted py-3">Tiada aset yang dipautkan kepada misi ini.</td></tr>`;
     return;
   }
 
@@ -1837,10 +2028,12 @@ function renderAssetWizard(){
     <tr>
       <td>${escHtml(a.name || a.id || "-")}</td>
       <td>${escHtml(a.category || "-")}</td>
+      <td>${escHtml(a.procurementCategory || "Belum direkodkan")}${a.assetOrigin==='MyEMT'?'<div class="small text-muted">Asal: Inventori MyEMT</div>':""}</td>
       <td class="text-center">${escHtml(a.quantity ?? "-")}</td>
-      <td><span class="status-soft">${escHtml(a.status || "-")}</span></td>
+      <td><span class="status-soft">${escHtml(a.currentStatus || a.status || "-")}</span></td>
+      <td><span class="status-soft">${escHtml(a.finalStatus === "Lain-lain" ? (a.finalStatusOther || "Lain-lain") : (a.finalStatus || "Belum Ditentukan"))}</span></td>
       <td>${escHtml(a.location || "-")}</td>
-      <td class="text-end">-</td>
+      <td class="text-end"><div class="btn-group"><a class="btn btn-sm btn-outline-primary" href="asset_view2.html?id=${encodeURIComponent(a.id||"")}&missionId=${encodeURIComponent(missionId)}">Lihat</a><a class="btn btn-sm btn-outline-secondary" href="asset_edit2.html?id=${encodeURIComponent(a.id||"")}&missionId=${encodeURIComponent(missionId)}">Kemas Kini</a></div></td>
     </tr>
   `).join("");
 }
@@ -1858,12 +2051,12 @@ function renderLogisticsWizard(){
   }else{
     transportBody.innerHTML=missionReportData.transport.map(v=>`
       <tr>
-        <td>${escHtml(v.name || v.vehicleName || "-")}</td>
-        <td>${escHtml(v.plate || v.registrationNo || "-")}</td>
-        <td>${escHtml(v.passengerCapacity ?? v.loadCapacity ?? "-")}</td>
+        <td><div class="table-primary-text">${escHtml(v.vehicleName || v.name || v.vehicleType || v.otherVehicleType || "-")}</div><div class="table-secondary-text">${escHtml(v.vehicleType === "Lain-lain" || v.vehicleType === "others" ? v.otherVehicleType : (v.vehicleType || v.type || ""))}</div></td>
+        <td>${escHtml(v.registrationNumber || v.plate || v.registrationNo || "-")}</td>
+        <td>${escHtml(v.passengerCapacity ? `${v.passengerCapacity} orang` : (v.capacity || "-"))}${v.loadCapacity ? `<div class="table-secondary-text">${escHtml(v.loadCapacity)} kg</div>` : ""}</td>
         <td><span class="status-soft">${escHtml(v.status || "-")}</span></td>
         <td>${escHtml(v.driver || "-")}</td>
-        <td class="text-end">-</td>
+        <td class="text-end"><div class="btn-group"><a class="btn btn-sm btn-outline-primary" href="logistik_transportView.html?id=${encodeURIComponent(v.id||"")}&missionId=${encodeURIComponent(missionId)}">Butiran</a><a class="btn btn-sm btn-outline-secondary" href="logistik_transportEdit.html?id=${encodeURIComponent(v.id||"")}&missionId=${encodeURIComponent(missionId)}">Kemas Kini</a></div></td>
       </tr>
     `).join("");
   }
@@ -1874,10 +2067,10 @@ function renderLogisticsWizard(){
     storageBody.innerHTML=missionReportData.storage.map(s=>`
       <tr>
         <td>${escHtml(s.id || "-")}</td>
-        <td>${escHtml(s.type || s.name || "-")}</td>
+        <td><div class="table-primary-text">${escHtml(s.storageType || s.type || s.name || "-")}</div><div class="table-secondary-text">${escHtml(s.name || "")}</div></td>
         <td>${escHtml(s.location || "-")}</td>
         <td><span class="status-soft">${escHtml(s.status || "-")}</span></td>
-        <td class="text-end">-</td>
+        <td class="text-end"><div class="btn-group"><a class="btn btn-sm btn-outline-primary" href="logistik_storageView.html?id=${encodeURIComponent(s.id||"")}&missionId=${encodeURIComponent(missionId)}">Butiran</a><a class="btn btn-sm btn-outline-secondary" href="logistik_storageEdit.html?id=${encodeURIComponent(s.id||"")}&missionId=${encodeURIComponent(missionId)}">Kemas Kini</a></div></td>
       </tr>
     `).join("");
   }
@@ -1962,9 +2155,10 @@ async function persistDailyReport(report){
         return json.data || report;
       }
 
-      throw new Error(json.message || "Daily report endpoint failed.");
+      const endpointError=new Error(json.message || "Daily report endpoint failed.");endpointError.isHttp=true;throw endpointError;
 
     }catch(err){
+      if(err.isHttp) throw err;
       console.warn("Switching daily report to local fallback:",err);
       dailyReportsBackendAvailable=false;
       document.getElementById("dailyStorageWarning").classList.add("show");
@@ -2049,10 +2243,16 @@ function setRiskCodes(codes){
   });
 }
 
-function getDailyReportByDate(date){
-  return missionReportData.dailyReports.find(r=>
-    String(r.reportDate||"")===String(date)
-  );
+function getDailyReportByContext(date,activityLocationId){
+  return missionReportData.dailyReports.filter(r=>String(r.reportDate||r.activityDate||r.date||"").slice(0,10)===String(date)).sort((a,b)=>(MyEmtMdsRules.normalizeStatus(b.status)==='SUBMITTED')-(MyEmtMdsRules.normalizeStatus(a.status)==='SUBMITTED')||String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')))[0]||null;
+}
+
+function refreshDailyLocationId(){
+  const current=document.getElementById("dailyActivityLocationId").value;
+  if(current.startsWith('LEGACY-'))return current;
+  const id=MyEmtMdsRules.canonicalLocationId({latitude:document.getElementById("dailyLatitude").value,longitude:document.getElementById("dailyLongitude").value});
+  document.getElementById("dailyActivityLocationId").value=id;
+  return id;
 }
 
 function populateDailyForm(report){
@@ -2069,9 +2269,16 @@ function populateDailyForm(report){
   document.getElementById("dailyEmail").value=report.email || "";
   document.getElementById("dailyLocation").value=report.location || "";
   document.getElementById("dailyFacilityName").value=report.facilityName || "";
+  document.getElementById("dailyState").value=report.activityState || report.activityLocation?.state || "";
+  document.getElementById("dailyDistrict").value=report.activityDistrict || report.activityLocation?.district || "";
   document.getElementById("dailyLatitude").value=report.latitude || "";
   document.getElementById("dailyLongitude").value=report.longitude || "";
+  document.getElementById("dailyActivityLocationId").value=report.activityLocationId || report.activityLocation?.id || MyEmtMdsRules.canonicalLocationId(report);
   document.getElementById("dailyComments").value=report.comments || "";
+  document.getElementById("dailyTotalBeds").value=report.totalBeds ?? "";
+  document.getElementById("dailyAvailableInpatientBeds").value=report.availableInpatientBeds ?? "";
+  document.getElementById("dailyAvailableIcuBeds").value=report.availableIcuBeds ?? "";
+  document.getElementById("dailyLiveBirths").value=report.liveBirths ?? "";
 
   setRiskCodes(report.riskCodes || Object.keys(report.needsRisks||{}).filter(k=>report.needsRisks[k]));
 
@@ -2107,6 +2314,12 @@ function buildDailyReportPayload(status){
     Object.keys(DAILY_RISK_LABELS).map(code=>[code,riskCodes.includes(code)])
   );
 
+  const activityDate=document.getElementById("dailyDate").value;
+  const latitude=document.getElementById("dailyLatitude").value.trim();
+  const longitude=document.getElementById("dailyLongitude").value.trim();
+  const activityLocationId=refreshDailyLocationId();
+  const normalizedStatus=MyEmtMdsRules.normalizeStatus(status);
+  const activityLocation={id:activityLocationId,name:document.getElementById("dailyLocation").value.trim(),state:document.getElementById("dailyState").value.trim(),district:document.getElementById("dailyDistrict").value.trim(),facilityName:document.getElementById("dailyFacilityName").value.trim(),latitude:Number(latitude),longitude:Number(longitude)};
   return {
     id:currentDailyReportId || `DR-${Date.now()}`,
     missionId,
@@ -2114,7 +2327,7 @@ function buildDailyReportPayload(status){
     picId:missionData?.picId || null,
     picName:missionData?.picName || missionData?.leader || "",
 
-    reportDate:document.getElementById("dailyDate").value,
+    reportDate:activityDate,activityDate,activityLocationId,activityLocation,
     reportTime:document.getElementById("dailyReportTime").value,
     estimatedDepartureDate:document.getElementById("dailyDepartureDate").value,
 
@@ -2128,16 +2341,20 @@ function buildDailyReportPayload(status){
 
     location:document.getElementById("dailyLocation").value.trim(),
     facilityName:document.getElementById("dailyFacilityName").value.trim(),
-    latitude:document.getElementById("dailyLatitude").value.trim(),
-    longitude:document.getElementById("dailyLongitude").value.trim(),
+    activityLocationName:activityLocation.name,activityState:activityLocation.state,activityDistrict:activityLocation.district,
+    latitude,longitude,
 
     riskCodes,
     needsRisks,
     comments:document.getElementById("dailyComments").value.trim(),
+    totalBeds:document.getElementById("dailyTotalBeds").value===''?null:Number(document.getElementById("dailyTotalBeds").value),
+    availableInpatientBeds:document.getElementById("dailyAvailableInpatientBeds").value===''?null:Number(document.getElementById("dailyAvailableInpatientBeds").value),
+    availableIcuBeds:document.getElementById("dailyAvailableIcuBeds").value===''?null:Number(document.getElementById("dailyAvailableIcuBeds").value),
+    liveBirths:document.getElementById("dailyLiveBirths").value===''?null:Number(document.getElementById("dailyLiveBirths").value),
 
-    status,
+    status:normalizedStatus,
     updatedAt:new Date().toISOString(),
-    submittedAt:status==="Submitted" ? new Date().toISOString() : null
+    submittedAt:normalizedStatus==="SUBMITTED" ? new Date().toISOString() : null
   };
 }
 
@@ -2152,7 +2369,7 @@ async function saveDailyReport(status){
   if(!validateDailyDate()) return;
 
   const payload=buildDailyReportPayload(status);
-  const existingSameDate=getDailyReportByDate(payload.reportDate);
+  const existingSameDate=getDailyReportByContext(payload.reportDate,payload.activityLocationId);
 
   if(existingSameDate && String(existingSameDate.id)!==String(payload.id)){
     payload.id=existingSameDate.id;
@@ -2181,7 +2398,7 @@ async function saveDailyReport(status){
     updateReportSummary();
 
     document.getElementById("dailyFormStatus").textContent=
-      status==="Submitted"
+      MyEmtMdsRules.normalizeStatus(status)==="SUBMITTED"
         ? "Laporan harian berjaya dihantar."
         : "Draft berjaya disimpan.";
 
@@ -2200,7 +2417,7 @@ function updateDailyMdsReference(){
   const date=document.getElementById("dailyDate").value;
 
   const count=missionReportData.mds.filter(r=>
-    !date || String(r.date||"")===String(date)
+    !date || String(r.activityDate||r.date||"").slice(0,10)===String(date)
   ).length;
 
   document.getElementById("dailyMdsReferenceCount").textContent=count;
@@ -2212,47 +2429,54 @@ function updateDailyMdsReference(){
 ========================================================= */
 function renderDailyHistory(){
   const body=document.getElementById("dailyHistoryBody");
-  const list=missionReportData.dailyReports;
+  const contexts=new Map();
+  const add=(source,report=null)=>{
+    const date=String(source.activityDate||source.reportDate||source.date||'').slice(0,10);
+    const activityLocationId=String(source.activityLocationId||MyEmtMdsRules.canonicalLocationId(source)||'');
+    if(!date)return;
+    const key=date,old=contexts.get(key)||{};
+    contexts.set(key,{...old,date,activityLocationId,
+      location:source.location||source.activityLocationName||source.activityLocation?.name||source.presentAddress||old.location||activityLocationId,
+      facilityName:source.facilityName||source.activityFacilityName||source.activityLocation?.facilityName||old.facilityName||'',report:report||old.report||null});
+  };
+  missionReportData.mds.forEach(record=>add(record));
+  missionReportData.dailyReports.forEach(report=>add(report,report));
+  const list=[...contexts.values()].map(c=>({...c,records:MyEmtMdsRules.eligibleRecords(missionReportData.mds,{missionId,activityDate:c.date})})).sort((a,b)=>b.date.localeCompare(a.date));
 
-  document.getElementById("dailyHistoryCount").textContent=`${list.length} laporan`;
+  document.getElementById("dailyHistoryCount").textContent=`${list.length} konteks`;
 
   if(!list.length){
-    body.innerHTML=`<tr><td colspan="7" class="text-center text-muted py-4">Belum ada laporan harian.</td></tr>`;
+    body.innerHTML=`<tr><td colspan="8" class="text-center text-muted py-4">Belum ada rekod MDS atau Laporan Harian.</td></tr>`;
     return;
   }
 
-  body.innerHTML=list.map(r=>{
-    const codes=(r.riskCodes || Object.keys(r.needsRisks||{}).filter(k=>r.needsRisks[k])).map(String);
-
-    const statusBadge=r.status==="Submitted"
+  body.innerHTML=list.map(context=>{
+    const r=context.report;
+    const codes=r?(r.riskCodes || Object.keys(r.needsRisks||{}).filter(k=>r.needsRisks[k])).map(String):[];
+    const status=r?MyEmtMdsRules.normalizeStatus(r.status):'MISSING';
+    const statusBadge=status==="SUBMITTED"
       ? "bg-success"
-      : "bg-warning text-dark";
+      : status==='DRAFT'?"bg-warning text-dark":"bg-danger";
+    const reportHref=`emt_mdsdaily.html?missionId=${encodeURIComponent(missionId)}&date=${encodeURIComponent(context.date)}&scope=mission`;
+    const editHref=`mission_detail.html?id=${encodeURIComponent(missionId)}&dailyDate=${encodeURIComponent(context.date)}#step12`;
 
     return `
       <tr>
+        <td>${escHtml(context.location||"-")}${context.facilityName?`<div class="small text-muted">${escHtml(context.facilityName)}</div>`:""}<div class="small text-muted">${escHtml(context.activityLocationId)}</div></td>
         <td>
-          <button class="history-date-btn" type="button"
-             onclick="openDailyReport('${escHtml(r.id)}')">
-            ${escHtml(formatDate(r.reportDate))}
-          </button>
+          ${escHtml(formatDate(context.date))}
         </td>
-        <td>${escHtml(r.teamName||"-")}</td>
-        <td>${escHtml(r.emtType||"-")}</td>
-        <td>
-          ${escHtml(r.location||"-")}
-          ${r.facilityName ? `<div class="small text-muted">${escHtml(r.facilityName)}</div>` : ""}
-        </td>
+        <td><span class="badge bg-primary">${context.records.length}</span></td>
+        <td>${escHtml(r?.teamName||"-")}</td>
+        <td>${escHtml(r?.emtType||"-")}</td>
         <td>
           <span class="badge ${codes.length ? "bg-danger" : "bg-light text-dark border"}">
             ${codes.length} ditanda
           </span>
         </td>
-        <td><span class="badge ${statusBadge}">${escHtml(r.status||"Draft")}</span></td>
+        <td><span class="badge ${statusBadge}">${status==='SUBMITTED'?'Dihantar':status==='DRAFT'?'Draf':'Maklumat asas belum dihantar'}</span></td>
         <td class="text-end">
-          <button type="button" class="btn btn-sm btn-outline-primary"
-             onclick="openDailyReport('${escHtml(r.id)}')">
-            Papar / Kemaskini
-          </button>
+          ${status==='SUBMITTED'?`<a class="btn btn-sm btn-outline-primary" href="${reportHref}">Jana / Lihat Laporan</a>`:`<a class="btn btn-sm btn-warning" href="${editHref}">Kemas Kini Maklumat Asas</a>`}
         </td>
       </tr>`;
   }).join("");
@@ -2264,7 +2488,7 @@ window.openDailyReport=function(reportId){
 
   populateDailyForm(report);
 
-  const trigger=document.querySelector('[data-bs-target="#step6"]');
+const trigger=document.querySelector('[data-bs-target="#step12"]');
   bootstrap.Tab.getOrCreateInstance(trigger).show();
 
   setTimeout(()=>{
@@ -2272,6 +2496,40 @@ window.openDailyReport=function(reportId){
       ?.scrollIntoView({behavior:"smooth",block:"start"});
   },150);
 };
+
+function openRequestedDailyContext(){
+  const params=new URLSearchParams(location.search);
+  const requestedDate=String(params.get('dailyDate')||'').slice(0,10);
+  const requestedLocationId=String(params.get('activityLocationId')||'');
+  if(!requestedDate)return false;
+
+  const existing=getDailyReportByContext(requestedDate,requestedLocationId);
+  if(existing){
+    populateDailyForm(existing);
+  }else{
+    const source=missionReportData.mds.find(r=>String(r.activityDate||r.date||'').slice(0,10)===requestedDate);
+    currentDailyReportId=null;
+    document.getElementById('dailyDate').value=requestedDate;
+    if(source){
+      const sourceLocation=source.activityLocation||{};
+      document.getElementById('dailyLocation').value=source.activityLocationName||source.location||sourceLocation.name||source.presentAddress||'';
+      document.getElementById('dailyFacilityName').value=source.activityFacilityName||source.facilityName||sourceLocation.facilityName||'';
+      document.getElementById('dailyState').value=source.activityState||sourceLocation.state||'';
+      document.getElementById('dailyDistrict').value=source.activityDistrict||sourceLocation.district||'';
+      document.getElementById('dailyLatitude').value=source.latitude??sourceLocation.latitude??'';
+      document.getElementById('dailyLongitude').value=source.longitude??sourceLocation.longitude??'';
+    }
+    document.getElementById('dailyActivityLocationId').value=requestedLocationId||MyEmtMdsRules.canonicalLocationId(source||{});
+    applyMissionDefaultsToDailyForm();
+    updateDailyMdsReference();
+    document.getElementById('dailyFormStatus').textContent='Konteks MDS lama telah dipraisi. Lengkapkan maklumat yang belum direkodkan dan hantar laporan.';
+  }
+
+  const trigger=document.querySelector('[data-bs-target="#step12"]');
+  if(trigger)bootstrap.Tab.getOrCreateInstance(trigger).show();
+  setTimeout(()=>document.getElementById('dailyReportForm')?.scrollIntoView({behavior:'smooth',block:'start'}),150);
+  return true;
+}
 
 
 /* =========================================================
@@ -2408,8 +2666,8 @@ async function generateMissionPdf(){
     addTitle("4. Logistik - Pengangkutan");
     const transportRows=missionReportData.transport.map(v=>[
       pdfText(v.id),
-      pdfText(v.name || v.vehicleName),
-      pdfText(v.plate || v.registrationNo),
+      pdfText(v.vehicleType || v.otherVehicleType || v.name || v.vehicleName),
+      pdfText(v.registrationNumber || v.plate || v.registrationNo),
       pdfText(v.status),
       pdfText(v.driver),
       pdfText(v.currentLocation || v.location)
@@ -2427,8 +2685,8 @@ async function generateMissionPdf(){
     addTitle("4.1 Logistik - Penyimpanan");
     const storageRows=missionReportData.storage.map(s=>[
       pdfText(s.id),
-      pdfText(s.name || s.type),
-      pdfText(s.type),
+      pdfText(s.name || s.storageType || s.type),
+      pdfText(s.storageType || s.type),
       pdfText(s.capacity),
       pdfText(s.location),
       pdfText(s.status)
@@ -2443,7 +2701,7 @@ async function generateMissionPdf(){
     });
     afterTable();
 
-    addTitle("5. Rekod MDS");
+    addTitle("5. Rekod Perubatan Pesakit (MDS)");
     const mdsRows=missionReportData.mds.map(r=>[
       pdfText(formatDate(r.date)),
       pdfText(r.id),
@@ -2464,7 +2722,22 @@ async function generateMissionPdf(){
     });
     afterTable();
 
-    addTitle("6. Laporan Harian Pasukans");
+    addTitle("6. Modul Operasi Klinikal");
+    const operationRows=[];
+    missionReportData.observations.forEach(r=>operationRows.push(["Observasi",pdfText(r.id),pdfText(formatDate(r.observationDate)),pdfText(r.patientName),pdfText(r.disposition||r.location)]));
+    missionReportData.notifications.forEach(r=>operationRows.push(["Notifikasi",pdfText(r.id),pdfText(formatDate(r.notificationDate)),pdfText(r.patientName),pdfText((r.diseases||[]).join?.(', ')||r.diagnosedDisease)]));
+    missionReportData.incidents.forEach(r=>operationRows.push(["Insiden",pdfText(r.id),pdfText(formatDate(r.incidentDate||r.estimatedIncidentDate)),pdfText(r.patientName),pdfText(r.incidentCategory||r.harmLevel)]));
+    missionReportData.discharges.forEach(r=>operationRows.push(["Rujukan / Discaj / Susulan",pdfText(r.id),pdfText(formatDate(r.dischargeDate)),pdfText(r.patientName),pdfText(r.receivingFacility||r.referralType)]));
+    doc.autoTable({startY:y,theme:"grid",head:[["Modul","ID","Tarikh","Pesakit","Ringkasan"]],body:operationRows.length?operationRows:[["-","-","-","Tiada rekod operasi klinikal","-"]],styles:{fontSize:6.5,cellPadding:1.3}});
+    afterTable();
+
+    addTitle("6.1 Dispensari Ubat (daripada rekod MDS)");
+    const medicationRows=[];
+    missionReportData.mds.forEach(r=>(Array.isArray(r.medications)?r.medications:[]).forEach(m=>medicationRows.push([pdfText(r.id),pdfText(r.patientName),pdfText(m.name||m.medication),pdfText(m.dose),pdfText(m.frequency||m.instructions)])));
+    doc.autoTable({startY:y,theme:"grid",head:[["ID MDS","Pesakit","Ubat","Dos","Arahan"]],body:medicationRows.length?medicationRows:[["-","-","Tiada data ubat direkodkan","-","-"]],styles:{fontSize:6.5,cellPadding:1.3}});
+    afterTable();
+
+    addTitle("7. Laporan Harian Pasukan, Keperluan, dan Penilaian Risiko");
     const dailyRows=missionReportData.dailyReports.map(r=>[
       pdfText(formatDate(r.reportDate)),
       pdfText(r.teamName),
@@ -2484,6 +2757,28 @@ async function generateMissionPdf(){
       columnStyles:{5:{cellWidth:48}}
     });
     afterTable();
+
+    addTitle("8. Laporan Penamatan dan Pengajaran");
+    const finalRows=[["EMT Exit Report",missionReportData.missionReports.find(r=>r.type==="exit")],["Lesson Learnt Report",missionReportData.missionReports.find(r=>r.type==="lessons")]].map(([label,r])=>[label,r?"Telah dilengkapkan":"Belum dilengkapkan",r?pdfText(formatDate(String(r.updatedAt||r.createdAt||"").slice(0,10))):"-"]);
+    doc.autoTable({startY:y,theme:"grid",head:[["Laporan","Status","Tarikh Kemas Kini"]],body:finalRows,styles:{fontSize:7,cellPadding:1.5}});
+    afterTable();
+
+    const exitFields=missionReportData.missionReports.find(r=>r.type==="exit")?.fields||{};
+    const lessonFields=missionReportData.missionReports.find(r=>r.type==="lessons")?.fields||{};
+    const finalNarratives=[
+      ["Keperluan yang ditangani",exitFields.needsAddressed],
+      ["Cabaran penugasan",exitFields.challenges],
+      ["Keperluan belum selesai",exitFields.unresolvedNeeds],
+      ["Cadangan Exit Report",exitFields.recommendations],
+      ["Penilaian Pusat AHA",lessonFields.ahaRoleAssessment],
+      ["Amalan baik",lessonFields.goodPractices],
+      ["Cadangan instrumen serantau",lessonFields.regionalInstrumentRecommendations],
+      ["Cadangan Langkah Kolektif ASEAN",lessonFields.aseanCollectiveRecommendations]
+    ].filter(([,value])=>value);
+    if(finalNarratives.length){
+      doc.autoTable({startY:y,theme:"grid",head:[["Perkara","Ringkasan"]],body:finalNarratives.map(([label,value])=>[label,pdfText(value)]),styles:{fontSize:7,cellPadding:1.5},columnStyles:{1:{cellWidth:135}}});
+      afterTable();
+    }
 
     doc.setFontSize(8);
     doc.setTextColor(100);
@@ -2515,7 +2810,7 @@ document.getElementById("dailyDate").addEventListener("change",()=>{
   if(!validateDailyDate()) return;
 
   const date=document.getElementById("dailyDate").value;
-  const existing=getDailyReportByDate(date);
+  const existing=getDailyReportByContext(date,refreshDailyLocationId());
 
   if(existing) populateDailyForm(existing);
   else{
@@ -2532,14 +2827,15 @@ document.getElementById("dailyDate").addEventListener("change",()=>{
     updateDailyMdsReference();
   }
 });
+['dailyLatitude','dailyLongitude'].forEach(id=>document.getElementById(id)?.addEventListener('input',()=>{refreshDailyLocationId();updateDailyMdsReference();}));
 
 document.getElementById("btnDailyNew").addEventListener("click",()=>resetDailyForm(false));
 
-document.getElementById("btnSaveDailyDraft").addEventListener("click",()=>saveDailyReport("Draft"));
+document.getElementById("btnSaveDailyDraft").addEventListener("click",()=>saveDailyReport("DRAFT"));
 
 document.getElementById("dailyReportForm").addEventListener("submit",e=>{
   e.preventDefault();
-  saveDailyReport("Submitted");
+  saveDailyReport("SUBMITTED");
 });
 
 document.getElementById("btnGenerateMissionPdf").addEventListener("click",generateMissionPdf);
@@ -2560,10 +2856,33 @@ document.addEventListener("DOMContentLoaded",async()=>{
   applyMissionDefaultsToDailyForm();
   updateDailyMdsReference();
 
-  const date=document.getElementById("dailyDate").value;
-  const existing=getDailyReportByDate(date);
+  const requestedDailyContext=openRequestedDailyContext();
+  if(!requestedDailyContext){
+    const date=document.getElementById("dailyDate").value;
+    const existing=getDailyReportByContext(date,refreshDailyLocationId());
+    if(existing) populateDailyForm(existing);
+  }
 
-  if(existing) populateDailyForm(existing);
+  if(location.hash==="#step9"){
+    const trigger=document.querySelector('[data-bs-target="#step9"]');
+    if(trigger) bootstrap.Tab.getOrCreateInstance(trigger).show();
+  }
+  if(location.hash==="#step11"){
+    const trigger=document.querySelector('[data-bs-target="#step11"]');
+    if(trigger) bootstrap.Tab.getOrCreateInstance(trigger).show();
+  }
+  if(location.hash==="#step10"){
+    const trigger=document.querySelector('[data-bs-target="#step10"]');
+    if(trigger) bootstrap.Tab.getOrCreateInstance(trigger).show();
+  }
+  if(location.hash==="#step13"){
+    const trigger=document.querySelector('[data-bs-target="#step13"]');
+    if(trigger) bootstrap.Tab.getOrCreateInstance(trigger).show();
+  }
+  if(location.hash==="#step12" && !requestedDailyContext){
+    const trigger=document.querySelector('[data-bs-target="#step12"]');
+    if(trigger) bootstrap.Tab.getOrCreateInstance(trigger).show();
+  }
 });
 </script>
 

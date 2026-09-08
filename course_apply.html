@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <title>Pendaftaran Program Kursus MyEMT</title>
+  <title>Pendaftaran Kursus MyEMT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -96,6 +96,31 @@
     .component-badge{
       font-size:.8rem;
     }
+
+    .session-table thead th{padding:.85rem 1rem;font-size:.76rem;color:#667085;text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid #e8edf3}
+    .session-table tbody td{padding:1rem;border-color:#edf1f5}
+    .session-title{font-size:.98rem;font-weight:750;color:#1f2d3d}
+    .session-subline{display:flex;align-items:center;gap:.4rem;color:#667085;font-size:.82rem;margin-top:.3rem}
+    .session-components{display:flex;flex-wrap:wrap;gap:.35rem;margin-top:.65rem}
+    .session-components .badge{background:#f2f4f7!important;border:0!important;color:#475467!important;font-weight:600}
+    .session-status-stack{display:flex;flex-direction:column;align-items:flex-start;gap:.45rem}
+    .session-action{min-width:142px}
+    .tentative-details summary{cursor:pointer;font-weight:650;list-style:none}
+    .tentative-details summary::-webkit-details-marker{display:none}
+    .tentative-details summary::before{content:'+';display:inline-grid;place-items:center;width:18px;height:18px;margin-right:.35rem;border-radius:50%;background:#e9f2ff}
+    .tentative-details[open] summary::before{content:'−'}
+    .tentative-item{padding:.55rem 0;border-top:1px solid #edf1f5}
+
+    @media(max-width:767.98px){
+      .session-table,.session-table tbody,.session-table tr,.session-table td{display:block;width:100%}
+      .session-table thead{display:none}
+      .session-table tbody{padding:.75rem}
+      .session-table tbody tr{border:1px solid #e1e7ef;border-radius:12px;padding:.9rem;margin-bottom:.75rem;background:#fff;box-shadow:0 .2rem .6rem rgba(31,45,61,.05)}
+      .session-table tbody td{border:0;padding:.35rem 0;text-align:left!important}
+      .session-table tbody td[data-label]::before{content:attr(data-label);display:block;color:#98a2b3;font-size:.72rem;font-weight:700;text-transform:uppercase;margin-bottom:.2rem}
+      .session-action{width:100%;margin-top:.35rem}
+      .session-action .btn{width:100%}
+    }
   </style>
 </head>
 
@@ -150,7 +175,7 @@
               <div class="col-md-6 col-xl-3">
                 <div class="component-card">
                   <div class="component-number">1</div>
-                  <h6 class="fw-bold">B-Course</h6>
+                                    <h6 class="fw-bold">Kursus B</h6>
                   <div class="small text-muted">
                     Pengetahuan asas berkaitan bencana, koordinasi dan sistem MyEMT.
                   </div>
@@ -160,7 +185,7 @@
               <div class="col-md-6 col-xl-3">
                 <div class="component-card">
                   <div class="component-number">2</div>
-                  <h6 class="fw-bold">C-Course</h6>
+                                    <h6 class="fw-bold">Kursus C</h6>
                   <div class="small text-muted">
                     Kemahiran klinikal serta operasi lapangan.
                   </div>
@@ -191,7 +216,7 @@
 
             <div class="alert alert-info mt-3 mb-0">
               <i class="bi bi-info-circle me-1"></i>
-              Anda <strong>tidak perlu mendaftar B-Course, C-Course, TTX dan FTX secara berasingan</strong>.
+                            Anda <strong>tidak perlu mendaftar Kursus B, Kursus C, TTX dan FTX secara berasingan</strong>.
               Pilih satu sesi program kursus yang tersedia di bawah.
             </div>
 
@@ -326,7 +351,7 @@
             <div>
               <strong>Senarai Sesi Program Kursus</strong>
               <div class="small text-muted">
-                Setiap sesi merangkumi B-Course + C-Course + TTX + FTX.
+                            Setiap sesi merangkumi Kursus B, Kursus C, TTX dan FTX.
               </div>
             </div>
 
@@ -337,24 +362,20 @@
 
           <div class="table-responsive">
 
-            <table class="table table-hover align-middle mb-0">
+            <table class="table session-table table-hover align-middle mb-0">
 
               <thead class="table-light">
                 <tr>
-                  <th>Sesi</th>
-                  <th>Tarikh</th>
-                  <th>Lokasi</th>
-                  <th>Level</th>
-                  <th>Komponen</th>
-                  <th>Status Sesi</th>
-                  <th>Status Permohonan Saya</th>
+                  <th>Program Latihan</th>
+                  <th>Jadual dan Lokasi</th>
+                  <th>Status</th>
                   <th class="text-end">Tindakan</th>
                 </tr>
               </thead>
 
               <tbody id="tbodySessions">
                 <tr>
-                  <td colspan="8" class="text-center text-muted py-4">
+                  <td colspan="4" class="text-center text-muted py-4">
                     Memuatkan sesi...
                   </td>
                 </tr>
@@ -446,13 +467,7 @@ fetch("sidebar.html")
 /* =====================================================
    GLOBAL
 ===================================================== */
-const MEMBER_ID =
-  new URLSearchParams(location.search).get("memberId") ||
-  localStorage.getItem("myemt_memberId") ||
-  localStorage.getItem("memberId") ||
-  sessionStorage.getItem("myemt_memberId") ||
-  sessionStorage.getItem("memberId") ||
-  "";
+const MEMBER_ID = window.MyEMT?.memberId?.() || "";
 
 const COURSE_COMPONENTS = [
   "B-Course",
@@ -460,6 +475,7 @@ const COURSE_COMPONENTS = [
   "TTX",
   "FTX"
 ];
+const COURSE_COMPONENT_LABELS={"B-Course":"Kursus B","C-Course":"Kursus C",TTX:"TTX",FTX:"FTX"};
 
 let member = null;
 let sessions = [];
@@ -590,6 +606,9 @@ function isSessionOpen(session) {
   return (
     status === "dibuka" ||
     status === "hampir penuh"
+  ) && (
+    !session.endDate ||
+    String(session.endDate).slice(0, 10) >= new Date().toISOString().slice(0, 10)
   );
 }
 
@@ -633,16 +652,14 @@ async function safeJson(url) {
 
     const res = await fetch(url);
 
-    if (!res.ok) {
-      return null;
-    }
-
-    return await res.json();
+    const json=await res.json().catch(()=>({}));
+    if (!res.ok || json.success===false) throw new Error(`${json.message||`HTTP ${res.status}`} (${url.replace(API,'')})`);
+    return json;
 
   } catch (err) {
 
     console.warn("API error:", url, err);
-    return null;
+    throw err;
   }
 }
 
@@ -698,10 +715,9 @@ async function loadMember() {
   }
 
 
-  const json =
-    await safeJson(
-      `${API}/api/members/${encodeURIComponent(MEMBER_ID)}`
-    );
+  let json;
+  try{json=await safeJson(`${API}/api/members/${encodeURIComponent(MEMBER_ID)}`);}
+  catch(error){renderAccessMessage('alert-danger',`<strong>Maklumat ahli MyEMT tidak dapat dimuatkan.</strong><br>${esc(error.message)}`);return false;}
 
 
   if (!json?.data) {
@@ -856,20 +872,8 @@ async function loadMember() {
    LOAD DATA
 ===================================================== */
 async function loadSessions() {
-
-  const json =
-    await safeJson(
-      `${API}/api/sessions`
-    );
-
-
-  sessions =
-    Array.isArray(json?.data)
-      ? json.data
-      : [];
-
-
-  renderSessions();
+  try{const json=await safeJson(`${API}/api/sessions`);sessions=Array.isArray(json?.data)?json.data:[];renderSessions();}
+  catch(error){sessions=[];document.getElementById('tbodySessions').innerHTML=`<tr><td colspan="5" class="text-center text-danger py-4"><strong>Sesi kursus gagal dimuatkan.</strong><br>${esc(error.message)}</td></tr>`;}
 }
 
 
@@ -881,10 +885,7 @@ async function loadApplications() {
   }
 
 
-  const json =
-    await safeJson(
-      `${API}/api/course-applications?memberId=${encodeURIComponent(MEMBER_ID)}`
-    );
+  let json;try{json=await safeJson(`${API}/api/course-applications?memberId=${encodeURIComponent(MEMBER_ID)}`);}catch(error){applications=[];document.getElementById('tbodyApplications').innerHTML=`<tr><td colspan="5" class="text-center text-danger py-4">${esc(error.message)}</td></tr>`;return;}
 
 
   applications =
@@ -1061,7 +1062,7 @@ function renderSessions() {
     tbody.innerHTML =
       `
         <tr>
-          <td colspan="8" class="text-center text-muted py-4">
+          <td colspan="4" class="text-center text-muted py-4">
             Tiada sesi kursus tersedia buat masa ini.
           </td>
         </tr>
@@ -1126,47 +1127,33 @@ function renderSessions() {
         return `
           <tr>
 
-            <td class="fw-semibold">
-              ${esc(session.name || session.id || "-")}
-            </td>
-
-            <td>
-              ${esc(
-                fmtDateRange(
-                  session.startDate,
-                  session.endDate
-                )
-              )}
-            </td>
-
-            <td>
-              ${esc(session.location || "-")}
-            </td>
-
-            <td>
-              ${esc(session.level || "-")}
-            </td>
-
-            <td>
-              <div class="d-flex flex-wrap gap-1">
+            <td data-label="Program latihan">
+              <div class="session-title">${esc(session.name || session.id || "-")}</div>
+              <div class="session-subline"><i class="bi bi-diagram-3"></i>${esc(session.level || "-")}</div>
+              <div class="session-components">
                 ${COURSE_COMPONENTS.map(component =>
-                  `<span class="badge bg-light text-dark border component-badge">${esc(component)}</span>`
+                  `<span class="badge bg-light text-dark border component-badge">${esc(COURSE_COMPONENT_LABELS[component]||component)}</span>`
                 ).join("")}
               </div>
             </td>
 
-            <td>
-              <span class="badge ${sessionBadgeClass}">
-                ${esc(sessionBadgeLabel)}
-              </span>
+            <td data-label="Jadual dan lokasi">
+              <div class="session-subline mt-0"><i class="bi bi-calendar3"></i>${esc(fmtDateRange(session.startDate,session.endDate))}</div>
+              <div class="session-subline"><i class="bi bi-geo-alt"></i>${esc(session.location || "-")}</div>
+              ${Array.isArray(session.tentative)&&session.tentative.length?`<details class="tentative-details mt-2"><summary class="small text-primary">Lihat tentatif (${session.tentative.length})</summary><div class="small mt-2">${session.tentative.map(item=>`<div class="tentative-item"><strong>${esc(item.date||'-')} ${esc(item.time||'')}</strong><br>${esc(item.activity||'-')}${item.venue?`<div class="text-muted">${esc(item.venue)}</div>`:''}</div>`).join('')}</div></details>`:''}
             </td>
 
-            <td>
-              ${applicationHtml}
+            <td data-label="Status">
+              <div class="session-status-stack">
+                <span class="badge ${sessionBadgeClass}">${esc(sessionBadgeLabel)}</span>
+                ${applicationHtml}
+              </div>
             </td>
 
-            <td class="text-end">
+            <td class="text-end" data-label="Tindakan">
+              <div class="session-action">
               ${actionHtml}
+              </div>
             </td>
 
           </tr>
@@ -1193,9 +1180,12 @@ function buildSessionAction(
 
   if (!isSessionOpen(session)) {
 
+    const ended=session.endDate&&String(session.endDate).slice(0,10)<new Date().toLocaleDateString('en-CA');
+    const reason=ended?'Sesi Telah Tamat':normalizeStatus(session.status)==='belum dibuka'?'Pendaftaran Belum Dibuka':normalizeStatus(session.status)==='penuh'?'Kuota Penuh':'Pendaftaran Ditutup';
+
     return `
       <button class="btn btn-sm btn-outline-secondary" disabled>
-        Tidak Tersedia
+        ${esc(reason)}
       </button>
     `;
   }
@@ -1225,9 +1215,17 @@ function buildSessionAction(
       status === "passed"
     ) {
 
+      if(application.attendance?.status !== "attended"){
+        return `
+          <a class="btn btn-sm btn-primary" href="course_attendance.html?id=${encodeURIComponent(application.id)}">
+            Daftar Kehadiran
+          </a>
+        `;
+      }
+
       return `
         <button class="btn btn-sm btn-success" disabled>
-          Telah Diluluskan
+          Kehadiran Direkodkan
         </button>
       `;
     }
@@ -1343,7 +1341,7 @@ function renderApplicationHistory() {
               </div>
 
               <small class="text-muted">
-                B-Course + C-Course + TTX + FTX
+                                    Kursus B, Kursus C, TTX dan FTX
               </small>
             </td>
 
@@ -1457,7 +1455,7 @@ async function daftarKursus(
 
   const confirmed =
     confirm(
-      `Sahkan pendaftaran untuk "${sessionName}"?\n\nProgram ini merangkumi B-Course, C-Course, TTX dan FTX.`
+                `Sahkan pendaftaran untuk "${sessionName}"?\n\nProgram ini merangkumi Kursus B, Kursus C, TTX dan FTX.`
     );
 
 
@@ -1479,9 +1477,15 @@ async function daftarKursus(
 
   try {
 
+    const isResubmission =
+      existing &&
+      normalizeStatus(existing.status) === "rejected";
+
     const res =
       await fetch(
-        `${API}/api/course-applications`,
+        isResubmission
+          ? `${API}/api/course-applications/${encodeURIComponent(existing.id)}/resubmit`
+          : `${API}/api/course-applications`,
         {
           method:"POST",
 
@@ -1490,7 +1494,7 @@ async function daftarKursus(
               "application/json"
           },
 
-          body:JSON.stringify({
+          body:JSON.stringify(isResubmission ? {} : {
             memberId:MEMBER_ID,
             memberName,
             sessionId,

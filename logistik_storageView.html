@@ -1,211 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
-    <meta charset="UTF-8">
-    <title>STORAGE VIEW</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Main CSS -->
-    <link href="assets/css/main.css" rel="stylesheet">
-
-    <style>
-    .mds-card{
-        border:1px solid #dee2e6;
-        border-radius:12px;
-        overflow:hidden;
-        margin-bottom:1rem;
-        box-shadow:0 .125rem .25rem rgba(0,0,0,.075);
-    }
-
-    .mds-card .card-header{
-        background:#0d6efd;
-        color:#fff;
-        font-weight:600;
-        padding:.75rem 1rem;
-    }
-
-    .mds-card .card-body{
-        background:#fff;
-        padding:1rem;
-    }
-
-    .form-check{
-        margin-bottom:.5rem;
-    }
-
-    .form-label{
-        font-weight:600;
-    }
-
-    .badge-soft{
-        background:#e9ecef;
-        color:#495057;
-        font-weight:500;
-    }
-
-    .section-title{
-        font-size:1.1rem;
-        font-weight:700;
-        margin-bottom:1rem;
-        padding-bottom:.5rem;
-        border-bottom:2px solid #dee2e6;
-    }
-
-    textarea{
-        resize:vertical;
-    }
-    </style>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Butiran Penyimpanan Misi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
 </head>
-
 <body>
-
-<!-- HEADER -->
 <div id="header"></div>
-
-<div class="container-fluid">
-  <div class="row">
-
-    <!-- SIDEBAR -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
-
-
-    <!-- MAIN CONTENT -->
-    <main class="col-md-9 col-lg-10 px-4 py-4">
-
-    <!-- PAGE HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-        <h4 class="mb-0">Butiran Rekod Penyimpanan</h4>
-        <small class="text-muted">
-            Paparan maklumat penyimpanan dan kontena logistik EMT
-        </small>
-        </div>
-
-        <div class="mb-3 d-flex justify-content-end">
-        <a href="mission_detail.html" class="btn btn-primary">
-            <i class="bi bi-arrow-left me-1"></i> Kembali
-        </a>
-        </div>
-    </div>
-
-    <!-- MAIN CARD -->
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body">
-
-        <!-- SECTION TITLE -->
-        <h5 class="fw-semibold mb-3">Maklumat Penyimpanan EMT</h5>
-
-        <!-- INFO GRID -->
-        <div class="row g-3">
-
-            <!-- EMT NAME -->
-            <div class="col-md-6">
-            <small class="text-muted">Nama Misi EMT</small>
-            <div class="fw-semibold">EMT Operasi Banjir Sabah</div>
-            </div>
-
-            <!-- STORAGE NAME -->
-            <div class="col-md-6">
-            <small class="text-muted">Nama Penyimpanan</small>
-            <div class="fw-semibold">Kontena Logistik A</div>
-            </div>
-
-            <!-- TYPE -->
-            <div class="col-md-6">
-            <small class="text-muted">Jenis Penyimpanan</small>
-            <div class="fw-semibold">Kontena 20 Kaki</div>
-            </div>
-
-            <!-- SERIAL -->
-            <div class="col-md-6">
-            <small class="text-muted">Nombor Siri</small>
-            <div class="fw-semibold">CNT-2026-001</div>
-            </div>
-
-            <!-- CAPACITY -->
-            <div class="col-md-6">
-            <small class="text-muted">Kapasiti</small>
-            <div class="fw-semibold">20 m³</div>
-            </div>
-
-            <!-- LOCATION -->
-            <div class="col-md-6">
-            <small class="text-muted">Lokasi Penyimpanan</small>
-            <div class="fw-semibold">Base Camp Sabah</div>
-            </div>
-
-            <!-- STATUS -->
-            <div class="col-md-6">
-            <small class="text-muted">Status</small><br>
-            <span class="badge bg-success">Digunakan</span>
-            </div>
-
-            <!-- DATE RECEIVED -->
-            <div class="col-md-6">
-            <small class="text-muted">Tarikh Diterima</small>
-            <div class="fw-semibold">25/05/2026</div>
-            </div>
-
-            <!-- LAST INSPECTION -->
-            <div class="col-md-6">
-            <small class="text-muted">Pemeriksaan Terakhir</small>
-            <div class="fw-semibold">01/06/2026</div>
-            </div>
-
-            <!-- NOTES -->
-            <div class="col-12">
-            <small class="text-muted">Catatan</small>
-            <div class="fw-semibold">
-                Kontena digunakan untuk penyimpanan bekalan perubatan dan peralatan kecemasan semasa operasi banjir Sabah.
-            </div>
-            </div>
-
-        </div>
-
-        </div>
-    </div>
-
-    <!-- ACTION BUTTONS -->
-    <div class="d-flex justify-content-end gap-2">
-
-        <a href="logistik_storageEdit.html"
-        class="btn btn-outline-primary px-4">
-        <i class="bi bi-pencil-square me-1"></i> Kemaskini
-        </a>
-
-    </div>
-
-    </main>
-    
-
-  </div>
-</div>
-
-<!-- FOOTER -->
+<div class="container-fluid"><div class="row">
+  <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+  <main class="col-md-9 col-lg-10 px-4 py-4">
+    <div class="mb-4"><h4 class="mb-1">Butiran Penyimpanan Misi</h4><p class="text-muted mb-0">Maklumat logistik yang dipautkan kepada misi MyEMT.</p></div>
+    <div class="card shadow-sm border-0"><div class="card-body" data-logistics-page data-resource="storage" data-mode="view"><div class="text-center text-muted py-5">Memuatkan rekod...</div></div></div>
+  </main>
+</div></div>
 <div id="footer"></div>
-
-<!-- LOAD HEADER / FOOTER / SIDEBAR -->
-<script>
-fetch("header.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("header").innerHTML = data);
-
-fetch("footer.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("footer").innerHTML = data);
-
-fetch("sidebar.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>fetch('header.html').then(r=>r.text()).then(h=>document.getElementById('header').innerHTML=h);fetch('sidebar.html').then(r=>r.text()).then(h=>document.getElementById('sidebar-placeholder').innerHTML=h);fetch('footer.html').then(r=>r.text()).then(h=>document.getElementById('footer').innerHTML=h);</script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/logistics-record.js"></script>
 </body>
 </html>

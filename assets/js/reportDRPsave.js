@@ -6,19 +6,15 @@ let drpReportAlreadySaved = false;
 // ===== AKTIFKAN EVENT SIMPAN =====
 // Bila user tekan butang terakhir dalam borang, data akan disimpan.
 document.addEventListener("DOMContentLoaded", function () {
-  const nextBtn = document.getElementById("nextBtn");
-
-  if (!nextBtn) return;
-
-  nextBtn.addEventListener("click", function () {
-    const steps = Array.from(document.querySelectorAll(".wizard-step"));
-    const activeStepIndex = steps.findIndex(step => step.classList.contains("active"));
-    const isLastStep = activeStepIndex === steps.length - 1;
-
-    if (!isLastStep) return;
-    if (drpReportAlreadySaved) return;
-
-    saveDrpReport();
+  const form = document.getElementById("wizardForm");
+  if (!form) return;
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    if (!drpReportAlreadySaved) saveDrpReport();
   });
 });
 
@@ -46,7 +42,7 @@ function saveDrpReport() {
   drpReportAlreadySaved = true;
 
   const selectedDaerah = getDrpValue("daerah_drp");
-  const daerah = selectedDaerah === "Lain-Lain"
+  const daerah = ["Lain-Lain", "LAIN_LAIN"].includes(selectedDaerah)
     ? getDrpValue("daerahLainDRP")
     : getDrpSelectText("daerah_drp");
 
@@ -85,5 +81,5 @@ function saveDrpReport() {
   localStorage.setItem("mycprc_drp_reports", JSON.stringify(reports));
 
   alert("Laporan DRP berjaya disimpan.");
-  window.location.href = "landingDRP.html";
+  window.location.href = "landingDRP.html?tab=reports";
 }

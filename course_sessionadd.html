@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Tambah Sesi Kursus</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tambah Sesi Kursus MyEMT</title>
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -15,53 +15,380 @@
     <link href="assets/css/main.css" rel="stylesheet">
 
     <style>
-    .mds-card{
-        border:1px solid #dee2e6;
-        border-radius:12px;
-        overflow:hidden;
-        margin-bottom:1rem;
-        box-shadow:0 .125rem .25rem rgba(0,0,0,.075);
-    }
+        :root {
+            --myemt-primary: #0b5ed7;
+            --myemt-primary-dark: #084298;
+            --myemt-page: #f5f7fb;
+            --myemt-surface: #ffffff;
+            --myemt-border: #e4e9f1;
+            --myemt-text: #172033;
+            --myemt-muted: #6c757d;
+        }
 
-    .mds-card .card-header{
-        background:#0d6efd;
-        color:#fff;
-        font-weight:600;
-        padding:.75rem 1rem;
-    }
+        body {
+            background: var(--myemt-page);
+            color: var(--myemt-text);
+        }
 
-    .mds-card .card-body{
-        background:#fff;
-        padding:1rem;
-    }
+        .page-heading {
+            background: linear-gradient(135deg, #0b5ed7 0%, #084298 100%);
+            border-radius: 18px;
+            color: #fff;
+            overflow: hidden;
+            padding: 1.5rem;
+            position: relative;
+        }
 
-    .form-check{
-        margin-bottom:.5rem;
-    }
+        .page-heading::after {
+            background: rgba(255, 255, 255, .08);
+            border-radius: 50%;
+            content: "";
+            height: 180px;
+            position: absolute;
+            right: -50px;
+            top: -85px;
+            width: 180px;
+        }
 
-    .form-label{
-        font-weight:600;
-    }
+        .page-heading .breadcrumb-label {
+            color: rgba(255, 255, 255, .72);
+            font-size: .8rem;
+            font-weight: 700;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
 
-    .badge-soft{
-        background:#e9ecef;
-        color:#495057;
-        font-weight:500;
-    }
+        .page-heading p {
+            color: rgba(255, 255, 255, .82);
+        }
 
-    .section-title{
-        font-size:1.1rem;
-        font-weight:700;
-        margin-bottom:1rem;
-        padding-bottom:.5rem;
-        border-bottom:2px solid #dee2e6;
-    }
+        .btn-heading {
+            background: rgba(255, 255, 255, .14);
+            border: 1px solid rgba(255, 255, 255, .38);
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
 
-    textarea{
-        resize:vertical;
-    }
+        .btn-heading:hover,
+        .btn-heading:focus {
+            background: #fff;
+            border-color: #fff;
+            color: var(--myemt-primary-dark);
+        }
+
+        .content-card {
+            background: var(--myemt-surface);
+            border: 1px solid var(--myemt-border);
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(31, 45, 61, .04);
+            overflow: hidden;
+        }
+
+        .section-header {
+            align-items: center;
+            border-bottom: 1px solid var(--myemt-border);
+            display: flex;
+            gap: .9rem;
+            padding: 1.1rem 1.25rem;
+        }
+
+        .section-number {
+            align-items: center;
+            background: #e7f1ff;
+            border-radius: 10px;
+            color: var(--myemt-primary);
+            display: flex;
+            flex: 0 0 38px;
+            font-weight: 750;
+            height: 38px;
+            justify-content: center;
+            width: 38px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 750;
+            margin: 0 0 .15rem;
+        }
+
+        .section-description {
+            color: var(--myemt-muted);
+            font-size: .82rem;
+            margin: 0;
+        }
+
+        .section-body {
+            padding: 1.25rem;
+        }
+
+        .form-label {
+            color: #344258;
+            font-size: .86rem;
+            font-weight: 700;
+            margin-bottom: .45rem;
+        }
+
+        .required-mark {
+            color: #dc3545;
+        }
+
+        .form-control,
+        .form-select {
+            border-color: #d9e0ea;
+            border-radius: 10px;
+            min-height: 44px;
+        }
+
+        textarea.form-control {
+            min-height: 116px;
+            resize: vertical;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #80adf3;
+            box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .11);
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon > i {
+            color: #8b97a8;
+            left: .9rem;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 4;
+        }
+
+        .input-icon .form-control,
+        .input-icon .form-select {
+            padding-left: 2.45rem;
+        }
+
+        .course-option {
+            height: 100%;
+            position: relative;
+        }
+
+        .course-option .form-check-input {
+            position: absolute;
+            right: 1rem;
+            top: .85rem;
+            z-index: 2;
+        }
+
+        .course-option-label {
+            background: #fff;
+            border: 1px solid var(--myemt-border);
+            border-radius: 12px;
+            cursor: pointer;
+            display: block;
+            height: 100%;
+            padding: .9rem 2.5rem .9rem .9rem;
+            transition: border-color .15s ease, background-color .15s ease, box-shadow .15s ease;
+        }
+
+        .course-option-label:hover {
+            border-color: #a9c8f7;
+        }
+
+        .course-option .form-check-input:checked + .course-option-label {
+            background: #f2f7ff;
+            border-color: #74a7f2;
+            box-shadow: inset 0 0 0 1px #74a7f2;
+        }
+
+        .course-code {
+            align-items: center;
+            background: #e7f1ff;
+            border-radius: 8px;
+            color: var(--myemt-primary);
+            display: inline-flex;
+            font-size: .75rem;
+            font-weight: 750;
+            height: 28px;
+            justify-content: center;
+            margin-bottom: .55rem;
+            min-width: 48px;
+            padding: 0 .55rem;
+        }
+
+        .course-name {
+            color: #28364c;
+            font-size: .88rem;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .summary-panel {
+            position: sticky;
+            top: 1rem;
+        }
+
+        .summary-head {
+            background: linear-gradient(135deg, #eef5ff, #f8fbff);
+            border-bottom: 1px solid #dce9fb;
+            padding: 1.15rem;
+        }
+
+        .summary-body {
+            padding: 1.15rem;
+        }
+
+        .summary-name {
+            color: #26344b;
+            font-size: 1.05rem;
+            font-weight: 750;
+            overflow-wrap: anywhere;
+        }
+
+        .summary-row {
+            align-items: flex-start;
+            border-bottom: 1px dashed #e3e8ef;
+            display: flex;
+            gap: .75rem;
+            padding: .8rem 0;
+        }
+
+        .summary-row:last-child {
+            border-bottom: 0;
+        }
+
+        .summary-row-icon {
+            align-items: center;
+            background: #f1f4f8;
+            border-radius: 8px;
+            color: #627086;
+            display: flex;
+            flex: 0 0 32px;
+            height: 32px;
+            justify-content: center;
+            width: 32px;
+        }
+
+        .summary-row-label {
+            color: var(--myemt-muted);
+            font-size: .74rem;
+            font-weight: 650;
+            margin-bottom: .1rem;
+        }
+
+        .summary-row-value {
+            color: #2d3b51;
+            font-size: .85rem;
+            font-weight: 650;
+            overflow-wrap: anywhere;
+        }
+
+        .guide-card {
+            background: #fff9e8;
+            border: 1px solid #ffe49a;
+            border-radius: 14px;
+            color: #664e00;
+            padding: 1rem;
+        }
+
+        .form-actions {
+            align-items: center;
+            background: #fbfcfe;
+            border-top: 1px solid var(--myemt-border);
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+        }
+
+        .form-alert {
+            border-radius: 12px;
+            display: none;
+            margin-bottom: 1rem;
+        }
+
+        .form-alert.is-visible {
+            display: block;
+        }
+
+        .status-preview {
+            border-radius: 50rem;
+            display: inline-flex;
+            font-size: .75rem;
+            font-weight: 750;
+            gap: .4rem;
+            padding: .4rem .65rem;
+        }
+
+        .status-preview::before {
+            background: currentColor;
+            border-radius: 50%;
+            content: "";
+            height: 6px;
+            margin-top: .32rem;
+            width: 6px;
+        }
+
+        .status-open {
+            background: #e8f7ee;
+            color: #198754;
+        }
+
+        .status-warning {
+            background: #fff4d6;
+            color: #997100;
+        }
+
+        .status-closed {
+            background: #eef1f5;
+            color: #657184;
+        }
+
+        @media (max-width: 991.98px) {
+            .summary-panel {
+                position: static;
+            }
+        }
+
+        @media (max-width: 767.98px) {
+            main {
+                padding-left: 1rem !important;
+                padding-right: 1rem !important;
+            }
+
+            .page-heading {
+                padding: 1.25rem;
+            }
+
+            .page-heading .btn-heading {
+                margin-top: 1rem;
+                width: 100%;
+            }
+
+            .section-body,
+            .section-header {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .form-actions {
+                align-items: stretch;
+                flex-direction: column-reverse;
+                gap: .75rem;
+                padding: 1rem;
+            }
+
+            .form-actions .action-buttons,
+            .form-actions .action-buttons .btn {
+                width: 100%;
+            }
+
+            .form-actions .action-buttons {
+                display: flex;
+                gap: .5rem;
+            }
+        }
     </style>
-
 </head>
 
 <body>
@@ -70,155 +397,313 @@
 <div id="header"></div>
 
 <div class="container-fluid">
-  <div class="row">
+    <div class="row">
 
-    <!-- SIDEBAR -->
-    <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+        <!-- SIDEBAR -->
+        <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
 
-    <!-- MAIN CONTENT -->
-    <main class="col-md-9 col-lg-10 px-4 py-4">
+        <!-- MAIN CONTENT -->
+        <main class="col-md-9 col-lg-10 px-4 py-4">
 
-        <!-- PAGE HEADER -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h4 class="mb-0">Tambah Sesi B-Course & C-Course</h4>
-                <small class="text-muted">
-                    Tambah sesi baharu B-Course & C-Course MyEMT
-                </small>
-            </div>
+            <!-- PAGE HEADER -->
+            <section class="page-heading mb-4">
+                <div class="row align-items-center position-relative" style="z-index: 1;">
+                    <div class="col-md-8">
+                        <div class="breadcrumb-label mb-2">Pentadbiran MyEMT / Pengurusan Kursus</div>
+                        <h3 class="fw-bold mb-2">Tambah Sesi Kursus Baharu</h3>
+                <p class="mb-0">Daftarkan sesi Kursus B dan Kursus C berserta jadual, lokasi dan kuota peserta.</p>
+                    </div>
+                    <div class="col-md-4 text-md-end">
+                        <a href="course_management.html" class="btn btn-heading px-3">
+                            <i class="bi bi-arrow-left me-1"></i> Kembali ke Senarai Sesi
+                        </a>
+                    </div>
+                </div>
+            </section>
 
-            <a href="course_management.html" class="btn btn-primary">
-                <i class="bi bi-arrow-left me-1"></i> Kembali
-            </a>
-        </div>
+            <div id="form-alert" class="alert form-alert" role="alert" aria-live="polite"></div>
 
-        <!-- FORM CARD -->
-        <div class="card shadow-sm border-0">
+            <form id="course-session-form" novalidate>
+                <div class="row g-4 align-items-start">
 
-            <div class="card-header bg-white fw-bold">
-                Maklumat Sesi Kursus
-            </div>
+                    <!-- BORANG UTAMA -->
+                    <div class="col-lg-8">
 
-            <div class="card-body">
-
-                <form>
-
-                    <div class="row g-3">
-
-                        <!-- NAMA SESI -->
-                        <div class="col-md-6">
-                            <label class="form-label">Nama Sesi</label>
-                            <input type="text" class="form-control"
-                                placeholder="Contoh: Sesi 1 / 2026">
-                        </div>
-
-                        <!-- LEVEL -->
-                        <div class="col-md-6">
-                            <label class="form-label">Level</label>
-                            <select class="form-select">
-                                <option selected disabled>Pilih Level</option>
-                                <option>National</option>
-                                <option>State</option>
-                            </select>
-                        </div>
-
-                        <!-- TARIKH MULA -->
-                        <div class="col-md-6">
-                            <label class="form-label">Tarikh Mula</label>
-                            <input type="date" class="form-control">
-                        </div>
-
-                        <!-- TARIKH TAMAT -->
-                        <div class="col-md-6">
-                            <label class="form-label">Tarikh Tamat</label>
-                            <input type="date" class="form-control">
-                        </div>
-
-                        <!-- TEMPAT -->
-                        <div class="col-md-12">
-                            <label class="form-label">Lokasi Kursus</label>
-                            <input type="text" class="form-control"
-                                placeholder="Contoh: Hospital Kuala Lumpur / Training Centre MyEMT">
-                        </div>
-
-                        <!-- SESI STRUKTUR -->
-                        <div class="col-md-12">
-                            <label class="form-label">Struktur Kursus</label>
-
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" checked>
-                                <label class="form-check-label">B-Course: Asas EMT & keselamatan operasi</label>
+                        <!-- 1. MAKLUMAT ASAS -->
+                        <section class="content-card mb-4">
+                            <div class="section-header">
+                                <div class="section-number">1</div>
+                                <div>
+                                    <h2 class="section-title">Maklumat Asas Sesi</h2>
+                                    <p class="section-description">Masukkan nama dan peringkat pelaksanaan kursus.</p>
+                                </div>
                             </div>
 
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" checked>
-                                <label class="form-check-label">C-Course: Klinikal & Kemahiran Operasional</label>
+                            <div class="section-body">
+                                <div class="row g-3">
+                                    <div class="col-md-7">
+                                        <label for="session-name" class="form-label">
+                                            Nama Sesi <span class="required-mark">*</span>
+                                        </label>
+                                        <div class="input-icon">
+                                            <i class="bi bi-mortarboard"></i>
+                                            <input type="text" id="session-name" class="form-control"
+                                        placeholder="Contoh: Kursus B Siri 1/2026" required maxlength="120">
+                                        </div>
+                                        <div class="invalid-feedback">Sila masukkan nama sesi.</div>
+                                    </div>
+
+                                    <div class="col-md-5">
+                                        <label for="session-level" class="form-label">
+                                            Peringkat <span class="required-mark">*</span>
+                                        </label>
+                                        <div class="input-icon">
+                                            <i class="bi bi-diagram-3"></i>
+                                            <select id="session-level" class="form-select" required>
+                                                <option value="" selected disabled>Pilih peringkat</option>
+                                                <option value="National">Kebangsaan</option>
+                                                <option value="State">Negeri</option>
+                                            </select>
+                                        </div>
+                                        <div class="invalid-feedback">Sila pilih peringkat sesi.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 2. JADUAL DAN LOKASI -->
+                        <section class="content-card mb-4">
+                            <div class="section-header">
+                                <div class="section-number">2</div>
+                                <div>
+                                    <h2 class="section-title">Jadual dan Lokasi</h2>
+                                    <p class="section-description">Tetapkan tempoh serta lokasi pelaksanaan kursus.</p>
+                                </div>
                             </div>
 
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" checked>
-                                <label class="form-check-label">TTX: Latihan Tabletop</label>
+                            <div class="section-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="start-date" class="form-label">
+                                            Tarikh Mula <span class="required-mark">*</span>
+                                        </label>
+                                        <div class="input-icon">
+                                            <i class="bi bi-calendar-event"></i>
+                                            <input type="date" id="start-date" class="form-control" required>
+                                        </div>
+                                        <div class="invalid-feedback">Sila pilih tarikh mula.</div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="end-date" class="form-label">
+                                            Tarikh Tamat <span class="required-mark">*</span>
+                                        </label>
+                                        <div class="input-icon">
+                                            <i class="bi bi-calendar-check"></i>
+                                            <input type="date" id="end-date" class="form-control" required>
+                                        </div>
+                                        <div class="invalid-feedback" id="end-date-feedback">Sila pilih tarikh tamat.</div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="session-location" class="form-label">
+                                            Lokasi Kursus <span class="required-mark">*</span>
+                                        </label>
+                                        <div class="input-icon">
+                                            <i class="bi bi-geo-alt"></i>
+                                            <input type="text" id="session-location" class="form-control"
+                                                   placeholder="Contoh: Institut Latihan KKM, Bangi" required maxlength="180">
+                                        </div>
+                                        <div class="invalid-feedback">Sila masukkan lokasi kursus.</div>
+                                    </div>
+                                    <div class="col-md-4"><label for="session-latitude" class="form-label">Latitud Lokasi</label><input type="number" step="any" id="session-latitude" class="form-control" placeholder="Contoh: 2.9300"></div>
+                                    <div class="col-md-4"><label for="session-longitude" class="form-label">Longitud Lokasi</label><input type="number" step="any" id="session-longitude" class="form-control" placeholder="Contoh: 101.6900"></div>
+                                    <div class="col-md-4"><label for="attendance-radius" class="form-label">Radius Kehadiran (meter)</label><input type="number" min="50" id="attendance-radius" class="form-control" value="300"></div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- 3. STRUKTUR KURSUS -->
+                        <section class="content-card mb-4">
+                            <div class="section-header">
+                                <div class="section-number">3</div>
+                                <div>
+                                    <h2 class="section-title">Struktur Kursus</h2>
+                                    <p class="section-description">Tandakan komponen latihan yang terlibat dalam sesi ini.</p>
+                                </div>
                             </div>
 
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" checked>
-                                <label class="form-check-label">FTX: Latihan Simulasi Lapangan</label>
+                            <div class="section-body">
+                                <div class="row g-3">
+                                    <div class="col-sm-6">
+                                        <div class="course-option">
+                                            <input class="form-check-input" type="checkbox" id="structure-b" checked disabled>
+                                            <label class="course-option-label" for="structure-b">
+                                            <span class="course-code">Kursus B</span>
+                                                <div class="course-name">Asas EMT dan Keselamatan Operasi</div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="course-option">
+                                            <input class="form-check-input" type="checkbox" id="structure-c" checked disabled>
+                                            <label class="course-option-label" for="structure-c">
+                                            <span class="course-code">Kursus C</span>
+                                                <div class="course-name">Klinikal dan Kemahiran Operasional</div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="course-option">
+                                            <input class="form-check-input" type="checkbox" id="structure-ttx" checked disabled>
+                                            <label class="course-option-label" for="structure-ttx">
+                                                <span class="course-code">TTX</span>
+                                                <div class="course-name">Latihan Tabletop</div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <div class="course-option">
+                                            <input class="form-check-input" type="checkbox" id="structure-ftx" checked disabled>
+                                            <label class="course-option-label" for="structure-ftx">
+                                                <span class="course-code">FTX</span>
+                                                <div class="course-name">Latihan Simulasi Lapangan</div>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </section>
 
-                        <!-- OBJEKTIF -->
-                        <div class="col-md-12">
-                            <label class="form-label">Objektif Kursus</label>
-                            <textarea class="form-control" rows="4"
-                                placeholder="Contoh: Memperkasa kompetensi operasi, klinikal dan koordinasi MyEMT..."></textarea>
-                        </div>
+                        <!-- 4. OBJEKTIF DAN TETAPAN -->
+                        <section class="content-card">
+                            <div class="section-header">
+                                <div class="section-number">4</div>
+                                <div>
+                                    <h2 class="section-title">Objektif dan Tetapan Sesi</h2>
+                                    <p class="section-description">Lengkapkan objektif, status semasa dan kuota peserta.</p>
+                                </div>
+                            </div>
 
-                        <!-- STATUS -->
-                        <div class="col-md-6">
-                            <label class="form-label">Status Sesi</label>
-                            <select class="form-select">
-                                <option>Aktif</option>
-                                <option>Dalam Perancangan</option>
-                                <option>Ditutup</option>
-                            </select>
-                        </div>
+                            <div class="section-body">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label for="session-objective" class="form-label">Objektif Kursus</label>
+                                        <textarea id="session-objective" class="form-control" rows="4"
+                                                  placeholder="Contoh: Memperkasa kompetensi operasi, klinikal dan koordinasi pasukan MyEMT..."></textarea>
+                                        <div class="form-text">Nyatakan hasil pembelajaran utama bagi sesi ini.</div>
+                                    </div>
+                                    <div class="col-12"><label for="session-tentative" class="form-label">Tentatif Latihan</label><textarea id="session-tentative" class="form-control" rows="7" placeholder="2026-01-15 | 08:00-10:00 | Pendaftaran dan taklimat | Dewan Utama"></textarea><div class="form-text">Satu aktiviti setiap baris: tarikh | masa | aktiviti | tempat.</div></div>
 
-                        <!-- KUOTA -->
-                        <div class="col-md-6">
-                            <label class="form-label">Kuota Peserta</label>
-                            <input type="number" class="form-control" min="1"
-                                placeholder="Contoh: 50">
-                        </div>
+                                    <div class="col-md-6">
+                                        <label for="session-status" class="form-label">
+                                            Status Sesi <span class="required-mark">*</span>
+                                        </label>
+                                        <div class="input-icon">
+                                            <i class="bi bi-activity"></i>
+                                            <select id="session-status" class="form-select" required>
+                                                <option value="Dibuka" selected>Dibuka</option>
+                                                <option value="Hampir Penuh">Hampir Penuh</option>
+                                                <option value="Belum Dibuka">Belum Dibuka</option>
+                                            </select>
+                                        </div>
+                                    </div>
 
+                                    <div class="col-md-6">
+                                        <label for="session-quota" class="form-label">
+                                            Kuota Peserta <span class="required-mark">*</span>
+                                        </label>
+                                        <div class="input-icon">
+                                            <i class="bi bi-people"></i>
+                                            <input type="number" id="session-quota" class="form-control"
+                                                   min="1" step="1" placeholder="Contoh: 50" required>
+                                        </div>
+                                        <div class="invalid-feedback">Masukkan kuota sekurang-kurangnya seorang.</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <small class="text-muted">
+                                    <span class="required-mark">*</span> Medan wajib diisi
+                                </small>
+
+                                <div class="action-buttons">
+                                    <button type="reset" class="btn btn-outline-secondary px-3">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i> Set Semula
+                                    </button>
+                                    <button type="submit" id="submit-button" class="btn btn-primary px-4">
+                                        <i class="bi bi-check-circle me-1"></i> Simpan Sesi
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
                     </div>
 
-                    <!-- BUTTON -->
-                    <div class="mt-4 d-flex justify-content-end">
+                    <!-- RINGKASAN LANGSUNG -->
+                    <aside class="col-lg-4">
+                        <div class="summary-panel">
+                            <section class="content-card mb-3">
+                                <div class="summary-head d-flex justify-content-between align-items-start gap-2">
+                                    <div>
+                                        <div class="small text-primary fw-bold text-uppercase mb-1">Ringkasan Sesi</div>
+                                        <div id="preview-name" class="summary-name">Sesi Kursus Baharu</div>
+                                    </div>
+                                    <span id="preview-status" class="status-preview status-open">Dibuka</span>
+                                </div>
 
-                        <button type="reset" class="btn btn-outline-secondary me-2">
-                            Reset
-                        </button>
+                                <div class="summary-body">
+                                    <div class="summary-row">
+                                        <div class="summary-row-icon"><i class="bi bi-diagram-3"></i></div>
+                                        <div>
+                                            <div class="summary-row-label">PERINGKAT</div>
+                                            <div id="preview-level" class="summary-row-value">Belum dipilih</div>
+                                        </div>
+                                    </div>
 
-                        <button type="submit" class="btn btn-primary">
-                            <i class="bi bi-save me-1"></i>
-                            Simpan Sesi
-                        </button>
+                                    <div class="summary-row">
+                                        <div class="summary-row-icon"><i class="bi bi-calendar-range"></i></div>
+                                        <div>
+                                            <div class="summary-row-label">TARIKH DAN TEMPOH</div>
+                                            <div id="preview-date" class="summary-row-value">Belum ditetapkan</div>
+                                            <div id="preview-duration" class="small text-muted mt-1"></div>
+                                        </div>
+                                    </div>
 
-                    </div>
+                                    <div class="summary-row">
+                                        <div class="summary-row-icon"><i class="bi bi-geo-alt"></i></div>
+                                        <div>
+                                            <div class="summary-row-label">LOKASI</div>
+                                            <div id="preview-location" class="summary-row-value">Belum dimasukkan</div>
+                                        </div>
+                                    </div>
 
-                </form>
+                                    <div class="summary-row">
+                                        <div class="summary-row-icon"><i class="bi bi-people"></i></div>
+                                        <div>
+                                            <div class="summary-row-label">KUOTA PESERTA</div>
+                                            <div id="preview-quota" class="summary-row-value">Belum ditetapkan</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
 
-            </div>
-
-        </div>
-
-    </main>
-
-
-
-
-
-  </div>
+                            <div class="guide-card d-flex align-items-start gap-2" role="note">
+                                <i class="bi bi-lightbulb-fill mt-1" aria-hidden="true"></i>
+                                <div class="small">
+                                    <strong>Semak sebelum simpan:</strong>
+                                    pastikan tarikh tamat tidak mendahului tarikh mula dan kuota bersesuaian dengan pecahan pencalonan negeri.
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </form>
+        </main>
+    </div>
 </div>
 
 <!-- FOOTER -->
@@ -226,57 +711,223 @@
 
 <!-- LOAD HEADER / FOOTER / SIDEBAR -->
 <script>
-fetch("header.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("header").innerHTML = data);
+    fetch("header.html")
+        .then(res => res.text())
+        .then(data => document.getElementById("header").innerHTML = data)
+        .catch(() => {});
 
-fetch("footer.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("footer").innerHTML = data);
+    fetch("footer.html")
+        .then(res => res.text())
+        .then(data => document.getElementById("footer").innerHTML = data)
+        .catch(() => {});
 
-fetch("sidebar.html")
-  .then(res => res.text())
-  .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
+    fetch("sidebar.html")
+        .then(res => res.text())
+        .then(data => document.getElementById("sidebar-placeholder").innerHTML = data)
+        .catch(() => {});
 </script>
 
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-document.querySelector('form').addEventListener('submit', async function (e) {
-  e.preventDefault();
-  const name      = this.querySelector('input[type=text]').value.trim();
-  const level     = this.querySelectorAll('select')[0].value;
-  const startDate = this.querySelectorAll('input[type=date]')[0].value;
-  const endDate   = this.querySelectorAll('input[type=date]')[1].value;
-  const location  = this.querySelectorAll('input[type=text]')[1]?.value?.trim() || '';
-  const quota     = this.querySelector('input[type=number]')?.value || '';
-  const status    = this.querySelectorAll('select')[1]?.value || 'Dibuka';
+    const form = document.getElementById('course-session-form');
+    const submitButton = document.getElementById('submit-button');
+    const defaultSubmitContent = submitButton.innerHTML;
 
-  if (!name || !level || !startDate || !endDate || !location) {
-    return alert('Sila lengkapkan semua medan wajib.');
-  }
+    const fields = {
+        name: document.getElementById('session-name'),
+        level: document.getElementById('session-level'),
+        startDate: document.getElementById('start-date'),
+        endDate: document.getElementById('end-date'),
+        location: document.getElementById('session-location'),
+        objective: document.getElementById('session-objective'),
+        status: document.getElementById('session-status'),
+        quota: document.getElementById('session-quota')
+    };
 
-  const btn = this.querySelector('[type=submit]');
-  btn.disabled = true; btn.textContent = 'Menyimpan...';
+    const statusClass = {
+        'Dibuka': 'status-open',
+        'Hampir Penuh': 'status-warning',
+        'Belum Dibuka': 'status-closed'
+    };
 
-  try {
-    const res = await fetch(`${API}/api/sessions`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, level, startDate, endDate, location, quota, status })
-    });
-    const result = await res.json();
-    if (result.success) {
-      alert('✅ Sesi berjaya ditambah!');
-      window.location.href = 'course_management.html';
-    } else {
-      alert('❌ ' + result.message);
-      btn.disabled = false; btn.textContent = 'Simpan Sesi';
+    function formatDate(dateString) {
+        if (!dateString) return '';
+
+        const parts = dateString.split('-').map(Number);
+        const date = new Date(parts[0], parts[1] - 1, parts[2]);
+        return new Intl.DateTimeFormat('ms-MY', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        }).format(date);
     }
-  } catch (err) {
-    alert('❌ Gagal menghubungi pelayan.');
-    btn.disabled = false; btn.textContent = 'Simpan Sesi';
-  }
-});
+
+    function calculateDuration() {
+        if (!fields.startDate.value || !fields.endDate.value) return null;
+
+        const start = new Date(`${fields.startDate.value}T00:00:00`);
+        const end = new Date(`${fields.endDate.value}T00:00:00`);
+        const days = Math.round((end - start) / 86400000) + 1;
+        return Number.isFinite(days) && days > 0 ? days : null;
+    }
+
+    function updateEndDateLimit() {
+        fields.endDate.min = fields.startDate.value || '';
+
+        if (fields.startDate.value && fields.endDate.value && fields.endDate.value < fields.startDate.value) {
+            fields.endDate.setCustomValidity('Tarikh tamat tidak boleh mendahului tarikh mula.');
+            document.getElementById('end-date-feedback').textContent = 'Tarikh tamat tidak boleh mendahului tarikh mula.';
+        } else {
+            fields.endDate.setCustomValidity('');
+            document.getElementById('end-date-feedback').textContent = 'Sila pilih tarikh tamat.';
+        }
+    }
+
+    function updatePreview() {
+        document.getElementById('preview-name').textContent = fields.name.value.trim() || 'Sesi Kursus Baharu';
+
+        const selectedLevel = fields.level.options[fields.level.selectedIndex];
+        document.getElementById('preview-level').textContent = fields.level.value
+            ? selectedLevel.textContent
+            : 'Belum dipilih';
+
+        if (fields.startDate.value && fields.endDate.value) {
+            document.getElementById('preview-date').textContent =
+                `${formatDate(fields.startDate.value)} – ${formatDate(fields.endDate.value)}`;
+        } else if (fields.startDate.value) {
+            document.getElementById('preview-date').textContent = `Bermula ${formatDate(fields.startDate.value)}`;
+        } else {
+            document.getElementById('preview-date').textContent = 'Belum ditetapkan';
+        }
+
+        const duration = calculateDuration();
+        document.getElementById('preview-duration').textContent = duration ? `${duration} hari` : '';
+        document.getElementById('preview-location').textContent = fields.location.value.trim() || 'Belum dimasukkan';
+        document.getElementById('preview-quota').textContent = fields.quota.value
+            ? `${fields.quota.value} peserta`
+            : 'Belum ditetapkan';
+
+        const previewStatus = document.getElementById('preview-status');
+        previewStatus.textContent = fields.status.value;
+        previewStatus.className = `status-preview ${statusClass[fields.status.value] || 'status-closed'}`;
+    }
+
+    function showAlert(type, message) {
+        const alertBox = document.getElementById('form-alert');
+        const icon = type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-circle-fill';
+        alertBox.className = `alert alert-${type} form-alert is-visible`;
+        alertBox.replaceChildren();
+
+        const alertIcon = document.createElement('i');
+        alertIcon.className = `bi ${icon} me-2`;
+        alertIcon.setAttribute('aria-hidden', 'true');
+
+        const alertMessage = document.createElement('span');
+        alertMessage.textContent = message;
+
+        alertBox.append(alertIcon, alertMessage);
+        alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function hideAlert() {
+        const alertBox = document.getElementById('form-alert');
+        alertBox.className = 'alert form-alert';
+        alertBox.textContent = '';
+    }
+
+    function setSubmitting(isSubmitting) {
+        submitButton.disabled = isSubmitting;
+        submitButton.innerHTML = isSubmitting
+            ? '<span class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>Menyimpan...'
+            : defaultSubmitContent;
+    }
+
+    Object.values(fields).forEach(field => {
+        field.addEventListener('input', updatePreview);
+        field.addEventListener('change', updatePreview);
+    });
+
+    fields.startDate.addEventListener('change', () => {
+        updateEndDateLimit();
+        updatePreview();
+    });
+
+    fields.endDate.addEventListener('change', () => {
+        updateEndDateLimit();
+        updatePreview();
+    });
+
+    form.addEventListener('reset', () => {
+        hideAlert();
+        form.classList.remove('was-validated');
+
+        window.setTimeout(() => {
+            fields.endDate.min = '';
+            fields.endDate.setCustomValidity('');
+            updatePreview();
+        }, 0);
+    });
+
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+        hideAlert();
+        updateEndDateLimit();
+
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            showAlert('danger', 'Sila lengkapkan semua medan wajib dengan maklumat yang sah.');
+            form.querySelector(':invalid')?.focus();
+            return;
+        }
+
+        const payload = {
+            name: fields.name.value.trim(),
+            level: fields.level.value,
+            startDate: fields.startDate.value,
+            endDate: fields.endDate.value,
+            location: fields.location.value.trim(),
+            quota: fields.quota.value,
+            status: fields.status.value,
+            objective: fields.objective.value.trim(),
+            components: ['B-Course','C-Course','TTX','FTX'],
+            latitude: Number(document.getElementById('session-latitude').value) || null,
+            longitude: Number(document.getElementById('session-longitude').value) || null,
+            attendanceRadiusM: Number(document.getElementById('attendance-radius').value) || 300,
+            tentative: document.getElementById('session-tentative').value.split('\n').map(line=>line.trim()).filter(Boolean).map(line=>{const [date,time,activity,venue]=line.split('|').map(value=>value.trim());return {date:date||'',time:time||'',activity:activity||'',venue:venue||''};})
+        };
+
+        setSubmitting(true);
+
+        try {
+            const response = await fetch(`${API}/api/sessions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                showAlert('success', 'Sesi kursus berjaya ditambah. Anda akan dibawa kembali ke senarai sesi.');
+                window.setTimeout(() => {
+                    window.location.href = 'course_management.html';
+                }, 900);
+                return;
+            }
+
+            showAlert('danger', result.message || 'Sesi kursus tidak dapat disimpan. Sila cuba semula.');
+        } catch (error) {
+            console.error('Gagal menyimpan sesi kursus:', error);
+            showAlert('danger', 'Gagal menghubungi pelayan. Sila semak sambungan dan cuba semula.');
+        } finally {
+            setSubmitting(false);
+        }
+    });
+
+    updatePreview();
 </script>
+
+</body>
+</html>

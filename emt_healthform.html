@@ -1,9 +1,12 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 
-<html lang="en">
+<!DOCTYPE html>
+
+<html lang="ms">
 <head>
 <meta charset="utf-8"/>
-<title>EMT MDS Form</title>
+    <title>Rekod Pesakit MDS+ MyEMT</title>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"/>
@@ -3003,7 +3006,357 @@
     margin-top:7px !important;
 }
 </style>
-</head>
+<style>
+/* =========================================================
+   UNIVERSAL 3-STEP MDS WORKFLOW
+========================================================= */
+.mds-page{
+  max-width:1500px;
+}
+
+.mds-workflow{
+  max-width:1500px;
+  margin-left:auto;
+  margin-right:auto;
+  display:grid;
+  grid-template-columns:1fr 54px 1fr 54px 1fr;
+  align-items:center;
+  background:#fff;
+  border:1px solid #e0e5eb;
+  border-radius:16px;
+  padding:.8rem;
+  box-shadow:0 .25rem .8rem rgba(0,0,0,.055);
+}
+
+.workflow-tab{
+  border:1px solid transparent;
+  border-radius:12px;
+  background:transparent;
+  min-height:72px;
+  padding:.75rem .85rem;
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  text-align:left;
+  color:#526173;
+  transition:.15s ease;
+}
+
+.workflow-tab:hover{
+  background:#f5f9ff;
+  border-color:#dce9fb;
+}
+
+.workflow-tab.active{
+  background:linear-gradient(135deg,#0d6efd,#0b5ed7);
+  color:#fff;
+  box-shadow:0 .35rem .8rem rgba(13,110,253,.18);
+}
+
+.workflow-number{
+  width:34px;
+  height:34px;
+  flex:0 0 34px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:#e9f2ff;
+  color:#0d6efd;
+  font-weight:800;
+}
+
+.workflow-tab.active .workflow-number{
+  background:#fff;
+  color:#0d6efd;
+}
+
+.workflow-tab-text{
+  display:flex;
+  flex-direction:column;
+  gap:.08rem;
+  min-width:0;
+}
+
+.workflow-tab-text strong{
+  font-size:.92rem;
+}
+
+.workflow-tab-text small{
+  opacity:.78;
+  font-size:.72rem;
+}
+
+.workflow-line{
+  height:2px;
+  background:#dfe5eb;
+}
+
+.workflow-panel{
+  display:none;
+  background:#f8fafc;
+}
+
+.workflow-panel.active{
+  display:block;
+}
+
+.workflow-panel-head{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:1rem;
+  padding:1rem 1.1rem;
+  background:#fff;
+  border-bottom:1px solid #dfe4e9;
+}
+
+.workflow-eyebrow{
+  font-size:.68rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  color:#0d6efd;
+  margin-bottom:.25rem;
+}
+
+.workflow-access-badge{
+  display:inline-flex;
+  align-items:center;
+  padding:.38rem .65rem;
+  border-radius:999px;
+  background:#eaf6ef;
+  color:#146c43;
+  border:1px solid #badbcc;
+  font-size:.75rem;
+  font-weight:700;
+}
+
+.workflow-audit-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:.7rem;
+  padding:1rem 1rem 0;
+}
+
+#workflowStep2 .workflow-audit-grid,
+#workflowStep3 .workflow-audit-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+
+.audit-card{
+  display:flex;
+  align-items:center;
+  gap:.65rem;
+  min-height:70px;
+  padding:.65rem .75rem;
+  border:1px solid #dde4eb;
+  border-radius:11px;
+  background:#fff;
+}
+
+.audit-icon{
+  width:35px;
+  height:35px;
+  flex:0 0 35px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:#e9f2ff;
+  color:#0d6efd;
+}
+
+.audit-label{
+  color:#6c757d;
+  font-size:.7rem;
+  margin-bottom:.1rem;
+}
+
+.audit-input{
+  border:0;
+  background:transparent;
+  width:100%;
+  min-width:0;
+  font-weight:750;
+  color:#212529;
+  padding:0;
+  outline:0;
+}
+
+.audit-value{
+  font-weight:800;
+}
+
+.workflow-actions{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-between;
+  align-items:center;
+  gap:.75rem;
+  padding:1rem;
+  background:#fff;
+  border-top:1px solid #dfe4e9;
+}
+
+#step1Content,
+#step2Content{
+  background:#fff;
+}
+
+.pharmacy-summary{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:.75rem;
+  padding:1rem 1rem 0;
+}
+
+.pharmacy-summary-item{
+  border:1px solid #dde4eb;
+  border-radius:11px;
+  background:#fff;
+  padding:.75rem .85rem;
+  min-height:70px;
+}
+
+.pharmacy-summary-item span{
+  display:block;
+  color:#6c757d;
+  font-size:.7rem;
+  margin-bottom:.2rem;
+}
+
+.pharmacy-summary-item strong{
+  display:block;
+  word-break:break-word;
+}
+
+.pharmacy-content-card,
+.confirmation-card{
+  margin:1rem;
+  border:1px solid #dde4eb;
+  border-radius:12px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.pharmacy-section-title{
+  background:#e9f2ff;
+  color:#0b3d91;
+  padding:.7rem .85rem;
+  font-weight:800;
+  border-bottom:1px solid #cfe2ff;
+}
+
+.pharmacy-column .right-row{
+  border-bottom:1px solid #e1e5e9!important;
+}
+
+.pharmacy-column .field-caption{
+  background:#f7f9fb!important;
+}
+
+.confirmation-card{
+  padding:1rem;
+}
+
+.confirmation-head{
+  display:flex;
+  align-items:center;
+  gap:.75rem;
+  padding-bottom:.8rem;
+  border-bottom:1px solid #e7ebef;
+}
+
+.confirmation-icon{
+  width:42px;
+  height:42px;
+  flex:0 0 42px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:#d1e7dd;
+  color:#146c43;
+  font-size:1.15rem;
+}
+
+.confirmation-check{
+  display:flex;
+  align-items:flex-start;
+  gap:.65rem;
+  padding:.85rem;
+  border:1px solid #dfe5ea;
+  border-radius:10px;
+  background:#f8fafc;
+  cursor:pointer;
+}
+
+.confirmation-check .form-check-input{
+  margin:.15rem 0 0;
+  flex:0 0 auto;
+}
+
+/* Step 2 gets the original MDS two-column layout */
+#workflowStep2 .mds-bottom-grid{
+  border-top:0!important;
+}
+
+/* The main title stays consistent across all tabs */
+.mds-title{
+  border-radius:0!important;
+}
+
+@media(max-width:1100px){
+  .mds-workflow{
+    grid-template-columns:1fr;
+    gap:.4rem;
+  }
+
+  .workflow-line{
+    display:none;
+  }
+
+  .workflow-tab{
+    min-height:58px;
+  }
+
+  .workflow-audit-grid,
+  #workflowStep2 .workflow-audit-grid,
+  #workflowStep3 .workflow-audit-grid,
+  .pharmacy-summary{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+@media(max-width:700px){
+  .workflow-audit-grid,
+  #workflowStep2 .workflow-audit-grid,
+  #workflowStep3 .workflow-audit-grid,
+  .pharmacy-summary{
+    grid-template-columns:1fr;
+  }
+
+  .workflow-actions{
+    align-items:stretch;
+  }
+
+  .workflow-actions .btn{
+    width:100%;
+  }
+}
+</style><style>
+/* =========================================================
+   4-STEP UPDATE WORKFLOW
+========================================================= */
+.mds-workflow-four{grid-template-columns:1fr 38px 1fr 38px 1fr 38px 1fr!important}
+.record-access-card{max-width:1500px;margin-left:auto;margin-right:auto;display:grid;grid-template-columns:46px minmax(220px,1fr) minmax(360px,.9fr) auto;gap:.8rem;align-items:center;background:#fff;border:1px solid #dfe5eb;border-radius:14px;padding:.8rem 1rem;box-shadow:0 .2rem .65rem rgba(0,0,0,.05)}
+.record-access-icon{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#e9f2ff;color:#0d6efd;font-size:1.05rem}
+.record-access-control{display:flex;gap:.5rem}.record-stage-box{display:flex;flex-direction:column;align-items:flex-end;gap:.25rem;white-space:nowrap}
+.command-summary-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;padding:1rem 1rem 0}
+.command-summary-card{background:#fff;border:1px solid #dde4eb;border-radius:11px;padding:.8rem .9rem;min-height:76px}.command-summary-card span{display:block;color:#6c757d;font-size:.7rem;margin-bottom:.2rem}.command-summary-card strong{display:block;word-break:break-word}
+.command-review-card{margin:1rem;border:1px solid #dde4eb;border-radius:12px;background:#fff;padding:1rem}
+.workflow-save-state{font-size:.75rem;color:#6c757d}
+@media(max-width:1200px){.record-access-card{grid-template-columns:46px 1fr}.record-access-control,.record-stage-box{grid-column:1/-1}.record-stage-box{align-items:flex-start}.command-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.mds-workflow-four{grid-template-columns:1fr!important}}
+@media(max-width:700px){.record-access-control{flex-direction:column}.command-summary-grid{grid-template-columns:1fr}}
+</style></head>
 <body>
 <div id="header"></div>
 <div class="container-fluid py-4">
@@ -3012,26 +3365,95 @@
 <main class="col-md-9 col-lg-10 px-4">
 <div class="d-flex justify-content-between align-items-center mb-3">
 <div>
-<h4 class="mb-0">Borang EMT MDS+</h4>
-<small class="text-muted">EMERGENCY MEDICAL TEAM MEDICAL RECORD (MDS+)</small>
+<h4 class="mb-0">Rekod EMT MDS+</h4>
+<small class="text-muted">Pendaftaran → Doktor → Farmasi → Command Post</small>
 </div>
 <button class="btn btn-primary" id="backBtn" type="button">
 <i class="bi bi-arrow-left me-1"></i> Kembali
                 </button>
 </div>
-<form class="mds-page" id="mdsForm">
+<div class="mds-workflow mds-workflow-four mb-3">
+<button class="workflow-tab active" data-step-target="1" type="button">
+<span class="workflow-number">1</span>
+<span class="workflow-tab-text"><strong>Pendaftaran</strong><small>Daftar pesakit &amp; jana ID</small></span>
+</button>
+<div class="workflow-line"></div>
+<button class="workflow-tab" data-step-target="2" type="button">
+<span class="workflow-number">2</span>
+<span class="workflow-tab-text"><strong>Doktor</strong><small>Konsultasi &amp; diagnosis</small></span>
+</button>
+<div class="workflow-line"></div>
+<button class="workflow-tab" data-step-target="3" type="button">
+<span class="workflow-number">3</span>
+<span class="workflow-tab-text"><strong>Farmasi</strong><small>Ubat &amp; catatan farmasi</small></span>
+</button>
+<div class="workflow-line"></div>
+<button class="workflow-tab" data-step-target="4" type="button">
+<span class="workflow-number">4</span>
+<span class="workflow-tab-text"><strong>Command Post</strong><small>Semakan MDS &amp; pengesahan</small></span>
+</button>
+</div><div class="record-access-card mb-4">
+<div class="record-access-icon"><i class="bi bi-search"></i></div>
+<div class="record-access-copy">
+<div class="fw-bold">Buka Rekod Menggunakan ID MDS</div>
+<div class="small text-muted">Untuk doktor, farmasi atau Command Post: masukkan ID yang diberikan kepada pesakit semasa pendaftaran.</div>
+</div>
+<div class="record-access-control">
+<input class="form-control" id="workflowRecordLookup" placeholder="Contoh: MDS809493" type="text"/>
+<button class="btn btn-primary" id="btnLoadWorkflowRecord" type="button"><i class="bi bi-folder2-open me-1"></i>Buka Rekod</button>
+</div>
+<div class="record-stage-box">
+<span class="small text-muted">Status Rekod</span>
+<span class="badge bg-secondary" id="workflowStageBadge">Rekod Baharu</span>
+</div>
+</div><form class="mds-page" id="mdsForm">
 <div class="mds-form">
 <div class="mds-title">PASUKAN PERUBATAN KECEMASAN – REKOD PERUBATAN (MDS+)</div>
 <!-- =========================================================
                          TOP: DATE THROUGH HISTORY OF PRESENT ILLNESS
                     ========================================================== -->
-<div class="mds-top-grid"><div class="mds-top-left"><div class="top-fields">
+<section class="workflow-panel active" data-step="1" id="workflowStep1">
+<div class="workflow-panel-head">
+<div>
+<div class="workflow-eyebrow">LANGKAH 1 DARIPADA 4</div>
+<h5 class="mb-1 fw-bold">Pendaftaran Pesakit</h5>
+<div class="text-muted small">Daftar maklumat asas pesakit. Selepas disimpan, sistem memberikan ID MDS untuk digunakan pada langkah seterusnya.</div>
+</div>
+<span class="workflow-access-badge">
+<i class="bi bi-people me-1"></i>
+      Akses semua pengguna
+    </span>
+</div>
+<div class="workflow-audit-grid mb-3">
+<div class="audit-card">
+<div class="audit-icon"><i class="bi bi-person-badge"></i></div>
+<div>
+<div class="audit-label">ID Petugas Pendaftaran</div>
+<input class="audit-input" id="registrationUserId" readonly=""/>
+</div>
+</div>
+<div class="audit-card">
+<div class="audit-icon"><i class="bi bi-person"></i></div>
+<div>
+<div class="audit-label">Nama Petugas</div>
+<input class="audit-input" id="registrationUserName" readonly=""/>
+</div>
+</div>
+<div class="audit-card">
+<div class="audit-icon"><i class="bi bi-upc-scan"></i></div>
+<div>
+<div class="audit-label">ID Rekod MDS</div>
+<div class="audit-value" id="registrationRecordId">-</div>
+</div>
+</div>
+</div>
+<div id="step1Content"><div class="mds-top-grid"><div class="mds-top-left"><div class="top-fields">
 <div class="top-field">
 <label for="date">Tarikh</label>
 <input class="form-control compact-input" id="date" name="date" type="date"/>
 </div>
 <div class="top-field">
-<label for="recordId">ID</label>
+<label for="recordId">ID Rekod MDS</label>
 <input class="form-control compact-input bg-light" id="recordId" readonly="" type="text"/>
 </div>
 </div><div class="identity-row identity-name"><label class="identity-label" for="patientName">Nama</label><div class="identity-field"><input class="form-control compact-input" id="patientName" name="patientName" placeholder="Masukkan nama penuh" type="text"/></div></div><div class="identity-row identity-nickname"><label class="identity-label" for="nickname">Nama Panggilan</label><div class="identity-field"><input class="form-control compact-input" id="nickname" name="nickname" placeholder="Masukkan nama panggilan" type="text"/></div></div><div class="right-row demographic-row"><div class="demographic-full-row age-full-row"><div class="field-area">
@@ -3125,7 +3547,7 @@
 </div>
 <div id="addressMap" style="">
 <div class="map-load-message" id="mapLoadMessage">
-            Loading map...
+                                                        Peta sedang dimuatkan...
         </div>
 </div>
 <div class="coordinate-grid">
@@ -3137,6 +3559,12 @@
 <label class="form-label small mb-1" for="longitude">Longitude</label>
 <input class="form-control form-control-sm bg-light" id="longitude" name="longitude" readonly="" type="text"/>
 </div>
+</div>
+<div class="row g-2 mt-2">
+<div class="col-md-6"><label class="form-label small mb-1" for="activityLocationId">ID Lokasi Aktiviti</label><input class="form-control form-control-sm bg-light" id="activityLocationId" readonly type="text" placeholder="Dijana daripada titik peta"/></div>
+<div class="col-md-6"><label class="form-label small mb-1" for="activityFacilityName">Nama Fasiliti</label><input class="form-control form-control-sm" id="activityFacilityName" type="text" placeholder="Jika berkaitan"/></div>
+<div class="col-md-6"><label class="form-label small mb-1" for="activityState">Negeri / Wilayah</label><input class="form-control form-control-sm" id="activityState" type="text"/></div>
+<div class="col-md-6"><label class="form-label small mb-1" for="activityDistrict">Daerah</label><input class="form-control form-control-sm" id="activityDistrict" type="text"/></div>
 </div>
 <div class="map-help text-muted">
                                                     Cari lokasi, tekan <strong>Lokasi Semasa</strong>, atau klik terus pada peta.
@@ -3160,7 +3588,44 @@
 <label class="unified-radio-option"><input class="form-check-input" id="tetanusN" name="vacc_tetanus" type="radio" value="N"/> Tidak</label>
 <label class="unified-radio-option"><input class="form-check-input" id="tetanusU" name="vacc_tetanus" type="radio" value="Unknown"/> Tidak diketahui</label>
 </div>
-</div></div><div class="vacc-allergy-col allergy-col"><div class="unified-option-box allergy-box"><div class="unified-option-title">Alergi</div><div class="unified-option-content"><div class="unified-options-row"><label class="unified-radio-option"><input class="form-check-input" id="allergyY" name="allergy" type="radio" value="Y"/> Ya (Ubat / Makanan / Lain-lain)</label><label class="unified-radio-option"><input class="form-check-input" id="allergyN" name="allergy" type="radio" value="N"/> Tidak</label><label class="unified-radio-option"><input class="form-check-input" id="allergyU" name="allergy" type="radio" value="Unknown"/> Tidak diketahui</label></div><input class="form-control unified-details-input" id="allergyDetails" name="allergyDetails" placeholder="Butiran alahan (jika berkaitan)" type="text"/></div></div></div></div></div></div><div class="mds-bottom-grid"><div class="mds-left mds-checklist-column">
+</div></div><div class="vacc-allergy-col allergy-col"><div class="unified-option-box allergy-box"><div class="unified-option-title">Alergi</div><div class="unified-option-content"><div class="unified-options-row"><label class="unified-radio-option"><input class="form-check-input" id="allergyY" name="allergy" type="radio" value="Y"/> Ya (Ubat / Makanan / Lain-lain)</label><label class="unified-radio-option"><input class="form-check-input" id="allergyN" name="allergy" type="radio" value="N"/> Tidak</label><label class="unified-radio-option"><input class="form-check-input" id="allergyU" name="allergy" type="radio" value="Unknown"/> Tidak diketahui</label></div><input class="form-control unified-details-input" id="allergyDetails" name="allergyDetails" placeholder="Butiran alahan (jika berkaitan)" type="text"/></div></div></div></div></div></div></div>
+<div class="workflow-actions">
+<div class="small text-muted">
+      Maklumat kekal dalam borang semasa anda bergerak antara tab.
+    </div>
+<button class="btn btn-primary px-4" id="btnRegisterPatient" type="button"><i class="bi bi-person-plus me-1"></i>Daftar Pesakit &amp; Jana ID</button>
+</div>
+</section><section class="workflow-panel" data-step="2" id="workflowStep2">
+<div class="workflow-panel-head">
+<div>
+<div class="workflow-eyebrow">LANGKAH 2 DARIPADA 4</div>
+<h5 class="mb-1 fw-bold">Konsultasi Doktor</h5>
+<div class="text-muted small">
+        Lengkapkan pengelasan MDS, sejarah klinikal, tanda vital, pemeriksaan dan diagnosis.
+      </div>
+</div>
+<span class="workflow-access-badge">
+<i class="bi bi-people me-1"></i>
+      Akses semua pengguna
+    </span>
+</div>
+<div class="workflow-audit-grid mb-3">
+<div class="audit-card">
+<div class="audit-icon"><i class="bi bi-person-vcard"></i></div>
+<div>
+<div class="audit-label">ID Doktor / Petugas Klinikal</div>
+<input class="audit-input" id="doctorUserId" readonly=""/>
+</div>
+</div>
+<div class="audit-card">
+<div class="audit-icon"><i class="bi bi-person"></i></div>
+<div>
+<div class="audit-label">Nama Doktor / Petugas Klinikal</div>
+<input class="audit-input" id="doctorUserName" readonly=""/>
+</div>
+</div>
+</div>
+<div id="step2Content"><div class="mds-bottom-grid"><div class="mds-left mds-checklist-column">
 <div class="section-bar">MDS – Tandakan semua yang berkenaan</div>
 <!-- TRAUMA -->
 <div class="pdf-section">
@@ -3266,7 +3731,7 @@
 <div class="check-row">
 <span class="check-no">22</span>
 <span class="check-box"><input class="form-check-input clinical-check" data-group="Additional" type="checkbox" value="Additional 22"/></span>
-<span class="check-label">Lain-lain kes tambahan</span>
+<span class="check-label">Item Tambahan 22</span>
 </div>
 </div>
 <!-- EMERGENCY -->
@@ -3285,7 +3750,7 @@
 </div>
 <!-- OTHER KEY DISEASES -->
 <div class="pdf-section">
-<div class="section-heading">Other key diseases</div>
+                                <div class="section-heading">Penyakit penting lain</div>
 <div class="check-row">
 <span class="check-no">25</span>
 <span class="check-box"><input class="form-check-input clinical-check" data-group="Other key diseases" type="checkbox" value="Skin disease"/></span>
@@ -3576,7 +4041,66 @@
 </div>
 </div>
 </div>
-</div><div class="right-row">
+</div></div></div></div>
+<div class="workflow-actions">
+<button class="btn btn-outline-secondary px-4" data-go-step="1" type="button">
+<i class="bi bi-arrow-left me-1"></i>
+      Kembali
+    </button>
+<button class="btn btn-primary px-4" id="btnSaveDoctor" type="button"><i class="bi bi-save me-1"></i>Simpan Konsultasi Doktor</button>
+</div>
+</section><section class="workflow-panel" data-step="3" id="workflowStep3">
+<div class="workflow-panel-head">
+<div>
+<div class="workflow-eyebrow">LANGKAH 3 DARIPADA 4</div>
+<h5 class="mb-1 fw-bold">Farmasi</h5>
+<div class="text-muted small">Buka ID MDS yang sama, semak diagnosis dan rekod ubat yang dibekalkan kepada pesakit.</div>
+</div>
+<span class="workflow-access-badge">
+<i class="bi bi-people me-1"></i>
+      Akses semua pengguna
+    </span>
+</div>
+<div class="pharmacy-summary mb-3">
+<div class="pharmacy-summary-item">
+<span>Pesakit</span>
+<strong id="pharmacyPatientSummary">-</strong>
+</div>
+<div class="pharmacy-summary-item">
+<span>ID MDS</span>
+<strong id="pharmacyRecordSummary">-</strong>
+</div>
+<div class="pharmacy-summary-item">
+<span>Diagnosis</span>
+<strong id="pharmacyDiagnosisSummary">-</strong>
+</div>
+<div class="pharmacy-summary-item">
+<span>Alergi</span>
+<strong id="pharmacyAllergySummary">-</strong>
+</div>
+</div>
+<div class="workflow-audit-grid mb-3">
+<div class="audit-card">
+<div class="audit-icon"><i class="bi bi-person-vcard"></i></div>
+<div>
+<div class="audit-label">ID Petugas Farmasi</div>
+<input class="audit-input" id="pharmacyUserId" readonly=""/>
+</div>
+</div>
+<div class="audit-card">
+<div class="audit-icon"><i class="bi bi-person"></i></div>
+<div>
+<div class="audit-label">Nama Petugas Farmasi</div>
+<input class="audit-input" id="pharmacyUserName" readonly=""/>
+</div>
+</div>
+</div>
+<div class="pharmacy-content-card">
+<div class="pharmacy-section-title">
+<i class="bi bi-capsule-pill me-2"></i>
+      Maklumat Farmasi
+    </div>
+<div class="mds-right pharmacy-column" id="step3MedicationContent"><div class="right-row">
 <div class="row g-0">
 <div class="col-2">
 <div class="field-caption">Maklumat Ubat</div>
@@ -3612,12 +4136,75 @@
 </div><div class="mds-memo-right"><div class="memo-box">
 <div class="memo-title">Memo</div>
 <textarea class="form-control border-0" id="memo" name="memo" placeholder="Masukkan memo atau catatan tambahan..." rows="5"></textarea>
-</div></div></div></div></div>
-<div class="d-flex justify-content-end gap-2 p-3 bg-white border-top">
-    <button type="submit" class="btn btn-primary px-4" id="submitBtn">
-        <i class="bi bi-send me-1"></i> Hantar
-    </button>
+</div></div></div>
 </div>
+
+<div class="workflow-actions">
+<button class="btn btn-outline-secondary px-4" data-go-step="2" type="button"><i class="bi bi-arrow-left me-1"></i>Kembali</button>
+<button class="btn btn-primary px-4" id="btnSavePharmacy" type="button"><i class="bi bi-save me-1"></i>Simpan Maklumat Farmasi</button>
+</div>
+</section><section class="workflow-panel" data-step="4" id="workflowStep4">
+<div class="workflow-panel-head">
+<div>
+<div class="workflow-eyebrow">LANGKAH 4 DARIPADA 4</div>
+<h5 class="mb-1 fw-bold">Command Post — Semakan MDS &amp; Pengesahan</h5>
+<div class="text-muted small">Command Post menyemak rekod lengkap daripada pendaftaran, doktor dan farmasi sebelum pengesahan akhir.</div>
+</div>
+<span class="workflow-access-badge"><i class="bi bi-people me-1"></i>Akses semua pengguna</span>
+</div>
+<div class="workflow-audit-grid mb-3">
+<div class="audit-card">
+<div class="audit-icon"><i class="bi bi-person-vcard"></i></div>
+<div><div class="audit-label">ID Petugas Command Post</div><input class="audit-input" id="commandPostUserId" readonly=""/></div>
+</div>
+<div class="audit-card">
+<div class="audit-icon"><i class="bi bi-person"></i></div>
+<div><div class="audit-label">Nama Petugas Command Post</div><input class="audit-input" id="commandPostUserName" readonly=""/></div>
+</div>
+</div>
+<div class="command-summary-grid">
+<div class="command-summary-card"><span>ID MDS</span><strong id="cpRecordId">-</strong></div>
+<div class="command-summary-card"><span>Pesakit</span><strong id="cpPatientName">-</strong></div>
+<div class="command-summary-card"><span>Diagnosis</span><strong id="cpDiagnosis">-</strong></div>
+<div class="command-summary-card"><span>Hasil Rawatan</span><strong id="cpOutcome">-</strong></div>
+<div class="command-summary-card"><span>Bilangan Ubat</span><strong id="cpMedicationCount">0</strong></div>
+                            <div class="command-summary-card"><span>Status Aliran Kerja</span><strong id="cpWorkflowStatus">-</strong></div>
+</div>
+<div class="command-review-card mt-3">
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+<div>
+<h6 class="fw-bold mb-1"><i class="bi bi-clipboard2-check me-1"></i>Semakan Rekod Lengkap</h6>
+<div class="small text-muted">Gunakan paparan rekod penuh untuk semak semua maklumat klinikal sebelum sahkan.</div>
+</div>
+                            <a class="btn btn-outline-primary" href="#" id="btnViewFullRecord" target="_blank"><i class="bi bi-journal-text me-1"></i>Lihat Rekod Penuh</a>
+</div>
+<div class="row g-3">
+<div class="col-md-6"><label class="form-label">Nama Pegawai Command Post / Pengesah</label><input class="form-control" id="confirmOfficerName" name="signature_mds" placeholder="Nama pegawai yang mengesahkan" type="text"/></div>
+<div class="col-md-6"><label class="form-label">Jawatan / Peranan</label><select class="form-select" id="confirmationRole" name="confirmationRole"><option value="">-- Pilih --</option><option value="Command Post">Command Post</option><option value="Pegawai Perubatan">Pegawai Perubatan</option><option value="Penyelaras MDS">Penyelaras MDS</option><option value="Ketua Pasukan">Ketua Pasukan</option><option value="Lain-lain">Lain-lain</option></select></div>
+<div class="col-12"><label class="confirmation-check"><input class="form-check-input" id="finalConfirmation" type="checkbox"/><span>Saya telah menyemak rekod pendaftaran, konsultasi doktor, maklumat farmasi dan laporan MDS ini sebelum pengesahan.</span></label></div>
+</div>
+</div>
+<div class="workflow-actions">
+<button class="btn btn-outline-secondary px-4" data-go-step="3" type="button"><i class="bi bi-arrow-left me-1"></i>Kembali</button>
+<button class="btn btn-success px-4" id="btnVerifyCommandPost" type="button"><i class="bi bi-patch-check me-1"></i>Sahkan Rekod MDS</button>
+</div>
+<div class="alert alert-success mt-4 d-none" id="commandPostActionPanel">
+  <div class="d-flex align-items-start gap-2 mb-3">
+    <i class="bi bi-check-circle-fill fs-5"></i>
+    <div>
+      <div class="fw-bold">Rekod telah disahkan — teruskan tindakan pesakit</div>
+      <div class="small">Pilih tindakan yang perlu diuruskan oleh Command Post. Maklumat misi, ID MDS dan nama pesakit akan dibawa ke borang secara automatik.</div>
+    </div>
+  </div>
+  <div class="d-flex flex-wrap gap-2">
+    <a class="btn btn-sm btn-outline-success bg-white" id="cpAddObservation" href="#"><i class="bi bi-clipboard2-pulse me-1"></i>Rekod Observasi</a>
+    <a class="btn btn-sm btn-outline-success bg-white" id="cpAddNotification" href="#"><i class="bi bi-bell me-1"></i>Borang Notifikasi</a>
+    <a class="btn btn-sm btn-outline-success bg-white" id="cpAddIncident" href="#"><i class="bi bi-exclamation-triangle me-1"></i>Laporan Insiden</a>
+    <a class="btn btn-sm btn-success" id="cpAddDischarge" href="#"><i class="bi bi-box-arrow-up-right me-1"></i>Rujukan / Discaj / Susulan</a>
+    <a class="btn btn-sm btn-outline-secondary bg-white" id="cpViewMds" href="#"><i class="bi bi-file-medical me-1"></i>Papar Rekod MDS</a>
+  </div>
+</div>
+</section></div>
 </form>
 </main>
 </div>
@@ -3641,6 +4228,7 @@ fetch("sidebar.html")
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="assets/js/config.js"></script>
+<script src="assets/js/mds-business-rules.js"></script>
 <script>
 function tambahUbat() {
     const container = document.getElementById("ubatContainer");
@@ -3679,9 +4267,18 @@ function tambahUbat() {
     const params = new URLSearchParams(location.search);
     const missionId = params.get("missionId") || "";
 
-    // Keep the existing mission ID flow, but display it as the MDS ID.
+    // Misi kekal sebagai missionId. ID Rekod MDS dijana berasingan.
     const recordId = document.getElementById("recordId");
-    recordId.value = missionId || "Auto-generated";
+    const requestedRecordId =
+        params.get("recordId") ||
+        params.get("mdsId") ||
+        "";
+
+    const generatedRecordId =
+        requestedRecordId ||
+        ("MDS" + String(Date.now()).slice(-6));
+
+    recordId.value = generatedRecordId;
 
     // Default date to today.
     const dateInput = document.getElementById("date");
@@ -3781,6 +4378,10 @@ function tambahUbat() {
 
         document.getElementById("latitude").value = latNum.toFixed(6);
         document.getElementById("longitude").value = lngNum.toFixed(6);
+        const locationId = document.getElementById("activityLocationId");
+        if (locationId && window.MyEmtMdsRules) {
+            locationId.value = MyEmtMdsRules.canonicalLocationId({ latitude: latNum, longitude: lngNum });
+        }
 
         if (!addressMap || !window.L) return;
 
@@ -4189,190 +4790,7 @@ function tambahUbat() {
         return document.getElementById(id)?.value?.trim() || "";
     }
 
-    form.addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        // IMPORTANT:
-        // Keep the ORIGINAL /api/mds database payload unchanged.
-        // New UI-only fields (map coordinates, body annotations, vaccination, etc.)
-        // are NOT sent here unless the backend/database is updated separately.
-        const trauma = checkedValues('.clinical-check[data-group="Trauma"]');
-        const infectious = checkedValues('.clinical-check[data-group="Infectious disease"]');
-        const additional = checkedValues('.clinical-check[data-group="Additional"]');
-        const otherDiseases = checkedValues('.clinical-check[data-group="Other key diseases"]');
-        const procedures = checkedValues('.clinical-check[data-group="Procedure"]');
-        const outcomes = checkedValues('.clinical-check[data-group="Outcome"]');
-
-        let clinicalClass = "Lain-lain";
-        let traumaType = "-";
-        let diseaseType = "-";
-
-        if (trauma.length) {
-            clinicalClass = "Trauma";
-            traumaType = trauma[0];
-        } else if (infectious.length) {
-            clinicalClass = "Penyakit Berjangkit";
-            diseaseType = infectious[0];
-        } else if (selectedValue("emergency")) {
-            clinicalClass = "Kecemasan";
-        } else if (additional.length) {
-            clinicalClass = "Kes Tambahan";
-        } else if (otherDiseases.length) {
-            clinicalClass = "Penyakit Penting Lain";
-        }
-
-        const contextValues = checkedValues(".context-check");
-
-        // Kumpulkan SEMUA input borang MDS untuk disimpan dalam mds.json.
-        // Backend /api/mds menerima ...body, jadi field tambahan boleh disimpan
-        // tanpa CREATE TABLE / ALTER TABLE.
-        const protectionValues = checkedValues(".protection-check");
-
-        const medications = Array.from(document.querySelectorAll("#ubatContainer .ubat-item"))
-            .map(row => ({
-                namaUbat: row.querySelector('[name="nama_ubat[]"]')?.value?.trim() || "",
-                dos: row.querySelector('[name="dos[]"]')?.value?.trim() || "",
-                kekerapan: row.querySelector('[name="kekerapan[]"]')?.value?.trim() || "",
-                nota: row.querySelector('[name="nota[]"]')?.value?.trim() || ""
-            }))
-            .filter(item => item.namaUbat || item.dos || item.kekerapan || item.nota);
-
-        let bodyAnnotationsForSave = [];
-        try {
-            bodyAnnotationsForSave = JSON.parse(val("bodyAnnotationsJson") || "[]");
-        } catch (_) {
-            bodyAnnotationsForSave = [];
-        }
-
-        const payload = {
-            // Pengenalan rekod / misi
-            missionId,
-            date: val("date"),
-
-            // Maklumat pesakit
-            patientName: val("patientName"),
-            nickname: val("nickname"),
-            age: val("ageValue") === "" ? null : Number(val("ageValue")),
-            ageUnit: selectedValue("age_unit"),
-            ageGroup: selectedValue("age_group"),
-            gender: selectedValue("sex"),
-            breastfeeding: selectedValue("breastfeed"),
-            armCircumference: val("armCircumference") === "" ? null : Number(val("armCircumference")),
-
-            // Alamat / koordinat
-            patientAddress: val("presentAddress"),
-            presentAddress: val("presentAddress"),
-            latitude: val("latitude"),
-            longitude: val("longitude"),
-            postcode: "",
-
-            // Vaksinasi / alergi
-            vaccinationMeasles: selectedValue("vacc_measles"),
-            vaccinationTetanus: selectedValue("vacc_tetanus"),
-            allergy: selectedValue("allergy"),
-            allergyDetails: val("allergyDetails"),
-
-            // MDS checklist - simpan semua pilihan, sambil kekalkan field ringkas lama
-            clinicalClass,
-            traumaType,
-            diseaseType,
-            outcome: outcomes[0] || "-",
-            context: contextValues[0] || "-",
-            trauma,
-            infectiousDiseases: infectious,
-            additionalCases: additional,
-            emergency: selectedValue("emergency"),
-            otherKeyDiseases: otherDiseases,
-            procedures,
-            outcomes,
-            contextValues,
-            protectionValues,
-
-            // Sejarah / aduan
-            pastHistoryYN: selectedValue("pastHistoryYN"),
-            pastHistory: val("pastHistory"),
-            medicationYN: selectedValue("medicationYN"),
-            currentMedication: val("currentMedication"),
-            chiefComplaints: val("chiefComplaints"),
-
-            // Tanda vital
-            bt: val("bt"),
-            bp: val("bp"),
-            pr: val("pr"),
-            rr: val("rr"),
-            weight: val("weight"),
-            height: val("height"),
-
-            // Catatan klinikal / rajah badan
-            historyPresentIllness: val("historyPresentIllness"),
-            bodyAnnotations: bodyAnnotationsForSave,
-            bodyAnnotationsJson: val("bodyAnnotationsJson"),
-            diagnosis: val("diagnosis"),
-            clinicalNotes: val("diagnosis") || val("historyPresentIllness"),
-
-            // Ubat & memo
-            medications,
-            memo: val("memo"),
-
-            // Kekalkan field backend lama
-            responsibleOfficer: (
-                document.querySelector('[name="signature_doctor"]')?.value?.trim()
-                || document.querySelector('[name="signature_mds"]')?.value?.trim()
-                || ""
-            ),
-            officerKedudukan: ""
-        };
-
-        if (payload.armCircumference !== null && payload.armCircumference < 0) {
-            alert("Lilitan lengan tidak boleh mempunyai nilai negatif.");
-            document.getElementById("armCircumference")?.focus();
-            return;
-        }
-
-        const btn = document.getElementById("submitBtn");
-        btn.disabled = true;
-        btn.textContent = "Menghantar...";
-
-        try {
-            const res = await fetch(`${API}/api/mds`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-
-            const json = await res.json();
-
-            if (json.success) {
-                alert("Rekod MDS berjaya dihantar!");
-                const userType = (
-                    localStorage.getItem("userType") ||
-                    sessionStorage.getItem("userType") ||
-                    new URLSearchParams(location.search).get("userType") ||
-                    "user"
-                ).toLowerCase();
-
-                const missionQuery = missionId
-                    ? `?id=${encodeURIComponent(missionId)}`
-                    : "";
-                /* 
-                if (userType === "admin") {
-                    window.location.href = `mission_detail.html${missionQuery}`;
-                } else {
-                    window.location.href = `user_misidetail.html${missionQuery}`;
-                }
-                */    
-            } else {
-                alert("Ralat: " + (json.message || "Hantar gagal."));
-                btn.disabled = false;
-                btn.innerHTML = '<i class="bi bi-send me-1"></i> Hantar';
-            }
-        } catch (err) {
-            console.error(err);
-            alert("Ralat rangkaian. Sila cuba semula.");
-            btn.disabled = false;
-            btn.innerHTML = '<i class="bi bi-send me-1"></i> Hantar';
-        }
-    });
+    // Submit asal dinyahaktifkan. Simpanan kini dibuat mengikut 4 langkah melalui POST/PATCH.
 
     function valByName(name) {
         return document.querySelector(`[name="${name}"]`)?.value?.trim() || "";
@@ -4381,38 +4799,218 @@ function tambahUbat() {
     updateAgeGroup();
 })();
 </script>
-
 <script>
-(function () {
-    const backBtn = document.getElementById("backBtn");
-    if (!backBtn) return;
+/* =========================================================
+   UNIVERSAL 4-STEP MDS UPDATE WORKFLOW
+========================================================= */
+(function(){
+  const qs=new URLSearchParams(location.search);
+  let currentRecord=null;
+  let currentRecordId=qs.get('id') || qs.get('recordId') || qs.get('mdsId') || '';
+  let currentStep=Math.min(4,Math.max(1,Number(qs.get('step')||1)));
 
-    backBtn.addEventListener("click", function () {
-        const params = new URLSearchParams(window.location.search);
-        const missionId = params.get("missionId") || params.get("id") || "";
+  const form=document.getElementById('mdsForm');
+  form?.addEventListener('submit',e=>e.preventDefault());
 
-        const userType = (
-            localStorage.getItem("userType") ||
-            sessionStorage.getItem("userType") ||
-            params.get("userType") ||
-            "user"
-        ).toLowerCase();
+  function val(id){return document.getElementById(id)?.value?.trim()||'';}
+  function selected(name){return document.querySelector(`[name="${name}"]:checked`)?.value||'';}
+  function checked(selector){return [...document.querySelectorAll(`${selector}:checked`)].map(x=>x.value);}
+  function setVal(id,value){const el=document.getElementById(id);if(el)el.value=value??'';}
+  function setText(id,value){const el=document.getElementById(id);if(el)el.textContent=value??'-';}
+  function nowIso(){return new Date().toISOString();}
 
-        const missionQuery = missionId
-            ? `?id=${encodeURIComponent(missionId)}`
-            : "";
+  function identity(){
+    return {
+      id: localStorage.getItem('myemt_memberId')||localStorage.getItem('memberId')||localStorage.getItem('userId')||localStorage.getItem('staffId')||localStorage.getItem('adminId')||sessionStorage.getItem('myemt_memberId')||sessionStorage.getItem('memberId')||sessionStorage.getItem('userId')||sessionStorage.getItem('staffId')||sessionStorage.getItem('adminId')||qs.get('userId')||qs.get('memberId')||'',
+      name: localStorage.getItem('myemt_memberName')||localStorage.getItem('memberName')||localStorage.getItem('userName')||localStorage.getItem('staffName')||localStorage.getItem('adminName')||sessionStorage.getItem('myemt_memberName')||sessionStorage.getItem('memberName')||sessionStorage.getItem('userName')||sessionStorage.getItem('staffName')||sessionStorage.getItem('adminName')||qs.get('userName')||''
+    };
+  }
 
-        if (userType === "admin") {
-            window.location.href = `mission_detail.html${missionQuery}`;
-        } 
-        /*
-        else {
-            window.location.href = `user_misidetail.html${missionQuery}`;
-        }
-        */
-    });
+  function setIdentity(prefix){
+    const u=identity();
+    const id=document.getElementById(prefix+'UserId');
+    const name=document.getElementById(prefix+'UserName');
+    if(id&&!id.value)id.value=u.id||'Tidak dikenal pasti';
+    if(name&&!name.value)name.value=u.name||'Tidak dikenal pasti';
+    if(prefix==='commandPost'&&!val('confirmOfficerName')&&u.name)setVal('confirmOfficerName',u.name);
+  }
+
+  const stageInfo={
+    registered:{label:'Pendaftaran Selesai',cls:'bg-info text-dark'},
+    doctor_completed:{label:'Konsultasi Doktor Selesai',cls:'bg-primary'},
+    pharmacy_completed:{label:'Farmasi Selesai',cls:'bg-warning text-dark'},
+    command_post_verified:{label:'Disahkan Command Post',cls:'bg-success'}
+  };
+
+  function updateStageBadge(stage){
+    const b=document.getElementById('workflowStageBadge');
+    if(!b)return;
+    const info=stageInfo[stage]||{label:currentRecordId?'Rekod Dibuka':'Rekod Baharu',cls:'bg-secondary'};
+    b.textContent=info.label;b.className=`badge ${info.cls}`;
+  }
+
+  function updateUrl(step=currentStep){
+    const p=new URLSearchParams(location.search);
+    if(currentRecordId)p.set('id',currentRecordId);else p.delete('id');
+    p.set('step',String(step));
+    history.replaceState(null,'',`${location.pathname}?${p.toString()}`);
+  }
+
+  function showStep(step){
+    currentStep=Number(step);
+    document.querySelectorAll('.workflow-tab').forEach(t=>t.classList.toggle('active',Number(t.dataset.stepTarget)===currentStep));
+    document.querySelectorAll('.workflow-panel').forEach(p=>p.classList.toggle('active',Number(p.dataset.step)===currentStep));
+    if(currentStep===1)setIdentity('registration');
+    if(currentStep===2)setIdentity('doctor');
+    if(currentStep===3){setIdentity('pharmacy');updatePharmacySummary();}
+    if(currentStep===4){setIdentity('commandPost');updateCommandSummary();}
+    updateUrl(currentStep);
+    document.querySelector('.mds-workflow')?.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+
+  function requireRecord(){
+    if(currentRecordId)return true;
+    alert('Sila daftar pesakit atau buka rekod menggunakan ID MDS terlebih dahulu.');
+    document.getElementById('workflowRecordLookup')?.focus();
+    return false;
+  }
+
+  function radio(name,value){
+    if(value===undefined||value===null)return;
+    const el=[...document.querySelectorAll(`[name="${name}"]`)].find(x=>String(x.value)===String(value));
+    if(el)el.checked=true;
+  }
+  function checks(selector,values){
+    const set=new Set(Array.isArray(values)?values:[]);
+    document.querySelectorAll(selector).forEach(x=>x.checked=set.has(x.value));
+  }
+
+  function createMedicationRows(items){
+    const c=document.getElementById('ubatContainer');if(!c)return;
+    const meds=Array.isArray(items)&&items.length?items:[{}];
+    c.innerHTML=meds.map((m,i)=>`
+      <div class="row g-2 ubat-item mb-2 border rounded p-2">
+        <div class="col-md-4"><label class="form-label">Nama Ubat</label><input class="form-control" name="nama_ubat[]" value="${escapeHtml(m.namaUbat||m.name||'')}" placeholder="Contoh: Paracetamol"></div>
+        <div class="col-md-2"><label class="form-label">Dos</label><input class="form-control" name="dos[]" value="${escapeHtml(m.dos||m.dose||'')}" placeholder="500mg"></div>
+        <div class="col-md-3"><label class="form-label">Kekerapan</label><input class="form-control" name="kekerapan[]" value="${escapeHtml(m.kekerapan||m.frequency||'')}" placeholder="3 kali sehari"></div>
+        <div class="col-md-3"><label class="form-label">Nota</label><input class="form-control" name="nota[]" value="${escapeHtml(m.nota||m.note||'')}" placeholder="Nota"></div>
+      </div>`).join('');
+  }
+  function escapeHtml(v){return String(v??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');}
+
+  function fillRecord(r){
+    currentRecord=r;currentRecordId=r.id||currentRecordId;
+    setVal('recordId',currentRecordId);setVal('workflowRecordLookup',currentRecordId);setText('registrationRecordId',currentRecordId);
+    ['date','patientName','nickname','presentAddress','latitude','longitude','activityLocationId','activityFacilityName','activityState','activityDistrict','allergyDetails','pastHistory','currentMedication','chiefComplaints','bt','bp','pr','rr','weight','height','historyPresentIllness','diagnosis','memo'].forEach(id=>{if(r[id]!==undefined)setVal(id,r[id]);});
+    const savedLocation=r.activityLocation||{};
+    setVal('activityLocationId',r.activityLocationId||savedLocation.id||MyEmtMdsRules.canonicalLocationId(r));
+    setVal('activityFacilityName',r.activityFacilityName||savedLocation.facilityName||'');setVal('activityState',r.activityState||savedLocation.state||'');setVal('activityDistrict',r.activityDistrict||savedLocation.district||'');
+    setVal('ageValue',r.age??'');setVal('armCircumference',r.armCircumference??'');
+    radio('age_unit',r.ageUnit);radio('age_group',r.ageGroup);radio('sex',r.gender);radio('breastfeed',r.breastfeeding);radio('vacc_measles',r.vaccinationMeasles);radio('vacc_tetanus',r.vaccinationTetanus);radio('allergy',r.allergy);radio('pastHistoryYN',r.pastHistoryYN);radio('medicationYN',r.medicationYN);radio('emergency',r.emergency);
+    checks('.clinical-check[data-group="Trauma"]',r.trauma);checks('.clinical-check[data-group="Infectious disease"]',r.infectiousDiseases);checks('.clinical-check[data-group="Additional"]',r.additionalCases);checks('.clinical-check[data-group="Other key diseases"]',r.otherKeyDiseases);checks('.clinical-check[data-group="Procedure"]',r.procedures);checks('.clinical-check[data-group="Outcome"]',r.outcomes);checks('.context-check',r.contextValues);checks('.protection-check',r.protectionValues);
+    if(r.bodyAnnotationsJson)setVal('bodyAnnotationsJson',r.bodyAnnotationsJson);else if(Array.isArray(r.bodyAnnotations))setVal('bodyAnnotationsJson',JSON.stringify(r.bodyAnnotations));
+    createMedicationRows(r.medications);
+    setVal('registrationUserId',r.registrationUserId||'');setVal('registrationUserName',r.registrationUserName||'');setVal('doctorUserId',r.doctorUserId||'');setVal('doctorUserName',r.doctorUserName||'');setVal('pharmacyUserId',r.pharmacyUserId||'');setVal('pharmacyUserName',r.pharmacyUserName||'');setVal('commandPostUserId',r.commandPostUserId||'');setVal('commandPostUserName',r.commandPostUserName||'');setVal('confirmOfficerName',r.responsibleOfficer||r.commandPostUserName||'');setVal('confirmationRole',r.officerKedudukan||r.confirmationRole||'');
+    const fc=document.getElementById('finalConfirmation');if(fc)fc.checked=!!r.finalConfirmed;
+    updateStageBadge(r.workflowStage);updatePharmacySummary();updateCommandSummary();updateUrl();
+  }
+
+  async function loadRecord(id){
+    const clean=String(id||'').trim();if(!clean){alert('Sila masukkan ID MDS.');return false;}
+    try{
+      const res=await fetch(`${API}/api/mds/${encodeURIComponent(clean)}`);const json=await res.json();
+      if(!res.ok||!json.success||!json.data)throw new Error(json.message||'Rekod MDS tidak dijumpai.');
+      fillRecord(json.data);return true;
+    }catch(err){console.error(err);alert(err.message||'Gagal membuka rekod MDS.');return false;}
+  }
+
+  function registrationPayload(){
+    const missionId=qs.get('missionId')||currentRecord?.missionId||'';
+    const activityDate=val('date');
+    const activityLocation={id:val('activityLocationId'),name:val('presentAddress'),state:val('activityState'),district:val('activityDistrict'),facilityName:val('activityFacilityName'),latitude:Number(val('latitude')),longitude:Number(val('longitude'))};
+    const activityLocationId=MyEmtMdsRules.canonicalLocationId(activityLocation);
+    const legacyGender=selected('sex'),sex=legacyGender==='Male'?'MALE':legacyGender?'FEMALE':'';
+    const pregnancyStatus=legacyGender==='Female pregnant'?'PREGNANT':legacyGender==='Female non-preg.'?'NOT_PREGNANT':legacyGender==='Male'?'NOT_APPLICABLE':'';
+    return {
+      id:val('recordId'),mdsRecordId:val('recordId'),missionId,date:activityDate,activityDate,activityLocationId,activityLocation:{...activityLocation,id:activityLocationId},activityLocationName:activityLocation.name,activityFacilityName:activityLocation.facilityName,activityState:activityLocation.state,activityDistrict:activityLocation.district,
+      patientName:val('patientName'), nickname:val('nickname'), age:val('ageValue')===''?null:Number(val('ageValue')), ageUnit:selected('age_unit'), ageGroup:selected('age_group'), gender:selected('sex'), breastfeeding:selected('breastfeed'), armCircumference:val('armCircumference')===''?null:Number(val('armCircumference')),
+      sex,pregnancyStatus,mdsCodes:MyEmtMdsRules.normalizeCodes([MyEmtMdsRules.sexCode({sex,pregnancyStatus})]),
+      patientAddress:val('presentAddress'), presentAddress:val('presentAddress'), latitude:val('latitude'), longitude:val('longitude'), postcode:'', vaccinationMeasles:selected('vacc_measles'), vaccinationTetanus:selected('vacc_tetanus'), allergy:selected('allergy'), allergyDetails:val('allergyDetails'),
+      registrationUserId:val('registrationUserId'),registrationUserName:val('registrationUserName'),registrationCompletedAt:nowIso(),workflowStage:'registered'
+    };
+  }
+
+  function doctorPayload(){
+    let annotations=[];try{annotations=JSON.parse(val('bodyAnnotationsJson')||'[]')}catch(_){}
+    const trauma=checked('.clinical-check[data-group="Trauma"]'), infectious=checked('.clinical-check[data-group="Infectious disease"]'), additional=checked('.clinical-check[data-group="Additional"]'), other=checked('.clinical-check[data-group="Other key diseases"]'), procedures=checked('.clinical-check[data-group="Procedure"]'), outcomes=checked('.clinical-check[data-group="Outcome"]'), contextValues=checked('.context-check'), protectionValues=checked('.protection-check');
+    let clinicalClass='Lain-lain',traumaType='-',diseaseType='-';if(trauma.length){clinicalClass='Trauma';traumaType=trauma[0]}else if(infectious.length){clinicalClass='Penyakit Berjangkit';diseaseType=infectious[0]}else if(selected('emergency'))clinicalClass='Kecemasan';else if(additional.length)clinicalClass='Kes Tambahan';else if(other.length)clinicalClass='Penyakit Penting Lain';
+    const base={...(currentRecord||{}),...registrationPayload(),trauma,infectiousDiseases:infectious,additionalCases:additional,emergency:selected('emergency'),otherKeyDiseases:other,procedures,outcomes,contextValues,protectionValues};
+    return {clinicalClass,traumaType,diseaseType,outcome:outcomes[0]||'-',context:contextValues[0]||'-',trauma,infectiousDiseases:infectious,additionalCases:additional,emergency:selected('emergency'),otherKeyDiseases:other,procedures,outcomes,contextValues,protectionValues,mdsCodes:MyEmtMdsRules.deriveCodes(base),pastHistoryYN:selected('pastHistoryYN'),pastHistory:val('pastHistory'),medicationYN:selected('medicationYN'),currentMedication:val('currentMedication'),chiefComplaints:val('chiefComplaints'),bt:val('bt'),bp:val('bp'),pr:val('pr'),rr:val('rr'),weight:val('weight'),height:val('height'),historyPresentIllness:val('historyPresentIllness'),bodyAnnotations:annotations,bodyAnnotationsJson:val('bodyAnnotationsJson'),diagnosis:val('diagnosis'),clinicalNotes:val('diagnosis')||val('historyPresentIllness'),doctorUserId:val('doctorUserId'),doctorUserName:val('doctorUserName'),doctorCompletedAt:nowIso(),workflowStage:'doctor_completed'};
+  }
+
+  function medications(){return [...document.querySelectorAll('#ubatContainer .ubat-item')].map(row=>({namaUbat:row.querySelector('[name="nama_ubat[]"]')?.value?.trim()||'',dos:row.querySelector('[name="dos[]"]')?.value?.trim()||'',kekerapan:row.querySelector('[name="kekerapan[]"]')?.value?.trim()||'',nota:row.querySelector('[name="nota[]"]')?.value?.trim()||''})).filter(x=>x.namaUbat||x.dos||x.kekerapan||x.nota);}
+  function pharmacyPayload(){return {medications:medications(),memo:val('memo'),pharmacyUserId:val('pharmacyUserId'),pharmacyUserName:val('pharmacyUserName'),pharmacyCompletedAt:nowIso(),workflowStage:'pharmacy_completed'};}
+  function commandPayload(){return {commandPostUserId:val('commandPostUserId'),commandPostUserName:val('commandPostUserName'),commandPostVerifiedAt:nowIso(),confirmationRole:val('confirmationRole'),finalConfirmed:true,responsibleOfficer:val('confirmOfficerName')||val('commandPostUserName'),officerKedudukan:val('confirmationRole'),verifiedAt:nowIso(),workflowStage:'command_post_verified',recordStatus:'verified'};}
+
+  async function patchRecord(payload){
+    if(!requireRecord())return null;
+    const res=await fetch(`${API}/api/mds/${encodeURIComponent(currentRecordId)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});let json={};try{json=await res.json()}catch(_){}
+    if(!res.ok||!json.success)throw new Error(json.message||'Rekod tidak dapat dikemas kini.');fillRecord(json.data||{...(currentRecord||{}),...payload,id:currentRecordId});return json.data;
+  }
+
+  function updatePharmacySummary(){setText('pharmacyPatientSummary',val('patientName')||currentRecord?.patientName||'-');setText('pharmacyRecordSummary',currentRecordId||val('recordId')||'-');setText('pharmacyDiagnosisSummary',val('diagnosis')||currentRecord?.diagnosis||'-');const allergy=selected('allergy')||currentRecord?.allergy||'';const details=val('allergyDetails')||currentRecord?.allergyDetails||'';setText('pharmacyAllergySummary',allergy==='Y'?(details?`Ya — ${details}`:'Ya'):allergy==='N'?'Tidak':allergy==='Unknown'?'Tidak diketahui':'-');}
+  function outcomeText(r){const arr=Array.isArray(r?.outcomes)&&r.outcomes.length?r.outcomes:(r?.outcome&&r.outcome!=='-'?[r.outcome]:[]);return arr.join(', ')||'-';}
+  function updateCommandActions(){
+    const r=currentRecord||{},panel=document.getElementById('commandPostActionPanel');
+    const verified=!!r.finalConfirmed||r.workflowStage==='command_post_verified';
+    if(!panel)return;
+    panel.classList.toggle('d-none',!verified);
+    const verifyButton=document.getElementById('btnVerifyCommandPost');
+    if(verifyButton){
+      verifyButton.innerHTML=verified?'<i class="bi bi-check-circle me-1"></i>Rekod Telah Disahkan':'<i class="bi bi-patch-check me-1"></i>Sahkan Rekod MDS';
+      verifyButton.disabled=verified;
+    }
+    if(!verified||!currentRecordId)return;
+    const missionId=r.missionId||qs.get('missionId')||'';
+    const related=new URLSearchParams({missionId,mdsId:currentRecordId,patientName:val('patientName')||r.patientName||''});
+    const links={
+      cpAddObservation:`observasi_add.html?${related.toString()}`,
+      cpAddNotification:`notifikasi_add.html?${related.toString()}`,
+      cpAddIncident:`insiden_add.html?${related.toString()}`,
+      cpAddDischarge:`discaj_add.html?${related.toString()}`,
+      cpViewMds:`emt_mdsview.html?id=${encodeURIComponent(currentRecordId)}&missionId=${encodeURIComponent(missionId)}`
+    };
+    Object.entries(links).forEach(([id,href])=>{const link=document.getElementById(id);if(link)link.href=href;});
+  }
+  function updateCommandSummary(){const r=currentRecord||{};setText('cpRecordId',currentRecordId||'-');setText('cpPatientName',val('patientName')||r.patientName||'-');setText('cpDiagnosis',val('diagnosis')||r.diagnosis||'-');setText('cpOutcome',outcomeText({...r,outcomes:checked('.clinical-check[data-group="Outcome"]')}));setText('cpMedicationCount',medications().length);setText('cpWorkflowStatus',stageInfo[r.workflowStage]?.label||r.workflowStage||'-');const a=document.getElementById('btnViewFullRecord');if(a&&currentRecordId)a.href=`emt_mdsview.html?id=${encodeURIComponent(currentRecordId)}${r.missionId?`&missionId=${encodeURIComponent(r.missionId)}`:''}`;updateCommandActions();}
+
+  document.querySelectorAll('.workflow-tab').forEach(t=>t.addEventListener('click',()=>showStep(t.dataset.stepTarget)));
+  document.querySelectorAll('[data-go-step]').forEach(b=>b.addEventListener('click',()=>showStep(b.dataset.goStep)));
+  document.getElementById('btnLoadWorkflowRecord')?.addEventListener('click',async()=>{const ok=await loadRecord(val('workflowRecordLookup'));if(ok){const requested=Number(qs.get('step')||currentStep||2);showStep(requested);}});
+  document.getElementById('workflowRecordLookup')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('btnLoadWorkflowRecord')?.click();}});
+
+  document.getElementById('btnRegisterPatient')?.addEventListener('click',async()=>{
+    if(!val('date')){alert('Sila masukkan tarikh aktiviti.');return;}if(!val('patientName')){alert('Sila masukkan nama pesakit.');return;}if(!(qs.get('missionId')||currentRecord?.missionId)){alert('Rekod MDS mesti dibuka daripada misi yang sah.');return;}if(!selected('sex')){alert('Sila pilih satu kategori jantina / kehamilan.');return;}if(val('ageValue')===''||Number(val('ageValue'))<0){alert('Sila masukkan umur yang sah.');return;}if(!val('latitude')||!val('longitude')||!val('activityLocationId')){alert('Sila pilih lokasi aktiviti pada peta.');return;}
+    setIdentity('registration');
+    if(!val('recordId')){setVal('recordId','MDS'+String(Date.now()).slice(-6));setText('registrationRecordId',val('recordId'));}
+    try{
+      if(currentRecordId){await patchRecord(registrationPayload());}
+      else{
+        const payload=registrationPayload();const res=await fetch(`${API}/api/mds`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const json=await res.json();if(!res.ok||!json.success)throw new Error(json.message||'Pendaftaran gagal.');fillRecord(json.data||payload);
+      }
+      currentRecordId=val('recordId');setVal('workflowRecordLookup',currentRecordId);alert(`Pendaftaran berjaya.\nID Pesakit / MDS: ${currentRecordId}`);showStep(2);
+    }catch(err){console.error(err);alert(err.message||'Pendaftaran gagal.');}
+  });
+
+  document.getElementById('btnSaveDoctor')?.addEventListener('click',async()=>{if(!requireRecord())return;setIdentity('doctor');try{await patchRecord(doctorPayload());alert('Konsultasi doktor berjaya disimpan.');showStep(3);}catch(err){console.error(err);alert(err.message||'Gagal menyimpan konsultasi.');}});
+  document.getElementById('btnSavePharmacy')?.addEventListener('click',async()=>{if(!requireRecord())return;setIdentity('pharmacy');try{await patchRecord(pharmacyPayload());alert('Maklumat farmasi berjaya disimpan.');showStep(4);}catch(err){console.error(err);alert(err.message||'Gagal menyimpan maklumat farmasi.');}});
+  document.getElementById('btnVerifyCommandPost')?.addEventListener('click',async()=>{if(!requireRecord())return;if(!val('confirmOfficerName')){alert('Sila masukkan nama pegawai pengesah.');return;}if(!val('confirmationRole')){alert('Sila pilih jawatan / peranan.');return;}if(!document.getElementById('finalConfirmation')?.checked){alert('Sila tandakan pengesahan akhir.');return;}setIdentity('commandPost');try{await patchRecord(commandPayload());updateCommandActions();alert('Rekod MDS telah disahkan. Command Post kini boleh memilih tindakan pesakit di bawah.');document.getElementById('commandPostActionPanel')?.scrollIntoView({behavior:'smooth',block:'center'});}catch(err){console.error(err);alert(err.message||'Gagal mengesahkan rekod.');}});
+
+  document.getElementById('backBtn')?.addEventListener('click',()=>{if(currentStep>1){showStep(currentStep-1);return;}if(history.length>1){history.back();return;}location.href='landingMyemt.html';});
+
+  // Initial state
+  setIdentity('registration');setIdentity('doctor');setIdentity('pharmacy');setIdentity('commandPost');
+  if(currentRecordId){setVal('workflowRecordLookup',currentRecordId);loadRecord(currentRecordId).then(ok=>showStep(ok?currentStep:1));}else{setText('registrationRecordId',val('recordId')||'-');updateStageBadge('');showStep(1);}
 })();
-</script>
-
-</body>
+</script></body>
 </html>

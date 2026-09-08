@@ -15,7 +15,8 @@ let iliHospitalChart = null;
 ===================================================== */
 
 
-const iliDashboardData = [
+let iliDashboardData = [];
+const iliLegacyDashboardData = [
 
     {
         date: "2026-01-05",
@@ -238,7 +239,8 @@ const iliDashboardData = [
 ===================================================== */
 
 
-function initILIDashboard(){
+async function initILIDashboard(){
+    try{let records;if(window.SURVEILLANCE_DEMO_MODE&&window.getSurveillanceDemoRecords){records=window.getSurveillanceDemoRecords('ili');}else{const response=await fetch(`${typeof API!=='undefined'?API:''}/api/ili-records`),json=await response.json().catch(()=>({}));if(!response.ok||!json.success)throw Object.assign(new Error(json.message||`HTTP ${response.status}`),{status:response.status});records=json.data||[];}iliDashboardData=records.map(item=>({date:item.date_received||item.date_collect||item.date_onset,facility:item.locality_name_sender||item.hospital||item.facility||'Tidak dinyatakan',hospital:item.locality_name_sender||item.hospital||item.facility||'Tidak dinyatakan',state:item.state||'',diagnosis:item.diagnosis||item.final_result_1||'',status:item.status||'Belum ditentukan',active:true}));}catch(error){console.error('Data dashboard ILI gagal dimuatkan:',error);iliDashboardData=[];const root=document.getElementById('iliDashboard'),routeMissing=error.status===404&&/route tidak dijumpai/i.test(error.message),message=routeMissing?'Perkhidmatan ILI pada pelayan belum dikemas kini. Sila gunakan pelayan tempatan atau deploy Lambda terkini.':error.message;if(root)root.insertAdjacentHTML('afterbegin',`<div class="alert alert-danger">Data dashboard ILI gagal dimuatkan: ${String(message).replace(/[<>]/g,'')}</div>`);}
 
 
     const hospitalFilter =

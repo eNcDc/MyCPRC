@@ -496,7 +496,12 @@ function updateRiskScoreChart(data) {
 // ===== UPDATE PETA =====
 function updateMaps(data) {
   updateMap("drpMalaysiaMap", false, data);
-  updateMap("drpMalaysiaMapFull", true, data);
+
+  // Peta modal hanya perlu dibina apabila modal telah dipaparkan.
+  const modal = document.getElementById("drpMapModal");
+  if (modal?.classList.contains("show")) {
+    updateMap("drpMalaysiaMapFull", true, data);
+  }
 }
 
 // ===== PAPAR PETA =====
@@ -546,13 +551,23 @@ function updateMap(mapId, isFullMap, data) {
     markers.push(marker);
   });
 
+  if (markers.length) {
+    const bounds = L.featureGroup(markers).getBounds();
+    map.fitBounds(bounds, { padding: [28, 28], maxZoom: 9 });
+  } else {
+    map.setView([4.2105, 101.9758], 6);
+  }
+
   if (isFullMap) {
     drpFullMapMarkers = markers;
   } else {
     drpMapMarkers = markers;
   }
 
-  setTimeout(() => map.invalidateSize(), 250);
+  requestAnimationFrame(() => {
+    map.invalidateSize();
+    setTimeout(() => map.invalidateSize(), 250);
+  });
 }
 
 // ===== EVENT PETA DALAM TAB DAN MODAL =====
@@ -560,14 +575,14 @@ function bindMapEvents() {
   const mapTab = document.getElementById("drp-map-tab");
   if (mapTab) {
     mapTab.addEventListener("shown.bs.tab", function () {
-      updateMaps(applyFilters());
+      updateMap("drpMalaysiaMap", false, applyFilters());
     });
   }
 
   const mapModal = document.getElementById("drpMapModal");
   if (mapModal) {
     mapModal.addEventListener("shown.bs.modal", function () {
-      updateMaps(applyFilters());
+      updateMap("drpMalaysiaMapFull", true, applyFilters());
     });
   }
 }

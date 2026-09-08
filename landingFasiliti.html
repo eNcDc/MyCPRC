@@ -217,5 +217,6 @@ document.getElementById('btnExport').addEventListener('click',()=>{const {d,r}=f
 ['header','footer'].forEach(id=>fetch(id+'.html').then(r=>r.ok?r.text():'').then(t=>document.getElementById(id).innerHTML=t).catch(()=>{}));fetch('sidebar.html').then(r=>r.ok?r.text():'').then(t=>document.getElementById('sidebar-placeholder').innerHTML=t).catch(()=>{});
 isiPenapis();render();
 </script>
+<script src="assets/js/layout.js"></script>
 </body>
 </html>

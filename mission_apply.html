@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Misi MyEMT</title>
+    <title>Permohonan Penyertaan Misi MyEMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
@@ -105,8 +105,8 @@
 
             <div class="text-end">
                 <small class="text-muted">Kursus</small><br>
-                <span class="badge bg-secondary" id="bcourse-badge">B-Course</span>
-                <span class="badge bg-secondary" id="ccourse-badge">C-Course</span>
+                    <span class="badge bg-secondary" id="bcourse-badge">Kursus B</span>
+                    <span class="badge bg-secondary" id="ccourse-badge">Kursus C</span>
             </div>
 
         </div>
@@ -116,7 +116,7 @@
     <div class="alert alert-warning d-flex align-items-center">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
         <small>
-            Hanya ahli yang telah lulus <strong>B-Course & C-Course</strong> dibenarkan menyertai misi.
+                Hanya ahli yang telah lulus <strong>Kursus B dan Kursus C</strong> dibenarkan menyertai misi.
         </small>
     </div>
 
@@ -242,8 +242,9 @@ fetch("sidebar.html")
 
 <script>
 const MISSION_ID  = new URLSearchParams(window.location.search).get('id');
-const MEMBER_ID   = localStorage.getItem('myemt_memberId') || '';
+const MEMBER_ID   = MyEMT.memberId();
 const STATUS_CLS  = { 'Selesai': 'bg-success', 'Sedang Dijalankan': 'bg-primary', 'Perancangan': 'bg-warning text-dark' };
+let EXISTING_APPLICATION = null;
 
 function maSet(id, val) { const el = document.getElementById(id); if (el) el.textContent = val || '-'; }
 
@@ -273,33 +274,35 @@ async function loadMissionApply() {
     return;
   }
   try {
-    const [mRes, cRes] = await Promise.all([
-      fetch(`${API}/api/members/` + MEMBER_ID),
-      fetch(`${API}/api/course-applications?memberId=` + MEMBER_ID)
-    ]);
-    const mJson = await mRes.json();
-    const cJson = await cRes.json();
-    const member     = mJson.data;
-    const courseApps = cJson.data || [];
-    const courseApp  = courseApps.length ? courseApps[0] : null;
-    const emtOk      = member && member.status === 'approved';
-    const courseOk   = courseApp && courseApp.status === 'approved';
+    if(!MISSION_ID) throw new Error('ID misi tidak ditemui.');
+    const applicationRes=await fetch(`${API}/api/mission-applications?memberId=${encodeURIComponent(MEMBER_ID)}&missionId=${encodeURIComponent(MISSION_ID)}`);
+    const applicationJson=await applicationRes.json();
+    if(!applicationRes.ok||!applicationJson.success)throw new Error(applicationJson.message||'Status permohonan tidak dapat disemak.');
+    EXISTING_APPLICATION=(applicationJson.data||[])[0]||null;
+    const eligibilityRes=await fetch(`${API}/api/mission-eligibility?memberId=${encodeURIComponent(MEMBER_ID)}&missionId=${encodeURIComponent(MISSION_ID)}`);
+    const eligibilityJson=await eligibilityRes.json();
+    const eligibility=eligibilityJson.data||{eligible:false,reasons:['Kelayakan tidak dapat disahkan.'],passedComponents:[]};
+    const bPassed=eligibility.passedComponents.includes('B-Course');
+    const cPassed=eligibility.passedComponents.includes('C-Course');
 
     const elBadge = document.getElementById('eligibility-badge');
-    if (emtOk && courseOk) {
+    if (eligibility.eligible) {
       elBadge.className   = 'badge bg-success px-3 py-2';
       elBadge.textContent = 'Layak Menyertai Misi';
     } else {
       elBadge.className   = 'badge bg-danger px-3 py-2';
       elBadge.textContent = 'Tidak Layak';
       document.getElementById('btn-confirm-join').disabled = true;
+      const notice=document.querySelector('.alert.alert-info');
+      if(notice)notice.innerHTML=`<strong>Tidak layak:</strong> ${MyEMT.escapeHTML(eligibility.reasons.join(' '))}`;
     }
+    if(EXISTING_APPLICATION){const status=String(EXISTING_APPLICATION.status||'').toLowerCase(),button=document.getElementById('btn-confirm-join');if(status==='rejected'){button.textContent='Hantar Semula Permohonan';}else{button.disabled=true;button.textContent=status==='approved'?'Permohonan Diluluskan':'Permohonan Sedang Disemak';}}
     const bcBadge = document.getElementById('bcourse-badge');
-    bcBadge.className   = courseOk ? 'badge bg-success' : 'badge bg-secondary';
-    bcBadge.textContent = courseOk ? 'B-Course ✓' : 'B-Course ✗';
+    bcBadge.className   = bPassed ? 'badge bg-success' : 'badge bg-secondary';
+    bcBadge.textContent = bPassed ? 'Kursus B ✓' : 'Kursus B ✗';
     const ccBadge = document.getElementById('ccourse-badge');
-    ccBadge.className   = courseOk ? 'badge bg-success' : 'badge bg-secondary';
-    ccBadge.textContent = courseOk ? 'C-Course ✓' : 'C-Course ✗';
+    ccBadge.className   = cPassed ? 'badge bg-success' : 'badge bg-secondary';
+    ccBadge.textContent = cPassed ? 'Kursus C ✓' : 'Kursus C ✗';
   } catch (e) { console.error('Gagal semak kelayakan:', e); }
 }
 
@@ -309,7 +312,8 @@ document.getElementById('btn-confirm-join').addEventListener('click', async func
   this.disabled = true;
   this.textContent = 'Menghantar...';
   try {
-    const res  = await fetch(`${API}/api/mission-applications`, {
+    const isResubmit=String(EXISTING_APPLICATION?.status||'').toLowerCase()==='rejected';
+    const res  = await fetch(isResubmit?`${API}/api/mission-applications/${encodeURIComponent(EXISTING_APPLICATION.id)}/resubmit`:`${API}/api/mission-applications`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ memberId: MEMBER_ID, missionId: MISSION_ID })

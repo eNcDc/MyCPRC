@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Borang Kesihatan Ahli</title>
+    <title>Maklumat Kesihatan Ahli MyEMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
@@ -407,7 +407,7 @@
     <!-- KESESUAIAN DEPLOYMENT -->
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-white fw-bold">
-            🌍 Kesesuaian Deployment
+                        🌍 Kesesuaian Penugasan
         </div>
 
         <div class="card-body">
@@ -494,6 +494,21 @@ fetch("sidebar.html")
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/myemt-health.js"></script>
+<script>
+(async function(){
+  const params=new URLSearchParams(location.search);
+  const memberId=MyEMT.memberId();
+  MyEMTData.renderMember(document,{});MyEMTData.renderHealth(document,{});
+  if(!memberId)return;
+  try{
+    const [memberRes,healthRes]=await Promise.all([fetch(`${API}/api/members/${encodeURIComponent(memberId)}`),fetch(`${API}/api/members/${encodeURIComponent(memberId)}/health`)]);
+    const memberJson=await memberRes.json(),healthJson=await healthRes.json();
+    MyEMTData.renderMember(document,memberRes.ok?memberJson.data:{});MyEMTData.renderHealth(document,healthRes.ok?healthJson.data:{});
+  }catch(error){console.error('Gagal memuatkan maklumat kesihatan:',error);}
+})();
+</script>
 
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <title>MyEMT Ahli</title>
+  <title>Portal Ahli MyEMT</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -147,7 +147,7 @@
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
       <!-- PAGE HEADER -->
-      <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-4">
+      <div class="myemt-landing-header d-flex flex-wrap justify-content-between align-items-start gap-2 mb-4">
         <div>
           <h4 class="mb-1 fw-bold">MyEMT</h4>
           <small class="text-muted">
@@ -189,7 +189,7 @@
                 <a href="emt_viewform.html"
                   id="btn-member-view"
                   class="btn btn-sm btn-outline-secondary">
-                  <i class="bi bi-eye me-1"></i>
+                  <i class="bi bi-file-earmark-person me-1"></i>
                   Lihat Maklumat
                 </a>
 
@@ -197,7 +197,7 @@
                   id="btn-member-edit"
                   class="btn btn-sm btn-outline-primary">
                   <i class="bi bi-pencil-square me-1"></i>
-                  Kemaskini Maklumat
+                    Kemas Kini Maklumat
                 </a>
 
               </div>
@@ -310,7 +310,7 @@
           <div class="summary-card">
             <div class="summary-label">Komponen Kursus</div>
             <div class="summary-value">4 Komponen</div>
-            <div class="small text-muted mt-1">B-Course • C-Course • TTX • FTX</div>
+                            <div class="small text-muted mt-1">Kursus B • Kursus C • TTX • FTX</div>
           </div>
         </div>
 
@@ -375,7 +375,7 @@
                 <h6 class="fw-bold">Kursus Kelayakan</h6>
 
                 <p class="small text-muted">
-                  Satu program kursus MyEMT merangkumi empat komponen latihan: B-Course, C-Course, TTX dan FTX.
+                        Satu program kursus MyEMT merangkumi empat komponen latihan: Kursus B, Kursus C, TTX dan FTX.
                 </p>
 
                 <div class="d-grid gap-2">
@@ -458,7 +458,7 @@
                 <h6 class="fw-bold">Program Kursus MyEMT</h6>
                 <p class="small text-muted mb-2">
                   Satu intake merangkumi:
-                  <strong>B-Course, C-Course, TTX dan FTX</strong>.
+                                    <strong>Kursus B, Kursus C, TTX dan FTX</strong>.
                 </p>
                 <div id="flow-course-status">
                   <span class="badge bg-secondary">Belum Mohon</span>
@@ -559,15 +559,8 @@ fetch("sidebar.html")
 /* =====================================================
    USER / MEMBER ID
 ===================================================== */
-const MEMBER_ID =
-  localStorage.getItem("myemt_memberId") ||
-  localStorage.getItem("memberId") ||
-  localStorage.getItem("userId") ||
-  sessionStorage.getItem("myemt_memberId") ||
-  sessionStorage.getItem("memberId") ||
-  sessionStorage.getItem("userId") ||
-  new URLSearchParams(location.search).get("memberId") ||
-  "";
+const MEMBER_ID = window.MyEMT?.memberId?.() ||
+  localStorage.getItem("userId") || sessionStorage.getItem("userId") || "";
 
 
 let currentMember = null;
@@ -730,7 +723,7 @@ function isApprovedLike(status) {
 
 /*
  * Kursus MyEMT dianggap satu program / intake.
- * B-Course, C-Course, TTX dan FTX ialah empat komponen
+        * Kursus B, Kursus C, TTX dan FTX ialah empat komponen
  * di dalam program tersebut, bukan empat permohonan berasingan.
  */
 function bestCourseApplication() {
@@ -905,10 +898,13 @@ async function loadMemberProfile() {
 
 
   /* MEMBER-SPECIFIC LINKS */
-  document.getElementById("btn-health-view").href =
+  const healthViewBtn = document.getElementById("btn-health-view");
+  const healthEditBtn = document.getElementById("btn-health-edit");
+
+  if (healthViewBtn) healthViewBtn.href =
     `user_healthview.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
 
-  document.getElementById("btn-health-edit").href =
+  if (healthEditBtn) healthEditBtn.href =
     `user_healthform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
 
   document.getElementById("btn-course-health").href =
@@ -949,7 +945,7 @@ async function loadMemberProfile() {
       '<i class="bi bi-arrow-repeat me-1"></i>Mohon Semula';
 
     emtBtn.href =
-      `emt_form.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+      `emt_editform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
 
   }
 
@@ -1016,10 +1012,13 @@ function updateFlow() {
     memberStatus === "approved";
 
 
-  const courseApproved =
-    isApprovedLike(
-      courseApp?.status
-    );
+  const courseApproved = Boolean(
+    courseApp &&
+    isApprovedLike(courseApp.status) &&
+    courseApp.attendance?.status === "attended" &&
+    courseApp.completion?.status === "completed" &&
+    ["B-Course","C-Course","TTX","FTX"].every(component => courseApp.componentResults?.[component]?.status === "passed")
+  );
 
 
   const fullyActive =
@@ -1154,8 +1153,8 @@ function updateFlow() {
 
     courseNote.textContent =
       courseApproved
-        ? "Program kursus telah diluluskan. Program ini merangkumi B-Course, C-Course, TTX dan FTX."
-        : "Satu permohonan kursus merangkumi B-Course, C-Course, TTX dan FTX.";
+            ? "Program kursus telah diluluskan. Program ini merangkumi Kursus B, Kursus C, TTX dan FTX."
+            : "Satu permohonan kursus merangkumi Kursus B, Kursus C, TTX dan FTX.";
   }
 
 
@@ -1193,7 +1192,7 @@ function updateFlow() {
     );
 
     missionNote.textContent =
-      "Akses operasi misi dibuka selepas keahlian MyEMT dan program kursus yang merangkumi B-Course, C-Course, TTX dan FTX diluluskan.";
+        "Akses operasi misi dibuka selepas keahlian MyEMT dan program kursus yang merangkumi Kursus B, Kursus C, TTX dan FTX diluluskan.";
 
   } else {
 
@@ -1202,7 +1201,7 @@ function updateFlow() {
     );
 
     missionBtn.href =
-      "user_misilist.html";
+        "emt_crud.html?paparan=pengguna";
 
     missionCard.classList.remove(
       "locked-action"
@@ -1252,7 +1251,7 @@ function updateFlow() {
       "alert alert-warning mt-3 mb-0";
 
     alertEl.innerHTML =
-      '<i class="bi bi-mortarboard me-1"></i>Keahlian telah diluluskan. Seterusnya daftar program kursus MyEMT yang merangkumi <strong>B-Course, C-Course, TTX dan FTX</strong>.';
+            '<i class="bi bi-mortarboard me-1"></i>Keahlian telah diluluskan. Seterusnya daftar program kursus MyEMT yang merangkumi <strong>Kursus B, Kursus C, TTX dan FTX</strong>.';
   }
 }
 
@@ -1371,7 +1370,7 @@ function renderApplicationHistory() {
         `Program Kursus MyEMT${app.sessionName ? " — " + app.sessionName : ""}`,
 
       sub:
-        "Merangkumi B-Course, C-Course, TTX dan FTX",
+                "Merangkumi Kursus B, Kursus C, TTX dan FTX",
 
       status:
         app.status,

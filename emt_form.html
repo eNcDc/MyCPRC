@@ -1349,6 +1349,9 @@ async function buildPayload() {
 
     payload.resubmissionOf =
       resubmissionOf;
+
+    payload.resubmittedAt =
+      new Date().toISOString();
   }
 
 
@@ -1404,6 +1407,22 @@ async function buildPayload() {
       await fileToBase64(supportFile);
   }
 
+
+  const weightKg = Number(payload.weight) || null;
+  const heightCm = Number(payload.height) || null;
+  payload.allergy = payload.allergies || null;
+  payload.health = {
+    schemaVersion: 1,
+    vitals: { weightKg, heightCm, bmi: weightKg && heightCm ? Number((weightKg / ((heightCm / 100) ** 2)).toFixed(1)) : null },
+    medicalCondition: { hasCondition: payload.medical_condition || null, details: payload.medical_condition_details || null },
+    allergy: { hasAllergy: payload.allergy, details: payload.allergy_details || null },
+    vaccinations: { tetanus:null, hepatitisB:null, influenza:null, covid19:null, other:[] },
+    fitness: { status:null, assessedAt:null, validUntil:null },
+    psychological: { stressLevel:null, ptsdRisk:null, sleepIssue:null, copingAbility:null, traumaHistory:null },
+    medications: [],
+    deployment: { flood:null, rural:null, international:null, restrictions:[] },
+    notes: payload.permanent_injury_details || null
+  };
 
   return payload;
 }
@@ -1483,11 +1502,23 @@ form.addEventListener(
         await buildPayload();
 
 
+      const requestUrl =
+        resubmissionOf
+          ? `${API}/api/members/${encodeURIComponent(resubmissionOf)}`
+          : `${API}/api/members`;
+
+
+      const requestMethod =
+        resubmissionOf
+          ? "PATCH"
+          : "POST";
+
+
       const res =
         await fetch(
-          `${API}/api/members`,
+          requestUrl,
           {
-            method: "POST",
+            method: requestMethod,
             headers: {
               "Content-Type":
                 "application/json"
@@ -1516,7 +1547,8 @@ form.addEventListener(
 
 
       const memberId =
-        result.data.id;
+        result.data.id ||
+        resubmissionOf;
 
 
       const memberName =

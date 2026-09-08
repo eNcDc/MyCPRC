@@ -10,7 +10,8 @@ let sariHospitalChart = null;
    DASHBOARD DATA
 ===================================================== */
 
-const sariDashboardData = [
+let sariDashboardData = [];
+const sariLegacyDashboardData = [
 
 {
     sampleDate:"2026-07-01",
@@ -251,7 +252,8 @@ const sariDashboardData = [
    LOAD DASHBOARD
 ===================================================== */
 
-function loadSariDashboard(){
+async function loadSariDashboard(){
+    try{let records;if(window.SURVEILLANCE_DEMO_MODE&&window.getSurveillanceDemoRecords){records=window.getSurveillanceDemoRecords('sari');}else{const response=await fetch(`${typeof API!=='undefined'?API:''}/api/sari-records`),json=await response.json();if(!response.ok||!json.success)throw new Error(json.message||`HTTP ${response.status}`);records=json.data||[];}sariDashboardData=records.map(item=>{const raw=String(item.status_of_wgs_test||''),wgsStatus=/proses|pending|belum/i.test(raw)?'PENDING':/tidak berkenaan|n\/a/i.test(raw)?'N/A':'COMPLETED';return{sampleDate:item.date_received_mol||item.date_received_tc||'',hospital:item.hospital||'Tidak dinyatakan',wgsEligible:/yes|ya/i.test(item.qualified_for_wgs||''),wgsStatus,influenza:item.influenza_pcr_result||'',covid:item.covid19_pcr_result||''};});}catch(error){console.error('Data dashboard SARI gagal dimuatkan:',error);sariDashboardData=[];const root=document.getElementById('sariDashboard');if(root)root.insertAdjacentHTML('afterbegin',`<div class="alert alert-danger">Data dashboard SARI gagal dimuatkan: ${String(error.message).replace(/[<>]/g,'')}</div>`);}
 
     console.log("SARI Dashboard Loaded");
 

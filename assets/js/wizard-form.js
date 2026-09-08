@@ -17,9 +17,28 @@ document.addEventListener("DOMContentLoaded", () => {
   indicators.forEach((indicator, index) => {
     indicator.addEventListener('click', (e) => {
       e.preventDefault();
+      if (index > currentStep && !validateCurrentStep()) return;
       goToStep(index);
     });
   });
+
+  function validateCurrentStep() {
+    const missingLocation = [...steps[currentStep].querySelectorAll('input[type="hidden"][required]')]
+      .find(field => !field.value);
+    if (missingLocation) {
+      const map = steps[currentStep].querySelector('[id^="map_"]');
+      if (map) map.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      alert('Sila pilih lokasi pada peta sebelum meneruskan.');
+      return false;
+    }
+    const fields = [...steps[currentStep].querySelectorAll('input, select, textarea')]
+      .filter(field => !field.disabled && field.type !== 'hidden');
+    const invalid = fields.find(field => !field.checkValidity());
+    if (!invalid) return true;
+    invalid.reportValidity();
+    invalid.focus();
+    return false;
+  }
 
   function goToStep(index) {
     if (index < 0 || index >= steps.length) return;
@@ -37,9 +56,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   nextBtn.addEventListener('click', () => {
+    if (!validateCurrentStep()) return;
     if (!isLastStep()) {
       currentStep++;
       showStep(currentStep);
+      steps[currentStep].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      form.requestSubmit();
     }
   });
 

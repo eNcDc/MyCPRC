@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ms">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Laporan Harian MDS Mengikut Misi</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/myemt.css" rel="stylesheet">
+  <style>
+    .context-card{border:1px solid #e5e7eb;border-radius:14px;background:#fff}
+    .metric{border-radius:12px;background:#f8fafc;padding:1rem;height:100%}
+    .metric strong{font-size:1.6rem;display:block}
+    .location-heading{background:#f1f5f9;border-left:4px solid #0d6efd}
+  </style>
+</head>
+<body>
+<div id="header"></div>
+<div class="container-fluid"><div class="row">
+  <aside class="col-md-3 col-lg-2 sidebar p-0" id="sidebar-placeholder"></aside>
+  <main class="col-md-9 col-lg-10 px-4 py-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+      <div>
+        <div class="small text-primary fw-semibold mb-1">MyEMT · Laporan Harian Misi</div>
+        <h4 class="fw-bold mb-1" id="missionName">Memuatkan misi...</h4>
+        <div class="text-muted" id="missionMeta">Laporan disusun mengikut hari aktiviti dalam misi.</div>
+      </div>
+      <a class="btn btn-outline-secondary" id="backMission" href="mission_detail.html"><i class="bi bi-arrow-left me-1"></i>Kembali ke Butiran Misi</a>
+    </div>
+
+    <div class="alert alert-info">
+      <i class="bi bi-info-circle me-1"></i>
+      Halaman ini hanya memaparkan rekod bagi misi yang dipilih. Satu tally dijana bagi setiap hari dan merangkumi semua lokasi pesakit dalam misi tersebut.
+    </div>
+    <div class="alert alert-danger d-none" id="errorState"></div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-lg-3"><div class="metric"><span class="text-muted small">Jumlah Pesakit MDS</span><strong id="patientCount">0</strong></div></div>
+      <div class="col-6 col-lg-3"><div class="metric"><span class="text-muted small">Hari Aktiviti</span><strong id="dayCount">0</strong></div></div>
+      <div class="col-6 col-lg-3"><div class="metric"><span class="text-muted small">Laporan Dihantar</span><strong class="text-success" id="submittedCount">0</strong></div></div>
+      <div class="col-6 col-lg-3"><div class="metric"><span class="text-muted small">Perlu Dilengkapkan</span><strong class="text-warning" id="incompleteCount">0</strong></div></div>
+    </div>
+
+    <div class="context-card overflow-hidden">
+      <div class="p-3 border-bottom d-flex flex-wrap justify-content-between gap-2 align-items-center">
+        <div><strong>Senarai Laporan Mengikut Hari</strong><div class="small text-muted">Konteks dibina daripada rekod MDS dan Laporan Harian misi ini.</div></div>
+        <a class="btn btn-primary" id="generalReport" href="emt_mdsdaily.html"><i class="bi bi-clipboard-data me-1"></i>Buka Laporan Umum</a>
+      </div>
+      <div id="contexts"><div class="text-center text-muted p-5">Memuatkan rekod...</div></div>
+    </div>
+  </main>
+</div></div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/mds-business-rules.js"></script>
+<script src="assets/js/layout.js"></script>
+<script>
+const params=new URLSearchParams(location.search);
+const missionId=String(params.get('missionId')||params.get('id')||'').trim();
+if(missionId)document.getElementById('backMission').href=`mission_detail.html?id=${encodeURIComponent(missionId)}#step12`;
+const esc=value=>String(value??'-').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+const dateLabel=value=>{if(!value)return '-';const p=String(value).slice(0,10).split('-');return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:value;};
+const contextKey=(m,d,l)=>`${m}|${d}|${l}`;
+
+function reportUrl(context){return `emt_mdsdaily.html?missionId=${encodeURIComponent(missionId)}&date=${encodeURIComponent(context.date)}&scope=mission`;}
+function editUrl(context){return `mission_detail.html?id=${encodeURIComponent(missionId)}&dailyDate=${encodeURIComponent(context.date)}#step12`;}
+
+function buildContexts(mds,reports){
+  const map=new Map();
+  const add=(source,report=null)=>{
+    const date=String(source.activityDate||source.reportDate||source.date||'').slice(0,10);
+    const locationId=String(source.activityLocationId||MyEmtMdsRules.canonicalLocationId(source)||'');
+    if(!date)return;
+    const key=`${missionId}|${date}`,old=map.get(key)||{},locations=new Set(old.locations||[]);
+    if(source.location||source.activityLocationName||source.activityLocation?.name)locations.add(source.location||source.activityLocationName||source.activityLocation?.name);
+    const selectedReport=report&&(!old.report||MyEmtMdsRules.normalizeStatus(report.status)==='SUBMITTED')?report:old.report||null;
+    map.set(key,{...old,date,activityLocationId:locationId,
+      locations:[...locations],
+      location:source.location||source.activityLocationName||source.activityLocation?.name||old.location||locationId,
+      facilityName:source.facilityName||source.activityFacilityName||source.activityLocation?.facilityName||old.facilityName||'',
+      report:selectedReport});
+  };
+  mds.forEach(r=>add(r));reports.forEach(r=>add(r,r));
+  return [...map.values()].map(c=>({...c,status:c.report?MyEmtMdsRules.normalizeStatus(c.report.status):'MISSING',records:MyEmtMdsRules.eligibleRecords(mds,{missionId,activityDate:c.date})}));
+}
+
+function render(contexts){
+  document.getElementById('patientCount').textContent=new Set(contexts.flatMap(c=>c.records||[]).map(r=>MyEmtMdsRules.recordKey(r))).size;
+  document.getElementById('dayCount').textContent=contexts.length;
+  document.getElementById('submittedCount').textContent=contexts.filter(c=>c.status==='SUBMITTED').length;
+  document.getElementById('incompleteCount').textContent=contexts.filter(c=>c.status!=='SUBMITTED').length;
+  if(!contexts.length){document.getElementById('contexts').innerHTML='<div class="text-center text-muted p-5">Tiada rekod MDS atau Laporan Harian bagi misi ini.</div>';return;}
+  const items=contexts.sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('contexts').innerHTML=`<div class="table-responsive"><table class="table align-middle mb-0"><thead><tr><th>Tarikh Aktiviti</th><th>Lokasi Direkodkan</th><th>Jumlah Pesakit</th><th>Status Laporan</th><th class="text-end">Tindakan</th></tr></thead><tbody>${items.map(c=>`<tr><td class="fw-semibold">${esc(dateLabel(c.date))}</td><td>${esc((c.locations||[]).join(', ')||c.location||'-')}</td><td>${c.records.length}</td><td><span class="badge ${c.status==='SUBMITTED'?'bg-success':c.status==='DRAFT'?'bg-warning text-dark':'bg-danger'}">${c.status==='SUBMITTED'?'Dihantar':c.status==='DRAFT'?'Draf':'Maklumat asas belum dihantar'}</span></td><td class="text-end">${c.status==='SUBMITTED'?`<a class="btn btn-sm btn-outline-primary" href="${reportUrl(c)}">Jana / Lihat Laporan</a>`:`<a class="btn btn-sm btn-warning" href="${editUrl(c)}">Kemas Kini Maklumat Asas</a>`}</td></tr>`).join('')}</tbody></table></div>`;
+}
+
+async function load(){
+  if(!missionId){document.getElementById('errorState').textContent='ID misi tidak diberikan.';document.getElementById('errorState').classList.remove('d-none');document.getElementById('contexts').innerHTML='';return;}
+  document.getElementById('backMission').href=`mission_detail.html?id=${encodeURIComponent(missionId)}#step12`;
+  document.getElementById('generalReport').href=`emt_mdsdaily.html?missionId=${encodeURIComponent(missionId)}`;
+  try{
+    const results=await Promise.allSettled([fetch(`${API}/api/missions/${encodeURIComponent(missionId)}`),fetch(`${API}/api/mds?missionId=${encodeURIComponent(missionId)}`),fetch(`${API}/api/daily-reports?missionId=${encodeURIComponent(missionId)}`)]);
+    const read=async(result,label)=>{if(result.status==='rejected')throw new Error(`${label}: ${result.reason?.message||'gagal disambungkan'}`);const response=result.value,json=await response.json();if(!response.ok||json?.success===false)throw new Error(`${label}: HTTP ${response.status}${json?.message?` - ${json.message}`:''}`);return json;};
+    const missionJson=await read(results[0],'/api/missions/:id');
+    const mdsJson=await read(results[1],'/api/mds');
+    let dailyJson={data:[]},dailyWarning='';
+    try{dailyJson=await read(results[2],'/api/daily-reports');}catch(error){dailyWarning=error.message;}
+    const mission=missionJson.data||{};
+    document.title=`Laporan Harian MDS — ${mission.name||missionId}`;
+    document.getElementById('missionName').textContent=mission.name||missionId;
+    document.getElementById('missionMeta').textContent=`${mission.location||'Lokasi misi belum direkodkan'} · ${mission.startDate?dateLabel(mission.startDate):'Tarikh mula belum direkodkan'}`;
+    render(buildContexts(mdsJson.data||[],dailyJson.data||[]));
+    if(dailyWarning){const box=document.getElementById('errorState');box.textContent=`${dailyWarning}. Rekod MDS masih dipaparkan, tetapi status penghantaran laporan tidak dapat disahkan.`;box.classList.remove('d-none');}
+  }catch(error){console.error(error);document.getElementById('errorState').textContent=error.message;document.getElementById('errorState').classList.remove('d-none');document.getElementById('contexts').innerHTML='';}
+}
+document.addEventListener('DOMContentLoaded',load);
+</script>
+</body>
+</html>

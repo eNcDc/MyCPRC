@@ -82,14 +82,14 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
 
             <div>
-            <h4 class="mb-0">Kemaskini Rekod Asset EMT</h4>
-            <small class="text-muted">
-                Rekod asset dan peralatan EMT
+            <h4 class="mb-0">Kemas Kini Rekod Aset EMT</h4>
+            <small class="text-muted" id="assetEditContext">
+                Rekod aset dan peralatan EMT
             </small>
             </div>
 
             <div class="mb-3 d-flex justify-content-end">
-            <a href="asset_all.html" class="btn btn-primary">
+            <a href="asset_all.html" class="btn btn-primary" id="assetEditBackLink">
                 <i class="bi bi-arrow-left me-1"></i> Kembali
             </a>
             </div>
@@ -100,7 +100,7 @@
         <div class="card shadow-sm">
 
             <div class="card-header bg-white">
-            <strong>Maklumat Asset EMT</strong>
+            <strong>Maklumat Aset EMT</strong>
             </div>
 
             <div class="card-body">
@@ -126,6 +126,8 @@
                         step="1"
                         value="10">
                 </div>
+
+                <div class="col-md-3"><label class="form-label">Paras Stok Minimum</label><input type="number" class="form-control" min="0" step="1"></div>
 
                 <!-- SERIAL NUMBER -->
                 <div class="col-md-3">
@@ -174,6 +176,21 @@
                 </div>
 
                 <div class="col-md-4">
+                <label class="form-label">Kategori Perolehan</label>
+                <select class="form-select" required>
+                    <option value="">Belum Direkodkan</option>
+                    <option>Penerimaan Sumbangan</option>
+                    <option>Pembelian Terus</option>
+                    <option value="Aset MyEMT">Daripada Aset MyEMT</option>
+                </select>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Asal Aset</label>
+                <input type="text" class="form-control bg-light" readonly>
+                </div>
+
+                <div class="col-md-4">
                 <label class="form-label">Tarikh Perolehan</label>
                 <input type="date" class="form-control"
                         value="2026-01-10">
@@ -198,14 +215,32 @@
                 </div>
 
                 <div class="col-md-4">
-                <label class="form-label">Status Aset</label>
+                <label class="form-label">Status Semasa Aset</label>
                 <select class="form-select">
                     <option>Tersedia</option>
                     <option selected>Digunakan</option>
                     <option>Penyelenggaraan</option>
                     <option>Rosak</option>
-                    <option>Hilang / Lupus</option>
                 </select>
+                </div>
+
+                <div class="col-md-4"><label class="form-label">Tarikh Dikeluarkan</label><input type="date" class="form-control"></div>
+                <div class="col-md-4"><label class="form-label">Tarikh Luput</label><input type="date" class="form-control"></div>
+
+                <div class="col-md-4">
+                <label class="form-label">Status Akhir Aset</label>
+                <select class="form-select">
+                    <option value="">Belum Ditentukan</option>
+                    <option>Disumbangkan</option>
+                    <option>Stok Habis</option>
+                    <option>Rosak</option>
+                    <option>Lain-lain</option>
+                </select>
+                </div>
+
+                <div class="col-md-4">
+                <label class="form-label">Status Akhir Lain</label>
+                <input type="text" class="form-control" maxlength="200">
                 </div>
 
                 <div class="col-md-4">
@@ -292,7 +327,7 @@
             <div class="d-flex justify-content-end mt-4">
                 <button type="submit"
                         class="btn btn-primary px-4 rounded-pill shadow-sm">
-                Kemaskini Aset
+                Kemas Kini Aset
                 </button>
             </div>
 
@@ -348,22 +383,44 @@ function getByLabel(labelText) {
   return null;
 }
 
-const id = new URLSearchParams(location.search).get('id');
+const assetEditParams = new URLSearchParams(location.search);
+const id = assetEditParams.get('id');
+const requestedMissionId = assetEditParams.get('missionId') || '';
+let assetOwnerMissionId = requestedMissionId;
+const assetEditForm = document.querySelector('form');
+assetEditForm?.querySelectorAll('input:not([type="file"]):not([readonly]), textarea').forEach(field=>field.value='');
+assetEditForm?.querySelectorAll('select').forEach(field=>field.selectedIndex=0);
 if (id) {
-  fetch(`${API}/api/assets/${encodeURIComponent(id)}`)
-    .then(r => r.json())
+  const ownershipQuery=requestedMissionId?`?missionId=${encodeURIComponent(requestedMissionId)}`:'';
+  fetch(`${API}/api/assets/${encodeURIComponent(id)}${ownershipQuery}`)
+    .then(async r => {const json=await r.json();if(!r.ok||!json.success)throw new Error(json.message||'Aset tidak dapat dimuatkan.');return json;})
     .then(({ data: a }) => {
-      if (!a) return;
+      if (!a) throw new Error('Aset tidak dijumpai.');
+      assetOwnerMissionId=a.missionId||'';
+      document.getElementById('assetEditContext').textContent=assetOwnerMissionId?`Aset milik misi ${assetOwnerMissionId}`:'Aset inventori keseluruhan MyEMT';
+      if(!assetOwnerMissionId){
+        const procurementLabel=[...document.querySelectorAll('.form-label')].find(label=>label.textContent.trim()==='Kategori Perolehan');
+        procurementLabel?.closest('[class*="col-"]')?.querySelector('select option[value="Aset MyEMT"]')?.remove();
+      }
+      const back=document.getElementById('assetEditBackLink');
+      if(back)back.href=assetOwnerMissionId?`mission_detail.html?id=${encodeURIComponent(assetOwnerMissionId)}#step2`:'asset_all.html';
       fillByLabel('Nama Aset', a.name);
       fillByLabel('Kuantiti Aset', a.quantity);
-      fillByLabel('No Siri', a.serial);
+      fillByLabel('Paras Stok Minimum', a.minimumStockLevel ?? 2);
+      fillByLabel('No Siri', a.serialNumber || a.serial);
       fillByLabel('Kategori', a.category);
       fillByLabel('Sub Kategori', a.subCategory);
       fillByLabel('Jenis Aset', a.assetType);
       fillByLabel('Tarikh Perolehan', a.procurementDate);
       fillByLabel('Kos Perolehan (RM)', a.cost);
       fillByLabel('Pembekal', a.supplier);
-      fillByLabel('Status Aset', a.status);
+      fillByLabel('Tarikh Dikeluarkan', a.manufacturedDate);
+      fillByLabel('Tarikh Luput', a.expiryDate);
+      fillByLabel('Kategori Perolehan', a.procurementCategory);
+      fillByLabel('Asal Aset', a.assetOrigin === 'MyEMT' ? 'Inventori MyEMT' : (a.procurementCategory || '-'));
+      fillByLabel('Status Semasa Aset', a.currentStatus || a.status);
+      fillByLabel('Status Akhir Aset', a.finalStatus);
+      fillByLabel('Status Akhir Lain', a.finalStatusOther);
       fillByLabel('Keadaan Fizikal', a.physicalCondition);
       fillByLabel('Tahap Kritikal', a.priority);
       fillByLabel('Lokasi Semasa', a.location);
@@ -373,23 +430,34 @@ if (id) {
       fillByLabel('Warranty Tamat', a.warrantyEnd);
       fillByLabel('Catatan', a.notes);
     })
-    .catch(() => {});
+    .catch(error => {alert(error.message);document.querySelector('button[type="submit"]')?.setAttribute('disabled','');});
 
   const form = document.querySelector('form');
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const assetType=getByLabel('Jenis Aset')||'';
+      if(/consumable|boleh habis guna/i.test(assetType)&&!getByLabel('Tarikh Luput')){alert('Tarikh luput diperlukan untuk aset boleh habis guna.');return;}
+      if(/equipment|peralatan/i.test(assetType)&&!getByLabel('Tarikh Servis Seterusnya')){alert('Tarikh penyelenggaraan seterusnya diperlukan untuk mesin atau peralatan.');return;}
       const payload = {
         name:              getByLabel('Nama Aset'),
         quantity:          Number(getByLabel('Kuantiti Aset')),
+        minimumStockLevel: Number(getByLabel('Paras Stok Minimum') || 0),
         serial:            getByLabel('No Siri'),
+        serialNumber:      getByLabel('No Siri'),
         category:          getByLabel('Kategori'),
         subCategory:       getByLabel('Sub Kategori'),
         assetType:         getByLabel('Jenis Aset'),
         procurementDate:   getByLabel('Tarikh Perolehan'),
         cost:              getByLabel('Kos Perolehan (RM)'),
         supplier:          getByLabel('Pembekal'),
-        status:            getByLabel('Status Aset'),
+        manufacturedDate:  getByLabel('Tarikh Dikeluarkan'),
+        expiryDate:        getByLabel('Tarikh Luput'),
+        procurementCategory:getByLabel('Kategori Perolehan'),
+        currentStatus:     getByLabel('Status Semasa Aset'),
+        status:            getByLabel('Status Semasa Aset'),
+        finalStatus:       getByLabel('Status Akhir Aset'),
+        finalStatusOther:  getByLabel('Status Akhir Lain'),
         physicalCondition: getByLabel('Keadaan Fizikal'),
         priority:          getByLabel('Tahap Kritikal'),
         location:          getByLabel('Lokasi Semasa'),
@@ -400,11 +468,12 @@ if (id) {
         notes:             getByLabel('Catatan'),
       };
       try {
-        const res = await fetch(`${API}/api/assets/${encodeURIComponent(id)}`, {
+        const ownershipQuery=assetOwnerMissionId?`?missionId=${encodeURIComponent(assetOwnerMissionId)}`:'';
+        const res = await fetch(`${API}/api/assets/${encodeURIComponent(id)}${ownershipQuery}`, {
           method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
         });
         const json = await res.json();
-        if (json.success) { alert('Aset berjaya dikemaskini!'); history.back(); }
+        if (json.success) { alert('Aset berjaya dikemas kini!'); location.href=assetOwnerMissionId?`mission_detail.html?id=${encodeURIComponent(assetOwnerMissionId)}#step2`:'asset_all.html'; }
         else alert('Ralat: ' + (json.message || 'Kemaskini gagal.'));
       } catch { alert('Ralat rangkaian.'); }
     });

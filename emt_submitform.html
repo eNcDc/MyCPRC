@@ -447,7 +447,7 @@
             </a>
 
             <a href="emt_form.html" class="btn btn-danger d-none" id="btnReapply">
-              <i class="bi bi-arrow-repeat me-1"></i>Kemaskini & Mohon Semula
+                        <i class="bi bi-arrow-repeat me-1"></i>Kemas Kini dan Mohon Semula
             </a>
 
             <a href="course_apply.html" class="btn btn-success d-none" id="btnCourse">
@@ -693,7 +693,7 @@ function renderStatus(member) {
       label:"Ditolak",
       card:"rejected",
       description:"Permohonan anda belum dapat diluluskan.",
-      action:"Semak komen urus setia, kemaskini maklumat yang berkaitan dan hantar permohonan semula."
+            action:"Semak ulasan urus setia, kemas kini maklumat yang berkaitan dan hantar permohonan semula."
     }
 
   };
@@ -781,7 +781,7 @@ function renderStatus(member) {
   ) {
 
     btnReapply.href =
-      `emt_form.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
+      `emt_editform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;
 
     btnReapply.classList.remove(
       "d-none"

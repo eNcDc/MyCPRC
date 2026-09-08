@@ -100,6 +100,27 @@
                         required
                     >
                   </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Negeri</label>
+                    <input type="text" class="form-control text-uppercase" id="hsp_state" name="hsp_state" required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Daerah</label>
+                    <input type="text" class="form-control text-uppercase" id="hsp_district" name="hsp_district" required>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label">Nama Hospital</label>
+                    <input type="text" class="form-control" id="hsp_facility_name" name="hsp_facility_name" required>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Alamat Hospital</label>
+                    <textarea class="form-control" id="hsp_facility_address" name="hsp_facility_address" rows="2" required></textarea>
+                    <input type="hidden" id="hsp_facility_category" name="hsp_facility_category" value="Hospital">
+                  </div>
                 
                 <div class="col-md-6">
                 <label>Bilik Gerakan Phone Number</label>
@@ -285,7 +306,7 @@
 
                 <div class="col-md-3 mb-3">
                   <label>Portable Oxygen Tanks</label>
-                  <select class="form-select" id="hsp_portable_oxygen_tank" name="hsp_portable_oxygen_tank">
+                  <select class="form-select" id="hsp_ed_portable_oxygen_tank" name="hsp_ed_portable_oxygen_tank">
                     <option value="">Select</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
@@ -732,8 +753,8 @@
 
           <!-- NAVIGATION -->
           <div class="d-flex justify-content-start mt-4 gap-2">
-          <button type="button" class="btn btn-secondary" id="prevBtn">Back</button>
-          <button type="button" class="btn btn-primary" id="nextBtn">Next</button>
+          <button type="button" class="btn btn-secondary" id="prevBtn">Kembali</button>
+          <button type="button" class="btn btn-primary" id="nextBtn">Seterusnya</button>
         </div>
         </div>
         </form>
@@ -749,13 +770,11 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Load Header & Footer -->
-<script src="assets/js/common.js"></script>
-
 <script src="assets/js/wizard-form.js"></script>
-
-<script src="assets/js/drp_form.js"></script>
+<script src="assets/js/reportDRMsave.js"></script>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+<script src="assets/js/layout.js"></script>
 </body>
 </html>

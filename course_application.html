@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Borang Kesihatan Ahli</title>
+    <title>Senarai Permohonan Kursus MyEMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
@@ -82,7 +82,7 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
 
             <div>
-                <h4 class="mb-0">Permohonan B-Course & C-Course</h4>
+                <h4 class="mb-0">Permohonan Kursus B dan Kursus C</h4>
                 <small class="text-muted">
                     Senarai permohonan latihan EMT yang menunggu semakan dan kelulusan
                 </small>
@@ -117,7 +117,7 @@
 
                         <div class="modal-header">
                             <h5 class="modal-title">
-                                Senarai Semua Permohonan B-Course & C-Course
+                                Senarai Semua Permohonan Kursus B dan Kursus C
                             </h5>
                             <button type="button" class="btn-close"
                                 data-bs-dismiss="modal"></button>
@@ -424,15 +424,19 @@ const COURSE_STATUS = {
 
 function courseRow(a) {
   const s = COURSE_STATUS[a.status] || { label: a.status, badge: 'bg-secondary' };
+  const esc=MyEMT.escapeHTML;
+  const completion=a.completion?.status==='completed'
+    ? '<span class="badge bg-primary ms-1">Latihan Selesai</span>'
+    : '<span class="badge bg-light text-dark border ms-1">Latihan Belum Selesai</span>';
   return `<tr>
-    <td>${a.id}</td>
-    <td>${a.submittedAt || '-'}</td>
-    <td>${a.memberName || '-'}</td>
-    <td>${a.designation || '-'}</td>
-    <td>${a.facility || '-'}</td>
-    <td><span class="badge ${s.badge}">${s.label}</span></td>
+    <td>${esc(a.id)}</td>
+    <td>${esc(a.submittedAt || '-')}</td>
+    <td>${esc(a.memberName || '-')}</td>
+    <td>${esc(a.designation || '-')}</td>
+    <td>${esc(a.facility || '-')}</td>
+    <td><span class="badge ${s.badge}">${esc(s.label)}</span>${completion}</td>
     <td class="text-end">
-      <a href="course_tindakan.html?id=${a.id}" class="btn btn-sm btn-outline-primary">Papar</a>
+      <a href="course_tindakan.html?id=${encodeURIComponent(a.id)}&sessionId=${encodeURIComponent(a.sessionId || '')}" class="btn btn-sm btn-outline-primary">Papar</a>
     </td>
   </tr>`;
 }
@@ -445,7 +449,12 @@ function fillTbody(id, rows, colspan) {
 }
 
 async function loadCourseApps() {
-  const res  = await fetch(`${API}/api/course-applications`);
+  const selectedSessionId = new URLSearchParams(location.search).get('sessionId');
+  const url = selectedSessionId
+    ? `${API}/api/course-applications?sessionId=${encodeURIComponent(selectedSessionId)}`
+    : `${API}/api/course-applications`;
+  const res  = await fetch(url);
+  if (!res.ok) throw new Error('Gagal memuatkan permohonan kursus.');
   const json = await res.json();
   const apps = json.data || json;
 

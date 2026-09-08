@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Borang Kesihatan Ahli</title>
+    <title>Kemas Kini Maklumat Kesihatan MyEMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
@@ -93,7 +93,7 @@
   </div>
 
   <!-- FORM -->
-  <form>
+  <form id="member-health-form" novalidate>
 
     <div class="card shadow-sm mb-3">
 
@@ -136,7 +136,7 @@
                 <!-- TEMPOH PERKHIDMATAN -->
                 <div class="col-md-3">
                     <label class="form-label">Tempoh Perkhidmatan (Tahun)</label>
-                    <input type="number" min="0" class="form-control" placeholder="Contoh: 5">
+                    <input type="text" class="form-control" placeholder="Diambil daripada profil MyEMT">
                 </div>
 
                 <!-- TELEFON -->
@@ -220,8 +220,9 @@
         <div class="form-check"><input class="form-check-input" type="checkbox"> Tetanus</div>
         <div class="form-check"><input class="form-check-input" type="checkbox"> Hepatitis B</div>
         <div class="form-check"><input class="form-check-input" type="checkbox"> Influenza</div>
-        <div class="form-check"><input class="form-check-input" type="checkbox"> COVID-19 (Booster)</div>
-        <div class="form-check"><input class="form-check-input" type="checkbox"> Lain-lain</div>
+                    <div class="form-check"><input class="form-check-input" type="checkbox"> COVID-19 (Dos penggalak)</div>
+        <div class="form-check"><input class="form-check-input" id="vaccine-other-check" type="checkbox"> Lain-lain</div>
+        <input type="text" class="form-control mt-2" id="vaccine-other" placeholder="Nyatakan vaksin lain" disabled>
 
       </div>
     </div>
@@ -232,8 +233,9 @@
       <div class="card-body">
 
         <div class="mb-3">
-          <label class="form-label">Status Fit</label>
+                    <label class="form-label">Status Kecergasan</label>
           <select class="form-select">
+            <option value="" selected>Belum dinilai</option>
             <option>Fit</option>
             <option>Fit dengan sekatan</option>
             <option>Tidak Fit</option>
@@ -313,7 +315,7 @@
                 <!-- BMI -->
                 <div class="col-md-3">
                     <label class="form-label">BMI</label>
-                    <input type="text" class="form-control" placeholder="Auto / Manual">
+                    <input type="text" class="form-control" placeholder="Automatik / Manual">
                 </div>
 
                 <!-- OXYGEN -->
@@ -331,7 +333,7 @@
                 <!-- HEART CONDITION -->
                 <div class="col-md-6">
                     <label class="form-label">Keadaan Jantung</label>
-                    <input type="text" class="form-control" placeholder="Normal / History penyakit jantung">
+                    <input type="text" class="form-control" placeholder="Normal / Sejarah penyakit jantung">
                 </div>
 
                 <!-- RESP CONDITION -->
@@ -360,7 +362,7 @@
                 <div class="col-md-4">
                     <label class="form-label">Tahap Stres Semasa</label>
                     <select class="form-select">
-                        <option selected disabled>Pilih tahap</option>
+                        <option value="" selected>Belum dinilai</option>
                         <option>Rendah</option>
                         <option>Sederhana</option>
                         <option>Tinggi</option>
@@ -372,7 +374,7 @@
                 <div class="col-md-4">
                     <label class="form-label">Risiko PTSD</label>
                     <select class="form-select">
-                        <option selected disabled>Pilih risiko</option>
+                        <option value="" selected>Belum dinilai</option>
                         <option>Tiada</option>
                         <option>Rendah</option>
                         <option>Sederhana</option>
@@ -384,7 +386,7 @@
                 <div class="col-md-4">
                     <label class="form-label">Keletihan / Gangguan Tidur</label>
                     <select class="form-select">
-                        <option selected disabled>Pilih keadaan</option>
+                        <option value="" selected>Belum dinilai</option>
                         <option>Tiada</option>
                         <option>Keletihan ringan</option>
                         <option>Keletihan sederhana</option>
@@ -401,9 +403,9 @@
 
                 <!-- COPING -->
                 <div class="col-md-6">
-                    <label class="form-label">Keupayaan Mengurus Tekanan (Coping Ability)</label>
+                    <label class="form-label">Keupayaan Mengurus Tekanan</label>
                     <select class="form-select">
-                        <option selected disabled>Pilih tahap</option>
+                        <option value="" selected>Belum dinilai</option>
                         <option>Baik</option>
                         <option>Sederhana</option>
                         <option>Lemah</option>
@@ -424,7 +426,7 @@
 
                 <!-- STRESSORS -->
                 <div class="col-12">
-                    <label class="form-label">Faktor Tekanan (Stressor Semasa)</label>
+                    <label class="form-label">Faktor Tekanan Semasa</label>
                     <textarea class="form-control" rows="2"
                         placeholder="Contoh: kerja shift panjang, misi banjir, kurang tidur, tekanan keluarga"></textarea>
                 </div>
@@ -502,10 +504,11 @@
       <div class="card-header bg-white fw-bold">⚠️ Klasifikasi Risiko</div>
       <div class="card-body">
 
-        <select class="form-select">
-          <option>High risk responder</option>
-          <option>Moderate risk</option>
-          <option>Low risk</option>
+        <select class="form-select" id="risk-classification">
+          <option value="" selected>Belum dinilai</option>
+                            <option value="High risk responder">Petugas berisiko tinggi</option>
+                            <option value="Moderate risk">Risiko sederhana</option>
+                            <option value="Low risk">Risiko rendah</option>
         </select>
 
       </div>
@@ -513,13 +516,14 @@
 
     <!-- 8. DEPLOYMENT -->
     <div class="card shadow-sm mb-3">
-      <div class="card-header bg-white fw-bold">🌍 Kesesuaian Deployment</div>
+        <div class="card-header bg-white fw-bold">🌍 Kesesuaian Penugasan</div>
       <div class="card-body">
 
         <div class="form-check"><input class="form-check-input" type="checkbox"> Misi banjir</div>
         <div class="form-check"><input class="form-check-input" type="checkbox"> Kawasan luar bandar</div>
         <div class="form-check"><input class="form-check-input" type="checkbox"> Misi luar negara</div>
         <div class="form-check"><input class="form-check-input" type="checkbox"> Sekatan tertentu</div>
+        <input type="text" class="form-control mt-2" id="deployment-restrictions" placeholder="Nyatakan sekatan jika ada" disabled>
 
       </div>
     </div>
@@ -529,15 +533,15 @@
       <div class="card-header bg-white fw-bold">🏥 Rekod Insiden Perubatan</div>
       <div class="card-body">
 
-        <textarea class="form-control mb-3" rows="2" placeholder="Sila masukkan maklumat insiden perubatan (Jika ada)"></textarea>
+        <textarea class="form-control mb-3" id="incident-notes" rows="2" placeholder="Sila masukkan maklumat insiden perubatan (Jika ada)"></textarea>
 
       </div>
     </div>
 
     <!-- SUBMIT -->
     <div class="text-end">
-      <button class="btn btn-success px-4">
-        Daftar Borang Kesihatan
+      <button type="submit" id="health-submit" class="btn btn-success px-4">
+        Simpan Maklumat Kesihatan
       </button>
     </div>
 
@@ -568,51 +572,14 @@ fetch("sidebar.html")
   .then(data => document.getElementById("sidebar-placeholder").innerHTML = data);
 </script>
 
+<script src="assets/js/config.js"></script>
+<script src="assets/js/myemt-health.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 
-<!--ubat-->
-
-<script>
-function tambahUbat() {
-
-    const container = document.getElementById("ubatContainer");
-
-    const html = `
-    <div class="row g-2 ubat-item mb-2 border rounded p-2">
-
-        <div class="col-md-4">
-            <input type="text" class="form-control" name="nama_ubat[]" placeholder="Nama ubat">
-        </div>
-
-        <div class="col-md-2">
-            <input type="text" class="form-control" name="dos[]" placeholder="Dos">
-        </div>
-
-        <div class="col-md-3">
-            <input type="text" class="form-control" name="kekerapan[]" placeholder="Kekerapan">
-        </div>
-
-        <div class="col-md-2">
-            <input type="text" class="form-control" name="nota[]" placeholder="Nota">
-        </div>
-
-        <div class="col-md-1 d-flex align-items-end">
-            <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.ubat-item').remove()">
-                X
-            </button>
-        </div>
-
-    </div>
-    `;
-
-    container.insertAdjacentHTML("beforeend", html);
-}
-</script>
-
 <!--6. medication-->
 <script>
-function addMedication() {
+function addMedication(data = {}) {
     const container = document.getElementById("medicationContainer");
 
     const html = `
@@ -667,7 +634,66 @@ function addMedication() {
     `;
 
     container.insertAdjacentHTML("beforeend", html);
+    const item = container.lastElementChild;
+    const controls = item.querySelectorAll('input, select, textarea');
+    [data.name, data.dose, data.frequency, data.purpose, data.duration, data.sideEffects]
+      .forEach((value, index) => { if (value != null && controls[index]) controls[index].value = value; });
 }
+</script>
+
+<script>
+const healthForm = document.getElementById('member-health-form');
+const healthMemberId = new URLSearchParams(location.search).get('memberId') || localStorage.getItem('myemt_memberId') || localStorage.getItem('memberId') || sessionStorage.getItem('myemt_memberId') || sessionStorage.getItem('memberId');
+const byLabel = label => {
+  const el = [...healthForm.querySelectorAll('label')].find(item => item.textContent.trim().startsWith(label));
+  return el?.parentElement?.querySelector('input, select, textarea') || null;
+};
+const cardByTitle = title => [...healthForm.querySelectorAll('.card')].find(card => card.querySelector('.card-header')?.textContent.includes(title));
+const checkByText = (title, text) => [...(cardByTitle(title)?.querySelectorAll('.form-check') || [])].find(row => row.textContent.trim().startsWith(text))?.querySelector('input') || null;
+const setValue = (label, value) => { const el=byLabel(label); if(el) el.value=value ?? ''; };
+const getValue = label => byLabel(label)?.value?.trim() || null;
+const setChecked = (title,label,value) => { const el=checkByText(title,label); if(el) el.checked=Boolean(value); };
+
+function updateBmi(){
+  const weight=Number(getValue('Berat')),height=Number(getValue('Tinggi')),bmi=byLabel('BMI');
+  if(bmi){bmi.readOnly=true;bmi.value=weight&&height?(weight/((height/100)**2)).toFixed(1):'';}
+}
+
+function medicationRows(){
+  return [...document.querySelectorAll('#medicationContainer .medication-item')].map(item=>{
+    const c=item.querySelectorAll('input, select, textarea');
+    return {name:c[0]?.value.trim()||'',dose:c[1]?.value.trim()||'',frequency:c[2]?.value||'',purpose:c[3]?.value.trim()||'',duration:c[4]?.value.trim()||'',sideEffects:c[5]?.value.trim()||''};
+  }).filter(item=>item.name);
+}
+
+async function loadHealthForm(){
+  if(!healthMemberId){alert('ID ahli MyEMT tidak dijumpai.');healthForm.querySelectorAll('input,select,textarea,button').forEach(el=>el.disabled=true);return;}
+  try{
+    const [memberRes,healthRes]=await Promise.all([fetch(`${API}/api/members/${encodeURIComponent(healthMemberId)}`),fetch(`${API}/api/members/${encodeURIComponent(healthMemberId)}/health`)]);
+    const memberJson=await memberRes.json(),healthJson=await healthRes.json();
+    if(!memberRes.ok)throw new Error(memberJson.message||'Ahli tidak dijumpai.');
+    const m=memberJson.data||{},h=healthRes.ok?healthJson.data:{},v=h.vitals||{},f=h.fitness||{},p=h.psychological||{},vac=h.vaccinations||{},d=h.deployment||{};
+    const memberValues={'Nama Penuh':m.full_name||m.name,'No. Kad Pengenalan':m.identification_number||m.ic,'Umur':m.age,'Jantina':m.gender,'Tempoh Perkhidmatan':m.service_period||'','No Telefon':m.phone,'Jawatan':m.designation||m.position,'Fasiliti':m.workplace||m.facility,'Negeri':m.state};
+    Object.entries(memberValues).forEach(([label,value])=>{setValue(label,value);const el=byLabel(label);if(el){if(el.tagName==='SELECT')el.disabled=true;else el.readOnly=true;}});
+    setChecked('Vaksinasi','Tetanus',vac.tetanus?.status==='complete');setChecked('Vaksinasi','Hepatitis B',vac.hepatitisB?.status==='complete');setChecked('Vaksinasi','Influenza',vac.influenza?.status==='complete');setChecked('Vaksinasi','COVID-19',vac.covid19?.status==='complete');const otherVaccines=Array.isArray(vac.other)?vac.other:[];document.getElementById('vaccine-other-check').checked=otherVaccines.length>0;document.getElementById('vaccine-other').disabled=!otherVaccines.length;document.getElementById('vaccine-other').value=otherVaccines.join(', ');
+    setValue('Status Fit',f.status);setValue('Tarikh Pemeriksaan',f.assessedAt);setValue('Tarikh Sah Laku',f.validUntil);setValue('Tekanan Darah',v.bloodPressure);setValue('Denyutan Nadi',v.pulse);setValue('Kadar Pernafasan',v.respiratoryRate);setValue('Suhu Badan',v.temperatureC);setValue('Berat',v.weightKg);setValue('Tinggi',v.heightCm);setValue('Saturasi Oksigen',v.oxygenSaturation);setValue('Keadaan Jantung',v.heartCondition);setValue('Keadaan Pernafasan',v.respiratoryCondition);setValue('Tahap Stres',p.stressLevel);setValue('Risiko PTSD',p.ptsdRisk);setValue('Keletihan',p.sleepIssue);setValue('Keupayaan',p.copingAbility);setValue('Sejarah Trauma',p.traumaHistory);setValue('Faktor Tekanan',p.stressors);document.getElementById('risk-classification').value=h.riskClassification||'';document.getElementById('incident-notes').value=h.incidentNotes||h.notes||'';
+    setChecked('Deployment','Misi banjir',d.flood==='suitable');setChecked('Deployment','Kawasan luar bandar',d.rural==='suitable');setChecked('Deployment','Misi luar negara',d.international==='suitable');const restriction=checkByText('Deployment','Sekatan tertentu'),restrictionInput=document.getElementById('deployment-restrictions');const restrictions=Array.isArray(d.restrictions)?d.restrictions:[];if(restriction){restriction.checked=restrictions.length>0;restrictionInput.disabled=!restriction.checked;restrictionInput.value=restrictions.join(', ');}
+    const meds=Array.isArray(h.medications)?h.medications:[];if(meds.length){document.getElementById('medicationContainer').innerHTML='';meds.forEach(addMedication);}updateBmi();
+  }catch(error){console.error(error);alert(error.message||'Maklumat kesihatan gagal dimuatkan.');}
+}
+
+checkByText('Deployment','Sekatan tertentu')?.addEventListener('change',event=>{const input=document.getElementById('deployment-restrictions');input.disabled=!event.target.checked;if(!event.target.checked)input.value='';});
+document.getElementById('vaccine-other-check').addEventListener('change',event=>{const input=document.getElementById('vaccine-other');input.disabled=!event.target.checked;if(!event.target.checked)input.value='';else input.focus();});
+byLabel('Berat')?.addEventListener('input',updateBmi);byLabel('Tinggi')?.addEventListener('input',updateBmi);
+
+healthForm.addEventListener('submit',async event=>{
+  event.preventDefault();const submit=document.getElementById('health-submit'),weight=Number(getValue('Berat'))||null,height=Number(getValue('Tinggi'))||null,restrictionChecked=checkByText('Deployment','Sekatan tertentu')?.checked;
+  const complete=status=>status?'complete':null;
+  const incidentNotes=document.getElementById('incident-notes').value.trim()||null,otherVaccine=document.getElementById('vaccine-other').value.trim();
+const payload={schemaVersion:1,fitness:{status:getValue('Status Kecergasan'),assessedAt:getValue('Tarikh Pemeriksaan'),validUntil:getValue('Tarikh Sah Laku')},vitals:{bloodPressure:getValue('Tekanan Darah'),pulse:getValue('Denyutan Nadi'),respiratoryRate:getValue('Kadar Pernafasan'),temperatureC:getValue('Suhu Badan'),weightKg:weight,heightCm:height,bmi:weight&&height?Number((weight/((height/100)**2)).toFixed(1)):null,oxygenSaturation:getValue('Saturasi Oksigen'),heartCondition:getValue('Keadaan Jantung'),respiratoryCondition:getValue('Keadaan Pernafasan')},vaccinations:{tetanus:{status:complete(checkByText('Vaksinasi','Tetanus')?.checked)},hepatitisB:{status:complete(checkByText('Vaksinasi','Hepatitis B')?.checked)},influenza:{status:complete(checkByText('Vaksinasi','Influenza')?.checked)},covid19:{status:complete(checkByText('Vaksinasi','COVID-19')?.checked)},other:document.getElementById('vaccine-other-check').checked&&otherVaccine?[otherVaccine]:[]},psychological:{stressLevel:getValue('Tahap Stres'),ptsdRisk:getValue('Risiko PTSD'),sleepIssue:getValue('Keletihan'),copingAbility:getValue('Keupayaan'),traumaHistory:getValue('Sejarah Trauma'),stressors:getValue('Faktor Tekanan')},medications:medicationRows(),deployment:{flood:checkByText('Deployment','Misi banjir')?.checked?'suitable':null,rural:checkByText('Deployment','Kawasan luar bandar')?.checked?'suitable':null,international:checkByText('Deployment','Misi luar negara')?.checked?'suitable':null,restrictions:restrictionChecked&&document.getElementById('deployment-restrictions').value.trim()?[document.getElementById('deployment-restrictions').value.trim()]:[]},riskClassification:document.getElementById('risk-classification').value||null,incidentNotes,notes:incidentNotes};
+  submit.disabled=true;submit.textContent='Menyimpan...';try{const res=await fetch(`${API}/api/members/${encodeURIComponent(healthMemberId)}/health`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)}),json=await res.json();if(!res.ok||!json.success)throw new Error(json.message||'Simpanan gagal.');alert('Maklumat kesihatan berjaya disimpan.');location.href=`user_healthview.html?memberId=${encodeURIComponent(healthMemberId)}`;}catch(error){alert(error.message);submit.disabled=false;submit.textContent='Simpan Maklumat Kesihatan';}
+});
+document.addEventListener('DOMContentLoaded',loadHealthForm);
 </script>
 
 

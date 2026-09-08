@@ -82,14 +82,14 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
 
         <div>
-        <h4 class="mb-0">Tambah Rekod Asset EMT</h4>
+        <h4 class="mb-0">Tambah Rekod Aset EMT</h4>
         <small class="text-muted">
-            Rekod asset dan peralatan EMT
+            Rekod aset dan peralatan untuk kegunaan misi EMT
         </small>
         </div>
 
         <div class="mb-3 d-flex justify-content-end">
-        <a href="mission_detail.html" class="btn btn-primary">
+        <a href="mission_detail.html" class="btn btn-primary" id="assetBackLink">
             <i class="bi bi-arrow-left me-1"></i> Kembali
         </a>
         </div>
@@ -100,21 +100,39 @@
     <div class="card shadow-sm border-0">
 
         <div class="card-header bg-white">
-        <strong>Maklumat Asset EMT</strong>
+        <strong>Maklumat Aset EMT</strong>
         </div>
 
         <div class="card-body">
 
-        <form>
+        <form data-operational-form="assets">
 
             <div class="row g-3">
+
+            <div class="col-md-6">
+                <label class="form-label">Kategori Perolehan</label>
+                <select class="form-select" name="procurementCategory" id="procurementCategory" required>
+                    <option value="">-- Pilih kategori perolehan --</option>
+                    <option value="Penerimaan Sumbangan">Penerimaan Sumbangan</option>
+                    <option value="Pembelian Terus">Pembelian Terus</option>
+                    <option value="Aset MyEMT">Daripada Aset MyEMT</option>
+                </select>
+            </div>
+
+            <div class="col-md-6 d-none" id="sourceAssetGroup">
+                <label class="form-label">Pilih Aset MyEMT</label>
+                <select class="form-select" name="sourceAssetId" id="sourceAssetId">
+                    <option value="">Memuatkan senarai aset...</option>
+                </select>
+                <small class="text-muted" id="sourceAssetStockInfo">Maklumat tersedia akan disalin sebagai rekod baharu milik misi. Lengkapkan mana-mana maklumat yang tiada.</small>
+            </div>
 
             <!-- EMT NAME (READ ONLY) -->
             <div class="col-md-6">
                 <label class="form-label">Nama EMT</label>
                 <input type="text"
                     class="form-control bg-light"
-                    value="EMT Operasi Banjir Sabah"
+                    data-mission-name
                     readonly>
                 <small class="text-muted">
                 Data ini diambil daripada rekod misi
@@ -123,15 +141,15 @@
 
             <!-- ASSET NAME -->
             <div class="col-md-6">
-                <label class="form-label">Nama Asset</label>
-                <input type="text" class="form-control"
+                <label class="form-label">Nama Aset</label>
+                <input type="text" class="form-control" name="name" required maxlength="200"
                     placeholder="Contoh: Oxygen Cylinder / Generator">
             </div>
 
             <!-- KATEGORI -->
             <div class="col-md-4">
                 <label class="form-label">Kategori</label>
-                <select class="form-select">
+                <select class="form-select" name="category" required>
                     <option>Elektrik</option>
                     <option selected>Perubatan</option>
                     <option>Logistik</option>
@@ -141,29 +159,40 @@
                 </select>
             </div>
 
+            <div class="col-md-4">
+                <label class="form-label">Jenis Aset</label>
+                <select class="form-select" name="assetType" required>
+                    <option value="">-- Pilih jenis --</option>
+                    <option value="Boleh Habis Guna (Consumable)">Boleh Habis Guna (Consumable)</option>
+                    <option value="Peralatan (Equipment)">Mesin / Peralatan</option>
+                    <option value="Sokongan Kenderaan">Sokongan Kenderaan</option>
+                    <option value="Peranti ICT">Peranti ICT</option>
+                </select>
+            </div>
+
             <!-- QUANTITY -->
             <div class="col-md-4">
                 <label class="form-label">Kuantiti</label>
-                <input type="number" class="form-control" min="0" value="1">
+                <input type="number" class="form-control" name="quantity" min="1" value="1" required>
             </div>
 
             <!-- SERIAL NUMBER -->
             <div class="col-md-4">
                 <label class="form-label">No Siri / Serial Number</label>
-                <input type="text" class="form-control"
+                <input type="text" class="form-control" name="serialNumber" maxlength="100"
                     placeholder="Contoh: SN-2026-AX9912">
             </div>
 
             <!-- PRODUCTION DATE -->
             <div class="col-md-4">
                 <label class="form-label">Tarikh Dikeluarkan</label>
-                <input type="date" class="form-control">
+                <input type="date" class="form-control" name="manufacturedDate">
             </div>
 
             <!-- EXPIRY DATE -->
             <div class="col-md-4">
                 <label class="form-label">Tarikh Luput</label>
-                <input type="date" class="form-control">
+                <input type="date" class="form-control" name="expiryDate">
                 <small class="text-muted">
                 Untuk ubat / consumable sahaja
                 </small>
@@ -171,27 +200,56 @@
 
             <!-- STATUS -->
             <div class="col-md-4">
-                <label class="form-label">Status Aset</label>
-                <select class="form-select">
+                <label class="form-label">Status Semasa Aset</label>
+                <select class="form-select" name="currentStatus" id="currentStatus" required>
                     <option>Tersedia</option>
                     <option selected>Digunakan</option>
                     <option>Penyelenggaraan</option>
                     <option>Rosak</option>
                 </select>
+                <small class="text-muted">Status operasi aset ketika berada dalam misi.</small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Tarikh Servis Terakhir</label>
+                <input type="date" class="form-control" name="lastServiceDate">
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Tarikh Penyelenggaraan Seterusnya</label>
+                <input type="date" class="form-control" name="nextServiceDate">
+                <small class="text-muted">Diperlukan untuk mesin atau peralatan yang mempunyai jadual penyelenggaraan.</small>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Status Akhir Aset</label>
+                <select class="form-select" name="finalStatus" id="finalStatus">
+                    <option value="" selected>Belum Ditentukan</option>
+                    <option value="Disumbangkan">Disumbangkan</option>
+                    <option value="Stok Habis">Stok Habis</option>
+                    <option value="Rosak">Rosak</option>
+                    <option value="Lain-lain">Lain-lain</option>
+                </select>
+                <small class="text-muted">Boleh dikemas kini apabila penugasan aset tamat.</small>
+            </div>
+
+            <div class="col-md-4 d-none" id="finalStatusOtherGroup">
+                <label class="form-label">Nyatakan Status Akhir Lain</label>
+                <input type="text" class="form-control" name="finalStatusOther" id="finalStatusOther" maxlength="200">
             </div>
 
             <!-- LOCATION -->
             <div class="col-md-6">
                 <label class="form-label">Lokasi</label>
-                <input type="text" class="form-control"
+                <input type="text" class="form-control" name="location" maxlength="200"
                     placeholder="Contoh: Field Team / Warehouse / Sabah Ops">
             </div>
 
             <!-- NOTES -->
             <div class="col-md-6">
                 <label class="form-label">Catatan</label>
-                <textarea class="form-control" rows="2"
-                        placeholder="Maklumat tambahan asset"></textarea>
+                <textarea class="form-control" rows="2" name="notes" maxlength="1000"
+                        placeholder="Maklumat tambahan aset"></textarea>
             </div>
 
             </div>
@@ -238,5 +296,7 @@ fetch("sidebar.html")
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/config.js"></script>
+<script src="assets/js/operational-form.js"></script>
 </body>
 </html>

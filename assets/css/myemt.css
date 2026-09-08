@@ -1,0 +1,189 @@
+/* Shared MyEMT interface language: consistent spacing, controls and states. */
+:root {
+  --myemt-primary:#0b5ed7;
+  --myemt-primary-dark:#084298;
+  --myemt-success:#198754;
+  --myemt-danger:#dc3545;
+  --myemt-border:#dee2e6;
+  --myemt-surface:#ffffff;
+  --myemt-muted:#6c757d;
+  --myemt-radius:12px;
+  --myemt-shadow:0 .25rem .9rem rgba(31,45,61,.08);
+}
+
+body.myemt-ui { background:#f5f7fb; color:#212529; }
+body.myemt-ui main { min-height:calc(100vh - 150px); }
+body.myemt-ui h1, body.myemt-ui h2, body.myemt-ui h3,
+body.myemt-ui h4, body.myemt-ui h5, body.myemt-ui h6 { color:#1f2d3d; }
+
+body.myemt-ui .card {
+  border:1px solid rgba(222,226,230,.9);
+  border-radius:var(--myemt-radius);
+  box-shadow:var(--myemt-shadow);
+}
+body.myemt-ui .card-header {
+  border-bottom:1px solid var(--myemt-border);
+  border-radius:var(--myemt-radius) var(--myemt-radius) 0 0;
+  padding:.9rem 1.1rem;
+}
+
+body.myemt-ui .btn { border-radius:8px; font-weight:600; min-height:38px; }
+body.myemt-ui .btn-sm { min-height:32px; }
+body.myemt-ui .btn-primary { background:var(--myemt-primary); border-color:var(--myemt-primary); }
+body.myemt-ui .btn-primary:hover,
+body.myemt-ui .btn-primary:focus { background:var(--myemt-primary-dark); border-color:var(--myemt-primary-dark); }
+body.myemt-ui .btn:focus-visible,
+body.myemt-ui .form-control:focus-visible,
+body.myemt-ui .form-select:focus-visible {
+  outline:3px solid rgba(13,110,253,.22);
+  outline-offset:2px;
+}
+
+body.myemt-ui .form-control,
+body.myemt-ui .form-select { border-radius:8px; min-height:42px; }
+body.myemt-ui textarea.form-control { min-height:auto; }
+body.myemt-ui .form-label { font-weight:600; color:#344054; }
+
+body.myemt-ui .table { margin-bottom:0; }
+body.myemt-ui .table thead th {
+  background:#eef3f8;
+  color:#344054;
+  font-size:.82rem;
+  letter-spacing:.015em;
+  text-transform:none;
+  white-space:nowrap;
+  border-bottom-width:1px;
+}
+body.myemt-ui .table > :not(caption) > * > * { padding:.8rem .75rem; vertical-align:middle; }
+body.myemt-ui .table-hover tbody tr:hover > * { background:#f3f7ff; }
+body.myemt-ui .table-responsive { border-radius:10px; }
+
+body.myemt-ui .badge { border-radius:999px; padding:.42em .7em; font-weight:600; }
+body.myemt-ui .alert { border-radius:10px; }
+body.myemt-ui .modal-content { border:0; border-radius:14px; box-shadow:0 1rem 3rem rgba(0,0,0,.18); }
+body.myemt-ui .modal-header { border-radius:14px 14px 0 0; }
+
+body.myemt-ui #missionWizard {
+  gap:.4rem;
+  scrollbar-width:thin;
+  padding-bottom:.35rem;
+}
+body.myemt-ui #missionWizard .nav-item { flex:0 0 auto; }
+body.myemt-ui #missionWizard .nav-link {
+  border:1px solid var(--myemt-border);
+  border-radius:999px;
+  color:#344054;
+  font-weight:600;
+  white-space:nowrap;
+}
+body.myemt-ui #missionWizard .nav-link.active {
+  background:var(--myemt-primary);
+  border-color:var(--myemt-primary);
+  color:#fff;
+}
+body.myemt-ui .module-placeholder {
+  background:#f8fafc;
+  border:1px dashed #b8c4d1;
+  border-radius:var(--myemt-radius);
+}
+
+/* Four MyEMT landing pages share one visual system. */
+body.myemt-landing {
+  background:
+    radial-gradient(circle at 92% 4%, rgba(13,110,253,.10), transparent 25rem),
+    #f4f7fb;
+}
+body.myemt-landing main { padding-top:1.5rem !important; }
+body.myemt-landing .myemt-landing-header {
+  position:relative;
+  overflow:hidden;
+  min-height:132px;
+  padding:1.6rem 1.75rem;
+  border-radius:18px;
+  background:linear-gradient(125deg,#073b5c 0%,#075985 50%,#0d6efd 135%);
+  box-shadow:0 .8rem 2rem rgba(7,59,92,.18);
+  color:#fff;
+}
+body.myemt-landing .myemt-landing-header::after {
+  content:"";
+  position:absolute;
+  right:-55px;
+  bottom:-85px;
+  width:230px;
+  height:230px;
+  border:42px solid rgba(255,255,255,.08);
+  border-radius:50%;
+  pointer-events:none;
+}
+body.myemt-landing .myemt-landing-header > * { position:relative; z-index:1; }
+body.myemt-landing .myemt-landing-header h4,
+body.myemt-landing .myemt-landing-header .page-title { color:#fff; font-size:clamp(1.35rem,2.2vw,2rem); }
+body.myemt-landing .myemt-landing-header small,
+body.myemt-landing .myemt-landing-header .text-muted { color:rgba(255,255,255,.78) !important; font-size:.92rem; }
+body.myemt-landing .myemt-landing-header .btn {
+  border-color:rgba(255,255,255,.7);
+  background:#fff;
+  color:#075985;
+}
+body.myemt-landing .myemt-landing-header .btn:hover { background:#eaf4ff; border-color:#fff; }
+
+body.myemt-landing .soft-card,
+body.myemt-landing .dashboard-card,
+body.myemt-landing .metric-card,
+body.myemt-landing .kpi-card,
+body.myemt-landing .category-card,
+body.myemt-landing .action-card,
+body.myemt-landing .summary-card,
+body.myemt-landing .flow-step,
+body.myemt-landing .mds-card {
+  border:1px solid rgba(216,225,235,.9) !important;
+  border-radius:16px !important;
+  box-shadow:0 .35rem 1.1rem rgba(31,45,61,.07) !important;
+}
+body.myemt-landing .metric-card,
+body.myemt-landing .kpi-card,
+body.myemt-landing .category-card,
+body.myemt-landing .action-card { transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease; }
+body.myemt-landing a:hover .metric-card,
+body.myemt-landing a:hover .action-card,
+body.myemt-landing .category-card:hover,
+body.myemt-landing .mission-filter-card:hover {
+  transform:translateY(-3px);
+  border-color:#b9d5ff !important;
+  box-shadow:0 .75rem 1.6rem rgba(31,45,61,.11) !important;
+}
+body.myemt-landing .kpi-value,
+body.myemt-landing .metric-value,
+body.myemt-landing .summary-value { color:#12344d; font-variant-numeric:tabular-nums; }
+body.myemt-landing .metric-icon,
+body.myemt-landing .category-icon,
+body.myemt-landing .action-card .icon-box { border-radius:13px; }
+body.myemt-landing .section-head,
+body.myemt-landing .dashboard-group-title { padding-bottom:.75rem; border-bottom:1px solid #e9eef4; }
+body.myemt-landing .card-header { background:transparent !important; }
+body.myemt-landing .table-responsive { border:1px solid #e7edf3; }
+body.myemt-landing .table thead th { background:#f2f6fa; }
+
+body.myemt-landing-mission .hover-card,
+body.myemt-landing-mission main > .row.g-3.mb-4 .card { min-height:150px; }
+body.myemt-landing-mission .hover-card .card-body,
+body.myemt-landing-mission main > .row.g-3.mb-4 .card-body {
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+
+@media (max-width:767.98px) {
+  body.myemt-landing main { padding:1rem !important; }
+  body.myemt-landing .myemt-landing-header { min-height:auto; padding:1.3rem; border-radius:14px; }
+  body.myemt-landing .myemt-landing-header .header-actions,
+  body.myemt-landing .myemt-landing-header .header-actions .btn { width:100%; }
+  body.myemt-landing .myemt-landing-header .d-flex.gap-2 { width:100%; }
+  body.myemt-landing .myemt-landing-header .d-flex.gap-2 .btn { flex:1 1 100%; }
+}
+
+@media (max-width:767.98px) {
+  body.myemt-ui .btn { width:auto; }
+  body.myemt-ui .table > :not(caption) > * > * { padding:.65rem .55rem; }
+  body.myemt-ui .card-body { padding:1rem; }
+}

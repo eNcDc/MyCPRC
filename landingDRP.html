@@ -205,6 +205,10 @@
       loadDrpReportsTable();
     }
   });
+
+  if (new URLSearchParams(window.location.search).get("tab") === "reports") {
+    bootstrap.Tab.getOrCreateInstance(document.getElementById("drp-reports-tab")).show();
+  }
 </script>
 
 </body>

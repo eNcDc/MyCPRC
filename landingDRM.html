@@ -224,6 +224,10 @@
       loadDrmReportsTable();
     }
   });
+
+  if (new URLSearchParams(window.location.search).get("tab") === "reports") {
+    bootstrap.Tab.getOrCreateInstance(document.getElementById("drm-reports-tab")).show();
+  }
 </script>
 
 <script src="assets/js/wizard-form.js"></script>

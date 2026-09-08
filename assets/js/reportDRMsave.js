@@ -10,20 +10,16 @@ const DRM_STORAGE_KEY = "mycprc_drm_reports";
 // ===== AKTIFKAN EVENT SIMPAN =====
 // Bila user tekan Next pada step terakhir, laporan akan disimpan.
 document.addEventListener("DOMContentLoaded", function () {
-  const nextBtn = document.getElementById("nextBtn");
-
-  if (!nextBtn) return;
-
-  nextBtn.addEventListener("click", function () {
-    const steps = Array.from(document.querySelectorAll(".wizard-step"));
-    const activeStepIndex = steps.findIndex(step => step.classList.contains("active"));
-    const isLastStep = activeStepIndex === steps.length - 1;
-
-    if (!isLastStep) return;
-    if (drmReportAlreadySaved) return;
-
-    saveDrmReport();
-  }, true);
+  const form = document.getElementById("wizardForm");
+  if (!form) return;
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    if (!drmReportAlreadySaved) saveDrmReport();
+  });
 });
 
 // ===== SIMPAN DATA BORANG =====

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <title>Misi MyEMT</title>
+    <title>Portal Misi Ahli MyEMT</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
@@ -79,7 +79,7 @@
 <main class="col-md-9 col-lg-10 px-4 py-4">
 
     <!-- PAGE HEADER -->
-    <div class="d-flex justify-content-between align-items-start mb-4">
+    <div class="myemt-landing-header d-flex justify-content-between align-items-start mb-4">
 
         <div>
             <h4 class="mb-1">Pendaftaran Misi EMT</h4>
@@ -102,7 +102,7 @@
 
         <!-- MISI SAYA -->
         <div class="col-md-6">
-            <a href="user_misilist.html"
+            <a href="emt_crud.html?paparan=pengguna"
             class="text-decoration-none text-dark">
 
                 <div class="card border-0 shadow-sm h-100 hover-card">
@@ -117,7 +117,7 @@
 
                         <div class="mt-2">
                             <span class="badge bg-primary">
-                                Aktif & Sertai
+                                Aktif dan Disertai
                             </span>
                         </div>
 
@@ -211,13 +211,13 @@
                           </tr>
 
                           <tr>
-                              <td>Lulus B-Course</td>
+                        <td>Lulus Kursus B</td>
                               <td id="ms-step-bcourse"><span class="badge bg-secondary">-</span></td>
                               <td id="ms-note-bcourse">-</td>
                           </tr>
 
                           <tr>
-                              <td>Lulus C-Course</td>
+                        <td>Lulus Kursus C</td>
                               <td id="ms-step-ccourse"><span class="badge bg-secondary">-</span></td>
                               <td id="ms-note-ccourse">-</td>
                           </tr>
@@ -275,13 +275,15 @@ fetch("sidebar.html")
 
 <script>
 
-const MEMBER_ID = localStorage.getItem('myemt_memberId') || '';
+const MEMBER_ID = MyEMT.memberId();
 
 async function loadMissionPage() {
   try {
-    const mRes = await fetch(`${API}/api/missions`);
-    const missions = (await mRes.json()).data || [];
-    const total = missions.length;
+    const [mRes,aRes]=await Promise.all([fetch(`${API}/api/missions`),MEMBER_ID?fetch(`${API}/api/mission-applications?memberId=${encodeURIComponent(MEMBER_ID)}`):Promise.resolve(null)]);
+    const missions=(await mRes.json()).data||[];
+    const applications=aRes?(await aRes.json()).data||[]:[];
+    const approvedIds=new Set(applications.filter(item=>item.status==='approved').map(item=>String(item.missionId)));
+    const total=missions.filter(item=>approvedIds.has(String(item.id))).length;
     const planning = missions.filter(m => m.status === 'Perancangan').length;
 
     document.getElementById('cnt-misi-saya').textContent = total;
@@ -315,18 +317,18 @@ async function loadMissionPage() {
     setStep('ms-step-emt', emtStatus, { pending: 'Dalam Semakan', approved: 'Lulus', rejected: 'Ditolak', none: 'Belum Mohon' }[emtStatus] || emtStatus);
     document.getElementById('ms-note-emt').textContent = emtStatus === 'approved' ? 'Permohonan telah diterima dan disahkan' : emtStatus === 'pending' ? 'Sedang dalam semakan' : '-';
 
-    const cRes  = await fetch(`${API}/api/course-applications?memberId=${MEMBER_ID}`);
+    const cRes  = await fetch(`${API}/api/course-applications?memberId=${encodeURIComponent(MEMBER_ID)}`);
     const { data: apps } = await cRes.json();
-    const courseApp = apps && apps.length ? apps[0] : null;
-    const cStatus = courseApp ? (courseApp.status || 'pending') : 'none';
-
-    setStep('ms-step-bcourse', cStatus, { pending: 'Dalam Semakan', approved: 'Lulus', rejected: 'Ditolak', none: 'Belum Mohon' }[cStatus] || cStatus);
-    document.getElementById('ms-note-bcourse').textContent = cStatus === 'approved' ? 'Telah melengkapkan latihan asas EMT' : cStatus === 'pending' ? 'Sedang dalam semakan' : 'Belum daftar kursus';
-
-    setStep('ms-step-ccourse', cStatus === 'approved' ? 'approved' : 'none', cStatus === 'approved' ? 'Lulus' : 'Belum Mohon');
-    document.getElementById('ms-note-ccourse').textContent = cStatus === 'approved' ? 'Telah melengkapkan latihan lanjutan klinikal' : '-';
-
-    const fullyActive = emtStatus === 'approved' && cStatus === 'approved';
+    const passed=component=>apps?.some(app=>app.componentResults?.[component]?.status==='passed');
+const completedTraining=(apps||[]).find(app=>app.status==='approved'&&app.attendance?.status==='attended'&&app.completion?.status==='completed'&&['B-Course','C-Course','TTX','FTX'].every(component=>app.componentResults?.[component]?.status==='passed'));
+const bPassed=Boolean(completedTraining),cPassed=Boolean(completedTraining);
+    setStep('ms-step-bcourse',bPassed?'approved':'none',bPassed?'Lulus':'Belum Lulus');
+document.getElementById('ms-note-bcourse').textContent=bPassed?'Latihan asas EMT telah disahkan':'Keputusan Kursus B belum lengkap';
+    setStep('ms-step-ccourse',cPassed?'approved':'none',cPassed?'Lulus':'Belum Lulus');
+document.getElementById('ms-note-ccourse').textContent=cPassed?'Latihan lanjutan klinikal telah disahkan':'Keputusan Kursus C belum lengkap';
+    const healthRes=await fetch(`${API}/api/members/${encodeURIComponent(MEMBER_ID)}/health`),health=(await healthRes.json()).data||{};
+    const fit=['fit','fit dengan sekatan'].includes(String(health.fitness?.status||'').toLowerCase())&&health.fitness?.validUntil>=new Date().toISOString().slice(0,10);
+    const fullyActive = emtStatus === 'approved' && bPassed && cPassed && fit;
     setStep('ms-step-aktif', fullyActive ? 'approved' : 'none', fullyActive ? 'Aktif' : 'Belum Aktif');
     document.getElementById('ms-note-aktif').textContent = fullyActive ? 'Layak menyertai semua aktiviti dan misi EMT' : 'Lengkapkan semua tahap terlebih dahulu';
 
@@ -342,7 +344,7 @@ function setStep(id, status, label) {
   const el = document.getElementById(id);
   if (!el) return;
   const cls = { approved: 'bg-success', pending: 'bg-warning text-dark', rejected: 'bg-danger', none: 'bg-secondary' }[status] || 'bg-secondary';
-  el.innerHTML = `<span class="badge ${cls}">${label}</span>`;
+  el.replaceChildren();const badge=document.createElement('span');badge.className=`badge ${cls}`;badge.textContent=label;el.appendChild(badge);
 }
 
 document.addEventListener('DOMContentLoaded', loadMissionPage);
