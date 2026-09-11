@@ -16,6 +16,19 @@
 
   <!-- CSS utama sistem -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/portal-dashboard-theme.css" rel="stylesheet">
+  <style>
+    #drmTabs{display:flex;gap:.45rem;padding:.45rem;background:linear-gradient(135deg,#e8f3f6,#edf7f2);border:1px solid #d8e8e8;border-radius:16px;box-shadow:0 6px 18px rgba(18,59,109,.05)}
+    #drmTabs .nav-item{flex:1}#drmTabs .nav-link{width:100%;border:0;border-radius:12px;padding:.8rem 1rem;color:#486174;background:transparent;font-weight:700;transition:.18s ease}
+    #drmTabs .nav-link:hover{background:rgba(255,255,255,.65);color:#087f8c!important}#drmTabs .nav-link.active,#drmTabs .nav-link.active:hover,#drmTabs .nav-link.active:focus{background:#fff!important;color:#075f69!important;-webkit-text-fill-color:#075f69!important;opacity:1!important;box-shadow:0 5px 16px rgba(18,59,109,.12)}#drmTabs .nav-link.active i{color:#0b8891!important;-webkit-text-fill-color:#0b8891!important}#drmTabs .nav-link i{margin-right:.35rem}
+    #drmTabsContent>.tab-pane{animation:drmFade .22s ease}@keyframes drmFade{from{opacity:.25;transform:translateY(4px)}to{opacity:1;transform:none}}
+    #drmReportsPane>.row .card{position:relative;overflow:hidden;border:0!important;background:linear-gradient(145deg,#fff,#f7fbfc)}#drmReportsPane>.row .card:after{content:"";position:absolute;width:75px;height:75px;border-radius:50%;right:-26px;top:-28px;background:#18a999;opacity:.1}
+    #drmReportsPane>.row>div:nth-child(2) .card:after{background:#f0ad35}#drmReportsPane>.row>div:nth-child(3) .card:after{background:#198754}#drmReportsPane>.row h3{font-size:1.85rem;font-weight:800;color:#173b67}
+    #drmReportsPane>.card{border:0!important;border-radius:18px!important;overflow:hidden}#drmReportsPane>.card .card-header{padding:1rem 1.2rem!important;background:linear-gradient(90deg,#fff,#f2faf9)!important;border-bottom:1px solid #e5eeee}
+    #drmReportsPane .table thead th{background:#eef6f7;color:#37566a;border-bottom:0;font-size:.78rem;text-transform:uppercase;letter-spacing:.035em;white-space:nowrap}#drmReportsPane .table tbody tr:hover{background:#f5fbfa}
+    #drm-dashboard-content>.row .card{border:0;background:linear-gradient(145deg,#fff,#f6fbfb);transition:.18s ease}#drm-dashboard-content>.row .card:hover{transform:translateY(-2px)}#drm-dashboard-content .card-header{color:#173b67}
+    @media(max-width:767px){#drmTabs{overflow-x:auto;flex-wrap:nowrap}#drmTabs .nav-item{min-width:170px}}
+  </style>
 </head>
 
 <body>
@@ -81,19 +94,6 @@
        <!-- Tab laporan DRM -->
         <div class="tab-pane fade" id="drmReportsPane" role="tabpanel">
 
-          <!-- Button borang hanya muncul dalam tab laporan -->
-          <div class="row g-3 mb-4">
-            <div class="col d-flex justify-content-end">
-              <a href="drmho_form.html" class="btn btn-primary me-2">
-                <i class="bi bi-plus-circle me-1"></i> Borang Pejabat Kesihatan Daerah
-              </a>
-
-              <a href="drmhsp_form.html" class="btn btn-primary">
-                <i class="bi bi-plus-circle me-1"></i> Borang Hospital
-              </a>
-            </div>
-          </div>
-
           <!-- Ringkasan laporan -->
           <div class="row g-3 mb-4">
             <div class="col-md-4">
@@ -124,31 +124,8 @@
             </div>
           </div>
 
-          <!-- Jadual laporan terkini -->
-          <div class="card shadow-sm">
-            <div class="card-header bg-white">
-              <strong>Laporan Terkini</strong>
-            </div>
-
-            <div class="table-responsive">
-              <table class="table table-striped table-bordered mb-0">
-                <thead class="table-light">
-                  <tr>
-                    <th>Tarikh</th>
-                    <th>Jenis Laporan</th>
-                    <th>Status</th>
-                    <th class="text-end">Tindakan</th>
-                  </tr>
-                </thead>
-
-                <tbody id="drmReportsTableBody">
-                  <tr>
-                    <td colspan="4" class="text-center text-muted py-4">Tiada laporan dijumpai.</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <div class="card shadow-sm mb-4"><div class="card-header bg-white d-flex justify-content-between align-items-center"><div><strong>Laporan Pejabat Kesihatan Daerah</strong><div class="small text-muted">Kesiapsiagaan sumber kesihatan awam mengikut daerah.</div></div><a href="drmho_form.html" class="btn btn-sm btn-primary"><i class="bi bi-plus-circle me-1"></i>Tambah</a></div><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Tarikh</th><th>Negeri / Daerah</th><th>Nama Pejabat</th><th>Pelan Bencana</th><th>Status</th><th class="text-end">Tindakan</th></tr></thead><tbody id="drmHealthOfficeReportsTableBody"><tr><td colspan="6" class="text-center text-muted py-4">Tiada laporan Pejabat Kesihatan Daerah.</td></tr></tbody></table></div></div>
+          <div class="card shadow-sm"><div class="card-header bg-white d-flex justify-content-between align-items-center"><div><strong>Laporan Hospital</strong><div class="small text-muted">Kesiapsiagaan sumber klinikal, peralatan dan unit khas hospital.</div></div><a href="drmhsp_form.html" class="btn btn-sm btn-primary"><i class="bi bi-plus-circle me-1"></i>Tambah</a></div><div class="table-responsive"><table class="table table-hover mb-0"><thead><tr><th>Tarikh</th><th>Negeri / Daerah</th><th>Nama Hospital</th><th>Telefon Bilik Gerakan</th><th>Status</th><th class="text-end">Tindakan</th></tr></thead><tbody id="drmHospitalReportsTableBody"><tr><td colspan="6" class="text-center text-muted py-4">Tiada laporan hospital.</td></tr></tbody></table></div></div>
 
         </div>
 
@@ -232,5 +209,7 @@
 
 <script src="assets/js/wizard-form.js"></script>
 
+<script src="assets/js/portal-dashboard-theme.js"></script>
+<script src="assets/js/preparedness-ms.js"></script>
 </body>
 </html>

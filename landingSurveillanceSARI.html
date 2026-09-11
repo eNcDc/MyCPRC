@@ -10,9 +10,11 @@
   <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/portal-dashboard-theme.css" rel="stylesheet">
+  <link href="assets/css/surveillance-sari-theme.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="sari-page">
 
 <div id="header"></div>
 
@@ -59,7 +61,7 @@
 
 <!-- ================= TAB ================= -->
 
-<ul class="nav doce-landing-tabs mb-4"
+<ul class="nav nav-pills sari-main-tabs mb-4"
     role="tablist">
 
 
@@ -71,7 +73,7 @@
 
 <i class="bi bi-speedometer2 me-1"></i>
 
-Dashboard
+Papan Pemuka
 
 </button>
 
@@ -138,6 +140,11 @@ Senarai Laporan
 <div class="tab-pane fade show active"
      id="sariDashboardPane">
 
+<div class="sari-pane-heading">
+  <h3 class="h5 fw-bold mb-1">Papan Pemuka SARI</h3>
+  <p class="text-muted mb-0">Ringkasan kes, kelayakan WGS dan taburan laporan mengikut hospital.</p>
+</div>
+
 
 <div id="sari-dashboard-content">
 
@@ -158,6 +165,11 @@ Senarai Laporan
 <div class="tab-pane fade"
      id="sariForecastPane">
 
+<div class="sari-pane-heading">
+  <h3 class="h5 fw-bold mb-1">Analitik dan Ramalan SARI</h3>
+  <p class="text-muted mb-0">Pantau trend, lokasi kes aktif dan tahap aktiviti yang memerlukan perhatian.</p>
+</div>
+
 
 <div id="sari-forecast-content">
 
@@ -177,6 +189,11 @@ Senarai Laporan
 
 <div class="tab-pane fade"
      id="sariReportPane">
+
+<div class="sari-pane-heading">
+  <h3 class="h5 fw-bold mb-1">Senarai Laporan SARI</h3>
+  <p class="text-muted mb-0">Cari dan semak rekod pesakit, keputusan PCR serta status ujian WGS.</p>
+</div>
 
 
 
@@ -449,18 +466,18 @@ Semua Status
 </option>
 
 
-<option>
-N/A
+<option value="Tidak Berkenaan">
+Tidak Berkenaan
 </option>
 
 
-<option>
-PENDING
+<option value="Dalam Proses">
+Dalam Proses
 </option>
 
 
-<option>
-COMPLETED
+<option value="Selesai">
+Selesai
 </option>
 
 
@@ -634,7 +651,7 @@ class="fw-bold text-success mb-0">
 
 <h6 class="text-muted mb-1">
 
-WGS Pending
+WGS Belum Selesai
 
 </h6>
 
@@ -1169,5 +1186,6 @@ err
 
 <script src="assets/js/surveillance-records.js"></script>
 
+<script src="assets/js/portal-dashboard-theme.js"></script>
 </body>
 </html>

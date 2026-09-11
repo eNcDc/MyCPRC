@@ -52,6 +52,8 @@
         }
     </style>
 
+  <link href="assets/css/preparedness-forms.css" rel="stylesheet">
+  <link href="assets/css/portal-dashboard-theme.css" rel="stylesheet">
 </head>
 
 <body>
@@ -63,7 +65,7 @@
 
     <aside class="col-md-3 col-lg-2 p-0 sidebar" id="sidebar-placeholder"></aside>
 
-    <main class="col-md-9 col-lg-10 p-4">
+    <main class="col-md-9 col-lg-10 p-4 preparedness-form-page">
 
         <div class="card shadow-sm">
 
@@ -831,6 +833,7 @@
 
 
 <!-- Load Header & Footer -->
+<script src="assets/js/malaysia-locations.js"></script>
 <script>
   fetch("header.html")
     .then(res => res.text())
@@ -1106,6 +1109,8 @@
        FUNCTION UNTUK SET DAERAH
     ====================================================== */
 
+    const lokasiMalaysia = window.MALAYSIA_LOCATIONS || daerahData;
+
     function setupDaerah(negeriId, daerahId) {
 
         const negeri =
@@ -1114,6 +1119,11 @@
         const daerah =
             document.getElementById(daerahId);
 
+
+        negeri.innerHTML = '<option value="">-- Pilih Negeri --</option>';
+        Object.keys(lokasiMalaysia).forEach(function (namaNegeri) {
+            negeri.add(new Option(namaNegeri, namaNegeri));
+        });
 
         negeri.addEventListener("change", function () {
 
@@ -1144,9 +1154,9 @@
             `;
 
 
-            if (daerahData[selectedNegeri]) {
+            if (lokasiMalaysia[selectedNegeri]) {
 
-                daerahData[selectedNegeri].forEach(
+                lokasiMalaysia[selectedNegeri].forEach(
                     function (namaDaerah) {
 
                         const option =
@@ -1225,5 +1235,6 @@
 </script>
 
 
+<script src="assets/js/portal-dashboard-theme.js"></script><script src="assets/js/preparedness-ms.js"></script>
 </body>
 </html>

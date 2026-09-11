@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <title>DRP Form</title>
+  <title>Borang Profil Risiko Daerah</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
@@ -27,6 +27,8 @@
 
   <!-- Main CSS -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/preparedness-forms.css" rel="stylesheet">
+  <link href="assets/css/portal-dashboard-theme.css" rel="stylesheet">
 </head>
 
 <body>
@@ -45,7 +47,7 @@
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main class="col-md-9 col-lg-10 p-4">
+    <main class="col-md-9 col-lg-10 p-4 preparedness-form-page">
       <div class="card shadow-sm border-1">
         <div class="card-body">
 
@@ -81,13 +83,13 @@
             
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label required">KATEGORI</label>
+                    <label class="form-label required">Kategori Bencana</label>
                     <select id="kategori" name="kategori" class="form-select" required>
-                        <option value="NATURAL DISASTER">NATURAL DISASTER</option>
-                        <option value="TECHNOLOGICAL DISASTER">TECHNOLOGICAL DISASTER</option>
-                        <option value="OUTBREAK">OUTBREAK</option>
-                        <option value="CRISIS">CRISIS</option>
-                        <option value="EMERGENCY">EMERGENCY</option>
+                        <option value="">-- Sila Pilih Kategori Bencana --</option>
+                        <option value="Bencana Semula Jadi">Bencana Semula Jadi</option>
+                        <option value="Bencana Teknologi">Bencana Teknologi</option>
+                        <option value="Wabak">Wabak</option>
+                        <option value="Krisis">Krisis</option>
                     </select>
                 </div>
             </div>
@@ -155,7 +157,7 @@
 
             <div class="row g-3 mb-3">
                 <div class="col-md-6">
-                <label class="form-label">Jenis Bencana</label>
+                <label class="form-label required">Jenis Bencana</label>
                 <select class="form-select" id="disasterType" name="disasterType" required></select>
                 </div>
                 <div class="col-md-6 d-none" id="disasterLainWrapper">
@@ -166,7 +168,7 @@
 
             <!-- LIKELIHOOD -->
             <div class="mb-3">
-                <label class="form-label required">Likelihood</label>
+                <label class="form-label required">Kebarangkalian</label>
                 <div class="rating-group" id="likelihood">
                 <label class="rating-label" style="background:#FF0000"><input type="radio" name="likelihood" value="1" required><span>1</span></label>
                 <label class="rating-label" style="background:#FF4500"><input type="radio" name="likelihood" value="2"><span>2</span></label>
@@ -180,7 +182,7 @@
             <h6 class="mt-4">Impact</h6>
             <div class="row g-3">
                 <div class="col-md-4 mb-3">
-                <label class="form-label required">MORTALITY</label>
+                <label class="form-label required">Kematian</label>
                 <div class="rating-group" id="mortality">
                     <label class="rating-label" style="background:#FF0000"><input type="radio" name="mortality" value="1" required><span>1</span></label>
                     <label class="rating-label" style="background:#FF4500"><input type="radio" name="mortality" value="2"><span>2</span></label>
@@ -191,7 +193,7 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                <label class="form-label required">MORBIDITY</label>
+                <label class="form-label required">Morbiditi</label>
                 <div class="rating-group" id="morbidity">
                     <label class="rating-label" style="background:#FF0000"><input type="radio" name="morbidity" value="1" required><span>1</span></label>
                     <label class="rating-label" style="background:#FF4500"><input type="radio" name="morbidity" value="2"><span>2</span></label>
@@ -202,7 +204,7 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                <label class="form-label required">ECONOMIC BURDEN</label>
+                <label class="form-label required">Beban Ekonomi</label>
                 <div class="rating-group" id="economic_burden">
                     <label class="rating-label" style="background:#FF0000"><input type="radio" name="economic_burden" value="1" required><span>1</span></label>
                     <label class="rating-label" style="background:#FF4500"><input type="radio" name="economic_burden" value="2"><span>2</span></label>
@@ -213,7 +215,7 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                <label class="form-label required">HEALTHCARE SYSTEM IMPACT</label>
+                <label class="form-label required">Impak terhadap Sistem Kesihatan</label>
                 <div class="rating-group" id="healthcare_system_impact">
                     <label class="rating-label" style="background:#FF0000"><input type="radio" name="healthcare_system_impact" value="1" required><span>1</span></label>
                     <label class="rating-label" style="background:#FF4500"><input type="radio" name="healthcare_system_impact" value="2"><span>2</span></label>
@@ -224,7 +226,7 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                <label class="form-label required">SOCIAL DISRUPTION</label>
+                <label class="form-label required">Gangguan Sosial</label>
                 <div class="rating-group" id="social_disruption">
                     <label class="rating-label" style="background:#FF0000"><input type="radio" name="social_disruption" value="1" required><span>1</span></label>
                     <label class="rating-label" style="background:#FF4500"><input type="radio" name="social_disruption" value="2"><span>2</span></label>
@@ -270,6 +272,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <!-- Load Header & Footer -->
+<script src="assets/js/drp-taxonomy.js"></script>
 <script src="assets/js/wizard-form.js"></script>
 <script src="assets/js/reportDRPsave.js"></script>
 
@@ -307,5 +310,6 @@ document.addEventListener("DOMContentLoaded", () => {
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script src="assets/js/layout.js"></script>
+<script src="assets/js/portal-dashboard-theme.js"></script><script src="assets/js/preparedness-ms.js"></script>
 </body>
 </html>

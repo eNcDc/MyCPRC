@@ -11,42 +11,56 @@
 
   <style>
     body{
-      background:#f4f6f9;
+      background:#f3f7fb;
     }
 
     .soft-card{
-      border:0;
-      border-radius:14px;
-      box-shadow:0 .25rem .75rem rgba(0,0,0,.06);
+      border:1px solid #e7edf4;
+      border-radius:18px;
+      box-shadow:0 8px 24px rgba(18,59,109,.06);
+      overflow:hidden;
+      transition:box-shadow .2s ease,transform .2s ease;
     }
+    .soft-card:hover{box-shadow:0 12px 30px rgba(18,59,109,.09)}
+    .page-hero{position:relative;overflow:hidden;border-radius:20px;padding:1.5rem 1.65rem;background:linear-gradient(125deg,#123b6d 0%,#087f8c 68%,#18a999 100%);box-shadow:0 16px 38px rgba(18,59,109,.16);color:#fff}
+    .page-hero:after{content:"";position:absolute;width:210px;height:210px;border-radius:50%;right:-60px;top:-105px;background:rgba(255,255,255,.11)}
+    .page-hero>div{position:relative;z-index:1}.page-eyebrow{font-size:.75rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#baf3e8}
+    .profile-summary{border:0;background:linear-gradient(135deg,#fff 0%,#f3fbfa 100%)}
 
     .profile-avatar{
-      width:64px;
-      height:64px;
+      width:72px;
+      height:72px;
       border-radius:50%;
       display:grid;
       place-items:center;
-      background:#f8f9fa;
-      border:1px solid #dee2e6;
-      flex:0 0 64px;
+      background:linear-gradient(145deg,#dff5f1,#e8f0fb);
+      border:4px solid #fff;
+      box-shadow:0 5px 16px rgba(18,59,109,.14);
+      flex:0 0 72px;
     }
 
     .info-row{
-      padding:.65rem 0;
-      border-bottom:1px solid #f0f1f3;
+      padding:.78rem .7rem;
+      border-bottom:1px solid #edf1f5;
+      border-radius:8px;
+      margin:0;
+      transition:background .15s ease;
     }
+    .info-row:hover{background:#f7fafc}
 
     .info-row:last-child{
       border-bottom:0;
     }
 
     .info-label{
-      color:#6c757d;
+      color:#64748b;
       font-size:.88rem;
+      font-weight:600;
     }
 
     .info-value{
-      font-weight:600;
+      font-weight:650;
+      color:#1e3448;
       white-space:pre-wrap;
       word-break:break-word;
     }
@@ -54,19 +68,20 @@
     .section-number{
       width:32px;
       height:32px;
-      border-radius:50%;
+      border-radius:10px;
       display:inline-grid;
       place-items:center;
-      background:#e9ecef;
+      background:linear-gradient(135deg,#123b6d,#087f8c);
+      color:#fff;
       font-weight:800;
       margin-right:.5rem;
     }
 
     .document-box{
-      border:1px solid #dee2e6;
-      border-radius:10px;
+      border:1px solid #dce6ef;
+      border-radius:12px;
       padding:.8rem 1rem;
-      background:#f8f9fa;
+      background:#f8fbfd;
     }
 
     .loading-box{
@@ -90,6 +105,10 @@
     .error-box.show{
       display:block;
     }
+    .soft-card>.card-header{padding:1rem 1.25rem!important;background:#fff!important;border-bottom:1px solid #edf1f5!important}
+    .soft-card>.card-header h6{font-size:1rem;color:#17324d}.soft-card>.card-body{padding:1rem 1.25rem 1.25rem}
+    .action-bar{position:sticky;bottom:1rem;z-index:5;padding:.8rem;border:1px solid #dde6ef;border-radius:15px;background:rgba(255,255,255,.94);box-shadow:0 10px 30px rgba(18,59,109,.12);backdrop-filter:blur(8px)}
+    @media(max-width:575px){main{padding-left:1rem!important;padding-right:1rem!important}.page-hero{padding:1.25rem}.page-hero .btn{width:100%}.info-label{margin-bottom:.2rem}.action-bar{bottom:.5rem}.action-bar .btn{flex:1}}
   </style>
 </head>
 
@@ -105,22 +124,23 @@
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
       <!-- PAGE HEADER -->
-      <div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+      <div class="page-hero d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
 
         <div>
-          <h4 class="mb-1 fw-bold">Maklumat MyEMT</h4>
-          <small class="text-muted">
+          <div class="page-eyebrow mb-1">Profil Ahli MyEMT</div>
+          <h3 class="mb-1 fw-bold">Maklumat Keahlian</h3>
+          <small class="text-white-50">
             Paparan maklumat pendaftaran dan kesiapsiagaan MyEMT anda.
           </small>
         </div>
 
         <div class="d-flex flex-wrap gap-2">
 
-          <a href="landingMyemt.html" class="btn btn-outline-secondary">
+          <a href="landingMyemt.html" class="btn btn-outline-light">
             <i class="bi bi-arrow-left me-1"></i>Kembali
           </a>
 
-          <a href="emt_editform.html" class="btn btn-primary" id="btnEdit">
+          <a href="emt_editform.html" class="btn btn-light text-primary fw-semibold" id="btnEdit">
                     <i class="bi bi-pencil-square me-1"></i>Kemas Kini Maklumat
           </a>
 
@@ -170,7 +190,7 @@
         <!-- =====================================================
              SUMMARY
         ====================================================== -->
-        <div class="card soft-card mb-4">
+        <div class="card soft-card profile-summary mb-4">
 
           <div class="card-body">
 
@@ -657,7 +677,7 @@
 
 
         <!-- ACTION -->
-        <div class="d-flex flex-wrap justify-content-end gap-2 mb-3">
+        <div class="action-bar d-flex flex-wrap justify-content-end gap-2 mb-3">
 
           <a href="emt_submitform.html" class="btn btn-outline-secondary" id="btnStatus">
             <i class="bi bi-clipboard-check me-1"></i>Lihat Status Permohonan
@@ -704,13 +724,7 @@ fetch("sidebar.html")
 /* =====================================================
    MEMBER
 ===================================================== */
-const MEMBER_ID =
-  new URLSearchParams(location.search).get("memberId") ||
-  localStorage.getItem("myemt_memberId") ||
-  localStorage.getItem("memberId") ||
-  sessionStorage.getItem("myemt_memberId") ||
-  sessionStorage.getItem("memberId") ||
-  "";
+const MEMBER_ID = window.MyEMT?.memberId?.() || "";
 
 
 /* =====================================================

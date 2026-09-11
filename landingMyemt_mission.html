@@ -13,6 +13,7 @@
 
     <!-- Main CSS -->
     <link href="assets/css/main.css" rel="stylesheet">
+    <link href="assets/css/portal-dashboard-theme.css" rel="stylesheet">
 
     <style>
     .mds-card{
@@ -60,6 +61,17 @@
     textarea{
         resize:vertical;
     }
+    body{background:#f4f7fb}
+    .mission-hero{position:relative;overflow:hidden;border-radius:22px;padding:2rem;color:#fff;background:linear-gradient(125deg,#123b6d 0%,#087f8c 65%,#18a999 100%);box-shadow:0 18px 42px rgba(18,59,109,.18)}
+    .mission-hero:after{content:"";position:absolute;width:260px;height:260px;border-radius:50%;right:-75px;top:-120px;background:rgba(255,255,255,.12)}
+    .mission-hero .hero-copy{max-width:720px;position:relative;z-index:1}.mission-hero .eyebrow{font-size:.76rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#baf3e8}
+    .metric-card{border:0;border-radius:16px;background:#fff;box-shadow:0 8px 24px rgba(15,44,79,.07);height:100%;padding:1.15rem;transition:.18s ease}.metric-card:hover{transform:translateY(-3px);box-shadow:0 13px 30px rgba(15,44,79,.12)}
+    .metric-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;font-size:1.2rem}.metric-number{font-size:1.7rem;font-weight:800;line-height:1}
+    .mission-panel{border:0;border-radius:18px;box-shadow:0 8px 25px rgba(15,44,79,.07);overflow:hidden}.mission-row{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1rem 1.15rem;border-bottom:1px solid #edf1f5}.mission-row:last-child{border-bottom:0}.mission-name{font-weight:750;color:#17324d}.mission-meta{font-size:.84rem;color:#6c7a89}
+    .registration-document{display:grid;grid-template-columns:minmax(220px,1.3fr) minmax(180px,1fr) auto;gap:1rem;align-items:center;padding:1rem;border:1px solid #e5eaf0;border-radius:14px;background:#fff}
+    .registration-document+.registration-document{margin-top:.75rem}.document-title{font-weight:700;color:#17324d}.document-meta{font-size:.82rem;color:#6c757d;overflow-wrap:anywhere}.document-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:.5rem}.document-upload{display:none}
+    @media(max-width:767px){.registration-document{grid-template-columns:1fr}.document-actions{justify-content:flex-start}}
+    @media(max-width:575px){.mission-hero{padding:1.4rem}.mission-row{align-items:flex-start;flex-direction:column}}
     </style>
 
 </head>
@@ -79,33 +91,19 @@
 <main class="col-md-9 col-lg-10 px-4 py-4">
 
     <!-- PAGE HEADER -->
-    <div class="myemt-landing-header d-flex justify-content-between align-items-start mb-4">
-
-        <div>
-            <h4 class="mb-1">Pendaftaran Misi EMT</h4>
-            <small class="text-muted">
-                Senarai misi aktif, selesai dan perancangan di bawah MyEMT Malaysia.
-            </small>
-        </div>
-
-        <!-- 
-        <a href="landingMyemt_mission.html"
-           class="btn btn-primary rounded-pill px-3 shadow-sm">
-            <i class="bi bi-arrow-left me-1"></i> Kembali
-        </a>
-        -->
-
-    </div>
+    <section class="mission-hero mb-4">
+      <div class="hero-copy"><div class="eyebrow mb-2">Portal Ahli MyEMT</div><h2 class="fw-bold mb-2">Misi Saya</h2><p class="mb-3 text-white-50">Semak kelayakan, permohonan dan tugasan misi anda dalam satu paparan.</p><div class="d-flex flex-wrap gap-2"><a href="user_misidaftar.html" class="btn btn-light fw-semibold"><i class="bi bi-plus-circle me-1"></i>Cari Misi</a><a href="landingMyemt.html" class="btn btn-outline-light"><i class="bi bi-arrow-left me-1"></i>Papan Pemuka Ahli</a></div></div>
+    </section>
 
     <!-- ================= SUMMARY CARDS (AHLI EMT - PERSONAL VIEW) ================= -->
     <div class="row g-3 mb-4">
 
         <!-- MISI SAYA -->
-        <div class="col-md-6">
+        <div class="col-6 col-lg-3">
             <a href="emt_crud.html?paparan=pengguna"
             class="text-decoration-none text-dark">
 
-                <div class="card border-0 shadow-sm h-100 hover-card">
+                <div class="card metric-card hover-card">
                     <div class="card-body text-center">
 
                         <div class="mb-2">
@@ -128,9 +126,9 @@
         </div>
 
         <!-- DAFTAR MISI -->
-        <div class="col-md-6">
+        <div class="col-6 col-lg-3">
 
-        <div class="card border-0 shadow-sm h-100 position-relative">
+        <div class="card metric-card position-relative">
 
             <div class="card-body text-center">
 
@@ -153,29 +151,26 @@
 
         </div>
 
+        <div class="col-6 col-lg-3"><div class="metric-card"><div class="d-flex justify-content-between align-items-start"><div><div class="small text-muted mb-2">Menunggu Semakan</div><div class="metric-number" id="cnt-misi-pending">-</div></div><div class="metric-icon bg-warning-subtle text-warning-emphasis"><i class="bi bi-hourglass-split"></i></div></div></div></div>
+        <div class="col-6 col-lg-3"><div class="metric-card"><div class="d-flex justify-content-between align-items-start"><div><div class="small text-muted mb-2">Misi Sedang Aktif</div><div class="metric-number" id="cnt-misi-aktif">-</div></div><div class="metric-icon bg-success-subtle text-success"><i class="bi bi-broadcast-pin"></i></div></div></div></div>
+
     </div>
 
+    <section class="card mission-panel mb-4"><div class="card-header bg-white border-0 d-flex justify-content-between align-items-center p-3"><div><h5 class="mb-1 fw-bold">Misi dan Permohonan Terkini</h5><div class="small text-muted">Maklumat paling terkini dipaparkan dahulu.</div></div><a href="emt_crud.html?paparan=pengguna" class="btn btn-sm btn-outline-primary">Lihat Semua</a></div><div id="recentMissionList"><div class="text-center text-muted p-4">Memuatkan misi...</div></div></section>
 
-    <!-- ================= KEPERLUAN PENDAFTARAN PASUKAN ================= -->
-    <div class="card shadow-sm mb-4 border-warning">
-        <div class="card-header bg-warning-subtle fw-bold">
-            <i class="bi bi-info-circle-fill me-2"></i>
-            Nota: Keperluan Pendaftaran Pasukan
+
+    <!-- ================= DOKUMEN PENDAFTARAN PASUKAN ================= -->
+    <section class="card mission-panel mb-4">
+        <div class="card-header bg-white border-0 d-flex flex-wrap justify-content-between align-items-center gap-2 p-3">
+            <div><h5 class="mb-1 fw-bold"><i class="bi bi-file-earmark-check me-2 text-primary"></i>Dokumen Pendaftaran Pasukan</h5><div class="small text-muted">Cetak dokumen yang tersedia atau muat naik salinan yang masih belum direkodkan.</div></div>
+            <span class="badge bg-secondary" id="documentCompletionBadge">Memuatkan...</span>
         </div>
-
-        <div class="card-body">
-            <p class="mb-2">
-                Sila sediakan dokumen dan maklumat berikut sebelum menyertai misi EMT:
-            </p>
-
-            <ol class="mb-0">
-                <li>Borang Pendaftaran EMT</li>
-                <li>Salinan pasport bagi setiap ahli pasukan</li>
-                <li>Kebenaran / autorisasi untuk menjalankan amalan bagi profesional perubatan</li>
-                <li>Dokumen atau keperluan lain yang berkaitan dengan misi</li>
-            </ol>
+        <div class="card-body pt-0">
+            <div class="alert alert-info small">Setiap ahli mengurus salinan pasport dan dokumen profesional masing-masing. Fail yang dimuat naik disimpan pada profil ahli dan boleh digunakan semula semasa pendaftaran misi.</div>
+            <div id="registrationDocumentAlert" class="alert d-none" role="alert"></div>
+            <div id="registrationDocuments"><div class="text-center text-muted py-4">Memuatkan dokumen...</div></div>
         </div>
-    </div>
+    </section>
 
       <!-- STATUS PERMOHONAN MYEMT -->
       <div class="card shadow-sm mb-4">
@@ -221,6 +216,9 @@
                               <td id="ms-step-ccourse"><span class="badge bg-secondary">-</span></td>
                               <td id="ms-note-ccourse">-</td>
                           </tr>
+
+                          <tr><td>Lulus TTX</td><td id="ms-step-ttx"><span class="badge bg-secondary">-</span></td><td id="ms-note-ttx">-</td></tr>
+                          <tr><td>Lulus FTX</td><td id="ms-step-ftx"><span class="badge bg-secondary">-</span></td><td id="ms-note-ftx">-</td></tr>
 
                           <tr>
                               <td>Aktif EMT</td>
@@ -276,6 +274,12 @@ fetch("sidebar.html")
 <script>
 
 const MEMBER_ID = MyEMT.memberId();
+let currentMember = null;
+const REGISTRATION_DOCUMENTS = [
+  { key:'passport', title:'Salinan pasport ahli', description:'PDF, JPG atau PNG (maksimum 5 MB)', nameField:'passport_file_name', typeField:'passport_file_type', dataField:'passport_file_data' },
+  { key:'practice', title:'Kebenaran menjalankan amalan', description:'APC, sijil atau kebenaran profesional perubatan', nameField:'apc_file_name', typeField:'apc_file_type', dataField:'apc_file_data' },
+  { key:'other', title:'Dokumen lain berkaitan misi', description:'Dokumen sokongan tambahan jika diperlukan', nameField:'mission_document_name', typeField:'mission_document_type', dataField:'mission_document_data' }
+];
 
 async function loadMissionPage() {
   try {
@@ -285,22 +289,35 @@ async function loadMissionPage() {
     const approvedIds=new Set(applications.filter(item=>item.status==='approved').map(item=>String(item.missionId)));
     const total=missions.filter(item=>approvedIds.has(String(item.id))).length;
     const planning = missions.filter(m => m.status === 'Perancangan').length;
+    const pending=applications.filter(item=>String(item.status).toLowerCase()==='pending').length;
+    const active=missions.filter(item=>approvedIds.has(String(item.id))&&['Aktif','Sedang Berlangsung'].includes(item.status)).length;
 
     document.getElementById('cnt-misi-saya').textContent = total;
     document.getElementById('cnt-daftar-misi').textContent = planning;
+    document.getElementById('cnt-misi-pending').textContent = pending;
+    document.getElementById('cnt-misi-aktif').textContent = active;
+    renderRecentMissions(missions,applications);
   } catch (e) {
     document.getElementById('cnt-misi-saya').textContent = '0';
     document.getElementById('cnt-daftar-misi').textContent = '0';
+    document.getElementById('cnt-misi-pending').textContent = '0';
+    document.getElementById('cnt-misi-aktif').textContent = '0';
+    document.getElementById('recentMissionList').innerHTML='<div class="text-center text-danger p-4">Maklumat misi gagal dimuatkan. Sila cuba semula.</div>';
   }
 
   if (!MEMBER_ID) {
+    renderRegistrationDocuments(null);
     setStep('ms-step-emt', 'none', 'Belum Mohon');
     setStep('ms-step-bcourse', 'none', 'Belum Mohon');
     setStep('ms-step-ccourse', 'none', 'Belum Mohon');
+    setStep('ms-step-ttx', 'none', 'Belum Mohon');
+    setStep('ms-step-ftx', 'none', 'Belum Mohon');
     setStep('ms-step-aktif', 'none', 'Belum Mohon');
     document.getElementById('ms-note-emt').textContent = 'Belum hantar permohonan';
     document.getElementById('ms-note-bcourse').textContent = '-';
     document.getElementById('ms-note-ccourse').textContent = '-';
+    document.getElementById('ms-note-ttx').textContent = '-';
+    document.getElementById('ms-note-ftx').textContent = '-';
     document.getElementById('ms-note-aktif').textContent = '-';
     const al = document.getElementById('ms-eligibility-alert');
     al.className = 'alert alert-warning mb-0';
@@ -309,9 +326,12 @@ async function loadMissionPage() {
   }
 
   try {
-    const mRes2  = await fetch(`${API}/api/members/${MEMBER_ID}`);
+    const mRes2  = await fetch(`${API}/api/members/${encodeURIComponent(MEMBER_ID)}`);
+    if (!mRes2.ok) throw new Error(`HTTP ${mRes2.status}`);
     const { data: m } = await mRes2.json();
-    if (!m) return;
+    if (!m) throw new Error('Rekod ahli tidak ditemui');
+    currentMember = m;
+    renderRegistrationDocuments(m);
 
     const emtStatus = m.status || 'none';
     setStep('ms-step-emt', emtStatus, { pending: 'Dalam Semakan', approved: 'Lulus', rejected: 'Ditolak', none: 'Belum Mohon' }[emtStatus] || emtStatus);
@@ -319,16 +339,22 @@ async function loadMissionPage() {
 
     const cRes  = await fetch(`${API}/api/course-applications?memberId=${encodeURIComponent(MEMBER_ID)}`);
     const { data: apps } = await cRes.json();
-    const passed=component=>apps?.some(app=>app.componentResults?.[component]?.status==='passed');
-const completedTraining=(apps||[]).find(app=>app.status==='approved'&&app.attendance?.status==='attended'&&app.completion?.status==='completed'&&['B-Course','C-Course','TTX','FTX'].every(component=>app.componentResults?.[component]?.status==='passed'));
-const bPassed=Boolean(completedTraining),cPassed=Boolean(completedTraining);
+    const trainingApp=(apps||[]).filter(app=>app.status==='approved').sort((a,b)=>String(b.submittedAt||'').localeCompare(String(a.submittedAt||'')))[0];
+    const passed=component=>trainingApp?.componentResults?.[component]?.status==='passed';
+const completedTraining=trainingApp?.attendance?.status==='attended'&&trainingApp?.completion?.status==='completed'&&['B-Course','C-Course','TTX','FTX'].every(passed);
+const bPassed=passed('B-Course'),cPassed=passed('C-Course');
     setStep('ms-step-bcourse',bPassed?'approved':'none',bPassed?'Lulus':'Belum Lulus');
 document.getElementById('ms-note-bcourse').textContent=bPassed?'Latihan asas EMT telah disahkan':'Keputusan Kursus B belum lengkap';
     setStep('ms-step-ccourse',cPassed?'approved':'none',cPassed?'Lulus':'Belum Lulus');
 document.getElementById('ms-note-ccourse').textContent=cPassed?'Latihan lanjutan klinikal telah disahkan':'Keputusan Kursus C belum lengkap';
+    const ttxPassed=passed('TTX'),ftxPassed=passed('FTX');
+    setStep('ms-step-ttx',ttxPassed?'approved':'none',ttxPassed?'Lulus':'Belum Lulus');
+    document.getElementById('ms-note-ttx').textContent=ttxPassed?'Latihan simulasi meja telah disahkan':'Keputusan TTX belum lengkap';
+    setStep('ms-step-ftx',ftxPassed?'approved':'none',ftxPassed?'Lulus':'Belum Lulus');
+    document.getElementById('ms-note-ftx').textContent=ftxPassed?'Latihan lapangan telah disahkan':'Keputusan FTX belum lengkap';
     const healthRes=await fetch(`${API}/api/members/${encodeURIComponent(MEMBER_ID)}/health`),health=(await healthRes.json()).data||{};
     const fit=['fit','fit dengan sekatan'].includes(String(health.fitness?.status||'').toLowerCase())&&health.fitness?.validUntil>=new Date().toISOString().slice(0,10);
-    const fullyActive = emtStatus === 'approved' && bPassed && cPassed && fit;
+    const fullyActive = emtStatus === 'approved' && Boolean(completedTraining) && fit;
     setStep('ms-step-aktif', fullyActive ? 'approved' : 'none', fullyActive ? 'Aktif' : 'Belum Aktif');
     document.getElementById('ms-note-aktif').textContent = fullyActive ? 'Layak menyertai semua aktiviti dan misi EMT' : 'Lengkapkan semua tahap terlebih dahulu';
 
@@ -337,7 +363,28 @@ document.getElementById('ms-note-ccourse').textContent=cPassed?'Latihan lanjutan
     al.innerHTML = fullyActive
       ? '✅ Pemohon telah <strong>LULUS SEMUA TAHAP</strong> dan layak menyertai aktiviti EMT.'
       : '⏳ Permohonan sedang dalam proses. Sila lengkapkan semua tahap untuk menjadi ahli aktif EMT.';
-  } catch (e) { console.error('Gagal muatkan status ahli:', e); }
+  } catch (e) { console.error('Gagal muatkan status ahli:', e); renderRegistrationDocuments(null,'Dokumen pendaftaran gagal dimuatkan. Sila cuba muat semula halaman.'); }
+}
+
+function renderRegistrationDocuments(member,errorMessage=''){
+  const container=document.getElementById('registrationDocuments'),badge=document.getElementById('documentCompletionBadge');if(!container||!badge)return;
+  if(!member){badge.className='badge bg-warning text-dark';badge.textContent='Profil diperlukan';container.innerHTML=`<div class="alert alert-warning mb-0">${MyEMT.escapeHTML(errorMessage||'Daftar atau pilih profil ahli terlebih dahulu untuk mengurus dokumen.')}</div>`;return;}
+  const uploaded=REGISTRATION_DOCUMENTS.filter(item=>member[item.dataField]).length;badge.className=`badge ${uploaded===REGISTRATION_DOCUMENTS.length?'bg-success':'bg-warning text-dark'}`;badge.textContent=`${uploaded+1} daripada ${REGISTRATION_DOCUMENTS.length+1} tersedia`;
+  const registration=`<div class="registration-document"><div><div class="document-title">Borang Pendaftaran EMT</div><div class="document-meta">Dijana terus daripada maklumat profil ahli dalam sistem.</div></div><div><span class="badge bg-success"><i class="bi bi-check-circle me-1"></i>Tersedia</span></div><div class="document-actions"><button type="button" class="btn btn-sm btn-outline-primary" data-document-action="print-registration"><i class="bi bi-printer me-1"></i>Cetak</button></div></div>`;
+  container.innerHTML=registration+REGISTRATION_DOCUMENTS.map(item=>{const exists=Boolean(member[item.dataField]),fileName=member[item.nameField]||'Salinan belum dimuat naik';return `<div class="registration-document"><div><div class="document-title">${MyEMT.escapeHTML(item.title)}</div><div class="document-meta">${MyEMT.escapeHTML(item.description)}</div></div><div><span class="badge ${exists?'bg-success':'bg-secondary'}">${exists?'Tersedia':'Belum tersedia'}</span><div class="document-meta mt-1">${MyEMT.escapeHTML(fileName)}</div></div><div class="document-actions"><input class="document-upload" id="upload-${item.key}" type="file" accept="application/pdf,image/jpeg,image/png" data-document-key="${item.key}"><label class="btn btn-sm btn-outline-secondary mb-0" for="upload-${item.key}"><i class="bi bi-upload me-1"></i>${exists?'Ganti salinan':'Muat naik'}</label>${exists?`<button type="button" class="btn btn-sm btn-outline-primary" data-document-action="open" data-document-key="${item.key}"><i class="bi bi-printer me-1"></i>Papar / Cetak</button>`:''}</div></div>`;}).join('');
+}
+function showDocumentMessage(message,type='success'){const box=document.getElementById('registrationDocumentAlert');if(!box)return;box.className=`alert alert-${type}`;box.textContent=message;}
+function readDocumentFile(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=()=>reject(new Error('Fail tidak dapat dibaca'));reader.readAsDataURL(file);});}
+async function uploadRegistrationDocument(key,file){
+  const config=REGISTRATION_DOCUMENTS.find(item=>item.key===key);if(!config||!file||!currentMember)return;
+  if(!['application/pdf','image/jpeg','image/png'].includes(file.type)){showDocumentMessage('Format fail tidak disokong. Gunakan PDF, JPG atau PNG.','danger');return;}if(file.size>5*1024*1024){showDocumentMessage('Saiz fail melebihi had 5 MB.','danger');return;}
+  showDocumentMessage('Dokumen sedang dimuat naik...','info');
+  try{const fileData=await readDocumentFile(file);const response=await fetch(`${API}/api/members/${encodeURIComponent(MEMBER_ID)}`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({[config.nameField]:file.name,[config.typeField]:file.type,[config.dataField]:fileData})});const payload=await response.json().catch(()=>({}));if(!response.ok||payload.success===false)throw new Error(payload.message||`HTTP ${response.status}`);currentMember=payload.data||{...currentMember,[config.nameField]:file.name,[config.typeField]:file.type,[config.dataField]:fileData};renderRegistrationDocuments(currentMember);showDocumentMessage('Dokumen berjaya disimpan dan kini boleh dicetak.');}catch(error){showDocumentMessage(`Dokumen gagal disimpan: ${error.message}`,'danger');}
+}
+function openStoredDocument(key){const config=REGISTRATION_DOCUMENTS.find(item=>item.key===key),data=config&&currentMember?.[config.dataField];if(!data){showDocumentMessage('Salinan dokumen belum tersedia.','warning');return;}const popup=window.open(data,'_blank');if(!popup)showDocumentMessage('Pelayar menyekat tetingkap dokumen. Benarkan tetingkap timbul untuk membuka atau mencetak fail.','warning');}
+function printRegistrationForm(member){
+  if(!member)return;const value=(...keys)=>{const found=keys.map(key=>member[key]).find(item=>item!==undefined&&item!==null&&String(item).trim());return MyEMT.escapeHTML(found||'Belum direkodkan');};const popup=window.open('','_blank');if(!popup){showDocumentMessage('Pelayar menyekat tetingkap cetakan. Benarkan tetingkap timbul dan cuba lagi.','warning');return;}popup.opener=null;
+  popup.document.write(`<!doctype html><html lang="ms"><head><meta charset="utf-8"><title>Borang Pendaftaran EMT</title><style>body{font:14px Arial,sans-serif;color:#172b3a;margin:36px}h1{font-size:22px;margin-bottom:4px}.sub{color:#667085;margin-bottom:24px}.row{display:grid;grid-template-columns:210px 1fr;padding:10px 0;border-bottom:1px solid #ddd}.label{font-weight:700}@media print{button{display:none}}</style></head><body><h1>Borang Pendaftaran Emergency Medical Team (EMT)</h1><div class="sub">Salinan dijana daripada rekod ahli MyEMT pada ${new Date().toLocaleString('ms-MY')}.</div><div class="row"><div class="label">ID Ahli</div><div>${value('id')}</div></div><div class="row"><div class="label">Nama penuh</div><div>${value('full_name','name')}</div></div><div class="row"><div class="label">No. pengenalan / pasport</div><div>${value('identification_number','id_number','passport_number')}</div></div><div class="row"><div class="label">Jawatan</div><div>${value('designation','position')}</div></div><div class="row"><div class="label">Tempat bertugas</div><div>${value('workplace','facility')}</div></div><div class="row"><div class="label">Negeri</div><div>${value('state')}</div></div><div class="row"><div class="label">Telefon</div><div>${value('phone')}</div></div><div class="row"><div class="label">E-mel</div><div>${value('email')}</div></div><div class="row"><div class="label">Status keahlian</div><div>${value('status')}</div></div><p style="margin-top:30px">Tandatangan ahli: __________________________ &nbsp;&nbsp; Tarikh: ________________</p><button onclick="window.print()">Cetak</button></body></html>`);popup.document.close();popup.focus();setTimeout(()=>popup.print(),250);
 }
 
 function setStep(id, status, label) {
@@ -347,7 +394,26 @@ function setStep(id, status, label) {
   el.replaceChildren();const badge=document.createElement('span');badge.className=`badge ${cls}`;badge.textContent=label;el.appendChild(badge);
 }
 
-document.addEventListener('DOMContentLoaded', loadMissionPage);
+function renderRecentMissions(missions,applications){
+  const applicationByMission=new Map(applications.map(item=>[String(item.missionId),item]));
+  const rows=missions.filter(item=>applicationByMission.has(String(item.id))||item.status==='Perancangan').sort((a,b)=>String(b.startDate||b.createdAt||'').localeCompare(String(a.startDate||a.createdAt||''))).slice(0,5);
+  const container=document.getElementById('recentMissionList');
+  if(!rows.length){container.innerHTML='<div class="text-center text-muted p-4"><i class="bi bi-briefcase fs-2 d-block mb-2"></i>Belum ada misi atau permohonan untuk dipaparkan.</div>';return;}
+  container.innerHTML=rows.map(mission=>{const application=applicationByMission.get(String(mission.id)),status=String(application?.status||mission.status||'-').toLowerCase(),label={approved:'Diterima',pending:'Dalam Semakan',rejected:'Ditolak',perancangan:'Dibuka'}[status]||application?.status||mission.status||'-',cls=status==='approved'?'bg-success':status==='pending'?'bg-warning text-dark':status==='rejected'?'bg-danger':'bg-primary';return `<div class="mission-row"><div><div class="mission-name">${MyEMT.escapeHTML(mission.name||mission.id)}</div><div class="mission-meta"><i class="bi bi-calendar3 me-1"></i>${MyEMT.escapeHTML(mission.startDate||'Tarikh belum ditetapkan')} · <i class="bi bi-geo-alt ms-1 me-1"></i>${MyEMT.escapeHTML(mission.location||'Lokasi belum ditetapkan')}</div></div><div class="d-flex align-items-center gap-2"><span class="badge ${cls}">${MyEMT.escapeHTML(label)}</span>${application?.status==='approved'?`<a class="btn btn-sm btn-outline-primary" href="mission_detail.html?id=${encodeURIComponent(mission.id)}">Butiran</a>`:mission.status==='Perancangan'?`<a class="btn btn-sm btn-primary" href="mission_apply.html?missionId=${encodeURIComponent(mission.id)}">Daftar</a>`:''}</div></div>`;}).join('');
+}
+
+document.addEventListener('DOMContentLoaded',async()=>{
+  document.getElementById('registrationDocuments')?.addEventListener('change',event=>{const input=event.target.closest('input[data-document-key]');if(input?.files?.[0])uploadRegistrationDocument(input.dataset.documentKey,input.files[0]);});
+  document.getElementById('registrationDocuments')?.addEventListener('click',event=>{const button=event.target.closest('[data-document-action]');if(!button)return;if(button.dataset.documentAction==='print-registration')printRegistrationForm(currentMember);if(button.dataset.documentAction==='open')openStoredDocument(button.dataset.documentKey);});
+  await loadMissionPage();
+  const statusHeader=[...document.querySelectorAll('.card-header')].find(item=>item.textContent.includes('Status Permohonan MyEMT'));
+  if(statusHeader)statusHeader.innerHTML='<i class="bi bi-clipboard-data me-2"></i>Status Kelayakan MyEMT';
+  const alertBox=document.getElementById('ms-eligibility-alert');
+  if(alertBox?.textContent.includes('belum mendaftar'))alertBox.innerHTML='<i class="bi bi-exclamation-triangle me-1"></i>Anda belum mendaftar sebagai ahli MyEMT.';
+  else if(alertBox?.textContent.includes('LULUS SEMUA TAHAP'))alertBox.innerHTML='<i class="bi bi-check-circle me-1"></i>Anda telah <strong>lulus semua tahap</strong> dan layak menyertai aktiviti EMT.';
+  else if(alertBox?.textContent.includes('sedang dalam proses'))alertBox.innerHTML='<i class="bi bi-hourglass-split me-1"></i>Permohonan sedang dalam proses. Sila lengkapkan semua tahap untuk menjadi ahli aktif EMT.';
+});
 </script>
+<script src="assets/js/portal-dashboard-theme.js"></script>
 </body>
 </html>

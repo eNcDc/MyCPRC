@@ -643,9 +643,10 @@ function addMedication(data = {}) {
 
 <script>
 const healthForm = document.getElementById('member-health-form');
-const healthMemberId = new URLSearchParams(location.search).get('memberId') || localStorage.getItem('myemt_memberId') || localStorage.getItem('memberId') || sessionStorage.getItem('myemt_memberId') || sessionStorage.getItem('memberId');
+const healthMemberId = window.MyEMT?.memberId?.() || '';
 const byLabel = label => {
-  const el = [...healthForm.querySelectorAll('label')].find(item => item.textContent.trim().startsWith(label));
+  if (label === 'Status Fit') label = 'Status Kecergasan';
+  const el = [...healthForm.querySelectorAll('label')].find(item => (item.dataset.myemtBm || item.textContent.trim()).startsWith(label));
   return el?.parentElement?.querySelector('input, select, textarea') || null;
 };
 const cardByTitle = title => [...healthForm.querySelectorAll('.card')].find(card => card.querySelector('.card-header')?.textContent.includes(title));

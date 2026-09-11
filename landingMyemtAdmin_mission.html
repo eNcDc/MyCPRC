@@ -8,6 +8,8 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet"/>
 <link href="assets/css/main.css" rel="stylesheet"/>
+<link href="assets/css/portal-dashboard-theme.css" rel="stylesheet"/>
+<link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet"/>
 <style>
     body{background:#f4f6f9}
     .page-title{font-weight:800}
@@ -104,6 +106,9 @@
       border-radius:12px;
       padding:.9rem 1rem;
     }
+    #logisticsLocationMap{height:430px;border-radius:12px;background:#eef2f6}
+    .map-legend{display:flex;flex-wrap:wrap;gap:1rem;font-size:.82rem;color:#596b7d}
+    .map-dot{display:inline-block;width:.72rem;height:.72rem;border-radius:50%;margin-right:.3rem}
 </style>
 </head>
 <body>
@@ -127,6 +132,8 @@
           </a>
 </div>
 </div>
+<div class="alert alert-warning d-none mb-4" id="dashboardAlert" role="alert"></div>
+<div id="adminDashboardTabs"></div>
 <!-- KPI MISI -->
 
 <div class="dashboard-group-title">
@@ -237,6 +244,26 @@
 </div>
 </div>
 </a>
+</div>
+</div>
+<!-- PETA LOGISTIK DAN PENYIMPANAN -->
+<div class="card dashboard-card mb-4">
+<div class="card-body">
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-3">
+<div><h6 class="fw-bold mb-1">Peta Lokasi Logistik dan Penyimpanan</h6><div class="section-subtitle">Lokasi berdasarkan koordinat rekod pengangkutan, penyimpanan misi dan stor MyEMT.</div></div>
+<div class="map-legend"><span><i class="map-dot" style="background:#0d6efd"></i>Pengangkutan</span><span><i class="map-dot" style="background:#198754"></i>Penyimpanan Misi</span><span><i class="map-dot" style="background:#fd7e14"></i>Stor MyEMT</span></div>
+</div>
+<div class="row g-2 mb-3">
+<div class="col-md-4"><label class="form-label small fw-semibold" for="mapMissionFilter">Misi</label><select class="form-select form-select-sm" id="mapMissionFilter"><option value="all">Semua misi</option></select></div>
+<div class="col-md-4"><label class="form-label small fw-semibold" for="mapTypeFilter">Jenis sumber</label><select class="form-select form-select-sm" id="mapTypeFilter"><option value="all">Semua jenis</option><option value="transport">Pengangkutan</option><option value="storage">Penyimpanan misi</option><option value="stores">Stor MyEMT</option></select></div>
+<div class="col-md-4"><label class="form-label small fw-semibold" for="mapStatusFilter">Status</label><select class="form-select form-select-sm" id="mapStatusFilter"><option value="all">Semua status</option></select></div>
+</div>
+<div id="logisticsLocationMap" role="img" aria-label="Peta lokasi logistik dan penyimpanan"></div>
+<div class="small text-muted mt-2" id="logisticsMapStatus">Memuatkan lokasi...</div>
+<div class="border rounded mt-3 overflow-hidden">
+<div class="d-flex justify-content-between align-items-center bg-light px-3 py-2"><strong>Lokasi belum dipetakan</strong><span class="badge text-bg-warning" id="unmappedLocationCount">0</span></div>
+<div class="table-responsive"><table class="table table-sm align-middle mb-0"><thead><tr><th>Jenis</th><th>Nama</th><th>Lokasi / alamat</th><th>Status</th><th class="text-end">Tindakan</th></tr></thead><tbody id="unmappedLocationBody"><tr><td colspan="5" class="text-center text-muted py-3">Memuatkan rekod...</td></tr></tbody></table></div>
+</div>
 </div>
 </div>
 <!-- CHART ROW 1 -->
@@ -374,7 +401,7 @@
 <a class="text-decoration-none text-dark" href="mission_add.html">
 <div class="quick-action">
 <i class="bi bi-plus-circle fs-4 text-primary"></i>
-<div class="fw-bold mt-2">Tambah Misi Baru</div>
+<div class="fw-bold mt-2">Tambah Misi Baharu</div>
 <small class="text-muted">Daftar operasi EMT baharu.</small>
 </div>
 </a>
@@ -402,7 +429,7 @@
 <div class="quick-action">
 <i class="bi bi-clipboard2-pulse fs-4 text-primary"></i>
 <div class="fw-bold mt-2">Laporan Harian MDS Keseluruhan</div>
-<small class="text-muted">Pilih misi, lokasi dan tarikh untuk semakan.</small>
+<small class="text-muted">Pilih misi dan tarikh untuk semakan.</small>
 </div>
 </a>
 </div>
@@ -488,8 +515,9 @@ fetch("sidebar.html")
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-Chart.register(ChartDataLabels);
+if(typeof ChartDataLabels!=='undefined')Chart.register(ChartDataLabels);
 
 let dashboardCharts = {};
 let allMissions = [];
@@ -500,6 +528,92 @@ let resourceCounts = {
   stores:0,
   mds:0
 };
+let logisticsLocationMap=null,logisticsLocationLayer=null;
+let logisticsMapData={transport:[],storage:[],stores:[],assets:[]};
+
+function initialiseAdminDashboardTabs(){
+  const host=document.getElementById('adminDashboardTabs'),main=host?.parentElement;if(!host||!main)return;
+  host.innerHTML=`<ul class="nav nav-pills bg-white shadow-sm rounded-3 p-2 mb-4" role="tablist"><li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#adminOverview" type="button"><i class="bi bi-speedometer2 me-1"></i>Ringkasan</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#adminResources" type="button"><i class="bi bi-boxes me-1"></i>Sumber dan Peta</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#adminMissionAnalysis" type="button"><i class="bi bi-bar-chart-line me-1"></i>Analitik Misi</button></li><li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#adminActions" type="button"><i class="bi bi-lightning-charge me-1"></i>Tindakan dan Rekod</button></li></ul><div class="tab-content"><section class="tab-pane fade show active" id="adminOverview"></section><section class="tab-pane fade" id="adminResources"></section><section class="tab-pane fade" id="adminMissionAnalysis"></section><section class="tab-pane fade" id="adminActions"></section></div>`;
+  const titles=[...main.querySelectorAll('.dashboard-group-title')],overview=document.getElementById('adminOverview'),resources=document.getElementById('adminResources'),analysis=document.getElementById('adminMissionAnalysis'),actions=document.getElementById('adminActions');
+  if(titles[0]){const row=titles[0].nextElementSibling;overview.append(titles[0]);if(row)overview.append(row);}
+  ['missionStatusChart','missionLocationChart','missionTypeChart','resourceChart'].forEach(id=>{const row=document.getElementById(id)?.closest('.row');if(row&&!overview.contains(row))overview.append(row);});
+  if(titles[1]){const row=titles[1].nextElementSibling;resources.append(titles[1]);if(row)resources.append(row);}
+  const mapCard=document.getElementById('logisticsLocationMap')?.closest('.dashboard-card');if(mapCard)resources.append(mapCard);
+  const filtered=document.getElementById('missionFilteredDashboard');if(filtered)analysis.append(filtered);
+  const recent=document.getElementById('recentMissionTable')?.closest('.dashboard-card'),quick=recent?.previousElementSibling;if(quick)actions.append(quick);if(recent)actions.append(recent);
+  host.querySelector('[data-bs-target="#adminResources"]')?.addEventListener('shown.bs.tab',()=>setTimeout(()=>logisticsLocationMap?.invalidateSize(),50));
+}
+
+async function fetchJson(path){
+  const response=await fetch(`${API}${path}`),json=await response.json().catch(()=>null);
+  if(!response.ok||!json?.success)throw new Error(`${path}: ${json?.message||`HTTP ${response.status}`}`);
+  return json;
+}
+
+function validCoordinates(item){
+  const latitude=Number(item?.latitude),longitude=Number(item?.longitude);
+  return item?.latitude!==''&&item?.latitude!=null&&item?.longitude!==''&&item?.longitude!=null&&Number.isFinite(latitude)&&Number.isFinite(longitude)&&latitude>=-90&&latitude<=90&&longitude>=-180&&longitude<=180;
+}
+
+function maintenanceState(item){
+  const status=String(item.status||'').toLowerCase(),date=item.nextServiceDate||item.nextMaintenanceDate;
+  if(status.includes('penyelenggaraan'))return {level:'warning',label:'Dalam penyelenggaraan'};
+  if(!date)return null;
+  const due=new Date(`${date}T23:59:59`),days=Math.ceil((due-Date.now())/86400000);
+  if(!Number.isFinite(due.getTime()))return null;
+  if(days<0)return {level:'danger',label:`Servis lewat ${Math.abs(days)} hari`};
+  if(days<=30)return {level:'warning',label:`Servis dalam ${days} hari`};
+  return null;
+}
+
+function mapEditLink(type,item){
+  if(type==='transport')return `logistik_transportEdit.html?id=${encodeURIComponent(item.id)}&missionId=${encodeURIComponent(item.missionId||'')}`;
+  if(type==='storage')return `logistik_storageEdit.html?id=${encodeURIComponent(item.id)}&missionId=${encodeURIComponent(item.missionId||'')}`;
+  return `store_edit.html?id=${encodeURIComponent(item.id)}`;
+}
+
+function storeStock(store,assets){
+  return (assets||[]).filter(asset=>!asset.missionId&&(
+    [asset.storeId,asset.locationId].some(value=>value&&[store.id,store.code].some(storeValue=>String(storeValue||'')===String(value)))||
+    [asset.location,asset.storageLocation].some(value=>value&&[store.name,store.address,store.code].some(storeValue=>String(storeValue||'').trim().toLowerCase()===String(value).trim().toLowerCase()))
+  )).reduce((sum,asset)=>sum+Number(asset.quantity||0),0);
+}
+
+function renderLogisticsMap(transport=logisticsMapData.transport,storage=logisticsMapData.storage,stores=logisticsMapData.stores,assets=logisticsMapData.assets){
+  logisticsMapData={transport:transport||[],storage:storage||[],stores:stores||[],assets:assets||[]};
+  const container=document.getElementById('logisticsLocationMap'),status=document.getElementById('logisticsMapStatus');
+  if(typeof L==='undefined'){status.textContent='Komponen peta tidak dapat dimuatkan.';return;}
+  if(!logisticsLocationMap){logisticsLocationMap=L.map(container).setView([4.2105,101.9758],6);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap'}).addTo(logisticsLocationMap);logisticsLocationLayer=L.layerGroup().addTo(logisticsLocationMap);}else logisticsLocationLayer.clearLayers();
+  const missionFilter=document.getElementById('mapMissionFilter')?.value||'all',typeFilter=document.getElementById('mapTypeFilter')?.value||'all';
+  const groups=[
+    {key:'transport',items:transport,label:'Pengangkutan',color:'#0d6efd',name:item=>item.vehicleName||item.name||item.vehicleType||item.registrationNumber},
+    {key:'storage',items:storage,label:'Penyimpanan Misi',color:'#198754',name:item=>item.name||item.storageType||item.type||item.id},
+    {key:'stores',items:stores,label:'Stor MyEMT',color:'#fd7e14',name:item=>item.name||item.storeName||item.location||item.id}
+  ],bounds=[],missing=[],visible=[];
+  const statuses=[...new Set(groups.flatMap(group=>(group.items||[]).map(item=>item.status).filter(Boolean)))].sort();
+  const statusSelect=document.getElementById('mapStatusFilter'),selectedStatus=statusSelect?.value||'all';
+  if(statusSelect){statusSelect.innerHTML=`<option value="all">Semua status</option>${statuses.map(value=>`<option value="${esc(value)}">${esc(value)}</option>`).join('')}`;statusSelect.value=statuses.includes(selectedStatus)?selectedStatus:'all';}
+  const statusFilter=statusSelect?.value||'all';
+  groups.forEach(group=>(group.items||[]).forEach(item=>{
+    if(typeFilter!=='all'&&typeFilter!==group.key)return;
+    if(missionFilter!=='all'&&String(item.missionId||'global')!==missionFilter)return;
+    if(statusFilter!=='all'&&item.status!==statusFilter)return;
+    visible.push(item);
+    if(!validCoordinates(item)){missing.push({item,group});return;}
+    const point=[Number(item.latitude),Number(item.longitude)];bounds.push(point);
+    const warning=group.key==='transport'?maintenanceState(item):null;
+    const capacity=group.key==='transport'?`Kapasiti: ${esc(item.passengerCapacity??'-')} penumpang${item.loadCapacity!==undefined?`, ${esc(item.loadCapacity)} muatan`:''}`:`Kapasiti penyimpanan: ${esc(item.capacity??'-')} ${esc(item.capacityUnit||'')}`;
+    const stock=group.key==='stores'?`<br>Jumlah stok dipautkan: ${storeStock(item,assets)}`:'';
+    const warningHtml=warning?`<br><span class="badge text-bg-${warning.level}">${esc(warning.label)}</span>`:'';
+    L.circleMarker(point,{radius:warning?10:8,color:warning?.level==='danger'?'#dc3545':warning?'#ffc107':'#fff',weight:warning?4:2,fillColor:group.color,fillOpacity:.95}).addTo(logisticsLocationLayer).bindPopup(`<strong>${esc(group.name(item)||'-')}</strong><br>${esc(group.label)}<br>${esc(item.currentLocation||item.location||item.address||'-')}<br>Status: ${esc(item.status||'-')}<br>${capacity}${stock}${warningHtml}`);
+  }));
+  if(bounds.length)logisticsLocationMap.fitBounds(bounds,{padding:[35,35],maxZoom:12});else logisticsLocationMap.setView([4.2105,101.9758],6);
+  const total=visible.length;
+  status.textContent=bounds.length?`${bounds.length} daripada ${total} lokasi yang sepadan mempunyai koordinat dan dipaparkan pada peta.${missing.length?` ${missing.length} rekod belum mempunyai titik peta.`:''}`:`Tiada lokasi yang sepadan mempunyai koordinat peta. Lengkapkan rekod dalam senarai di bawah.`;
+  document.getElementById('unmappedLocationCount').textContent=missing.length;
+  document.getElementById('unmappedLocationBody').innerHTML=missing.length?missing.map(({item,group})=>`<tr><td>${esc(group.label)}</td><td class="fw-semibold">${esc(group.name(item)||'-')}</td><td>${esc(item.currentLocation||item.location||item.address||'-')}</td><td>${esc(item.status||'-')}</td><td class="text-end"><a class="btn btn-sm btn-warning" href="${mapEditLink(group.key,item)}">Lengkapkan peta</a></td></tr>`).join(''):`<tr><td colspan="5" class="text-center text-success py-3">Semua lokasi yang sepadan telah dipetakan.</td></tr>`;
+  setTimeout(()=>logisticsLocationMap.invalidateSize(),100);
+}
 
 function esc(value){
   return String(value ?? '-')
@@ -508,6 +622,13 @@ function esc(value){
     .replaceAll('>','&gt;')
     .replaceAll('"','&quot;')
     .replaceAll("'","&#039;");
+}
+
+function showDashboardWarning(message){
+  const alertBox=document.getElementById('dashboardAlert');
+  if(!alertBox)return;
+  alertBox.textContent=message;
+  alertBox.classList.remove('d-none');
 }
 
 function statusBadge(status){
@@ -537,14 +658,17 @@ function countBy(list, getter){
 }
 
 function makeChart(id,type,labels,data,label='Jumlah'){
+  if(typeof Chart==='undefined')return;
   if(dashboardCharts[id]) dashboardCharts[id].destroy();
+
+  const translate=value=>window.MyEMT?.t?.(String(value)) || String(value);
 
   dashboardCharts[id] = new Chart(document.getElementById(id),{
     type,
     data:{
-      labels,
+      labels:labels.map(translate),
       datasets:[{
-        label,
+        label:translate(label),
         data,
         borderWidth:0,
         borderRadius:type === 'bar' ? 5 : 0
@@ -719,25 +843,16 @@ function initialiseMissionFilterCards(){
 }
 
 async function loadSupportCounts(){
-  try{
-    const [assetRes, storageRes, transportRes, storesRes, mdsRes] = await Promise.all([
-      fetch(`${API}/api/assets/summary`),
-      fetch(`${API}/api/storage`),
-      fetch(`${API}/api/transport`),
-      fetch(`${API}/api/stores`),
-      fetch(`${API}/api/mds`)
-    ]);
+  const paths=['/api/assets/summary','/api/storage','/api/transport','/api/stores','/api/mds','/api/assets'];
+  const results=await Promise.allSettled(paths.map(fetchJson));
+  const values=results.map(result=>result.status==='fulfilled'?result.value:{success:false,data:[],total:0});
+  const [assets,storage,transport,stores,mds,assetList]=values;
+  const failures=results.map((result,index)=>result.status==='rejected'?paths[index]:null).filter(Boolean);
 
-    const assets = await assetRes.json();
-    const storage = await storageRes.json();
-    const transport = await transportRes.json();
-    const stores = await storesRes.json();
-    const mds = await mdsRes.json();
-
-    resourceCounts.assets = assets.total || 0;
-    resourceCounts.logistics = (storage.total || 0) + (transport.total || 0);
-    resourceCounts.stores = stores.total || 0;
-    resourceCounts.mds = mds.total || 0;
+  resourceCounts.assets = Number(assets.total || 0);
+  resourceCounts.logistics = Number(storage.total || storage.data?.length || 0) + Number(transport.total || transport.data?.length || 0);
+  resourceCounts.stores = Number(stores.total || stores.data?.length || 0);
+  resourceCounts.mds = Number(mds.total || mds.data?.length || 0);
 
     document.getElementById('cnt-assets').textContent = resourceCounts.assets;
     document.getElementById('cnt-logistics').textContent = resourceCounts.logistics;
@@ -745,7 +860,7 @@ async function loadSupportCounts(){
     document.getElementById('cnt-mds').textContent = resourceCounts.mds;
     document.getElementById('summary-mds').textContent = resourceCounts.mds;
 
-    makeChart(
+  makeChart(
       'resourceChart',
       'bar',
       ['Aset','Logistik','Penyimpanan','MDS'],
@@ -756,24 +871,24 @@ async function loadSupportCounts(){
         resourceCounts.mds
       ],
       'Jumlah'
-    );
-
-  }catch(err){
-    console.error('Gagal muatkan data sumber:',err);
+  );
+  renderLogisticsMap(transport.data||[],storage.data||[],stores.data||[],assetList.data||[]);
+  if(failures.length){
+    document.getElementById('logisticsMapStatus').textContent+=` Gagal memuatkan: ${failures.join(', ')}.`;
+    showDashboardWarning(`Sebahagian ringkasan sumber tidak dapat dimuatkan: ${failures.join(', ')}. Data modul lain masih dipaparkan.`);
+    console.warn('Sebahagian data sumber gagal dimuatkan:',failures);
   }
 }
 
 async function loadMissionData(){
   try{
-    const [summaryRes, missionsRes] = await Promise.all([
-      fetch(`${API}/api/missions/summary`),
-      fetch(`${API}/api/missions`)
-    ]);
-
-    const summary = await summaryRes.json();
-    const missionJson = await missionsRes.json();
+    const missionJson=await fetchJson('/api/missions');
+    let summary={};
+    try{summary=await fetchJson('/api/missions/summary');}catch(summaryError){console.warn('Ringkasan API gagal; kiraan dibuat daripada senarai misi.',summaryError);}
     const missions = missionJson.data || [];
     allMissions = missions;
+    const mapMissionFilter=document.getElementById('mapMissionFilter'),currentMapMission=mapMissionFilter?.value||'all';
+    if(mapMissionFilter){mapMissionFilter.innerHTML=`<option value="all">Semua misi</option><option value="global">Stor MyEMT (bukan misi)</option>${missions.map(m=>`<option value="${esc(m.id)}">${esc(m.name||m.id)}</option>`).join('')}`;mapMissionFilter.value=[...mapMissionFilter.options].some(option=>option.value===currentMapMission)?currentMapMission:'all';renderLogisticsMap();}
 
     const total = summary.total ?? missions.length;
     const completed = summary.completed ?? missions.filter(m=>m.status==='Selesai').length;
@@ -846,14 +961,22 @@ async function loadMissionData(){
     console.error('Gagal muatkan data misi:',err);
     document.getElementById('recentMissionTable').innerHTML =
       `<tr><td colspan="6" class="text-center text-danger py-4">Gagal memuatkan data.</td></tr>`;
+    showDashboardWarning(`Data misi gagal dimuatkan: ${err.message}`);
   }
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
+  initialiseAdminDashboardTabs();
   initialiseMissionFilterCards();
+  ['mapMissionFilter','mapTypeFilter','mapStatusFilter'].forEach(id=>document.getElementById(id)?.addEventListener('change',()=>renderLogisticsMap()));
+  loadMissionData();
+  loadSupportCounts();
+});
+window.addEventListener('myemt:languagechange',()=>{
   loadMissionData();
   loadSupportCounts();
 });
 </script>
+<script src="assets/js/portal-dashboard-theme.js"></script>
 </body>
 </html>

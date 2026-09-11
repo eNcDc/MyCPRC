@@ -775,13 +775,7 @@ fetch("sidebar.html")
 /* =====================================================
    MEMBER
 ===================================================== */
-const MEMBER_ID =
-  new URLSearchParams(location.search).get("memberId") ||
-  localStorage.getItem("myemt_memberId") ||
-  localStorage.getItem("memberId") ||
-  sessionStorage.getItem("myemt_memberId") ||
-  sessionStorage.getItem("memberId") ||
-  "";
+const MEMBER_ID = window.MyEMT?.memberId?.() || "";
 
 let currentMember = null;
 

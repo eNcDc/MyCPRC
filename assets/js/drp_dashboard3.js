@@ -1,13 +1,6 @@
 // ===== PILIHAN FILTER JENIS BENCANA =====
 // Senarai ini digunakan untuk isi pilihan kategori dan jenis bencana dalam filter dashboard.
-const disasterData = {
-  "Semula Jadi": ["Banjir", "Tanah Runtuh"],
-  "Teknologi": ["Pencemaran Udara - H2S & Methane", "RTA", "Kemalangan Houseboat", "Pembuangan Bahan Kimia"],
-  "Wabak": ["COVID-19", "Dengue", "HFMD", "Leptospirosis", "YAW", "Measles", "Kusta", "FP", "KRM", "Brucellosis"],
-  "Krisis": ["Rusuhan Pendatang Asing", "Kekurangan Makanan", "Ketidakstabilan Politik", "Pencemaran Bahan Toksik", "Bioterorisme"],
-  "Kecemasan": ["Kegagalan Empangan", "Letupan Stesen Hidroelektrik", "Kemalangan Penerbangan Udara", "Ancaman Siber"],
-  "Lain-Lain": ["Lain-lain"]
-};
+const disasterData = window.DRP_TAXONOMY?.categories || {};
 
 // ===== DATA CONTOH DRP =====
 // Data ini digunakan sementara sebelum sambungan database dibuat.
@@ -19,7 +12,7 @@ const drpData = [
     address: "PENJARA SIMPANG RENGGAM",
     district: "KLUANG",
     subdistrict: "RENGGAM",
-    risk: "Rusuhan Pendatang Asing",
+    risk: "Insiden Mangsa Beramai-ramai",
     caseCount: 10,
     likelihood: 1,
     mortality: 1,
@@ -40,7 +33,7 @@ const drpData = [
     address: "SENAI INTERNATIONAL AIRPORT",
     district: "KULAI",
     subdistrict: "SENAI",
-    risk: "Bioterorisme",
+    risk: "Kebakaran dan Letupan",
     caseCount: 6,
     likelihood: 1,
     mortality: 3,
@@ -57,7 +50,7 @@ const drpData = [
   {
     date: "2026-01-15",
     state: "JOHOR",
-    riskCategory: "Semula Jadi",
+    riskCategory: "Bencana Semula Jadi",
     address: "KAWASAN BANJIR TAMAN SRI MUDA",
     district: "BATU PAHAT",
     subdistrict: "SIMPANG KANAN",
@@ -78,11 +71,11 @@ const drpData = [
   {
     date: "2026-02-01",
     state: "JOHOR",
-    riskCategory: "Teknologi",
+    riskCategory: "Bencana Teknologi",
     address: "KAWASAN INDUSTRI PASIR GUDANG",
     district: "JOHOR BAHRU",
     subdistrict: "PASIR GUDANG",
-    risk: "Pembuangan Bahan Kimia",
+    risk: "Kebocoran Bahan Kimia",
     caseCount: 12,
     likelihood: 3,
     mortality: 3,
@@ -99,7 +92,7 @@ const drpData = [
   {
     date: "2026-02-10",
     state: "SELANGOR",
-    riskCategory: "Semula Jadi",
+    riskCategory: "Bencana Semula Jadi",
     address: "KAWASAN PERUMAHAN TAMAN SRI MUDA",
     district: "PETALING",
     subdistrict: "SHAH ALAM",
@@ -124,7 +117,7 @@ const drpData = [
     address: "KLINIK KESIHATAN KAJANG",
     district: "HULU LANGAT",
     subdistrict: "KAJANG",
-    risk: "Dengue",
+    risk: "Denggi",
     caseCount: 22,
     likelihood: 4,
     mortality: 2,
@@ -141,11 +134,11 @@ const drpData = [
   {
     date: "2026-03-11",
     state: "SELANGOR",
-    riskCategory: "Kecemasan",
+    riskCategory: "Krisis",
     address: "EMPANGAN BATU",
     district: "GOMBAK",
     subdistrict: "BATU",
-    risk: "Kegagalan Empangan",
+    risk: "Banjir Kilat",
     caseCount: 3,
     likelihood: 2,
     mortality: 5,
@@ -162,7 +155,7 @@ const drpData = [
   {
     date: "2026-04-04",
     state: "KELANTAN",
-    riskCategory: "Semula Jadi",
+    riskCategory: "Bencana Semula Jadi",
     address: "KAMPUNG PULAU GAJAH",
     district: "KOTA BHARU",
     subdistrict: "PENGKALAN CHEPA",
@@ -187,7 +180,7 @@ const drpData = [
     address: "SEKOLAH KEBANGSAAN GUAL IPOH",
     district: "TANAH MERAH",
     subdistrict: "GUAL IPOH",
-    risk: "HFMD",
+    risk: "Penyakit Tangan, Kaki dan Mulut (HFMD)",
     caseCount: 16,
     likelihood: 4,
     mortality: 1,
@@ -225,11 +218,11 @@ const drpData = [
   {
     date: "2026-05-20",
     state: "PAHANG",
-    riskCategory: "Teknologi",
+    riskCategory: "Bencana Teknologi",
     address: "KAWASAN INDUSTRI GEBENG",
     district: "KUANTAN",
     subdistrict: "GEBENG",
-    risk: "Pencemaran Udara - H2S & Methane",
+    risk: "Pencemaran Udara",
     caseCount: 14,
     likelihood: 4,
     mortality: 4,
@@ -246,7 +239,7 @@ const drpData = [
   {
     date: "2026-06-01",
     state: "PAHANG",
-    riskCategory: "Semula Jadi",
+    riskCategory: "Bencana Semula Jadi",
     address: "KAMPUNG JANDA BAIK",
     district: "BENTONG",
     subdistrict: "JANDA BAIK",
@@ -434,6 +427,7 @@ function updateRiskCategoryChart(data) {
 
   if (riskCategoryChart) riskCategoryChart.destroy();
 
+  const valueLabels=createDrpValueLabelPlugin('risk-category','doughnut');
   riskCategoryChart = new Chart(ctx, {
     type: "doughnut",
     data: {
@@ -443,6 +437,7 @@ function updateRiskCategoryChart(data) {
         backgroundColor: ["#4c1d95", "#2563eb", "#0f766e", "#16a34a", "#9333ea", "#06b6d4"]
       }]
     },
+    plugins:[valueLabels],
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -468,6 +463,7 @@ function updateRiskScoreChart(data) {
 
   if (riskScoreChart) riskScoreChart.destroy();
 
+  const valueLabels=createDrpValueLabelPlugin('risk-score','bar');
   riskScoreChart = new Chart(ctx, {
     type: "bar",
     data: {
@@ -478,12 +474,14 @@ function updateRiskScoreChart(data) {
         backgroundColor: ["#4c1d95", "#2563eb", "#0f766e", "#16a34a", "#9333ea", "#06b6d4"]
       }]
     },
+    plugins:[valueLabels],
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
         y: {
           beginAtZero: true,
+          grace: "12%",
           ticks: {
             precision: 0
           }
@@ -492,6 +490,8 @@ function updateRiskScoreChart(data) {
     }
   });
 }
+
+function createDrpValueLabelPlugin(id,type){return{id:`drp-label-${id}`,afterDatasetsDraw(chart){const values=chart.data.datasets[0]?.data||[],total=values.reduce((sum,value)=>sum+Number(value||0),0),ctx=chart.ctx;ctx.save();ctx.font='600 12px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';chart.getDatasetMeta(0).data.forEach((element,index)=>{const value=Number(values[index]||0);if(!value)return;const point=element.tooltipPosition(),text=type==='doughnut'?`${value.toLocaleString('ms-MY')} (${total?Math.round(value/total*100):0}%)`:value.toLocaleString('ms-MY');ctx.fillStyle='#302447';ctx.fillText(text,point.x,type==='bar'?point.y-10:point.y);});ctx.restore();}};}
 
 // ===== UPDATE PETA =====
 function updateMaps(data) {

@@ -568,14 +568,25 @@ function createILIChart(data){
 
                     data:values,
 
+                    borderColor:"#325ea8",
 
-                    tension:0.3,
+                    backgroundColor:"rgba(84, 123, 209, 0.16)",
+
+                    pointBackgroundColor:"#25a7a1",
+
+                    pointBorderColor:"#ffffff",
+
+                    pointBorderWidth:2,
+
+                    tension:0.35,
 
 
                     borderWidth:3,
 
 
-                    pointRadius:5
+                    pointRadius:4,
+
+                    fill:true
 
 
                 }]
@@ -600,7 +611,7 @@ function createILIChart(data){
 
                     legend:{
 
-                        display:true
+                        display:false
 
                     }
 
@@ -766,8 +777,13 @@ function createHospitalChart(data){
 
                     data:values,
 
+                    backgroundColor:["#325ea8", "#25a7a1", "#547bd1", "#ef8f55", "#786fc5", "#4bb9b0", "#df7182"],
 
-                    borderWidth:1
+                    borderWidth:0,
+
+                    borderRadius:7,
+
+                    borderSkipped:false
 
 
                 }]
@@ -785,13 +801,15 @@ function createHospitalChart(data){
 
                 maintainAspectRatio:false,
 
+                indexAxis:"y",
+
 
                 plugins:{
 
 
                     legend:{
 
-                        display:true
+                        display:false
 
                     }
 
@@ -802,7 +820,7 @@ function createHospitalChart(data){
                 scales:{
 
 
-                    y:{
+                    x:{
 
 
                         beginAtZero:true,
@@ -823,7 +841,7 @@ function createHospitalChart(data){
                     },
 
 
-                    x:{
+                    y:{
 
 
                         ticks:{
@@ -832,10 +850,13 @@ function createHospitalChart(data){
                             autoSkip:false,
 
 
-                            maxRotation:45,
+                            callback:function(value){
 
+                                const label=this.getLabelForValue(value);
 
-                            minRotation:45
+                                return label.length>25?label.slice(0,25)+"…":label;
+
+                            }
 
 
                         }

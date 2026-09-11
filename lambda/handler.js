@@ -483,6 +483,8 @@ const getIncidents = () => getList('myemt/incidents.json', []);
 const getMissionReports = () => getList('myemt/mission-reports.json', []);
 const getObservations = () => getList('myemt/observations.json', []);
 const getReferrals = () => getList('myemt/referrals.json', []);
+const getDispensaryRecords = () => getList('myemt/dispensary-records.json', []);
+const getMedicineInventory = () => getList('myemt/medicine-inventory.json', []);
 const getIliRecords = () => getList('surveillance/ili-records.json', []);
 const getSariRecords = () => getList('surveillance/sari-records.json', []);
 
@@ -493,7 +495,8 @@ const normalizeDailyStatus=value=>['SUBMITTED','COMPLETED','DIHANTAR'].includes(
 const normalizeMdsCodes=value=>[...new Set((Array.isArray(value)?value:[]).map(Number).filter(code=>Number.isInteger(code)&&code>=1&&code<=50))].sort((a,b)=>a-b);
 function canonicalMdsLocationId(value={}){const explicit=cleanText(value.activityLocationId||value.activityLocation?.id||value.locationId,150);if(explicit)return explicit;const rawLat=value.latitude??value.activityLocation?.latitude,rawLng=value.longitude??value.activityLocation?.longitude,lat=Number(rawLat),lng=Number(rawLng);if(rawLat!==''&&rawLat!=null&&rawLng!==''&&rawLng!=null&&Number.isFinite(lat)&&Number.isFinite(lng))return `LOC-${lat.toFixed(5)}-${lng.toFixed(5)}`.replace(/\+/g,'');const name=cleanText(value.activityLocationName||value.location||value.activityLocation?.name||value.presentAddress,500).toLowerCase().replace(/\s+/g,' ');if(!name)return '';let hash=2166136261;for(let i=0;i<name.length;i++){hash^=name.charCodeAt(i);hash=Math.imul(hash,16777619);}return `LEGACY-${(hash>>>0).toString(36).toUpperCase()}`;}
 function validateMdsContext(body){const missionId=cleanText(body.missionId,100),activityDate=body.activityDate||body.date,activityLocationId=cleanText(body.activityLocationId||body.activityLocation?.id,150);if(!missionId||!activityDate||!validDate(activityDate)||!activityLocationId)return 'ID misi, tarikh aktiviti dan ID lokasi aktiviti yang sah diperlukan.';const supplied=Array.isArray(body.mdsCodes)?body.mdsCodes:[],codes=normalizeMdsCodes(supplied);if(supplied.length!==codes.length)return 'Kod MDS mesti unik dan merupakan nombor bulat 1 hingga 50.';const sex=cleanText(body.sex,20).toUpperCase(),pregnancy=cleanText(body.pregnancyStatus,30).toUpperCase(),sexCodes=codes.filter(code=>code<=3);if(sex==='MALE'&&pregnancy&&pregnancy!=='NOT_APPLICABLE')return 'Pesakit lelaki tidak boleh mempunyai status kehamilan.';if(supplied.length&&sexCodes.length!==1)return 'Setiap pesakit mesti mempunyai tepat satu kod jantina MDS 1, 2 atau 3.';const expected=sex==='MALE'?1:sex==='FEMALE'&&pregnancy==='PREGNANT'?3:sex==='FEMALE'?2:null;if(expected&&sexCodes[0]!==expected)return 'Kod jantina MDS tidak sepadan dengan jantina dan status kehamilan.';return '';}
-function calculateStoredMdsTally(records){const groups=['under1','age1to4','age5to17','age18to64','age65plus'],items=Object.fromEntries(Array.from({length:50},(_,i)=>[i+1,{under1:0,age1to4:0,age5to17:0,age18to64:0,age65plus:0,under5:0,age5plus:0,total:0}])),ageGroups=Object.fromEntries(groups.map(key=>[key,0])),seen=new Set(),unique=[];(records||[]).forEach(record=>{const id=String(record.mdsRecordId||record.id||'');if(id&&!seen.has(id)){seen.add(id);unique.push(record);}});unique.forEach(record=>{let age=Number(record.age);const unit=String(record.ageUnit||'years').toLowerCase();if(unit.startsWith('day')||unit.startsWith('hari'))age/=365.2425;else if(unit.startsWith('month')||unit.startsWith('bulan'))age/=12;const group=!Number.isFinite(age)||age<0?null:age<1?'under1':age<5?'age1to4':age<18?'age5to17':age<65?'age18to64':'age65plus';if(group)ageGroups[group]++;normalizeMdsCodes(record.mdsCodes).forEach(code=>{items[code].total++;if(group)items[code][group]++;});});Object.values(items).forEach(value=>{value.under5=value.under1+value.age1to4;value.age5plus=value.age5to17+value.age18to64+value.age65plus;});return {patientCount:unique.length,ageGroups,items};}
+async function clinicalMdsLinkError(value){const missionId=cleanText(value.missionId,100),mdsId=cleanText(value.mdsId,100);if(!mdsId)return 'ID MDS diperlukan.';return (await getList('myemt/mds.json',[])).some(item=>String(item.id)===mdsId&&String(item.missionId)===missionId)?'':'Rekod MDS tidak sepadan dengan misi.';}
+function calculateStoredMdsTally(records,activityDate){const groups=['under1','age1to4','age5to17','age18to64','age65plus'],items=Object.fromEntries(Array.from({length:50},(_,i)=>[i+1,{under1:0,age1to4:0,age5to17:0,age18to64:0,age65plus:0,under5:0,age5plus:0,total:0}])),ageGroups=Object.fromEntries(groups.map(key=>[key,0])),seen=new Set(),unique=[],warnings=[];(records||[]).forEach(record=>{const id=String(record.mdsRecordId||record.id||'');if(id&&!seen.has(id)){seen.add(id);unique.push(record);}});unique.forEach(record=>{let age=null,dob=String(record.dateOfBirth||record.dob||'').slice(0,10),at=String(activityDate||'').slice(0,10);if(/^\d{4}-\d{2}-\d{2}$/.test(dob)&&/^\d{4}-\d{2}-\d{2}$/.test(at)){const birth=new Date(`${dob}T00:00:00Z`),date=new Date(`${at}T00:00:00Z`);if(date>=birth)age=(date-birth)/(365.2425*86400000);}if(age===null){age=Number(record.age);const unit=String(record.ageUnit||'years').toLowerCase();if(unit.startsWith('day')||unit.startsWith('hari'))age/=365.2425;else if(unit.startsWith('month')||unit.startsWith('bulan'))age/=12;}const group=!Number.isFinite(age)||age<0?null:age<1?'under1':age<5?'age1to4':age<18?'age5to17':age<65?'age18to64':'age65plus',codes=normalizeMdsCodes(record.mdsCodes),sex=codes.filter(code=>code<=3);if(group)ageGroups[group]++;else warnings.push(`Umur tidak sah: ${record.mdsRecordId||record.id||'rekod tanpa ID'}`);if(sex.length!==1)warnings.push(`Kategori jantina tidak konsisten: ${record.mdsRecordId||record.id||'rekod tanpa ID'}`);codes.forEach(code=>{items[code].total++;if(group)items[code][group]++;});});Object.values(items).forEach(value=>{value.under5=value.under1+value.age1to4;value.age5plus=value.age5to17+value.age18to64+value.age65plus;});const validAge=Object.values(ageGroups).reduce((sum,value)=>sum+value,0),sexTotal=items[1].total+items[2].total+items[3].total;if(validAge!==unique.length)warnings.push('Jumlah kumpulan umur tidak sama dengan jumlah pesakit.');if(sexTotal!==unique.length)warnings.push('Jumlah MDS 1–3 tidak sama dengan jumlah pesakit.');return {patientCount:unique.length,ageGroups,items,warnings};}
 const COURSE_COMPONENTS = ['B-Course','C-Course','TTX','FTX'];
 
 function normalizeCourseApplication(application={}) {
@@ -1370,6 +1373,10 @@ const getAssets =
 
 function validateMissionLogistics(resource,body){
   const allowed=resource==='transport'?['Tersedia','Digunakan','Penyelenggaraan','Sedia Digunakan']:['Aktif','Digunakan','Sedia Digunakan','Penyelenggaraan','Tidak Digunakan'];
+  const latitude=Number(body.latitude),longitude=Number(body.longitude),hasLatitude=body.latitude!==''&&body.latitude!==null&&body.latitude!==undefined,hasLongitude=body.longitude!==''&&body.longitude!==null&&body.longitude!==undefined;
+  if(hasLatitude!==hasLongitude)return 'Latitud dan longitud mesti diberikan bersama.';
+  if(!hasLatitude)return 'Titik lokasi logistik mesti dipilih pada peta.';
+  if(hasLatitude&&(!Number.isFinite(latitude)||!Number.isFinite(longitude)||latitude< -90||latitude>90||longitude< -180||longitude>180))return 'Koordinat lokasi logistik tidak sah.';
   if(resource==='transport'){
     if(!cleanText(body.vehicleName||body.name,200)||!cleanText(body.vehicleType||body.type,100)||!cleanText(body.registrationNumber||body.plate,50))return 'Nama, jenis dan nombor pendaftaran kenderaan diperlukan.';
     if((body.vehicleType==='Lain-lain'||body.vehicleType==='others')&&!cleanText(body.otherVehicleType,100))return 'Sila nyatakan jenis kenderaan lain.';
@@ -1388,6 +1395,40 @@ function validateMissionLogistics(resource,body){
   if(!allowed.includes(body.status))return 'Status logistik tidak sah.';
   return '';
 }
+
+function validateStoreLocation(body){
+  const latitude=Number(body.latitude),longitude=Number(body.longitude);
+  if(!cleanText(body.name,200)||!cleanText(body.code,50)||!cleanText(body.state,100)||!cleanText(body.type,100)||!cleanText(body.address,500))return 'Nama, kod, negeri, jenis dan alamat lokasi diperlukan.';
+  if(!Number.isFinite(Number(body.capacity))||Number(body.capacity)<0)return 'Kapasiti penyimpanan tidak sah.';
+  if(body.latitude===''||body.latitude===null||body.latitude===undefined||body.longitude===''||body.longitude===null||body.longitude===undefined)return 'Titik lokasi stor mesti dipilih pada peta.';
+  if(!Number.isFinite(latitude)||!Number.isFinite(longitude)||latitude< -90||latitude>90||longitude< -180||longitude>180)return 'Koordinat lokasi stor tidak sah.';
+  if(!['Aktif','Dalam Penyelenggaraan','Tidak Aktif'].includes(body.status))return 'Status lokasi stor tidak sah.';
+  return '';
+}
+
+function validateDispensaryRecord(body){
+  const status=cleanText(body.status,50),items=Array.isArray(body.prescriptions)?body.prescriptions:[];
+  if(!body.dispenseDate||!validDate(body.dispenseDate))return 'Tarikh pendispensan yang sah diperlukan.';
+  if(!cleanText(body.dispensaryLocation,300))return 'Lokasi dispensari diperlukan.';
+  if(!cleanText(body.officerName,200))return 'Nama pegawai yang mendispens diperlukan.';
+  if(!['Lengkap','Sebahagian','Tidak dapat dibekalkan'].includes(status))return 'Status pendispensan tidak sah.';
+  if(!items.length)return 'Sekurang-kurangnya satu ubat diperlukan.';
+  for(const item of items){
+    const prescribed=Number(item.kuantitiDipreskripsi),dispensed=Number(item.kuantitiDidispens);
+    if(!cleanText(item.namaUbat||item.name||item.medication,200)||!cleanText(item.dos||item.dose,100)||!cleanText(item.kekerapan||item.frequency,100))return 'Nama ubat, dos dan kekerapan diperlukan.';
+    if(!Number.isInteger(prescribed)||prescribed<1||!Number.isInteger(dispensed)||dispensed<0||dispensed>prescribed)return 'Kuantiti dipreskripsi atau didispens tidak sah.';
+    if(item.expiryDate&&!validDate(item.expiryDate))return 'Tarikh luput ubat tidak sah.';
+  }
+  if(status==='Lengkap'&&items.some(item=>Number(item.kuantitiDidispens)!==Number(item.kuantitiDipreskripsi)))return 'Status Lengkap memerlukan semua kuantiti didispens sama dengan kuantiti dipreskripsi.';
+  if(status==='Sebahagian'&&(!items.some(item=>Number(item.kuantitiDidispens)>0)||!items.some(item=>Number(item.kuantitiDidispens)<Number(item.kuantitiDipreskripsi))))return 'Status Sebahagian memerlukan sekurang-kurangnya satu kuantiti diberi dan satu kekurangan.';
+  if(status==='Tidak dapat dibekalkan'&&items.some(item=>Number(item.kuantitiDidispens)!==0))return 'Status Tidak dapat dibekalkan memerlukan kuantiti didispens sifar.';
+  if(status!=='Lengkap'&&!cleanText(body.incompleteReason,200))return 'Sebab pendispensan tidak lengkap diperlukan.';
+  return '';
+}
+
+function validateMedicineInventory(body){const quantity=Number(body.quantity),minimumStock=Number(body.minimumStock??0);if(!cleanText(body.name,200)||!cleanText(body.strength,100)||!cleanText(body.form,100)||!cleanText(body.unit,40)||!cleanText(body.batchNumber,100))return 'Nama, kekuatan, bentuk, unit dan nombor batch diperlukan.';if(!body.expiryDate||!validDate(body.expiryDate))return 'Tarikh luput yang sah diperlukan.';if(!Number.isInteger(quantity)||quantity<0||!Number.isInteger(minimumStock)||minimumStock<0)return 'Kuantiti atau paras stok minimum tidak sah.';return '';}
+const isMedicineAsset=body=>/farmasi|pharmacy|medicine|drug/i.test([body.category,body.subCategory].join(' '))||(/^ubat\b/i.test(String(body.name||'').trim())&&/bekalan|supply|consumable|boleh habis/i.test(body.assetType||''));
+function applyMedicineStock(inventory,oldItems,newItems,missionId,recordId,dispenseDate){const next=inventory.map(item=>({...item,stockMovements:Array.isArray(item.stockMovements)?[...item.stockMovements]:[]})),now=new Date().toISOString(),normalized=value=>String(value||'').trim().toLowerCase().replace(/\s+/g,' ');for(const item of oldItems||[]){const quantity=Number(item.kuantitiDidispens||0);if(!quantity||!item.inventoryItemId)continue;const stock=next.find(value=>String(value.id)===String(item.inventoryItemId)&&String(value.missionId)===String(missionId));if(stock){stock.quantity=Number(stock.quantity||0)+quantity;stock.stockMovements.push({id:makeId('MEDMOV'),type:'IN',quantity,balanceAfter:stock.quantity,dispensaryRecordId:recordId,date:now,note:'Pelarasan semula rekod pendispensan'});}}for(const item of newItems||[]){const quantity=Number(item.kuantitiDidispens||0);if(!quantity)continue;if(!item.inventoryItemId)return {error:`Pilih batch inventori untuk ${cleanText(item.namaUbat||item.name,200)||'ubat'}.`};const stock=next.find(value=>String(value.id)===String(item.inventoryItemId)&&String(value.missionId)===String(missionId));if(!stock)return {error:'Batch inventori ubat tidak dijumpai dalam misi ini.'};if(normalized(stock.name)!==normalized(item.namaUbat||item.name))return {error:'Batch inventori tidak sepadan dengan nama ubat yang dipreskripsi.'};if(stock.expiryDate&&String(stock.expiryDate)<String(dispenseDate))return {error:`Batch ${stock.batchNumber} telah luput.`};if(Number(stock.quantity||0)<quantity)return {error:`Stok ${stock.name} batch ${stock.batchNumber} tidak mencukupi.`};stock.quantity=Number(stock.quantity)-quantity;stock.updatedAt=now;stock.stockMovements.push({id:makeId('MEDMOV'),type:'OUT',quantity,balanceAfter:stock.quantity,dispensaryRecordId:recordId,date:now,note:`Didispens kepada pesakit (${recordId})`});item.batchNumber=stock.batchNumber;item.expiryDate=stock.expiryDate;item.inventoryItemId=stock.id;}return {inventory:next};}
 
 
 const getStorage =
@@ -1494,16 +1535,28 @@ function err(
 exports.handler =
 async (event) => {
 
-  const method =
+  const method = String(
     event.httpMethod ||
     event.requestContext?.http?.method ||
-    'GET';
+    'GET'
+  ).toUpperCase();
 
 
-  const path =
-    event.path ||
+  const rawRequestPath =
     event.rawPath ||
+    event.path ||
     '/';
+
+  // API Gateway REST API may include the deployment stage in event.path,
+  // while HTTP API normally supplies rawPath without it. Normalise both
+  // formats and an optional trailing slash before matching application routes.
+  const stage = event.requestContext?.stage;
+  const stagePrefix = stage && stage !== '$default' ? `/${stage}` : '';
+  let path = String(rawRequestPath);
+  if (stagePrefix && (path === stagePrefix || path.startsWith(`${stagePrefix}/`))) {
+    path = path.slice(stagePrefix.length) || '/';
+  }
+  if (path.length > 1) path = path.replace(/\/+$/, '');
 
 
   const qs =
@@ -1701,10 +1754,7 @@ async (event) => {
         ...memberData,
 
         id:
-          'M' +
-          String(
-            Date.now()
-          ).slice(-6),
+          makeId('M'),
 
         submittedAt:
           today(),
@@ -2022,6 +2072,18 @@ async (event) => {
 
         'apc_file_data',
 
+        'passport_file_name',
+
+        'passport_file_type',
+
+        'passport_file_data',
+
+        'mission_document_name',
+
+        'mission_document_type',
+
+        'mission_document_data',
+
         'lampiran_ketua_jabatan_name',
 
         'lampiran_ketua_jabatan_type',
@@ -2224,10 +2286,7 @@ async (event) => {
       const mission = {
 
         id:
-          'MSN' +
-          String(
-            Date.now()
-          ).slice(-6),
+          makeId('MSN'),
 
         createdAt:
           today(),
@@ -2402,7 +2461,7 @@ async (event) => {
       if (!Number.isInteger(quota) || quota < 1) return err(400, 'Kuota peserta tidak sah.');
       if (!allowedStatuses.includes(body.status)) return err(400, 'Status sesi tidak sah.');
       const now = new Date().toISOString();
-const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).trim(), level:body.level, startDate:body.startDate, endDate:body.endDate, location:String(body.location).trim(), latitude:Number(body.latitude)||null, longitude:Number(body.longitude)||null, attendanceRadiusM:Math.max(50,Number(body.attendanceRadiusM)||300), quota, status:body.status, objective:String(body.objective||'').trim(), components:COURSE_COMPONENTS, tentative:Array.isArray(body.tentative)?body.tentative:[], createdAt:now, updatedAt:now };
+const session = { id:makeId('S'), name:String(body.name).trim(), level:body.level, startDate:body.startDate, endDate:body.endDate, location:String(body.location).trim(), latitude:Number.isFinite(Number(body.latitude))?Number(body.latitude):null, longitude:Number.isFinite(Number(body.longitude))?Number(body.longitude):null, attendanceRadiusM:Math.max(50,Number(body.attendanceRadiusM)||300), quota, status:body.status, objective:String(body.objective||'').trim(), components:COURSE_COMPONENTS, tentative:Array.isArray(body.tentative)?body.tentative:[], createdAt:now, updatedAt:now };
       list.push(session); await saveSessions(list);
       return ok({ success:true, message:'Sesi kursus berjaya ditambah.', data:session });
     }
@@ -2589,10 +2648,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
         components: Array.isArray(session.components) && session.components.length ? session.components : [],
 
         id:
-          'CA' +
-          String(
-            Date.now()
-          ).slice(-6),
+          makeId('CA'),
 
         submittedAt:
           today(),
@@ -2972,7 +3028,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       const report=(await getDailyReports()).find(item=>String(item.missionId)===missionId&&String(item.activityDate||item.reportDate||item.date)===activityDate&&normalizeDailyStatus(item.status)==='SUBMITTED');
       if(!report)return err(409,'Laporan Harian bagi misi dan tarikh ini belum dihantar.','DAILY_REPORT_NOT_SUBMITTED');
       const seen=new Set(),records=(await getMds()).filter(item=>String(item.missionId)===missionId&&String(item.activityDate||item.date)===activityDate).filter(item=>{const id=String(item.mdsRecordId||item.id||'');if(!id||seen.has(id))return false;seen.add(id);return true;});
-      return ok({success:true,data:{context:{missionId,activityDate},dailyReportId:report.id,tally:calculateStoredMdsTally(records)}});
+      return ok({success:true,data:{context:{missionId,activityDate},dailyReportId:report.id,tally:calculateStoredMdsTally(records,activityDate)}});
     }
 
     if(method==='GET'&&path==='/api/notifications'){
@@ -2983,6 +3039,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
     if(method==='POST'&&path==='/api/notifications'){
       const missionId=cleanText(body.missionId,100),patientName=cleanText(body.patientName,200),notificationDate=body.notificationDate;
       if(!missionId||!patientName||!notificationDate||!validDate(notificationDate))return err(400,'ID misi, nama pesakit dan tarikh notifikasi yang sah diperlukan.');
+      const linkError=await clinicalMdsLinkError(body);if(linkError)return err(409,linkError);
       if(!(await getMissions()).some(item=>String(item.id)===String(missionId)))return err(404,'Misi tidak dijumpai.');
       const list=await getNotifications(),now=new Date().toISOString(),item={...body,id:makeId('NTF'),missionId,patientName,notificationDate,createdAt:now,updatedAt:now};
       list.push(item);await s3Put('myemt/notifications.json',list);
@@ -2999,7 +3056,8 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       const {id:ignoredId,missionId:ignoredMissionId,createdAt:ignoredCreatedAt,...updates}=body||{};
       if(updates.notificationDate&&!validDate(updates.notificationDate))return err(400,'Tarikh notifikasi tidak sah.');
       if(updates.patientName!==undefined&&!cleanText(updates.patientName,200))return err(400,'Nama pesakit diperlukan.');
-      list[index]={...list[index],...updates,id:list[index].id,missionId:list[index].missionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};
+      const candidate={...list[index],...updates,missionId:list[index].missionId},linkError=await clinicalMdsLinkError(candidate);if(linkError)return err(409,linkError);
+      list[index]={...candidate,id:list[index].id,missionId:list[index].missionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};
       await s3Put('myemt/notifications.json',list);
       return ok({success:true,message:'Rekod notifikasi berjaya dikemas kini.',data:list[index]});
     }
@@ -3011,6 +3069,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
     if(method==='POST'&&path==='/api/discharges'){
       const missionId=cleanText(body.missionId,100),patientName=cleanText(body.patientName,200),dischargeDate=body.dischargeDate;
       if(!missionId||!patientName||!dischargeDate||!validDate(dischargeDate))return err(400,'ID misi, nama pesakit dan tarikh discaj yang sah diperlukan.');
+      const linkError=await clinicalMdsLinkError(body);if(linkError)return err(409,linkError);
       if(!(await getMissions()).some(item=>String(item.id)===String(missionId)))return err(404,'Misi tidak dijumpai.');
       const list=await getDischarges(),now=new Date().toISOString(),item={...body,id:makeId('DCJ'),missionId,patientName,dischargeDate,createdAt:now,updatedAt:now};list.push(item);await s3Put('myemt/discharges.json',list);
       return ok({success:true,message:'Rekod discaj berjaya disimpan.',data:item});
@@ -3021,7 +3080,8 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       const list=await getDischarges(),index=list.findIndex(value=>String(value.id)===String(dischargeMatch[1]));if(index<0)return err(404,'Rekod discaj tidak dijumpai.');
       const {id:ignoredId,missionId:ignoredMissionId,createdAt:ignoredCreatedAt,...updates}=body||{};
       if(updates.dischargeDate&&!validDate(updates.dischargeDate))return err(400,'Tarikh discaj tidak sah.');if(updates.patientName!==undefined&&!cleanText(updates.patientName,200))return err(400,'Nama pesakit diperlukan.');
-      list[index]={...list[index],...updates,id:list[index].id,missionId:list[index].missionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};await s3Put('myemt/discharges.json',list);
+      const candidate={...list[index],...updates,missionId:list[index].missionId},linkError=await clinicalMdsLinkError(candidate);if(linkError)return err(409,linkError);
+      list[index]={...candidate,id:list[index].id,missionId:list[index].missionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};await s3Put('myemt/discharges.json',list);
       return ok({success:true,message:'Rekod discaj berjaya dikemas kini.',data:list[index]});
     }
 
@@ -3029,15 +3089,26 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
     if(method==='POST'&&path==='/api/incidents'){
       const missionId=cleanText(body.missionId,100),patientName=cleanText(body.patientName,200),reportDate=body.reportDate,incidentDate=body.incidentDate||body.estimatedIncidentDate;
       if(!missionId||!patientName||!reportDate||!validDate(reportDate)||!incidentDate||!validDate(incidentDate))return err(400,'ID misi, nama pesakit, tarikh laporan dan tarikh insiden yang sah diperlukan.');if(!(await getMissions()).some(item=>String(item.id)===String(missionId)))return err(404,'Misi tidak dijumpai.');
+      const linkError=await clinicalMdsLinkError(body);if(linkError)return err(409,linkError);
       const list=await getIncidents(),now=new Date().toISOString(),item={...body,id:makeId('IR'),missionId,patientName,reportDate,createdAt:now,updatedAt:now};list.push(item);await s3Put('myemt/incidents.json',list);return ok({success:true,message:'Laporan insiden berjaya disimpan.',data:item});
     }
     const incidentMatch=path.match(/^\/api\/incidents\/([^/]+)$/);
     if(method==='GET'&&incidentMatch){const item=(await getIncidents()).find(value=>String(value.id)===String(incidentMatch[1]));return item?ok({success:true,data:item}):err(404,'Rekod insiden tidak dijumpai.');}
-    if(method==='PATCH'&&incidentMatch){const list=await getIncidents(),index=list.findIndex(value=>String(value.id)===String(incidentMatch[1]));if(index<0)return err(404,'Rekod insiden tidak dijumpai.');const{id:ignoredId,missionId:ignoredMissionId,createdAt:ignoredCreatedAt,...updates}=body||{};for(const key of ['reportDate','incidentDate','estimatedIncidentDate','reporterReportDate','eirSubmissionDate','verificationDate'])if(updates[key]&&!validDate(updates[key]))return err(400,`Tarikh ${key} tidak sah.`);if(updates.patientName!==undefined&&!cleanText(updates.patientName,200))return err(400,'Nama pesakit diperlukan.');list[index]={...list[index],...updates,id:list[index].id,missionId:list[index].missionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};await s3Put('myemt/incidents.json',list);return ok({success:true,message:'Laporan insiden berjaya dikemas kini.',data:list[index]});}
+    if(method==='PATCH'&&incidentMatch){const list=await getIncidents(),index=list.findIndex(value=>String(value.id)===String(incidentMatch[1]));if(index<0)return err(404,'Rekod insiden tidak dijumpai.');const{id:ignoredId,missionId:ignoredMissionId,createdAt:ignoredCreatedAt,...updates}=body||{};for(const key of ['reportDate','incidentDate','estimatedIncidentDate','reporterReportDate','eirSubmissionDate','verificationDate'])if(updates[key]&&!validDate(updates[key]))return err(400,`Tarikh ${key} tidak sah.`);if(updates.patientName!==undefined&&!cleanText(updates.patientName,200))return err(400,'Nama pesakit diperlukan.');const candidate={...list[index],...updates,missionId:list[index].missionId},linkError=await clinicalMdsLinkError(candidate);if(linkError)return err(409,linkError);list[index]={...candidate,id:list[index].id,missionId:list[index].missionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};await s3Put('myemt/incidents.json',list);return ok({success:true,message:'Laporan insiden berjaya dikemas kini.',data:list[index]});}
 
     if(method==='GET'&&path==='/api/mission-reports'){let list=await getMissionReports();if(qs.missionId)list=list.filter(item=>String(item.missionId)===String(qs.missionId));if(qs.type)list=list.filter(item=>String(item.type)===String(qs.type));return ok({success:true,data:list,total:list.length});}
-    if(method==='POST'&&path==='/api/mission-reports'){const missionId=cleanText(body.missionId,100),type=cleanText(body.type,30);if(!missionId||!['exit','lessons'].includes(type))return err(400,'ID misi dan jenis laporan yang sah diperlukan.');if(!(await getMissions()).some(item=>String(item.id)===String(missionId)))return err(404,'Misi tidak dijumpai.');const list=await getMissionReports(),now=new Date().toISOString(),index=list.findIndex(item=>String(item.missionId)===missionId&&item.type===type),payload={...body,missionId,type,updatedAt:now};if(index>=0)list[index]={...list[index],...payload,id:list[index].id,createdAt:list[index].createdAt};else list.push({...payload,id:makeId(type==='exit'?'EXT':'LLR'),createdAt:now});await s3Put('myemt/mission-reports.json',list);return ok({success:true,message:'Laporan misi berjaya disimpan.',data:index>=0?list[index]:list[list.length-1]});}
-    for(const resource of [{path:'observations',key:'myemt/observations.json',get:getObservations,prefix:'OBS',label:'observasi',date:'observationDate'},{path:'referrals',key:'myemt/referrals.json',get:getReferrals,prefix:'REF',label:'rujukan',date:'referralDate'}]){if(method==='GET'&&path===`/api/${resource.path}`){let list=await resource.get();if(qs.missionId)list=list.filter(item=>String(item.missionId)===String(qs.missionId));return ok({success:true,data:list,total:list.length});}const match=path.match(new RegExp(`^/api/${resource.path}/([^/]+)$`));if(method==='GET'&&match){const item=(await resource.get()).find(value=>String(value.id)===String(match[1]));return item?ok({success:true,data:item}):err(404,`Rekod ${resource.label} tidak dijumpai.`);}if(method==='POST'&&path===`/api/${resource.path}`){const missionId=cleanText(body.missionId,100),patientName=cleanText(body.patientName,200),date=body[resource.date];if(!missionId||!patientName||!date||!validDate(date))return err(400,'ID misi, nama pesakit dan tarikh yang sah diperlukan.');if(!(await getMissions()).some(item=>String(item.id)===missionId))return err(404,'Misi tidak dijumpai.');if(body.mdsId&&!(await getList('myemt/mds.json',[])).some(item=>String(item.id)===String(body.mdsId)&&String(item.missionId)===missionId))return err(409,'Rekod MDS tidak sepadan dengan misi.');const list=await resource.get(),now=new Date().toISOString(),item={...body,id:makeId(resource.prefix),missionId,patientName,createdAt:now,updatedAt:now};list.push(item);await s3Put(resource.key,list);return ok({success:true,message:`Rekod ${resource.label} berjaya disimpan.`,data:item});}if(method==='PATCH'&&match){const list=await resource.get(),index=list.findIndex(item=>String(item.id)===String(match[1]));if(index<0)return err(404,`Rekod ${resource.label} tidak dijumpai.`);const {id:ignoredId,missionId:ignoredMission,createdAt:ignoredCreated,...updates}=body||{};if(updates[resource.date]&&!validDate(updates[resource.date]))return err(400,'Tarikh tidak sah.');list[index]={...list[index],...updates,id:list[index].id,missionId:list[index].missionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};await s3Put(resource.key,list);return ok({success:true,message:`Rekod ${resource.label} berjaya dikemas kini.`,data:list[index]});}}
+    if(method==='POST'&&path==='/api/mission-reports'){const missionId=cleanText(body.missionId,100),type=cleanText(body.type,30),fields=body.fields&&typeof body.fields==='object'&&!Array.isArray(body.fields)?body.fields:null,status=String(body.status||'DRAFT').toUpperCase();if(!missionId||!['exit','lessons'].includes(type)||!fields)return err(400,'ID misi, jenis laporan dan kandungan berstruktur yang sah diperlukan.');if(!['DRAFT','SUBMITTED'].includes(status))return err(400,'Status laporan tidak sah.');if(!(await getMissions()).some(item=>String(item.id)===String(missionId)))return err(404,'Misi tidak dijumpai.');const required=type==='exit'?['incidentName','teamName','deploymentStart','deploymentEnd','preparedBy','reportDate']:['incidentName','teamName','deploymentStart','deploymentEnd','goodPractices','preparedBy','reportDate'],complete=required.filter(key=>cleanText(fields[key],500)).length,completeness=Math.round(complete/required.length*100);if(status==='SUBMITTED'&&completeness<100)return err(400,`Laporan belum lengkap. Lengkapkan: ${required.filter(key=>!cleanText(fields[key],500)).join(', ')}.`);const list=await getMissionReports(),now=new Date().toISOString(),index=list.findIndex(item=>String(item.missionId)===missionId&&item.type===type),history=index>=0?(Array.isArray(list[index].statusHistory)?list[index].statusHistory:[]):[],payload={missionId,type,fields,status,completeness,submittedAt:status==='SUBMITTED'?(list[index]?.submittedAt||now):null,updatedAt:now,statusHistory:[...history,{status,changedAt:now}]};if(index>=0)list[index]={...list[index],...payload,id:list[index].id,createdAt:list[index].createdAt};else list.push({...payload,id:makeId(type==='exit'?'EXT':'LLR'),createdAt:now});await s3Put('myemt/mission-reports.json',list);const item=index>=0?list[index]:list[list.length-1];return ok({success:true,message:status==='SUBMITTED'?'Laporan misi berjaya dihantar.':'Draf laporan berjaya disimpan.',data:item});}
+    for(const resource of [{path:'observations',key:'myemt/observations.json',get:getObservations,prefix:'OBS',label:'observasi',date:'observationDate'},{path:'referrals',key:'myemt/referrals.json',get:getReferrals,prefix:'REF',label:'rujukan',date:'referralDate'}]){if(method==='GET'&&path===`/api/${resource.path}`){let list=await resource.get();if(qs.missionId)list=list.filter(item=>String(item.missionId)===String(qs.missionId));return ok({success:true,data:list,total:list.length});}const match=path.match(new RegExp(`^/api/${resource.path}/([^/]+)$`));if(method==='GET'&&match){const item=(await resource.get()).find(value=>String(value.id)===String(match[1]));return item?ok({success:true,data:item}):err(404,`Rekod ${resource.label} tidak dijumpai.`);}if(method==='POST'&&path===`/api/${resource.path}`){const missionId=cleanText(body.missionId,100),patientName=cleanText(body.patientName,200),date=body[resource.date];if(!missionId||!patientName||!date||!validDate(date))return err(400,'ID misi, nama pesakit dan tarikh yang sah diperlukan.');if(!(await getMissions()).some(item=>String(item.id)===missionId))return err(404,'Misi tidak dijumpai.');const linkError=await clinicalMdsLinkError(body);if(linkError)return err(409,linkError);const list=await resource.get(),now=new Date().toISOString(),item={...body,id:makeId(resource.prefix),missionId,patientName,createdAt:now,updatedAt:now};list.push(item);await s3Put(resource.key,list);return ok({success:true,message:`Rekod ${resource.label} berjaya disimpan.`,data:item});}if(method==='PATCH'&&match){const list=await resource.get(),index=list.findIndex(item=>String(item.id)===String(match[1]));if(index<0)return err(404,`Rekod ${resource.label} tidak dijumpai.`);const {id:ignoredId,missionId:ignoredMission,createdAt:ignoredCreated,...updates}=body||{},candidate={...list[index],...updates,missionId:list[index].missionId};if(updates[resource.date]&&!validDate(updates[resource.date]))return err(400,'Tarikh tidak sah.');if(updates.patientName!==undefined&&!cleanText(updates.patientName,200))return err(400,'Nama pesakit diperlukan.');const linkError=await clinicalMdsLinkError(candidate);if(linkError)return err(409,linkError);list[index]={...candidate,id:list[index].id,missionId:list[index].missionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};await s3Put(resource.key,list);return ok({success:true,message:`Rekod ${resource.label} berjaya dikemas kini.`,data:list[index]});}}
+
+    if(method==='GET'&&path==='/api/dispensary-records'){let list=await getDispensaryRecords();if(qs.missionId)list=list.filter(item=>String(item.missionId)===String(qs.missionId));if(qs.mdsId)list=list.filter(item=>String(item.mdsId)===String(qs.mdsId));return ok({success:true,data:list,total:list.length});}
+    if(method==='GET'&&path==='/api/medicine-inventory'){let list=await getMedicineInventory();if(qs.missionId)list=list.filter(item=>String(item.missionId)===String(qs.missionId));return ok({success:true,data:list,total:list.length});}
+    if(method==='POST'&&path==='/api/medicine-inventory'){const missionId=cleanText(body.missionId,100),sourceMedicineId=cleanText(body.sourceMedicineId,100),list=await getMedicineInventory(),now=new Date().toISOString();if(missionId&&!(await getMissions()).some(item=>String(item.id)===missionId))return err(404,'Misi tidak dijumpai.');let payload={...body,missionId:missionId||''},quantity=Number(body.quantity),source=null;if(sourceMedicineId){if(!missionId)return err(400,'Pemindahan stok MyEMT memerlukan ID misi.');source=list.find(item=>String(item.id)===sourceMedicineId&&!item.missionId);if(!source)return err(404,'Stok ubat MyEMT tidak dijumpai.');if(!Number.isInteger(quantity)||quantity<1||quantity>Number(source.quantity))return err(409,'Kuantiti diminta melebihi baki stok ubat MyEMT.');payload={...source,...body,id:undefined,missionId,sourceMedicineId:source.id,medicineOrigin:'MyEMT',procurementCategory:'Stok Ubat MyEMT',quantity,stockMovements:undefined};}const validation=validateMedicineInventory(payload);if(validation)return err(400,validation);const duplicate=list.find(item=>String(item.missionId||'')===String(missionId)&&String(item.batchNumber).toLowerCase()===String(payload.batchNumber).trim().toLowerCase()&&String(item.name).toLowerCase()===String(payload.name).trim().toLowerCase());if(duplicate&&!source)return err(409,'Ubat dan nombor batch ini telah wujud dalam inventori tersebut.');if(source){source.quantity=Number(source.quantity)-quantity;source.updatedAt=now;source.stockMovements=[...(source.stockMovements||[]),{id:makeId('MEDMOV'),type:'OUT',quantity,balanceAfter:source.quantity,missionId,date:now,note:`Dipindahkan kepada misi ${missionId}`}];if(duplicate){duplicate.quantity=Number(duplicate.quantity)+quantity;duplicate.updatedAt=now;duplicate.stockMovements=[...(duplicate.stockMovements||[]),{id:makeId('MEDMOV'),type:'IN',quantity,balanceAfter:duplicate.quantity,sourceMedicineId:source.id,date:now,note:'Diterima daripada stok ubat MyEMT'}];await s3Put('myemt/medicine-inventory.json',list);return ok({success:true,data:duplicate,message:`Stok dipindahkan. Baki stok MyEMT: ${source.quantity}.`},201);}}const item={...payload,id:makeId('MED'),quantity,minimumStock:Number(payload.minimumStock||0),createdAt:now,updatedAt:now,stockMovements:[{id:makeId('MEDMOV'),type:'IN',quantity,balanceAfter:quantity,sourceMedicineId:source?.id||'',date:now,note:source?'Diterima daripada stok ubat MyEMT':'Baki pembukaan'}]};list.push(item);await s3Put('myemt/medicine-inventory.json',list);return ok({success:true,data:item,message:source?`Stok dipindahkan. Baki stok MyEMT: ${source.quantity}.`:'Stok ubat berjaya ditambah.'},201);}
+    const medicineInventoryMatch=path.match(/^\/api\/medicine-inventory\/([^/]+)$/);
+    if(method==='PATCH'&&medicineInventoryMatch){const list=await getMedicineInventory(),index=list.findIndex(item=>String(item.id)===String(medicineInventoryMatch[1]));if(index<0)return err(404,'Stok ubat tidak dijumpai.');if(String(qs.missionId||'')!==String(list[index].missionId||''))return err(403,'Stok ubat bukan milik skop inventori ini.');const{id:ignoredId,missionId:ignoredMissionId,createdAt:ignoredCreatedAt,stockMovements:ignoredMovements,...updates}=body||{},candidate={...list[index],...updates},validation=validateMedicineInventory(candidate);if(validation)return err(400,validation);const before=Number(list[index].quantity),after=Number(candidate.quantity),movement=after===before?[]:[{id:makeId('MEDMOV'),type:after>before?'IN':'OUT',quantity:Math.abs(after-before),balanceAfter:after,date:new Date().toISOString(),note:'Pelarasan manual inventori'}];list[index]={...candidate,id:list[index].id,missionId:list[index].missionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString(),stockMovements:[...(list[index].stockMovements||[]),...movement]};await s3Put('myemt/medicine-inventory.json',list);return ok({success:true,data:list[index],message:'Stok ubat berjaya dikemas kini.'});}
+    const dispensaryMatch=path.match(/^\/api\/dispensary-records\/([^/]+)$/);
+    if(method==='GET'&&dispensaryMatch){const item=(await getDispensaryRecords()).find(value=>String(value.id)===String(dispensaryMatch[1]));if(!item)return err(404,'Rekod dispensari tidak dijumpai.');if(qs.missionId&&String(qs.missionId)!==String(item.missionId))return err(403,'Rekod dispensari bukan milik misi ini.');return ok({success:true,data:item});}
+    if(method==='POST'&&path==='/api/dispensary-records'){const missionId=cleanText(body.missionId,100),mdsId=cleanText(body.mdsId,100),validation=validateDispensaryRecord(body);if(!missionId||!mdsId)return err(400,'ID misi dan ID MDS diperlukan.');if(validation)return err(400,validation);const mdsList=await getList('myemt/mds.json',[]),mdsIndex=mdsList.findIndex(item=>String(item.id||item.mdsRecordId)===mdsId&&String(item.missionId)===missionId),mds=mdsList[mdsIndex];if(!mds)return err(409,'Rekod MDS tidak sepadan dengan misi.');const list=await getDispensaryRecords();if(list.some(item=>String(item.missionId)===missionId&&String(item.mdsId)===mdsId))return err(409,'Rekod MDS ini telah mempunyai rekod pendispensan. Gunakan tindakan Kemas Kini.');const now=new Date().toISOString(),id=makeId('DSP'),prescriptions=body.prescriptions.map(item=>({...item})),stockResult=applyMedicineStock(await getMedicineInventory(),[],prescriptions,missionId,id,body.dispenseDate);if(stockResult.error)return err(409,stockResult.error);const item={...body,prescriptions,id,missionId,mdsId,patientId:mds.patientId||mds.id||mds.mdsRecordId,patientName:mds.patientName||mds.fullName||'',diagnosis:mds.diagnosis||mds.clinicalNotes||mds.diseaseType||mds.traumaType||'',createdAt:now,updatedAt:now};await s3Put('myemt/medicine-inventory.json',stockResult.inventory);list.push(item);await s3Put('myemt/dispensary-records.json',list);mdsList[mdsIndex]={...mds,workflowStage:mds.workflowStage==='command_post_verified'?mds.workflowStage:'pharmacy_completed',recordStatus:mds.workflowStage==='command_post_verified'?mds.recordStatus:'Farmasi Selesai',pharmacyUserId:item.officerId||'',pharmacyUserName:item.officerName,pharmacyCompletedAt:now,updatedAt:now};await s3Put('myemt/mds.json',mdsList);return ok({success:true,message:'Ubat telah disahkan diberi dan baki stok dikemas kini.',data:item},201);}
+    if(method==='PATCH'&&dispensaryMatch){const list=await getDispensaryRecords(),index=list.findIndex(item=>String(item.id)===String(dispensaryMatch[1]));if(index<0)return err(404,'Rekod dispensari tidak dijumpai.');if(!qs.missionId||String(qs.missionId)!==String(list[index].missionId))return err(403,'Rekod dispensari bukan milik misi ini.');const{id:ignoredId,missionId:ignoredMissionId,mdsId:ignoredMdsId,patientId:ignoredPatientId,patientName:ignoredPatientName,diagnosis:ignoredDiagnosis,createdAt:ignoredCreatedAt,...updates}=body||{},candidate={...list[index],...updates,prescriptions:(updates.prescriptions||list[index].prescriptions).map(item=>({...item}))},validation=validateDispensaryRecord(candidate);if(validation)return err(400,validation);const stockResult=applyMedicineStock(await getMedicineInventory(),list[index].prescriptions,candidate.prescriptions,list[index].missionId,list[index].id,candidate.dispenseDate);if(stockResult.error)return err(409,stockResult.error);list[index]={...candidate,id:list[index].id,missionId:list[index].missionId,mdsId:list[index].mdsId,patientId:list[index].patientId,patientName:list[index].patientName,diagnosis:list[index].diagnosis,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};await s3Put('myemt/medicine-inventory.json',stockResult.inventory);await s3Put('myemt/dispensary-records.json',list);return ok({success:true,message:'Rekod pendispensan dan baki stok berjaya dikemas kini.',data:list[index]});}
 
 
 
@@ -3053,7 +3124,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
     ) {
 
       const list =
-        await getAssets();
+        (await getAssets()).filter(asset => !isMedicineAsset(asset));
 
 
       const byCategory =
@@ -3140,6 +3211,8 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       let list =
         await getAssets();
 
+      list = list.filter(asset => !isMedicineAsset(asset));
+
       if (qs.missionId) list = list.filter(asset => String(asset.missionId || '') === String(qs.missionId));
 
 
@@ -3171,6 +3244,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       const currentStatuses = ['Tersedia','Digunakan','Penyelenggaraan','Rosak'];
       const finalStatuses = ['','Disumbangkan','Stok Habis','Rosak','Lain-lain'];
       const assetMissionId = cleanText(body.missionId,100);
+      if (isMedicineAsset(body)) return err(400,'Ubat mesti direkodkan dalam modul Inventori Ubat, bukan Inventori Aset.');
       if (!procurementCategories.includes(body.procurementCategory)) return err(400,'Kategori perolehan aset tidak sah.');
       if (body.minimumStockLevel !== undefined && (!Number.isInteger(Number(body.minimumStockLevel)) || Number(body.minimumStockLevel) < 0)) return err(400,'Paras stok minimum tidak sah.');
       if (/consumable|boleh habis guna/i.test(body.assetType||'') && !validDate(body.expiryDate)) return err(400,'Tarikh luput diperlukan untuk aset boleh habis guna.');
@@ -3208,10 +3282,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
         ...assetPayload,
 
         id:
-          'AST' +
-          String(
-            Date.now()
-          ).slice(-6),
+          makeId('AST'),
 
         createdAt:
           today(),
@@ -3245,6 +3316,14 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
           : `Aset berjaya dimasukkan ke misi. Baki stok MyEMT: ${sourceRemainingQuantity} unit.`
 
       });
+
+      const inventoryAssets = list.filter(asset => !asset.missionId);
+      const minimumStockOf = asset =>
+        asset.minimumStockLevel === undefined ||
+        asset.minimumStockLevel === null ||
+        asset.minimumStockLevel === ''
+          ? 2
+          : Number(asset.minimumStockLevel);
     }
 
 
@@ -3332,6 +3411,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
 
       const {id:ignoredAssetId,missionId:ignoredAssetMissionId,createdAt:ignoredAssetCreatedAt,stockMovements:ignoredStockMovements,...assetUpdates}=body||{};
       const updatedAsset = { ...list[index], ...assetUpdates };
+      if (isMedicineAsset(updatedAsset)) return err(400,'Ubat mesti direkodkan dalam modul Inventori Ubat, bukan Inventori Aset.');
       const updateProcurementCategories = ['Penerimaan Sumbangan','Pembelian Terus','Aset MyEMT'];
       const updateCurrentStatuses = ['Tersedia','Digunakan','Penyelenggaraan','Rosak'];
       const updateFinalStatuses = ['','Disumbangkan','Stok Habis','Rosak','Lain-lain'];
@@ -3358,7 +3438,10 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
           list[index].missionId,
 
         createdAt:
-          list[index].createdAt
+          list[index].createdAt,
+
+        updatedAt:
+          new Date().toISOString()
 
       };
 
@@ -3396,26 +3479,27 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       if(method==='GET'&&recordId){
         const item=list.find(value=>String(value.id)===String(recordId));
         if(!item)return err(404,'Rekod logistik tidak dijumpai.');
-        if(!qs.missionId||String(item.missionId||'')!==String(qs.missionId))return err(403,'Rekod logistik ini hanya boleh dibuka melalui misi pemiliknya.');
+        if(String(item.missionId||'')!==String(qs.missionId||''))return err(403,item.missionId?'Rekod logistik ini hanya boleh dibuka melalui misi pemiliknya.':'Rekod logistik ini ialah milik pusat MyEMT.');
         return ok({success:true,data:item});
       }
       if(method==='POST'&&!recordId){
         const ownerMissionId=cleanText(body.missionId,100);
-        if(!ownerMissionId)return err(400,'ID misi diperlukan.');
-        if(!(await getMissions()).some(mission=>String(mission.id)===ownerMissionId))return err(404,'Misi tidak dijumpai.');
+        if(ownerMissionId&&!(await getMissions()).some(mission=>String(mission.id)===ownerMissionId))return err(404,'Misi tidak dijumpai.');
         const validationError=validateMissionLogistics(resource,body);if(validationError)return err(400,validationError);
         if(resource==='transport'&&list.some(item=>String(item.missionId||'')===ownerMissionId&&String(item.registrationNumber||item.plate||'').toLowerCase()===String(body.registrationNumber||'').toLowerCase()))return err(409,'Nombor pendaftaran ini telah digunakan dalam misi tersebut.');
-        const now=new Date().toISOString(),item={...body,missionId:ownerMissionId,id:makeId(resource==='transport'?'VEH':'STO'),createdAt:now,updatedAt:now};
+        if(resource==='storage'&&body.serialNumber&&list.some(item=>String(item.missionId||'')===ownerMissionId&&String(item.serialNumber||'').toLowerCase()===String(body.serialNumber).toLowerCase()))return err(409,'Nombor siri penyimpanan ini telah digunakan dalam misi tersebut.');
+        const now=new Date().toISOString(),item={...body,missionId:ownerMissionId||null,id:makeId(resource==='transport'?'VEH':'STO'),createdAt:now,updatedAt:now};
         list.push(item);await saveListFn(list);return ok({success:true,data:item,message:'Rekod logistik berjaya ditambah.'});
       }
       if(method==='PATCH'&&recordId){
         const index=list.findIndex(value=>String(value.id)===String(recordId));if(index<0)return err(404,'Rekod logistik tidak dijumpai.');
         const ownerMissionId=cleanText(list[index].missionId,100);
-        if(!qs.missionId||String(qs.missionId)!==ownerMissionId)return err(403,'Rekod logistik ini hanya boleh dikemas kini melalui misi pemiliknya.');
+        if(String(qs.missionId||'')!==ownerMissionId)return err(403,ownerMissionId?'Rekod logistik ini hanya boleh dikemas kini melalui misi pemiliknya.':'Rekod logistik pusat MyEMT tidak boleh dikemas kini sebagai rekod misi.');
         const {id:ignoredId,missionId:ignoredMissionId,createdAt:ignoredCreatedAt,...updates}=body||{};
         const candidate={...list[index],...updates};const validationError=validateMissionLogistics(resource,candidate);if(validationError)return err(400,validationError);
         if(resource==='transport'&&list.some((item,itemIndex)=>itemIndex!==index&&String(item.missionId||'')===ownerMissionId&&String(item.registrationNumber||item.plate||'').toLowerCase()===String(candidate.registrationNumber||candidate.plate||'').toLowerCase()))return err(409,'Nombor pendaftaran ini telah digunakan dalam misi tersebut.');
-        list[index]={...candidate,id:list[index].id,missionId:ownerMissionId,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};
+        if(resource==='storage'&&candidate.serialNumber&&list.some((item,itemIndex)=>itemIndex!==index&&String(item.missionId||'')===ownerMissionId&&String(item.serialNumber||'').toLowerCase()===String(candidate.serialNumber).toLowerCase()))return err(409,'Nombor siri penyimpanan ini telah digunakan dalam misi tersebut.');
+        list[index]={...candidate,id:list[index].id,missionId:ownerMissionId||null,createdAt:list[index].createdAt,updatedAt:new Date().toISOString()};
         await saveListFn(list);return ok({success:true,data:list[index],message:'Rekod logistik berjaya dikemas kini.'});
       }
     }
@@ -3462,10 +3546,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       const item = {
 
         id:
-          'STO' +
-          String(
-            Date.now()
-          ).slice(-6),
+          makeId('STO'),
 
         createdAt:
           today(),
@@ -3641,10 +3722,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       const item = {
 
         id:
-          'VEH-' +
-          String(
-            Date.now()
-          ).slice(-6),
+          makeId('VEH-'),
 
         createdAt:
           today(),
@@ -3791,7 +3869,6 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       const list =
         await getStores();
 
-
       const byState =
         {};
 
@@ -3880,19 +3957,23 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       const list =
         await getStores();
 
+      const validationError = validateStoreLocation(body);
+      if (validationError) return err(400, validationError);
+      if (list.some(store => String(store.code || '').toLowerCase() === String(body.code || '').toLowerCase())) return err(409, 'Kod lokasi stor telah digunakan.');
+
 
       const item = {
 
+        ...body,
+
         id:
-          'LOC-' +
-          String(
-            Date.now()
-          ).slice(-6),
+          makeId('LOC-'),
 
         createdAt:
-          today(),
+          new Date().toISOString(),
 
-        ...body
+        updatedAt:
+          new Date().toISOString()
 
       };
 
@@ -3990,15 +4071,25 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
         );
       }
 
+      const { id: ignoredId, createdAt: ignoredCreatedAt, ...updates } = body || {};
+      const candidate = { ...list[index], ...updates };
+      const validationError = validateStoreLocation(candidate);
+      if (validationError) return err(400, validationError);
+      if (list.some((store, storeIndex) => storeIndex !== index && String(store.code || '').toLowerCase() === String(candidate.code || '').toLowerCase())) return err(409, 'Kod lokasi stor telah digunakan.');
+
 
       list[index] = {
 
-        ...list[index],
-
-        ...body,
+        ...candidate,
 
         id:
-          list[index].id
+          list[index].id,
+
+        createdAt:
+          list[index].createdAt,
+
+        updatedAt:
+          new Date().toISOString()
 
       };
 
@@ -4186,12 +4277,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
 
       const recordId =
         requestedId ||
-        (
-          'MDS' +
-          String(
-            Date.now()
-          ).slice(-6)
-        );
+        makeId('MDS');
 
 
       /*
@@ -4414,6 +4500,12 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
         createdAt:
           ignoredCreatedAt,
 
+        missionId:
+          ignoredMissionId,
+
+        mdsRecordId:
+          ignoredMdsRecordId,
+
         ...updates
 
       } = body || {};
@@ -4422,9 +4514,10 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       const now =
         new Date().toISOString();
 
-      const mergedMds={...existing,...updates};
+      const mergedMds={...existing,...updates,missionId:existing.missionId};
       const contextProblem=validateMdsContext(mergedMds);
       if(contextProblem)return err(400,contextProblem);
+      if(!cleanText(mergedMds.patientName,200))return err(400,'Nama pesakit diperlukan.');
 
 
       /*
@@ -4437,12 +4530,25 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
        * pharmacy_completed
        * command_post_verified
        */
-      const newStage =
+      const requestedStage =
         updates.workflowStage ||
         existing.workflowStage ||
         'registered';
 
-      if(!['registered','doctor_completed','pharmacy_completed','command_post_verified'].includes(newStage))return err(400,'Peringkat aliran kerja tidak sah.');
+      const stages=['registered','doctor_completed','pharmacy_completed','command_post_verified'];
+      const currentStage=stages.includes(existing.workflowStage)?existing.workflowStage:'registered';
+      if(!stages.includes(requestedStage))return err(400,'Peringkat aliran kerja tidak sah.');
+      if(stages.indexOf(requestedStage)>stages.indexOf(currentStage)+1)return err(409,'Lengkapkan setiap peringkat MDS mengikut turutan: pendaftaran, doktor, farmasi dan Pos Kawalan.');
+      const newStage=stages.indexOf(requestedStage)<stages.indexOf(currentStage)?currentStage:requestedStage;
+
+      // Rekod yang mempunyai arahan ubat hanya boleh menamatkan peringkat
+      // farmasi melalui modul dispensari. Modul itu menyimpan audit serahan
+      // dan menolak stok secara atomik sebelum mengemas kini status MDS.
+      const prescribedMedications=Array.isArray(existing.medications)?existing.medications:(Array.isArray(mergedMds.medications)?mergedMds.medications:[]);
+      if(newStage==='pharmacy_completed'&&currentStage!=='pharmacy_completed'&&prescribedMedications.length){
+        const dispensed=(await getDispensaryRecords()).some(item=>String(item.missionId)===String(mergedMds.missionId)&&String(item.mdsId)===String(existing.id||existing.mdsRecordId));
+        if(!dispensed)return err(409,'Lengkapkan serahan ubat melalui modul Dispensari Ubat supaya rekod pendispensan disimpan dan stok ditolak.');
+      }
 
 
       /*
@@ -4453,12 +4559,12 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
       if (
         newStage ===
           'command_post_verified' &&
-        updates.finalConfirmed !== true
+        mergedMds.finalConfirmed !== true
       ) {
 
         return err(
           400,
-          'Pengesahan akhir Command Post diperlukan.'
+          'Pengesahan akhir Pos Kawalan diperlukan.'
         );
       }
 
@@ -4478,7 +4584,7 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
           'Farmasi Selesai',
 
         command_post_verified:
-          'Disahkan Command Post'
+          'Disahkan Pos Kawalan'
 
       };
 
@@ -4524,7 +4630,6 @@ const session = { id:'S'+String(Date.now()).slice(-6), name:String(body.name).tr
           newStage,
 
         recordStatus:
-          updates.recordStatus ||
           stageStatus[newStage] ||
           existing.recordStatus ||
           'Dalam Proses'

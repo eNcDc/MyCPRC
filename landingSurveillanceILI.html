@@ -20,9 +20,11 @@
   
 
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/portal-dashboard-theme.css" rel="stylesheet">
+  <link href="assets/css/surveillance-ili-theme.css" rel="stylesheet">
 </head>
 
-<body>
+<body class="ili-page">
 
 <div id="header"></div>
 
@@ -48,7 +50,7 @@
 
       <!-- ================= TAB NAVIGATION ================= -->
 
-      <ul class="nav doce-landing-tabs mb-4"
+      <ul class="nav nav-pills ili-main-tabs mb-4"
           id="iliLandingTabs"
           role="tablist">
 
@@ -61,7 +63,7 @@
         type="button">
 
         <i class="bi bi-speedometer2 me-1"></i>
-        Dashboard
+        Papan Pemuka
 
         </button>
 
@@ -110,6 +112,8 @@
       <div class="tab-pane fade show active"
           id="iliDashboardPane">
 
+        <div class="ili-pane-heading"><h3 class="h5 fw-bold mb-1">Papan Pemuka ILI</h3><p class="text-muted mb-0">Ringkasan kes, fasiliti pelapor dan trend pengawasan semasa.</p></div>
+
         <div id="ili-dashboard-content">
 
         </div>
@@ -122,6 +126,8 @@
 
       <div class="tab-pane fade"
           id="iliForecastPane">
+
+        <div class="ili-pane-heading"><h3 class="h5 fw-bold mb-1">Analitik dan Ramalan ILI</h3><p class="text-muted mb-0">Pantau trend, lokasi kes aktif dan corak diagnosis mengikut tempoh.</p></div>
 
         <div id="ili-forecast-content">
 
@@ -136,9 +142,11 @@
       <div class="tab-pane fade"
           id="iliReportPane">
 
+          <div class="ili-pane-heading"><h3 class="h5 fw-bold mb-1">Senarai Laporan ILI</h3><p class="text-muted mb-0">Cari dan semak rekod pengawasan yang dihantar oleh fasiliti kesihatan.</p></div>
+
           <!-- BUTTON -->
 
-        <div class="d-flex justify-content-end mb-4">
+        <div class="d-none">
 
           <a href="ili_form.html"
             class="btn btn-primary">
@@ -153,7 +161,7 @@
 
 <!-- ================= SUMMARY CARD ================= -->
 
-<div class="row g-3 mb-4">
+<div class="row g-3 mb-4 ili-report-summary">
 
 
 <!-- JUMLAH BORANG -->
@@ -306,7 +314,7 @@
 
       <!-- FILTER -->
 
-      <div class="card shadow-sm mb-4">
+      <div class="card shadow-sm mb-4 ili-report-filter">
 
 
       <div class="card-body">
@@ -422,7 +430,7 @@
       <!-- REPORT TABLE -->
 
 
-      <div class="card shadow-sm">
+      <div class="card shadow-sm ili-report-table">
 
         <div class="card-header bg-white">
           <strong>
@@ -924,5 +932,6 @@ filterILITable
 <script src="assets/js/surveillance-records.js"></script>
 
 
+<script src="assets/js/portal-dashboard-theme.js"></script>
 </body>
 </html>

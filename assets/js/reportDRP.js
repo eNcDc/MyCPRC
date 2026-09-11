@@ -6,7 +6,7 @@ const defaultDrpReports = [
     createdAt: "2026-01-12T08:00:00",
     status: "Dihantar",
 
-    kategori: "Semula Jadi",
+    kategori: "Bencana Semula Jadi",
     negeri: "Kelantan",
     daerah: "Kota Bharu",
     mukim: "Pengkalan Chepa",
@@ -29,7 +29,7 @@ const defaultDrpReports = [
     createdAt: "2026-01-10T08:00:00",
     status: "Draf",
 
-    kategori: "Semula Jadi",
+    kategori: "Bencana Semula Jadi",
     negeri: "Pahang",
     daerah: "Bentong",
     mukim: "Janda Baik",
@@ -58,7 +58,11 @@ document.addEventListener("DOMContentLoaded", function () {
 // ===== AMBIL DATA DARIPADA LOCALSTORAGE =====
 // Data ini datang daripada borang DRP bila user submit.
 function getSavedDrpReports() {
-  return JSON.parse(localStorage.getItem("mycprc_drp_reports") || "[]");
+  return JSON.parse(localStorage.getItem("mycprc_drp_reports") || "[]").map(report => ({
+    ...report,
+    kategori: window.DRP_TAXONOMY?.normalizeCategory(report.kategori) || report.kategori,
+    disasterType: window.DRP_TAXONOMY?.normalizeType(report.disasterType) || report.disasterType
+  }));
 }
 
 // ===== AMBIL DATA UNTUK TABLE =====
@@ -86,7 +90,7 @@ function loadDrpReportsTable() {
   if (!reports.length) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="4" class="text-center text-muted py-4">
+        <td colspan="8" class="text-center text-muted py-4">
           Tiada laporan dijumpai.
         </td>
       </tr>
@@ -100,7 +104,9 @@ function loadDrpReportsTable() {
     .map(report => `
       <tr>
         <td>${formatDrpReportDate(report.createdAt)}</td>
-        <td>${escapeDrpText(report.disasterType || "-")}</td>
+        <td><strong>${escapeDrpText(report.negeri||'-')}</strong><div class="small text-muted">${escapeDrpText([report.daerah,report.mukim].filter(Boolean).join(', ')||'-')}</div></td>
+        <td>${escapeDrpText(report.kategori||'-')}<div class="small text-muted">${escapeDrpText(report.disasterType||'-')}</div></td>
+        <td>${escapeDrpText(report.likelihood||'-')}</td><td>${escapeDrpText(report.averageImpactScore||'-')}</td><td><strong>${escapeDrpText(report.totalScore||'-')}</strong></td>
         <td>${getDrpStatusBadge(report.status)}</td>
         <td class="text-end">
           <a href="viewDRP.html?id=${encodeURIComponent(report.id)}" class="btn btn-sm btn-outline-primary">
@@ -115,13 +121,6 @@ function loadDrpReportsTable() {
 // ===== UPDATE RINGKASAN LAPORAN =====
 // Jika belum ada data sebenar, nombor lama 12, 3, 9 akan dipaparkan semula.
 function updateDrpReportSummary(savedReports, reports) {
-  if (savedReports.length === 0) {
-    setDrpReportText("drpReportTotal", 12);
-    setDrpReportText("drpReportDraft", 3);
-    setDrpReportText("drpReportSubmitted", 9);
-    return;
-  }
-
   const total = reports.length;
   const draft = reports.filter(item => item.status === "Draf" || item.status === "Draft").length;
   const submitted = reports.filter(item => item.status === "Dihantar" || item.status === "Submitted").length;

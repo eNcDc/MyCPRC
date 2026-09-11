@@ -8,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/portal-dashboard-theme.css" rel="stylesheet">
 
   <style>
     body{background:#f4f6f9}
@@ -132,6 +133,14 @@
     .member-profile.show{
       display:block;
     }
+    .member-hero{position:relative;overflow:hidden;border-radius:22px;padding:2rem;background:linear-gradient(125deg,#173f73 0%,#176b87 58%,#1aa179 100%);color:#fff;box-shadow:0 18px 42px rgba(20,65,105,.18)}
+    .member-hero:after{content:"";position:absolute;right:-80px;top:-125px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.12)}
+    .member-hero .hero-content{position:relative;z-index:1;max-width:760px}.member-hero .eyebrow{font-size:.76rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#b9f4e2}
+    .summary-card{border:0;border-radius:16px;box-shadow:0 8px 24px rgba(15,44,79,.07);transition:.18s ease}.summary-card:hover,.action-card:hover{transform:translateY(-3px);box-shadow:0 13px 30px rgba(15,44,79,.11)}
+    .summary-card:before{content:"";display:block;width:34px;height:4px;border-radius:4px;background:linear-gradient(90deg,#176b87,#1aa179);margin-bottom:.8rem}
+    .action-card{border:0;border-radius:16px;box-shadow:0 8px 24px rgba(15,44,79,.07);transition:.18s ease}.action-card .icon-box{background:#eaf5f5;color:#126c78}
+    .focus-panel{border:0;border-radius:18px;background:#fff;box-shadow:0 8px 25px rgba(15,44,79,.07);overflow:hidden}.focus-icon{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;background:#e9f7f2;color:#168566;font-size:1.35rem;flex:0 0 auto}
+    @media(max-width:575px){.member-hero{padding:1.4rem}.member-hero h2{font-size:1.55rem}}
   </style>
 </head>
 
@@ -147,14 +156,7 @@
     <main class="col-md-9 col-lg-10 px-4 py-4">
 
       <!-- PAGE HEADER -->
-      <div class="myemt-landing-header d-flex flex-wrap justify-content-between align-items-start gap-2 mb-4">
-        <div>
-          <h4 class="mb-1 fw-bold">MyEMT</h4>
-          <small class="text-muted">
-            Pendaftaran ahli, program latihan MyEMT dan akses operasi Malaysia Emergency Medical Team.
-          </small>
-        </div>
-      </div>
+      <section class="member-hero mb-4"><div class="hero-content"><div class="eyebrow mb-2">Pasukan Perubatan Kecemasan Malaysia</div><h2 class="fw-bold mb-2">Selamat Datang ke Portal Ahli MyEMT</h2><p class="mb-3 text-white-50">Urus keahlian, kesihatan, latihan dan kelayakan misi anda daripada satu papan pemuka.</p><div class="d-flex flex-wrap gap-2"><a href="#mainActions" class="btn btn-light fw-semibold"><i class="bi bi-lightning-charge me-1"></i>Tindakan Saya</a><a href="landingMyemt_mission.html" class="btn btn-outline-light"><i class="bi bi-briefcase me-1"></i>Misi Saya</a></div></div></section>
 
 
       <!-- =====================================================
@@ -286,6 +288,8 @@
         </div>
       </div>
 
+      <section class="card focus-panel mb-4"><div class="card-body p-3 p-lg-4"><div class="d-flex flex-column flex-md-row align-items-md-center gap-3"><div class="focus-icon"><i class="bi bi-compass"></i></div><div class="flex-grow-1"><div class="small text-uppercase fw-bold text-muted mb-1">Langkah Seterusnya</div><h5 class="fw-bold mb-1" id="focus-title">Menyemak status anda...</h5><p class="text-muted mb-0" id="focus-description">Maklumat tindakan akan dipaparkan selepas profil dimuatkan.</p></div><a class="btn btn-primary align-self-md-center" id="focus-action" href="emt_form.html">Teruskan</a></div></div></section>
+
 
       <!-- =====================================================
            CURRENT PROGRESS SUMMARY
@@ -327,7 +331,7 @@
       <!-- =====================================================
            MAIN ACTIONS
       ====================================================== -->
-      <div class="card soft-card mb-4">
+      <div class="card soft-card mb-4" id="mainActions">
         <div class="card-header bg-white fw-bold">
           Tindakan Utama
         </div>
@@ -457,7 +461,7 @@
                 <div class="flow-number">2</div>
                 <h6 class="fw-bold">Program Kursus MyEMT</h6>
                 <p class="small text-muted mb-2">
-                  Satu intake merangkumi:
+                  Satu pengambilan merangkumi:
                                     <strong>Kursus B, Kursus C, TTX dan FTX</strong>.
                 </p>
                 <div id="flow-course-status">
@@ -590,7 +594,7 @@ function fmtDate(value) {
     const date = new Date(raw);
 
     if (!Number.isNaN(date.getTime())) {
-      return date.toLocaleDateString("ms-MY");
+      return date.toLocaleDateString(window.MyEMT?.getLanguage?.() === "en" ? "en-MY" : "ms-MY");
     }
   }
 
@@ -1253,6 +1257,12 @@ function updateFlow() {
     alertEl.innerHTML =
             '<i class="bi bi-mortarboard me-1"></i>Keahlian telah diluluskan. Seterusnya daftar program kursus MyEMT yang merangkumi <strong>Kursus B, Kursus C, TTX dan FTX</strong>.';
   }
+
+  const focusTitle=document.getElementById('focus-title'),focusDescription=document.getElementById('focus-description'),focusAction=document.getElementById('focus-action');
+  if(!currentMember){focusTitle.textContent='Daftar sebagai ahli MyEMT';focusDescription.textContent='Lengkapkan profil keahlian untuk memulakan proses kelayakan.';focusAction.textContent='Daftar MyEMT';focusAction.href='emt_form.html';}
+  else if(!memberApproved){focusTitle.textContent=memberStatus==='rejected'?'Kemas kini dan hantar semula permohonan':'Permohonan sedang disemak';focusDescription.textContent=memberStatus==='rejected'?'Semak catatan pentadbir dan betulkan maklumat yang diperlukan.':'Anda boleh memastikan profil dan maklumat kesihatan sentiasa lengkap sementara menunggu keputusan.';focusAction.textContent=memberStatus==='rejected'?'Kemas Kini':'Lihat Status';focusAction.href=`emt_submitform.html?memberId=${encodeURIComponent(MEMBER_ID)}`;}
+  else if(!courseApproved){focusTitle.textContent='Lengkapkan program latihan MyEMT';focusDescription.textContent='Daftar satu sesi latihan yang merangkumi Kursus B, Kursus C, TTX dan FTX.';focusAction.textContent='Urus Kursus';focusAction.href=`course_apply.html?memberId=${encodeURIComponent(MEMBER_ID)}`;}
+  else{focusTitle.textContent='Anda layak menyertai operasi MyEMT';focusDescription.textContent='Semak misi yang dibuka, permohonan anda dan tugasan yang telah diterima.';focusAction.textContent='Buka Misi Saya';focusAction.href='landingMyemt_mission.html';}
 }
 
 
@@ -1479,5 +1489,6 @@ document.addEventListener(
 );
 </script>
 
+<script src="assets/js/portal-dashboard-theme.js"></script>
 </body>
 </html>

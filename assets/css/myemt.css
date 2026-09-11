@@ -173,6 +173,14 @@ body.myemt-landing-mission main > .row.g-3.mb-4 .card-body {
   justify-content:center;
 }
 
+.myemt-language-switch{position:fixed;top:.65rem;right:.75rem;z-index:1090;display:flex;align-items:center;gap:.2rem;padding:.28rem;border:1px solid #d7e0e9;border-radius:999px;background:rgba(255,255,255,.96);box-shadow:0 .25rem .8rem rgba(31,45,61,.12);backdrop-filter:blur(8px)}
+.myemt-language-label{padding:0 .35rem 0 .5rem;color:#526273;font-size:.72rem;font-weight:700}
+.myemt-language-switch button{min-width:2.35rem;border:0;border-radius:999px;padding:.28rem .5rem;background:transparent;color:#405365;font-size:.75rem;font-weight:700}
+.myemt-language-switch button:hover{background:#eef5fb;color:#075985}
+.myemt-language-switch button.active{background:#0b5cab;color:#fff}
+.myemt-language-switch button:focus-visible{outline:3px solid rgba(13,110,253,.25);outline-offset:1px}
+@media (max-width:575.98px){.myemt-language-switch{top:.45rem;right:.45rem}.myemt-language-label{display:none}}
+
 @media (max-width:767.98px) {
   body.myemt-landing main { padding:1rem !important; }
   body.myemt-landing .myemt-landing-header { min-height:auto; padding:1.3rem; border-radius:14px; }

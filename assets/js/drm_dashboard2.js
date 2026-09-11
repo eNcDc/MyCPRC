@@ -764,15 +764,15 @@ function buildDrmPopup(item) {
     ${item.district}, ${item.state}<br>
     <hr class="my-2">
     Kategori: <strong>${item.facilityCategory}</strong><br>
-    Human Resources: <strong>${sumObjectValues(item.humanResources)}</strong><br>
-    Equipment: <strong>${sumMultipleCategoryObjects(item, [
+    Sumber Manusia: <strong>${sumObjectValues(item.humanResources)}</strong><br>
+    Peralatan: <strong>${sumMultipleCategoryObjects(item, [
       "medicalDevices",
       "nonMedicalDevices",
       "facilities",
       "communication",
       "transportation"
     ])}</strong><br>
-    Special Units: <strong>${sumObjectValues(item.specialUnits)}</strong>
+    Unit Khas: <strong>${sumObjectValues(item.specialUnits)}</strong>
   `;
 }
 
@@ -781,8 +781,8 @@ function buildDrmPopup(item) {
 function renderDrmSpecialUnitsChart(data) {
   const grouped = groupDrmCategory(data, "specialUnits");
 
-  renderDrmChart("drmSpecialUnitsChart", "pie", grouped, "Special Units");
-  renderDrmChart("drmSpecialUnitsChartFull", "pie", grouped, "Special Units");
+  renderDrmChart("drmSpecialUnitsChart", "pie", grouped, "Unit Khas");
+  renderDrmChart("drmSpecialUnitsChartFull", "pie", grouped, "Unit Khas");
 }
 
 // ===== RENDER CHART EQUIPMENT =====
@@ -809,6 +809,7 @@ function renderDrmChart(canvasId, type, groupedData, label) {
     drmCharts[canvasId].destroy();
   }
 
+  const valueLabelPlugin={id:`drmValueLabels-${canvasId}`,afterDatasetsDraw(chart){const ctx=chart.ctx,values=chart.data.datasets[0]?.data||[],total=values.reduce((sum,value)=>sum+Number(value||0),0);ctx.save();ctx.font='600 12px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';chart.getDatasetMeta(0).data.forEach((element,index)=>{const value=Number(values[index]||0);if(!value)return;const point=element.tooltipPosition(),text=type==='pie'?`${value.toLocaleString('ms-MY')} (${total?Math.round(value/total*100):0}%)`:value.toLocaleString('ms-MY');ctx.fillStyle=type==='pie'?'#17324d':'#17324d';ctx.fillText(text,point.x,type==='bar'?point.y-10:point.y);});ctx.restore();}};
   drmCharts[canvasId] = new Chart(canvas, {
     type,
     data: {
@@ -832,6 +833,7 @@ function renderDrmChart(canvasId, type, groupedData, label) {
         borderWidth: 2
       }]
     },
+    plugins:[valueLabelPlugin],
     options: {
       responsive: true,
       maintainAspectRatio: false,
@@ -849,7 +851,9 @@ function renderDrmChart(canvasId, type, groupedData, label) {
           }
         },
         y: {
-          beginAtZero: true
+          beginAtZero: true,
+          grace: "12%",
+          ticks:{precision:0}
         }
       } : {}
     }
@@ -873,7 +877,7 @@ function updateDrmEquipmentTable(data) {
           <td>${item.facilityCategory}</td>
           <td>${item.facilityName}</td>
           <td>${getDrmCategoryTitle(currentDrmCategory)}</td>
-          <td>${drmLabels[key] || key}</td>
+          <td>${window.translatePreparednessText?.(drmLabels[key] || key) || drmLabels[key] || key}</td>
           <td><strong>${Number(quantity || 0).toLocaleString()}</strong></td>
         </tr>
       `);
@@ -898,7 +902,8 @@ function groupDrmCategory(data, categoryKey) {
     const categoryData = item[categoryKey] || {};
 
     Object.entries(categoryData).forEach(([key, value]) => {
-      const label = drmLabels[key] || key;
+      const sourceLabel = drmLabels[key] || key;
+      const label = window.translatePreparednessText?.(sourceLabel) || sourceLabel;
       grouped[label] = (grouped[label] || 0) + Number(value || 0);
     });
   });
@@ -940,13 +945,13 @@ function sumMultipleCategoryObjects(item, categoryKeys) {
 // Tukar nama key kategori kepada tajuk yang lebih kemas untuk UI.
 function getDrmCategoryTitle(categoryKey) {
   const titles = {
-    humanResources: "Human Resources",
-    medicalDevices: "Medical Devices",
-    nonMedicalDevices: "Non Medical Devices",
-    facilities: "Facilities",
-    communication: "Communication",
-    transportation: "Transportation",
-    specialUnits: "Special Units"
+    humanResources: "Sumber Manusia",
+    medicalDevices: "Peralatan Perubatan",
+    nonMedicalDevices: "Peralatan Bukan Perubatan",
+    facilities: "Kemudahan",
+    communication: "Komunikasi",
+    transportation: "Pengangkutan",
+    specialUnits: "Unit Khas"
   };
 
   return titles[categoryKey] || categoryKey;
@@ -993,7 +998,7 @@ function downloadDrmChartData(type) {
 
   const rows = Object.entries(grouped).map(([item, quantity]) => ({
     Item: item,
-    Quantity: quantity
+    Kuantiti: quantity
   }));
 
   const worksheet = XLSX.utils.json_to_sheet(rows);

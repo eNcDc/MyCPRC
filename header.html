@@ -28,8 +28,13 @@
 <style>
   .header-logo {
     max-height: 70px;          /* ← adjust height here if needed */
+    display: block;
     width: auto;
     object-fit: contain;
+    background: transparent !important;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
 
   /* Fine-tune on smaller screens */
@@ -39,14 +44,14 @@
     }
     .header-logo {
       max-height: 55px;        /* slightly smaller logos on mobile */
-      background-color: white;
+      background: transparent !important;
     }
     /* Reduce inward shift on very small screens */
     .d-flex[style*="margin-left"] { margin-left: -5px !important; }
     .d-flex[style*="margin-right"] { margin-right: -5px !important; }
   }
   .header-logo { height:70px; max-width:180px; }
-  .header-logo-slot { width:180px; justify-content:center; }
+  .header-logo-slot { width:180px; justify-content:center; background:transparent !important; }
   @media (max-width:991px) {
     .header-logo { height:55px; max-width:120px; }
     .header-logo-slot { width:auto; }

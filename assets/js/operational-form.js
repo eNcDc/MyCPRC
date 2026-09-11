@@ -32,8 +32,16 @@
 
   async function loadMission() {
     if (!missionId) {
-      message('ID misi tidak ditemui. Sila buka borang ini melalui halaman butiran misi.', 'danger');
-      submitButton.disabled = true;
+      if (['transport','storage'].includes(resource)) {
+        if (missionInput) missionInput.value = 'Inventori Pusat MyEMT';
+        const label=resource==='transport'?'Pengangkutan':'Penyimpanan';
+        document.title=`Tambah ${label} MyEMT`;
+        const heading=document.querySelector('main h4');if(heading)heading.textContent=`Tambah ${label} MyEMT`;
+        const missionLabel=missionInput?.closest('.mb-3, [class*="col-"]')?.querySelector('label');if(missionLabel)missionLabel.textContent='Pemilik Rekod';
+        document.querySelectorAll('a[href="mission_detail.html"], #operationalCancelLink').forEach(link => { link.href = 'logistic_all.html'; });
+        return;
+      }
+      message('ID misi tidak ditemui. Sila buka borang ini melalui halaman butiran misi.', 'danger');submitButton.disabled = true;
       return;
     }
     try {
@@ -92,8 +100,9 @@
     const selected = (sourceAssetSelect._assetRecords || []).find(item => String(item.id) === sourceAssetSelect.value);
     const quantity=form.elements.namedItem('quantity'),stockInfo=document.getElementById('sourceAssetStockInfo');
     if (!selected) { if(quantity)quantity.removeAttribute('max'); return; }
-    const snapshot={name:selected.name,category:selected.category,assetType:selected.assetType,serialNumber:selected.serialNumber||selected.serial,manufacturedDate:selected.manufacturedDate,expiryDate:selected.expiryDate,lastServiceDate:selected.lastServiceDate,nextServiceDate:selected.nextServiceDate,location:selected.location,notes:selected.notes};
+    const snapshot={name:selected.name,category:selected.category,assetType:selected.assetType,serialNumber:selected.serialNumber||selected.serial,manufacturedDate:selected.manufacturedDate,expiryDate:selected.expiryDate,lastServiceDate:selected.lastServiceDate,nextServiceDate:selected.nextServiceDate,location:selected.location,latitude:selected.latitude,longitude:selected.longitude,notes:selected.notes};
     Object.entries(snapshot).forEach(([name,value])=>{if(value!==undefined&&value!==null&&value!=='')setNamedValue(name,value);});
+    window.MyEMTLocation?.refresh(form.elements.namedItem('location'));
     const transferableStatus=['Tersedia','Digunakan','Penyelenggaraan','Rosak'].includes(selected.currentStatus||selected.status)?(selected.currentStatus||selected.status):'Digunakan';
     setNamedValue('currentStatus',transferableStatus);
     if(quantity){quantity.value='1';quantity.max=String(Number(selected.quantity||0));}
@@ -105,7 +114,7 @@
     event.preventDefault();
     if (!form.reportValidity()) return;
     const payload = Object.fromEntries(new FormData(form).entries());
-    payload.missionId = missionId;
+    if(missionId)payload.missionId = missionId;
     if(resource==='transport'){
       if(payload.vehicleType==='Lain-lain'&&!payload.otherVehicleType)return message('Sila nyatakan jenis kenderaan lain.','danger');
       if(payload.nextServiceDate&&payload.lastServiceDate&&payload.nextServiceDate<payload.lastServiceDate)return message('Tarikh servis seterusnya tidak boleh lebih awal daripada tarikh servis terakhir.','danger');
@@ -126,7 +135,7 @@
       const result = await response.json();
       if (!response.ok || !result.success) throw new Error(result.message || 'Rekod gagal disimpan.');
       message(result.message || 'Rekod berjaya disimpan.', 'success');
-      setTimeout(() => location.href = `mission_detail.html?id=${encodeURIComponent(missionId)}`, 500);
+      setTimeout(() => location.href = missionId?`mission_detail.html?id=${encodeURIComponent(missionId)}#${resource==='assets'?'step2':'step4'}`:'logistic_all.html', 500);
     } catch (error) {
       message(error.message || 'Rekod gagal disimpan.', 'danger');
       submitButton.disabled = false;

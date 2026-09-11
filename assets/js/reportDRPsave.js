@@ -56,7 +56,7 @@ function saveDrpReport() {
     createdAt: new Date().toISOString(),
     status: "Dihantar",
 
-    kategori: getDrpValue("kategori"),
+    kategori: window.DRP_TAXONOMY?.normalizeCategory(getDrpValue("kategori")) || getDrpValue("kategori"),
     negeri: getDrpSelectText("negeri_drp"),
     daerah: daerah,
     mukim: getDrpValue("mukim"),
@@ -64,7 +64,7 @@ function saveDrpReport() {
     latitude: getDrpValue("latitude_drp"),
     longitude: getDrpValue("longitude_drp"),
 
-    disasterType: disasterType,
+    disasterType: window.DRP_TAXONOMY?.normalizeType(disasterType) || disasterType,
     likelihood: getDrpRadioValue("likelihood"),
     mortality: getDrpRadioValue("mortality"),
     morbidity: getDrpRadioValue("morbidity"),

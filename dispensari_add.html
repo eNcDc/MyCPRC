@@ -40,7 +40,7 @@
             <p class="text-muted mb-0">Rekod pendispensan ubat yang dipautkan kepada rekod MDS / EMT.</p>
           </div>
 
-            <a class="btn btn-primary" href="mission_detail.html">
+            <a class="btn btn-primary" href="mission_detail.html" id="backLink">
             <i class="bi bi-arrow-left me-1"></i> Kembali
             </a>
         </div>
@@ -49,6 +49,7 @@
           <i class="bi bi-link-45deg me-1"></i>
           Pilih rekod MDS untuk mengisi maklumat pesakit dan klinikal secara automatik.
         </div>
+        <div class="alert alert-warning d-none" id="inventoryWarning" role="alert"></div>
 
         <form id="dispensaryForm">
 
@@ -130,13 +131,13 @@
               <div class="row g-3">
                 <div class="col-md-4">
                   <label for="dispenseDate" class="form-label">Tarikh</label>
-                  <input type="date" id="dispenseDate" name="dispenseDate" class="form-control readonly-box" readonly>
-                  <div class="form-text">Tarikh diambil secara automatik daripada rekod EMT MDS.</div>
+                  <input type="date" id="dispenseDate" name="dispenseDate" class="form-control" required>
+                  <div class="form-text">Tarikh rekod MDS digunakan sebagai cadangan dan boleh diselaraskan kepada tarikh sebenar ubat didispens.</div>
                 </div>
                 <div class="col-md-8">
                   <label for="dispensaryLocation" class="form-label">Lokasi Dispensari</label>
-                  <input type="text" id="dispensaryLocation" name="dispensaryLocation" class="form-control readonly-box" readonly>
-                  <div class="form-text">Lokasi diambil secara automatik daripada Alamat Semasa dalam rekod EMT MDS.</div>
+                  <input type="text" id="dispensaryLocation" name="dispensaryLocation" class="form-control readonly-box" required readonly>
+                  <div class="form-text">Lokasi diambil daripada lokasi operasi misi, bukan alamat pesakit.</div>
                 </div>
               </div>
             </div>
@@ -225,9 +226,12 @@ fetch("sidebar.html").then(r => r.text()).then(t => document.getElementById("sid
 const params = new URLSearchParams(window.location.search);
 const queryMissionId = params.get("missionId") || "";
 const queryMdsId = params.get("mdsId") || "";
+const dispensaryRecordId=params.get("id")||"";
 
 let mdsRecords = [];
 let medicineIndex = 0;
+let missionRecord=null;
+let medicineInventory=[];
 
 function esc(v){
   return String(v ?? "")
@@ -245,6 +249,8 @@ function getDiagnosisText(r){
   return r.diagnosis || r.clinicalNotes || r.diseaseType || r.traumaType || r.emergency || "";
 }
 
+function normalizedMedicineName(value){return String(value||'').trim().toLowerCase().replace(/\s+/g,' ');}
+
 function addMedicine(data = {}){
   medicineIndex++;
 
@@ -255,7 +261,7 @@ function addMedicine(data = {}){
   row.innerHTML = `
     <div class="d-flex justify-content-between align-items-center mb-3">
       <strong>Ubat ${medicineIndex}</strong>
-      <button type="button" class="btn btn-sm btn-outline-danger remove-medicine">
+      <button type="button" class="btn btn-sm btn-outline-danger remove-medicine d-none">
         <i class="bi bi-trash"></i>
       </button>
     </div>
@@ -263,40 +269,45 @@ function addMedicine(data = {}){
     <div class="row g-3">
       <div class="col-md-4">
         <label class="form-label required">Nama Ubat</label>
-        <input type="text" class="form-control med-name" value="${esc(data.namaUbat || data.name || "")}" required>
+        <input type="text" class="form-control med-name readonly-box" value="${esc(data.namaUbat || data.name || "")}" required readonly>
       </div>
       <div class="col-md-2">
         <label class="form-label">Kekuatan</label>
-        <input type="text" class="form-control med-strength" value="${esc(data.kekuatan || data.strength || "")}" placeholder="Contoh: 500 mg">
+        <input type="text" class="form-control med-strength readonly-box" value="${esc(data.kekuatan || data.strength || "")}" placeholder="Contoh: 500 mg" readonly>
       </div>
       <div class="col-md-2">
         <label class="form-label">Bentuk Sediaan</label>
-        <input type="text" class="form-control med-form" value="${esc(data.bentukSediaan || data.form || "")}" placeholder="Tablet / Sirap">
+        <input type="text" class="form-control med-form readonly-box" value="${esc(data.bentukSediaan || data.form || "")}" placeholder="Tablet / Sirap" readonly>
       </div>
       <div class="col-md-2">
         <label class="form-label required">Dos</label>
-        <input type="text" class="form-control med-dose" value="${esc(data.dos || data.dose || "")}" required>
+        <input type="text" class="form-control med-dose readonly-box" value="${esc(data.dos || data.dose || "")}" required readonly>
       </div>
       <div class="col-md-2">
         <label class="form-label required">Kekerapan</label>
-        <input type="text" class="form-control med-frequency" value="${esc(data.kekerapan || data.frequency || "")}" required>
+        <input type="text" class="form-control med-frequency readonly-box" value="${esc(data.kekerapan || data.frequency || "")}" required readonly>
       </div>
 
       <div class="col-md-3">
         <label class="form-label">Tempoh</label>
-        <input type="text" class="form-control med-duration" value="${esc(data.tempoh || data.duration || "")}" placeholder="Contoh: 5 hari">
+        <input type="text" class="form-control med-duration readonly-box" value="${esc(data.tempoh || data.duration || "")}" placeholder="Contoh: 5 hari" readonly>
       </div>
       <div class="col-md-3">
         <label class="form-label required">Kuantiti Dipreskripsi</label>
-        <input type="number" min="0" step="1" class="form-control med-prescribed" value="${esc(data.kuantitiDipreskripsi || "")}" required>
+        <input type="number" min="1" step="1" class="form-control med-prescribed readonly-box" value="${esc(data.kuantitiDipreskripsi || "")}" required readonly>
       </div>
       <div class="col-md-3">
         <label class="form-label required">Kuantiti Didispens</label>
         <input type="number" min="0" step="1" class="form-control med-dispensed" value="${esc(data.kuantitiDidispens || "")}" required>
       </div>
+      <div class="col-md-6">
+        <label class="form-label">Batch Inventori</label>
+        <select class="form-select med-inventory"><option value="">-- Pilih apabila ubat diberi --</option>${medicineInventory.filter(item=>normalizedMedicineName(item.name)===normalizedMedicineName(data.namaUbat||data.name)).sort((a,b)=>String(a.expiryDate).localeCompare(String(b.expiryDate))).map(item=>`<option value="${esc(item.id)}" ${String(item.id)===String(data.inventoryItemId||'')?'selected':''}>${esc(item.name)} ${esc(item.strength)} · Batch ${esc(item.batchNumber)} · Baki ${esc(item.quantity)} ${esc(item.unit)} · Luput ${esc(item.expiryDate)}</option>`).join('')}</select>
+        <div class="form-text">Batch disusun mengikut tarikh luput terawal (FEFO).</div>
+      </div>
       <div class="col-md-3">
         <label class="form-label">No. Batch</label>
-        <input type="text" class="form-control med-batch" value="${esc(data.batchNumber || "")}">
+        <input type="text" class="form-control med-batch readonly-box" value="${esc(data.batchNumber || "")}" readonly>
       </div>
 
       <div class="col-md-3">
@@ -305,7 +316,7 @@ function addMedicine(data = {}){
       </div>
       <div class="col-md-9">
         <label class="form-label">Arahan Penggunaan / Arahan Khas</label>
-        <input type="text" class="form-control med-instruction" value="${esc(data.arahanPenggunaan || "")}">
+        <input type="text" class="form-control med-instruction readonly-box" value="${esc(data.arahanPenggunaan || data.nota || data.note || "")}" readonly>
       </div>
     </div>
   `;
@@ -313,6 +324,26 @@ function addMedicine(data = {}){
   row.querySelector(".remove-medicine").addEventListener("click", () => {
     row.remove();
     if (!document.querySelector(".medicine-row")) addMedicine();
+  });
+  row.querySelector('.med-inventory').addEventListener('change',event=>{const stock=medicineInventory.find(item=>String(item.id)===String(event.target.value));row.querySelector('.med-batch').value=stock?.batchNumber||'';row.querySelector('.med-expiry').value=stock?.expiryDate||'';});
+
+  // Rekod MDS lama tidak semestinya mempunyai semua butiran preskripsi.
+  // Kekalkan nilai doktor sebagai baca sahaja, tetapi benarkan pegawai farmasi
+  // melengkapkan medan yang memang belum direkodkan supaya proses tidak tersekat.
+  [
+    ['.med-name',data.namaUbat||data.name],
+    ['.med-strength',data.kekuatan||data.strength],
+    ['.med-form',data.bentukSediaan||data.form],
+    ['.med-dose',data.dos||data.dose],
+    ['.med-frequency',data.kekerapan||data.frequency],
+    ['.med-duration',data.tempoh||data.duration],
+    ['.med-prescribed',data.kuantitiDipreskripsi],
+    ['.med-instruction',data.arahanPenggunaan||data.nota||data.note]
+  ].forEach(([selector,sourceValue])=>{
+    const control=row.querySelector(selector),hasValue=sourceValue!==undefined&&sourceValue!==null&&String(sourceValue).trim()!=='';
+    control.readOnly=hasValue;
+    control.classList.toggle('readonly-box',hasValue);
+    if(!hasValue)control.title='Maklumat ini belum direkodkan dalam MDS. Lengkapkan untuk pendispensan.';
   });
 
   document.getElementById("medicineContainer").appendChild(row);
@@ -331,6 +362,7 @@ function collectMedicines(){
     arahanPenggunaan: row.querySelector(".med-instruction").value.trim(),
     batchNumber: row.querySelector(".med-batch").value.trim(),
     expiryDate: row.querySelector(".med-expiry").value
+    ,inventoryItemId: row.querySelector(".med-inventory").value
   }));
 }
 
@@ -338,10 +370,10 @@ function applyMdsRecord(record){
   if (!record) return;
 
   document.getElementById("missionId").value = record.missionId || queryMissionId || "";
-  document.getElementById("patientId").value = record.id || "";
-  document.getElementById("patientName").value = record.patientName || "";
+  document.getElementById("patientId").value = record.patientId || record.id || record.mdsRecordId || "";
+  document.getElementById("patientName").value = record.patientName || record.fullName || "";
   document.getElementById("age").value = record.age ?? "";
-  document.getElementById("gender").value = record.gender || "";
+  document.getElementById("gender").value = record.gender || record.sex || "";
   document.getElementById("diagnosis").value = getDiagnosisText(record);
 
   document.getElementById("dispenseDate").value =
@@ -350,11 +382,7 @@ function applyMdsRecord(record){
     record.mdsDate ||
     "";
 
-  document.getElementById("dispensaryLocation").value =
-    record.presentAddress ||
-    record.patientAddress ||
-    record.address ||
-    "";
+  document.getElementById("dispensaryLocation").value = missionRecord?.location || record.activityLocationName || record.activityLocation?.name || "";
 
   const container = document.getElementById("medicineContainer");
   container.innerHTML = "";
@@ -398,8 +426,12 @@ function loadLoggedInOfficer(){
   const user = getLoggedInUser();
 
   if (!user){
-    document.getElementById("officerName").value = "";
+    document.getElementById("officerName").readOnly=false;
+    document.getElementById("officerName").classList.remove('readonly-box');
+    document.getElementById("officerName").required=true;
     document.getElementById("officerId").value = "";
+    document.getElementById("officerId").readOnly=false;
+    document.getElementById("officerId").classList.remove('readonly-box');
     return;
   }
 
@@ -415,36 +447,71 @@ async function loadMdsRecords(){
   const missionId = queryMissionId;
 
   try{
-    const path = missionId
-      ? `/api/mds?missionId=${encodeURIComponent(missionId)}`
-      : "/api/mds";
+    if(!missionId)throw new Error('ID misi diperlukan untuk membuka rekod dispensari.');
+    const path = `/api/mds?missionId=${encodeURIComponent(missionId)}`;
 
-    const res = await fetch(`${API}${path}`);
+    const [res,missionRes] = await Promise.all([fetch(`${API}${path}`),fetch(`${API}/api/missions/${encodeURIComponent(missionId)}`)]);
     const json = await res.json();
 
     if (!json.success) throw new Error(json.message || "Gagal memuatkan rekod MDS.");
 
     mdsRecords = json.data || [];
+    const missionJson=await missionRes.json();if(!missionRes.ok||!missionJson.success)throw new Error(missionJson.message||'Maklumat misi gagal dimuatkan.');missionRecord=missionJson.data;
+    const warning=document.getElementById('inventoryWarning');
+    try{
+      const inventoryRes=await fetch(`${API}/api/medicine-inventory?missionId=${encodeURIComponent(missionId)}`),inventoryJson=await inventoryRes.json().catch(()=>null);
+      if(!inventoryRes.ok||!inventoryJson?.success)throw new Error(inventoryJson?.message||`HTTP ${inventoryRes.status}`);
+      medicineInventory=inventoryJson.data||[];
+      warning.classList.add('d-none');warning.textContent='';
+    }catch(inventoryError){
+      medicineInventory=[];
+      warning.textContent=`Inventori ubat tidak dapat dimuatkan: ${inventoryError.message}. Rekod pesakit masih boleh dibuka, tetapi ubat tidak boleh disahkan sebagai telah diberi sehingga inventori tersedia.`;
+      warning.classList.remove('d-none');
+      console.warn('Medicine inventory unavailable:',inventoryError);
+    }
 
     select.innerHTML = `<option value="">-- Pilih rekod pesakit --</option>` +
       mdsRecords.map(r => `
-        <option value="${esc(r.id)}">
-          ${esc(r.id)} - ${esc(r.patientName || "-")} (${esc(r.date || "-")})
+        <option value="${esc(r.id || r.mdsRecordId)}">
+          ${esc(r.id || r.mdsRecordId)} - ${esc(r.patientName || r.fullName || "-")} (${esc(r.date || r.recordDate || "-")})
         </option>
       `).join("");
 
     if (queryMdsId){
       select.value = queryMdsId;
-      applyMdsRecord(mdsRecords.find(r => r.id === queryMdsId));
+      applyMdsRecord(mdsRecords.find(r => String(r.id || r.mdsRecordId) === String(queryMdsId)));
     }
   }catch(err){
     console.error(err);
     select.innerHTML = `<option value="">Gagal memuatkan rekod MDS</option>`;
+    throw err;
   }
 }
 
+async function loadExistingDispensary(){
+  if(!dispensaryRecordId)return;
+  const response=await fetch(`${API}/api/dispensary-records/${encodeURIComponent(dispensaryRecordId)}?missionId=${encodeURIComponent(queryMissionId)}`,{cache:'no-store'});
+  const json=await response.json().catch(()=>null);
+  if(!response.ok||!json?.success)throw new Error(json?.message||'Rekod dispensari gagal dimuatkan.');
+  const record=json.data;
+  if(String(record.missionId)!==String(queryMissionId))throw new Error('Rekod dispensari bukan milik misi ini.');
+  const source=mdsRecords.find(item=>String(item.id||item.mdsRecordId)===String(record.mdsId));
+  if(!source)throw new Error('Rekod MDS asal tidak ditemui dalam misi ini.');
+  document.querySelector('h4').textContent='Kemas Kini Rekod Dispensari Ubat';
+  document.getElementById('submitBtn').innerHTML='<i class="bi bi-save me-1"></i> Simpan Perubahan';
+  document.getElementById('mdsRecordSelect').value=record.mdsId;
+  document.getElementById('mdsRecordSelect').disabled=true;
+  applyMdsRecord(source);
+  const container=document.getElementById('medicineContainer');container.innerHTML='';medicineIndex=0;(record.prescriptions||[]).forEach(addMedicine);if(!record.prescriptions?.length)addMedicine();
+  document.getElementById('dispenseDate').value=record.dispenseDate||'';
+  document.getElementById('dispensaryLocation').value=record.dispensaryLocation||missionRecord?.location||'';
+  document.getElementById('officerName').value=record.officerName||'';document.getElementById('officerId').value=record.officerId||'';
+  const status=[...document.querySelectorAll('[name="dispenseStatus"]')].find(item=>item.value===record.status);if(status){status.checked=true;status.dispatchEvent(new Event('change'));}
+  document.getElementById('incompleteReason').value=record.incompleteReason||'';document.getElementById('incompleteReasonNotes').value=record.incompleteReasonNotes||'';
+}
+
 document.getElementById("mdsRecordSelect").addEventListener("change", function(){
-  applyMdsRecord(mdsRecords.find(r => r.id === this.value));
+  applyMdsRecord(mdsRecords.find(r => String(r.id||r.mdsRecordId) === String(this.value)));
 });
 
 document.getElementById("addMedicineBtn").addEventListener("click", () => addMedicine());
@@ -469,29 +536,34 @@ document.querySelectorAll('[name="dispenseStatus"]').forEach(radio => {
 document.getElementById("dispensaryForm").addEventListener("submit", async function(e){
   e.preventDefault();
 
-  const selectedMds = mdsRecords.find(r => r.id === document.getElementById("mdsRecordSelect").value);
+  const selectedMds = mdsRecords.find(r => String(r.id||r.mdsRecordId) === String(document.getElementById("mdsRecordSelect").value));
   if (!selectedMds){
     alert("Sila pilih rekod MDS terlebih dahulu.");
     return;
   }
 
   const medicines = collectMedicines();
+  if(medicines.some(m=>m.kuantitiDidispens>m.kuantitiDipreskripsi)){alert('Kuantiti didispens tidak boleh melebihi kuantiti dipreskripsi.');return;}
+  if(medicines.some(m=>m.kuantitiDidispens>0&&!m.inventoryItemId)){alert('Pilih batch inventori bagi setiap ubat yang telah diberikan kepada pesakit.');return;}
+  const dispenseStatus=selectedValue("dispenseStatus");
+  if(dispenseStatus==='Lengkap'&&medicines.some(m=>m.kuantitiDidispens!==m.kuantitiDipreskripsi)){alert('Status Lengkap hanya boleh dipilih apabila semua kuantiti didispens sepenuhnya.');return;}
+  if(dispenseStatus==='Sebahagian'&&(!medicines.some(m=>m.kuantitiDidispens>0)||!medicines.some(m=>m.kuantitiDidispens<m.kuantitiDipreskripsi))){alert('Status Sebahagian memerlukan sekurang-kurangnya satu ubat diberi dan satu kekurangan.');return;}
+  if(dispenseStatus==='Tidak dapat dibekalkan'&&medicines.some(m=>m.kuantitiDidispens!==0)){alert('Tetapkan semua kuantiti didispens kepada sifar bagi status Tidak dapat dibekalkan.');return;}
 
   const payload = {
-    module: "dispensari_ubat",
     missionId: document.getElementById("missionId").value,
-    mdsId: selectedMds.id,
+    mdsId: selectedMds.id || selectedMds.mdsRecordId,
     patientId: document.getElementById("patientId").value,
     patientName: document.getElementById("patientName").value,
     age: selectedMds.age ?? null,
-    gender: selectedMds.gender || "",
+    gender: selectedMds.gender || selectedMds.sex || "",
     diagnosis: document.getElementById("diagnosis").value,
     prescriptions: medicines,
     dispenseDate: document.getElementById("dispenseDate").value,
     dispensaryLocation: document.getElementById("dispensaryLocation").value.trim(),
     officerName: document.getElementById("officerName").value.trim(),
     officerId: document.getElementById("officerId").value.trim(),
-    status: selectedValue("dispenseStatus"),
+    status: dispenseStatus,
     incompleteReason: document.getElementById("incompleteReason").value,
     incompleteReasonNotes: document.getElementById("incompleteReasonNotes").value.trim()
   };
@@ -501,21 +573,24 @@ document.getElementById("dispensaryForm").addEventListener("submit", async funct
   btn.innerHTML = `<span class="spinner-border spinner-border-sm me-1"></span> Menyimpan...`;
 
   try{
-    const res = await fetch(`${API}/submit`, {
-      method:"POST",
+    const res = await fetch(`${API}/api/dispensary-records${dispensaryRecordId?`/${encodeURIComponent(dispensaryRecordId)}?missionId=${encodeURIComponent(payload.missionId)}`:''}`, {
+      method:dispensaryRecordId?"PATCH":"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify(payload)
     });
 
-    const json = await res.json();
+    const responseText=await res.text();let json=null;try{json=responseText?JSON.parse(responseText):null;}catch(_){json=null;}
 
-    if (!json.success) throw new Error(json.message || "Gagal menyimpan rekod.");
+    if (!res.ok || !json?.success){
+      const routeMissing=res.status===404&&/route tidak dijumpai/i.test(json?.message||'');
+      throw new Error(routeMissing?'Route dispensari ubat belum tersedia pada API production. Lambda perlu dideploy dengan kod terkini.':json?.message||`Gagal menyimpan rekod (HTTP ${res.status}).`);
+    }
 
     alert("Rekod dispensari berjaya disimpan.");
 
     const returnMissionId = payload.missionId;
     if (returnMissionId){
-      window.location.href = `mission_detail.html?id=${encodeURIComponent(returnMissionId)}`;
+      window.location.href = `mission_detail.html?id=${encodeURIComponent(returnMissionId)}#step6`;
     }else{
       history.back();
     }
@@ -524,13 +599,14 @@ document.getElementById("dispensaryForm").addEventListener("submit", async funct
     alert(err.message || "Gagal menghubungi pelayan.");
   }finally{
     btn.disabled = false;
-    btn.innerHTML = `<i class="bi bi-send me-1"></i> Simpan Rekod Dispensari`;
+    btn.innerHTML = dispensaryRecordId?`<i class="bi bi-save me-1"></i> Simpan Perubahan`:`<i class="bi bi-send me-1"></i> Simpan Rekod Dispensari`;
   }
 });
 
-addMedicine();
 loadLoggedInOfficer();
-loadMdsRecords();
+document.getElementById('addMedicineBtn').classList.add('d-none');
+document.getElementById('backLink').href=queryMissionId?`mission_detail.html?id=${encodeURIComponent(queryMissionId)}#step6`:'mission_detail.html';
+(async()=>{try{addMedicine();await loadMdsRecords();await loadExistingDispensary();}catch(error){alert(error.message);document.getElementById('submitBtn').disabled=true;}})();
 </script>
 </body>
 </html>

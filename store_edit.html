@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <title>Kemaskini Lokasi Penyimpanan</title>
@@ -13,6 +13,7 @@
 
     <!-- Main CSS -->
     <link href="assets/css/main.css" rel="stylesheet">
+    <link href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" rel="stylesheet">
 
     <style>
     .mds-card{
@@ -103,29 +104,27 @@
 
         <div class="card-body">
 
-        <form>
+        <form id="storeForm">
 
         <div class="row g-3">
 
             <!-- NAMA LOKASI -->
             <div class="col-md-6">
             <label class="form-label">Nama Lokasi</label>
-            <input type="text" class="form-control"
-                    value="Warehouse EMT Sabah"
+            <input type="text" id="name" name="name" class="form-control" required
                     placeholder="Contoh: Warehouse EMT Sabah / Hospital Kuala Lumpur">
             </div>
 
             <!-- KOD LOKASI -->
             <div class="col-md-3">
             <label class="form-label">Kod Lokasi</label>
-            <input type="text" class="form-control"
-                    value="LOC-EMT-001">
+            <input type="text" id="code" name="code" class="form-control" required>
             </div>
 
             <!-- NEGERI -->
             <div class="col-md-3">
             <label class="form-label">Negeri</label>
-            <select class="form-select">
+            <select id="state" name="state" class="form-select" required>
 
                 <option>Johor</option>
                 <option>Kedah</option>
@@ -137,7 +136,7 @@
                 <option>Perlis</option>
                 <option>Pulau Pinang</option>
 
-                <option selected>Sabah</option>
+                <option>Sabah</option>
 
                 <option>Sarawak</option>
                 <option>Selangor</option>
@@ -151,12 +150,12 @@
             <!-- JENIS LOKASI -->
             <div class="col-md-4">
             <label class="form-label">Jenis Lokasi</label>
-            <select class="form-select">
+            <select id="type" name="type" class="form-select" required>
 
                 <option>Warehouse Utama</option>
                 <option>Stor Hospital</option>
 
-                <option selected>Stor Lapangan (Field Base)</option>
+                <option>Stor Lapangan (Field Base)</option>
 
                 <option>Unit Logistik</option>
                 <option>Lain-lain</option>
@@ -167,15 +166,14 @@
             <!-- KAPASITI -->
             <div class="col-md-4">
             <label class="form-label">Kapasiti Penyimpanan</label>
-            <input type="number" class="form-control"
-                    value="150"
+            <input type="number" id="capacity" name="capacity" min="0" step="1" class="form-control" required
                     placeholder="Contoh: 100 (unit aset)">
             </div>
 
             <!-- STATUS -->
             <div class="col-md-4">
             <label class="form-label">Status Lokasi</label>
-            <select class="form-select">
+            <select id="status" name="status" class="form-select" required>
 
                 <option selected>Aktif</option>
                 <option>Tidak Aktif</option>
@@ -187,13 +185,14 @@
             <!-- ALAMAT -->
             <div class="col-12">
             <label class="form-label">Alamat Lengkap</label>
-            <textarea class="form-control" rows="3">Jalan Hospital, Kota Kinabalu, Sabah, Malaysia</textarea>
+            <textarea id="address" name="address" class="form-control" rows="3" required data-location-picker data-latitude-field="latitude" data-longitude-field="longitude"></textarea>
+            <input type="hidden" id="latitude" name="latitude"><input type="hidden" id="longitude" name="longitude">
             </div>
 
             <!-- CATATAN -->
             <div class="col-12">
             <label class="form-label">Catatan</label>
-            <textarea class="form-control" rows="2">Lokasi utama penyimpanan aset EMT Sabah untuk operasi bencana.</textarea>
+            <textarea id="notes" name="notes" class="form-control" rows="2"></textarea>
             </div>
 
         </div>
@@ -243,6 +242,8 @@ fetch("sidebar.html")
 
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="assets/js/myemt-location.js"></script>
 <script>
 function fillByLabel(labelText, value) {
   if (value === undefined || value === null) return;
@@ -279,6 +280,9 @@ if (id) {
       fillByLabel('Status Lokasi', s.status);
       fillByLabel('Alamat Lengkap', s.address);
       fillByLabel('Catatan', s.notes);
+      document.getElementById('latitude').value=s.latitude??'';
+      document.getElementById('longitude').value=s.longitude??'';
+      window.MyEMTLocation?.refresh(document.getElementById('address'));
     })
     .catch(() => {});
 
@@ -286,6 +290,7 @@ if (id) {
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      if(document.getElementById('latitude').value===''||document.getElementById('longitude').value===''){alert('Sila pilih titik lokasi stor pada peta.');document.getElementById('address').focus();return;}
       const payload = {
         name:     getByLabel('Nama Lokasi'),
         code:     getByLabel('Kod Lokasi'),
@@ -295,6 +300,8 @@ if (id) {
         status:   getByLabel('Status Lokasi'),
         address:  getByLabel('Alamat Lengkap'),
         notes:    getByLabel('Catatan'),
+        latitude: Number(document.getElementById('latitude').value),
+        longitude: Number(document.getElementById('longitude').value),
       };
       try {
         const res = await fetch(`${API}/api/stores/${encodeURIComponent(id)}`, {

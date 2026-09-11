@@ -24,10 +24,10 @@
   })();
 </script> -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
   <meta charset="UTF-8">
-  <title>MyCPRC Reporting</title>
+  <title>Portal Modul MyCPRC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- Bootstrap CSS -->
@@ -50,7 +50,7 @@
   <div class="row">
 
     <!-- LEFT PANEL – fixed ID to match fetch script -->
-    <aside class="col-md-3 col-lg-2 p-0" id="sidebar-container">
+    <aside class="col-md-3 col-lg-2 p-0" id="sidebar-placeholder">
       <!-- Sidebar will be loaded here from sidebar.html -->
     </aside>
 
@@ -80,7 +80,7 @@
             <li><a href="landingDRP.html">Profil Risiko Daerah (DRP)</a></li>
             <li><a href="landingDRM.html">Pengurusan Sumber Bencana (DRM)</a></li>
             <li><a href="landingFasiliti.html">Fasiliti Bencana</a></li> <!--BAHAN KIMIA // BECANA (SIMULASI)--> <!--landingFasiliti.html-->
-            <li><a href="#">Mobilisasi</a></li> <!--SUMBER MANUSIA--> <!--landingMobilisasi.html-->  
+            <li><a href="landingMobilisasi.html">Mobilisasi Anggota KKM</a></li>
           </ul>
         </div>
 
@@ -101,9 +101,9 @@
         <!-- Response -->
         <div class="card response">
           <div class="icon-circle">
-            <img src="assets\img\lifebuoy_icon_244142.webp" alt="Response Icon">
+            <img src="assets/img/lifebuoy_icon_244142.webp" alt="Ikon respons">
           </div>
-          <h2 class="text-center">Response</h2>
+          <h2 class="text-center">Respons</h2>
           <ul class="sub-options">
             <li><a href="landingDOCE.html">Pelaporan Bencana, Wabak, Krisis & Kecemasan</a></li>
             <li><a href="landingFlood.html">Pengurusan Banjir</a></li>
@@ -142,14 +142,14 @@
         <!-- MyEMT -->
         <div class="card response">
           <div class="icon-circle">
-            <img src="assets\img\lifebuoy_icon_244142.webp" alt="Response Icon">
+            <img src="assets/img/lifebuoy_icon_244142.webp" alt="Ikon MyEMT">
           </div>
           <h2 class="text-center">MyEMT</h2>
           <ul class="sub-options">
-            <li><a href="landingMyemtAdmin.html">Pengurusan MyEMT (Admin)</a></li>
-            <li><a href="landingMyemtAdmin_mission.html">Pengurusan Lapangan MyEMT (Admin)</a></li>
-            <li><a href="landingMyemt.html">Pengurusan MyEMT</a></li>
-            <li><a href="landingMyemt_mission.html">Pengurusan Lapangan MyEMT </a></li>
+            <li><a href="landingMyemt.html">Portal Ahli MyEMT</a></li>
+            <li><a href="landingMyemt_mission.html">Misi Saya</a></li>
+            <li><a href="landingMyemtAdmin.html">Pentadbiran Ahli dan Latihan</a></li>
+            <li><a href="landingMyemtAdmin_mission.html">Pentadbiran Misi dan Operasi</a></li>
           </ul>
         </div>
       </div>
@@ -179,12 +179,10 @@
   fetch("sidebar.html")
     .then(res => res.text())
     .then(data => {
-      document.getElementById("sidebar-container").innerHTML = data;
+      document.getElementById("sidebar-placeholder").innerHTML = data;
     })
-    .catch(err => console.error("Failed to load sidebar:", err));
+    .catch(err => console.error("Sidebar gagal dimuatkan:", err));
 </script>
-
-<script src="assets/js/wizard-form.js"></script>
 
 <!-- Improved Sidebar Sign Out (waits for sidebar to load) -->
 <script>
@@ -192,12 +190,9 @@
     setTimeout(() => {
       const sidebarSignOut = document.getElementById('sidebarSignOut');
 
-      console.log("Looking for sidebarSignOut:", sidebarSignOut); // Debug
-
       if (sidebarSignOut) {
         sidebarSignOut.addEventListener('click', function(e) {
           e.preventDefault();
-          console.log("Sidebar Sign Out clicked!");
           window.location.href = 'https://login-b73cc.web.app';
         });
       } else {

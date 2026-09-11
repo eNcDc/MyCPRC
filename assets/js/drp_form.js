@@ -1,29 +1,46 @@
-// Data bencana
-const disasterData = {
-  "Natural": ["Banjir", "Tanah Runtuh"],
-  "Teknologi": ["Pencemaran Udara - H2S & Methane", "RTA", "Kemalangan Houseboat", "Pembuangan Bahan Kimia"],
-  "Wabak": ["COVID-19", "Dengue", "HFMD", "Leptospirosis", "YAW", "Measles", "Kusta", "FP", "KRM", "Brucellosis","Dengue"],
-  "Krisis":["Rusuhan Pendatang Asing", "Kekurangan Makanan", "Ketidakstabilan Politik", "Pencemaran Bhaan Toksik", "Bioterorisme"],
-  "Kecemasan":["Kegagalan Empangan", "Letupan Stesen Hidroelektrik", "Kemalangan Penerbangan Udara", "Ancaman Siber"],
-  "Lain-Lain": ["Lain-lain"]
-};
-
+const disasterData = window.DRP_TAXONOMY?.categories || {};
+const categorySelect = document.getElementById("kategori");
 const disasterSelect = document.getElementById("disasterType");
 
-// Populate select
-Object.keys(disasterData).forEach(category => {
-  const group = document.createElement("optgroup");
-  group.label = category;
+function toggleOtherDisaster() {
+  const isOther = disasterSelect.value === "Lain-lain";
+  $('#disasterLainWrapper').toggleClass('d-none', !isOther);
+  $('#disasterLain').prop('required', isOther);
+  if (!isOther) $('#disasterLain').val('');
+}
 
-  disasterData[category].forEach(item => {
+function populateDisasterTypes() {
+  const selectedCategory = categorySelect?.value || "";
+  const currentValue = disasterSelect.value;
+  disasterSelect.replaceChildren();
+
+  const placeholder = document.createElement("option");
+  placeholder.value = "";
+  placeholder.textContent = selectedCategory ? "-- Sila Pilih Jenis Bencana --" : "-- Pilih kategori bencana dahulu --";
+  disasterSelect.appendChild(placeholder);
+
+  (disasterData[selectedCategory] || []).forEach(item => {
     const option = document.createElement("option");
     option.value = item;
     option.textContent = item;
-    group.appendChild(option);
+    disasterSelect.appendChild(option);
   });
 
-  disasterSelect.appendChild(group);
-});
+  if (selectedCategory) {
+    const other = document.createElement("option");
+    other.value = "Lain-lain";
+    other.textContent = "Lain-lain";
+    disasterSelect.appendChild(other);
+  }
+
+  disasterSelect.disabled = !selectedCategory;
+  if ([...disasterSelect.options].some(option => option.value === currentValue)) disasterSelect.value = currentValue;
+  if ($('#disasterType').hasClass('select2-hidden-accessible')) $('#disasterType').trigger('change.select2');
+  toggleOtherDisaster();
+}
+
+categorySelect?.addEventListener("change", populateDisasterTypes);
+populateDisasterTypes();
 
 // Init Select2
 $('#disasterType').select2({
@@ -34,14 +51,10 @@ $('#disasterType').select2({
 
 // Handle "Lain-lain"
 $('#disasterType').on('select2:select select2:clear', function () {
-  if ($(this).val() === "Lain-lain") {
-    $('#disasterLainWrapper').removeClass('d-none');
-    $('#disasterLain').prop('required', true).focus();
-  } else {
-    $('#disasterLainWrapper').addClass('d-none');
-    $('#disasterLain').prop('required', false).val('');
-  }
+  toggleOtherDisaster();
+  if ($(this).val() === "Lain-lain") $('#disasterLain').focus();
 });
+disasterSelect.addEventListener('change', toggleOtherDisaster);
 
 const factors = [
   'likelihood',

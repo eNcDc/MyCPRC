@@ -39,6 +39,53 @@ Resources:
       Handler: handler.handler
       Description: MyCPRC MyEMT REST API
       Events:
+        # Route inventori ubat dinyatakan secara eksplisit supaya versi API
+        # production sentiasa menyediakan GET/POST/PATCH untuk modul ini.
+        MedicineInventoryCollection:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref MyEMTApi
+            Path: /api/medicine-inventory
+            Method: ANY
+        MedicineInventoryItem:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref MyEMTApi
+            Path: /api/medicine-inventory/{id}
+            Method: ANY
+        DispensaryRecordsCollection:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref MyEMTApi
+            Path: /api/dispensary-records
+            Method: ANY
+        DispensaryRecordsItem:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref MyEMTApi
+            Path: /api/dispensary-records/{id}
+            Method: ANY
+        # Route laporan harian didaftarkan secara eksplisit. Ini mengelakkan
+        # deployment lama/caching API Gateway daripada tidak mengenali route
+        # walaupun pengendali Lambda sudah menyokongnya.
+        DailyReportsCollection:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref MyEMTApi
+            Path: /api/daily-reports
+            Method: ANY
+        DailyReportsItem:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref MyEMTApi
+            Path: /api/daily-reports/{id}
+            Method: ANY
+        MdsTally:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref MyEMTApi
+            Path: /api/mds-tally
+            Method: ANY
         # Catch all routes under /api/
         ApiProxy:
           Type: HttpApi

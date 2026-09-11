@@ -1,0 +1,23 @@
+.myemt-dashboard{background:#f5f7fb;min-height:calc(100vh - 70px)}
+.myemt-dashboard .dashboard-header{background:linear-gradient(135deg,#fff 0%,#f4f8ff 100%);border:1px solid #e3eaf3;border-radius:18px;padding:1.25rem 1.35rem;box-shadow:0 10px 28px rgba(15,23,42,.055)}
+.myemt-dashboard .dashboard-header h4{color:#14213d;font-weight:800;letter-spacing:-.02em}
+.myemt-dashboard .dashboard-toolbar{display:flex;flex-wrap:wrap;gap:.55rem;align-items:center;justify-content:flex-end}
+.myemt-dashboard .dashboard-toolbar .form-select,.myemt-dashboard .dashboard-toolbar .form-control{min-height:40px}
+.myemt-dashboard .card{border:1px solid #e6ebf2!important;border-radius:16px!important;box-shadow:0 7px 22px rgba(15,23,42,.055)!important;overflow:hidden}
+.myemt-dashboard .card-header{border-bottom:1px solid #edf0f4;padding:1rem 1.15rem}
+.myemt-dashboard .metric-card,.myemt-dashboard .dashboard-metric{transition:transform .18s ease,box-shadow .18s ease}
+.myemt-dashboard .metric-card:hover,.myemt-dashboard .dashboard-metric:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(15,23,42,.09)!important}
+.myemt-dashboard .dashboard-metric .metric-label{color:#68778a;font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.045em}
+.myemt-dashboard .dashboard-metric .metric-number{color:#14213d;font-size:1.8rem;font-weight:800;line-height:1.15;margin-top:.45rem}
+.myemt-dashboard .dashboard-metric .metric-symbol{display:grid;place-items:center;width:44px;height:44px;border-radius:13px;font-size:1.2rem}
+.myemt-dashboard .table{margin-bottom:0}
+.myemt-dashboard .table thead th{background:#f7f9fc;color:#536174;border-bottom:1px solid #dfe5ed;font-size:.73rem;font-weight:800;letter-spacing:.045em;padding:.85rem .9rem;text-transform:uppercase;white-space:nowrap}
+.myemt-dashboard .table tbody td{border-color:#edf0f4;padding:.9rem;vertical-align:middle}
+.myemt-dashboard .table-hover tbody tr:hover{--bs-table-hover-bg:#f5f9ff}
+.myemt-dashboard .btn{border-radius:10px;font-weight:600}
+.myemt-dashboard .form-control,.myemt-dashboard .form-select{border-color:#dce3eb;border-radius:10px}
+.myemt-dashboard .nav-pills{border:1px solid #e6ebf2;border-radius:14px!important;gap:.25rem;box-shadow:0 5px 18px rgba(15,23,42,.045)!important}
+.myemt-dashboard .nav-pills .nav-link{border-radius:10px;font-weight:650}
+.myemt-dashboard .chart-panel{height:260px;position:relative}
+@media(max-width:991.98px){.myemt-dashboard .dashboard-header{align-items:flex-start!important;flex-direction:column}.myemt-dashboard .dashboard-toolbar{justify-content:flex-start;width:100%}}
+@media(max-width:575.98px){.myemt-dashboard{padding-left:1rem!important;padding-right:1rem!important}.myemt-dashboard .dashboard-toolbar>*{width:100%!important}.myemt-dashboard .dashboard-header{padding:1rem}.myemt-dashboard .card-header{align-items:flex-start!important;flex-direction:column;gap:.65rem}.myemt-dashboard .table tbody td{padding:.75rem}}

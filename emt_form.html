@@ -769,13 +769,7 @@ fetch("sidebar.html")
 /* =====================================================
    EXISTING MEMBER
 ===================================================== */
-const EXISTING_MEMBER_ID =
-  new URLSearchParams(location.search).get("memberId") ||
-  localStorage.getItem("myemt_memberId") ||
-  localStorage.getItem("memberId") ||
-  sessionStorage.getItem("myemt_memberId") ||
-  sessionStorage.getItem("memberId") ||
-  "";
+const EXISTING_MEMBER_ID = window.MyEMT?.memberId?.() || "";
 
 let resubmissionOf = null;
 

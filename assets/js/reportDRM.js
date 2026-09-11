@@ -117,50 +117,23 @@ function getDrmReportsForTable() {
 function loadDrmReportsTable() {
   const savedReports = getSavedDrmReports();
   const reports = getDrmReportsForTable();
-  const tbody = document.getElementById("drmReportsTableBody");
-
-  if (!tbody) return;
+  const healthOfficeBody = document.getElementById("drmHealthOfficeReportsTableBody");
+  const hospitalBody = document.getElementById("drmHospitalReportsTableBody");
+  if (!healthOfficeBody || !hospitalBody) return;
 
   updateDrmReportSummary(savedReports, reports);
 
-  if (!reports.length) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="4" class="text-center text-muted py-4">
-          Tiada laporan dijumpai.
-        </td>
-      </tr>
-    `;
-    return;
-  }
+  renderDrmTypeTable(healthOfficeBody,reports.filter(item=>item.reportType==='healthOffice'),'Pejabat Kesihatan Daerah');
+  renderDrmTypeTable(hospitalBody,reports.filter(item=>item.reportType==='hospital'),'Hospital');
+}
 
-  tbody.innerHTML = reports
-    .slice()
-    .reverse()
-    .map(report => `
-      <tr>
-        <td>${formatDrmReportDate(report.createdAt)}</td>
-        <td>${escapeDrmReportText(report.reportTypeLabel || getDrmReportTypeLabel(report.reportType))}</td>
-        <td>${getDrmStatusBadge(report.status)}</td>
-        <td class="text-end">
-          <a href="viewDRM.html?id=${encodeURIComponent(report.id)}" class="btn btn-sm btn-outline-primary">
-            Lihat
-          </a>
-        </td>
-      </tr>
-    `)
-    .join("");
+function renderDrmTypeTable(tbody,reports,typeLabel){
+  if(!reports.length){tbody.innerHTML=`<tr><td colspan="6" class="text-center text-muted py-4">Tiada laporan ${escapeDrmReportText(typeLabel)}.</td></tr>`;return;}
+  tbody.innerHTML=reports.slice().sort((a,b)=>String(b.createdAt||'').localeCompare(String(a.createdAt||''))).map(report=>`<tr><td>${formatDrmReportDate(report.createdAt)}</td><td><strong>${escapeDrmReportText(report.state||'-')}</strong><div class="small text-muted">${escapeDrmReportText(report.district||'-')}</div></td><td>${escapeDrmReportText(report.facilityName||'-')}</td><td>${report.reportType==='healthOffice'?escapeDrmReportText(report.dmpAvailable||'-'):escapeDrmReportText(report.operationRoomPhone||'-')}</td><td>${getDrmStatusBadge(report.status)}</td><td class="text-end"><a href="viewDRM.html?id=${encodeURIComponent(report.id)}" class="btn btn-sm btn-outline-primary"><i class="bi bi-file-earmark-text me-1"></i>Papar</a></td></tr>`).join('');
 }
 
 // ===== UPDATE RINGKASAN LAPORAN =====
 function updateDrmReportSummary(savedReports, reports) {
-  if (savedReports.length === 0) {
-    setDrmReportText("drmReportTotal", 12);
-    setDrmReportText("drmReportDraft", 3);
-    setDrmReportText("drmReportSubmitted", 9);
-    return;
-  }
-
   setDrmReportText("drmReportTotal", reports.length);
   setDrmReportText("drmReportDraft", reports.filter(item => item.status === "Draf").length);
   setDrmReportText("drmReportSubmitted", reports.filter(item => item.status === "Dihantar").length);

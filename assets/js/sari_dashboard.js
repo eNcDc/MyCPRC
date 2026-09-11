@@ -435,11 +435,23 @@ function createSariTrendChart(data){
 
                 data:values,
 
-                borderWidth:2,
+                borderColor:"#176b87",
 
-                fill:false,
+                backgroundColor:"rgba(40, 169, 158, 0.16)",
 
-                tension:0.3
+                pointBackgroundColor:"#28a99e",
+
+                pointBorderColor:"#ffffff",
+
+                pointBorderWidth:2,
+
+                pointRadius:4,
+
+                borderWidth:3,
+
+                fill:true,
+
+                tension:0.35
 
             }]
 
@@ -451,13 +463,23 @@ function createSariTrendChart(data){
 
             maintainAspectRatio:false,
 
+            plugins:{
+                legend:{display:false},
+                tooltip:{displayColors:false}
+            },
+
             scales:{
 
                 y:{
                     beginAtZero:true,
                     ticks:{
                         stepSize:1
-                    }
+                    },
+                    grid:{color:"rgba(148, 163, 184, 0.18)"}
+                },
+
+                x:{
+                    grid:{display:false}
                 }
 
             }
@@ -515,7 +537,13 @@ function createSariHospitalChart(data){
 
                 data:Object.values(hospital),
 
-                borderWidth:1
+                backgroundColor:["#176b87", "#28a99e", "#4f8fc0", "#f59e66", "#7b74c9", "#4bb8b0", "#dc7182"],
+
+                borderWidth:0,
+
+                borderRadius:7,
+
+                borderSkipped:false
 
             }]
 
@@ -527,20 +555,32 @@ function createSariHospitalChart(data){
 
             maintainAspectRatio:false,
 
+            indexAxis:"y",
+
+            plugins:{
+                legend:{display:false},
+                tooltip:{displayColors:false}
+            },
+
             scales:{
 
-                y:{
+                x:{
                     beginAtZero:true,
                     ticks:{
                         stepSize:1
-                    }
+                    },
+                    grid:{color:"rgba(148, 163, 184, 0.18)"}
                 },
 
-                x:{
+                y:{
                     ticks:{
-                        maxRotation:45,
-                        minRotation:45
-                    }
+                        autoSkip:false,
+                        callback:function(value){
+                            const label=this.getLabelForValue(value);
+                            return label.length>25?label.slice(0,25)+"…":label;
+                        }
+                    },
+                    grid:{display:false}
                 }
 
             }

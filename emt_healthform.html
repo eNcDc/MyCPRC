@@ -3366,7 +3366,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
 <div>
 <h4 class="mb-0">Rekod EMT MDS+</h4>
-<small class="text-muted">Pendaftaran → Doktor → Farmasi → Command Post</small>
+<small class="text-muted">Pendaftaran → Doktor → Farmasi → Pos Kawalan</small>
 </div>
 <button class="btn btn-primary" id="backBtn" type="button">
 <i class="bi bi-arrow-left me-1"></i> Kembali
@@ -3390,13 +3390,13 @@
 <div class="workflow-line"></div>
 <button class="workflow-tab" data-step-target="4" type="button">
 <span class="workflow-number">4</span>
-<span class="workflow-tab-text"><strong>Command Post</strong><small>Semakan MDS &amp; pengesahan</small></span>
+<span class="workflow-tab-text"><strong>Pos Kawalan</strong><small>Semakan MDS &amp; pengesahan</small></span>
 </button>
 </div><div class="record-access-card mb-4">
 <div class="record-access-icon"><i class="bi bi-search"></i></div>
 <div class="record-access-copy">
 <div class="fw-bold">Buka Rekod Menggunakan ID MDS</div>
-<div class="small text-muted">Untuk doktor, farmasi atau Command Post: masukkan ID yang diberikan kepada pesakit semasa pendaftaran.</div>
+<div class="small text-muted">Untuk doktor, farmasi atau Pos Kawalan: masukkan ID yang diberikan kepada pesakit semasa pendaftaran.</div>
 </div>
 <div class="record-access-control">
 <input class="form-control" id="workflowRecordLookup" placeholder="Contoh: MDS809493" type="text"/>
@@ -3712,7 +3712,7 @@
 </div>
 <!-- ADDITIONAL -->
 <div class="pdf-section">
-<div class="section-heading">Additional</div>
+<div class="section-heading">Tambahan</div>
 <div class="check-row">
 <span class="check-no">19</span>
 <span class="check-box"><input class="form-check-input clinical-check" data-group="Additional" type="checkbox" value="Additional 19"/></span>
@@ -4109,7 +4109,7 @@
 <div class="field-area">
 <div id="ubatContainer">
 <div class="row g-2 ubat-item mb-2 border rounded p-2">
-<div class="col-md-4">
+<div class="col-md-3">
 <label class="form-label">Nama Ubat</label>
 <input class="form-control" name="nama_ubat[]" placeholder="Contoh: Paracetamol" type="text"/>
 </div>
@@ -4117,10 +4117,11 @@
 <label class="form-label">Dos</label>
 <input class="form-control" name="dos[]" placeholder="500mg" type="text"/>
 </div>
-<div class="col-md-3">
+<div class="col-md-2">
 <label class="form-label">Kekerapan</label>
 <input class="form-control" name="kekerapan[]" placeholder="3 kali sehari" type="text"/>
 </div>
+<div class="col-md-2"><label class="form-label">Kuantiti</label><input class="form-control" min="1" name="kuantiti[]" placeholder="Contoh: 10" step="1" type="number"/></div>
 <div class="col-md-3">
 <label class="form-label">Nota</label>
 <input class="form-control" name="nota[]" placeholder="Nota" type="text"/>
@@ -4141,25 +4142,25 @@
 
 <div class="workflow-actions">
 <button class="btn btn-outline-secondary px-4" data-go-step="2" type="button"><i class="bi bi-arrow-left me-1"></i>Kembali</button>
-<button class="btn btn-primary px-4" id="btnSavePharmacy" type="button"><i class="bi bi-save me-1"></i>Simpan Maklumat Farmasi</button>
+<button class="btn btn-primary px-4 d-none" id="btnConfirmNoMedicine" type="button"><i class="bi bi-check-circle me-1"></i>Sahkan Tiada Ubat Dipreskripsi</button>
 </div>
 </section><section class="workflow-panel" data-step="4" id="workflowStep4">
 <div class="workflow-panel-head">
 <div>
 <div class="workflow-eyebrow">LANGKAH 4 DARIPADA 4</div>
-<h5 class="mb-1 fw-bold">Command Post — Semakan MDS &amp; Pengesahan</h5>
-<div class="text-muted small">Command Post menyemak rekod lengkap daripada pendaftaran, doktor dan farmasi sebelum pengesahan akhir.</div>
+<h5 class="mb-1 fw-bold">Pos Kawalan — Semakan MDS &amp; Pengesahan</h5>
+<div class="text-muted small">Pos Kawalan menyemak rekod lengkap daripada pendaftaran, doktor dan farmasi sebelum pengesahan akhir.</div>
 </div>
 <span class="workflow-access-badge"><i class="bi bi-people me-1"></i>Akses semua pengguna</span>
 </div>
 <div class="workflow-audit-grid mb-3">
 <div class="audit-card">
 <div class="audit-icon"><i class="bi bi-person-vcard"></i></div>
-<div><div class="audit-label">ID Petugas Command Post</div><input class="audit-input" id="commandPostUserId" readonly=""/></div>
+<div><div class="audit-label">ID Petugas Pos Kawalan</div><input class="audit-input" id="commandPostUserId" readonly=""/></div>
 </div>
 <div class="audit-card">
 <div class="audit-icon"><i class="bi bi-person"></i></div>
-<div><div class="audit-label">Nama Petugas Command Post</div><input class="audit-input" id="commandPostUserName" readonly=""/></div>
+<div><div class="audit-label">Nama Petugas Pos Kawalan</div><input class="audit-input" id="commandPostUserName" readonly=""/></div>
 </div>
 </div>
 <div class="command-summary-grid">
@@ -4179,8 +4180,8 @@
                             <a class="btn btn-outline-primary" href="#" id="btnViewFullRecord" target="_blank"><i class="bi bi-journal-text me-1"></i>Lihat Rekod Penuh</a>
 </div>
 <div class="row g-3">
-<div class="col-md-6"><label class="form-label">Nama Pegawai Command Post / Pengesah</label><input class="form-control" id="confirmOfficerName" name="signature_mds" placeholder="Nama pegawai yang mengesahkan" type="text"/></div>
-<div class="col-md-6"><label class="form-label">Jawatan / Peranan</label><select class="form-select" id="confirmationRole" name="confirmationRole"><option value="">-- Pilih --</option><option value="Command Post">Command Post</option><option value="Pegawai Perubatan">Pegawai Perubatan</option><option value="Penyelaras MDS">Penyelaras MDS</option><option value="Ketua Pasukan">Ketua Pasukan</option><option value="Lain-lain">Lain-lain</option></select></div>
+<div class="col-md-6"><label class="form-label">Nama Pegawai Pos Kawalan / Pengesah</label><input class="form-control" id="confirmOfficerName" name="signature_mds" placeholder="Nama pegawai yang mengesahkan" type="text"/></div>
+<div class="col-md-6"><label class="form-label">Jawatan / Peranan</label><select class="form-select" id="confirmationRole" name="confirmationRole"><option value="">-- Pilih --</option><option value="Command Post">Pos Kawalan</option><option value="Pegawai Perubatan">Pegawai Perubatan</option><option value="Penyelaras MDS">Penyelaras MDS</option><option value="Ketua Pasukan">Ketua Pasukan</option><option value="Lain-lain">Lain-lain</option></select></div>
 <div class="col-12"><label class="confirmation-check"><input class="form-check-input" id="finalConfirmation" type="checkbox"/><span>Saya telah menyemak rekod pendaftaran, konsultasi doktor, maklumat farmasi dan laporan MDS ini sebelum pengesahan.</span></label></div>
 </div>
 </div>
@@ -4193,7 +4194,7 @@
     <i class="bi bi-check-circle-fill fs-5"></i>
     <div>
       <div class="fw-bold">Rekod telah disahkan — teruskan tindakan pesakit</div>
-      <div class="small">Pilih tindakan yang perlu diuruskan oleh Command Post. Maklumat misi, ID MDS dan nama pesakit akan dibawa ke borang secara automatik.</div>
+      <div class="small">Pilih tindakan yang perlu diuruskan oleh Pos Kawalan. Maklumat misi, ID MDS dan nama pesakit akan dibawa ke borang secara automatik.</div>
     </div>
   </div>
   <div class="d-flex flex-wrap gap-2">
@@ -4236,7 +4237,7 @@ function tambahUbat() {
 
     const html = `
       <div class="row g-2 ubat-item mb-2 border rounded p-2">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <label class="form-label">Nama Ubat</label>
           <input type="text" class="form-control" name="nama_ubat[]" placeholder="Nama ubat">
         </div>
@@ -4244,10 +4245,11 @@ function tambahUbat() {
           <label class="form-label">Dos</label>
           <input type="text" class="form-control" name="dos[]" placeholder="Dos">
         </div>
-        <div class="col-md-3">
+        <div class="col-md-2">
           <label class="form-label">Kekerapan</label>
           <input type="text" class="form-control" name="kekerapan[]" placeholder="Kekerapan">
         </div>
+        <div class="col-md-2"><label class="form-label">Kuantiti</label><input type="number" min="1" step="1" class="form-control" name="kuantiti[]" placeholder="10"></div>
         <div class="col-md-2">
           <label class="form-label">Nota</label>
           <input type="text" class="form-control" name="nota[]" placeholder="Nota">
@@ -4820,10 +4822,7 @@ function tambahUbat() {
   function nowIso(){return new Date().toISOString();}
 
   function identity(){
-    return {
-      id: localStorage.getItem('myemt_memberId')||localStorage.getItem('memberId')||localStorage.getItem('userId')||localStorage.getItem('staffId')||localStorage.getItem('adminId')||sessionStorage.getItem('myemt_memberId')||sessionStorage.getItem('memberId')||sessionStorage.getItem('userId')||sessionStorage.getItem('staffId')||sessionStorage.getItem('adminId')||qs.get('userId')||qs.get('memberId')||'',
-      name: localStorage.getItem('myemt_memberName')||localStorage.getItem('memberName')||localStorage.getItem('userName')||localStorage.getItem('staffName')||localStorage.getItem('adminName')||sessionStorage.getItem('myemt_memberName')||sessionStorage.getItem('memberName')||sessionStorage.getItem('userName')||sessionStorage.getItem('staffName')||sessionStorage.getItem('adminName')||qs.get('userName')||''
-    };
+    return window.MyEMT?.actor?.() || {id:'',name:''};
   }
 
   function setIdentity(prefix){
@@ -4839,7 +4838,7 @@ function tambahUbat() {
     registered:{label:'Pendaftaran Selesai',cls:'bg-info text-dark'},
     doctor_completed:{label:'Konsultasi Doktor Selesai',cls:'bg-primary'},
     pharmacy_completed:{label:'Farmasi Selesai',cls:'bg-warning text-dark'},
-    command_post_verified:{label:'Disahkan Command Post',cls:'bg-success'}
+    command_post_verified:{label:'Disahkan Pos Kawalan',cls:'bg-success'}
   };
 
   function updateStageBadge(stage){
@@ -4890,9 +4889,10 @@ function tambahUbat() {
     const meds=Array.isArray(items)&&items.length?items:[{}];
     c.innerHTML=meds.map((m,i)=>`
       <div class="row g-2 ubat-item mb-2 border rounded p-2">
-        <div class="col-md-4"><label class="form-label">Nama Ubat</label><input class="form-control" name="nama_ubat[]" value="${escapeHtml(m.namaUbat||m.name||'')}" placeholder="Contoh: Paracetamol"></div>
+        <div class="col-md-3"><label class="form-label">Nama Ubat</label><input class="form-control" name="nama_ubat[]" value="${escapeHtml(m.namaUbat||m.name||'')}" placeholder="Contoh: Paracetamol"></div>
         <div class="col-md-2"><label class="form-label">Dos</label><input class="form-control" name="dos[]" value="${escapeHtml(m.dos||m.dose||'')}" placeholder="500mg"></div>
-        <div class="col-md-3"><label class="form-label">Kekerapan</label><input class="form-control" name="kekerapan[]" value="${escapeHtml(m.kekerapan||m.frequency||'')}" placeholder="3 kali sehari"></div>
+        <div class="col-md-2"><label class="form-label">Kekerapan</label><input class="form-control" name="kekerapan[]" value="${escapeHtml(m.kekerapan||m.frequency||'')}" placeholder="3 kali sehari"></div>
+        <div class="col-md-2"><label class="form-label">Kuantiti</label><input type="number" min="1" step="1" class="form-control" name="kuantiti[]" value="${escapeHtml(m.kuantitiDipreskripsi||m.quantity||'')}" placeholder="10"></div>
         <div class="col-md-3"><label class="form-label">Nota</label><input class="form-control" name="nota[]" value="${escapeHtml(m.nota||m.note||'')}" placeholder="Nota"></div>
       </div>`).join('');
   }
@@ -4945,11 +4945,10 @@ function tambahUbat() {
     const trauma=checked('.clinical-check[data-group="Trauma"]'), infectious=checked('.clinical-check[data-group="Infectious disease"]'), additional=checked('.clinical-check[data-group="Additional"]'), other=checked('.clinical-check[data-group="Other key diseases"]'), procedures=checked('.clinical-check[data-group="Procedure"]'), outcomes=checked('.clinical-check[data-group="Outcome"]'), contextValues=checked('.context-check'), protectionValues=checked('.protection-check');
     let clinicalClass='Lain-lain',traumaType='-',diseaseType='-';if(trauma.length){clinicalClass='Trauma';traumaType=trauma[0]}else if(infectious.length){clinicalClass='Penyakit Berjangkit';diseaseType=infectious[0]}else if(selected('emergency'))clinicalClass='Kecemasan';else if(additional.length)clinicalClass='Kes Tambahan';else if(other.length)clinicalClass='Penyakit Penting Lain';
     const base={...(currentRecord||{}),...registrationPayload(),trauma,infectiousDiseases:infectious,additionalCases:additional,emergency:selected('emergency'),otherKeyDiseases:other,procedures,outcomes,contextValues,protectionValues};
-    return {clinicalClass,traumaType,diseaseType,outcome:outcomes[0]||'-',context:contextValues[0]||'-',trauma,infectiousDiseases:infectious,additionalCases:additional,emergency:selected('emergency'),otherKeyDiseases:other,procedures,outcomes,contextValues,protectionValues,mdsCodes:MyEmtMdsRules.deriveCodes(base),pastHistoryYN:selected('pastHistoryYN'),pastHistory:val('pastHistory'),medicationYN:selected('medicationYN'),currentMedication:val('currentMedication'),chiefComplaints:val('chiefComplaints'),bt:val('bt'),bp:val('bp'),pr:val('pr'),rr:val('rr'),weight:val('weight'),height:val('height'),historyPresentIllness:val('historyPresentIllness'),bodyAnnotations:annotations,bodyAnnotationsJson:val('bodyAnnotationsJson'),diagnosis:val('diagnosis'),clinicalNotes:val('diagnosis')||val('historyPresentIllness'),doctorUserId:val('doctorUserId'),doctorUserName:val('doctorUserName'),doctorCompletedAt:nowIso(),workflowStage:'doctor_completed'};
+    return {clinicalClass,traumaType,diseaseType,outcome:outcomes[0]||'-',context:contextValues[0]||'-',trauma,infectiousDiseases:infectious,additionalCases:additional,emergency:selected('emergency'),otherKeyDiseases:other,procedures,outcomes,contextValues,protectionValues,mdsCodes:MyEmtMdsRules.deriveCodes(base),pastHistoryYN:selected('pastHistoryYN'),pastHistory:val('pastHistory'),medicationYN:selected('medicationYN'),currentMedication:val('currentMedication'),chiefComplaints:val('chiefComplaints'),bt:val('bt'),bp:val('bp'),pr:val('pr'),rr:val('rr'),weight:val('weight'),height:val('height'),historyPresentIllness:val('historyPresentIllness'),bodyAnnotations:annotations,bodyAnnotationsJson:val('bodyAnnotationsJson'),diagnosis:val('diagnosis'),clinicalNotes:val('diagnosis')||val('historyPresentIllness'),medications:medications(),doctorUserId:val('doctorUserId'),doctorUserName:val('doctorUserName'),doctorCompletedAt:nowIso(),workflowStage:'doctor_completed'};
   }
 
-  function medications(){return [...document.querySelectorAll('#ubatContainer .ubat-item')].map(row=>({namaUbat:row.querySelector('[name="nama_ubat[]"]')?.value?.trim()||'',dos:row.querySelector('[name="dos[]"]')?.value?.trim()||'',kekerapan:row.querySelector('[name="kekerapan[]"]')?.value?.trim()||'',nota:row.querySelector('[name="nota[]"]')?.value?.trim()||''})).filter(x=>x.namaUbat||x.dos||x.kekerapan||x.nota);}
-  function pharmacyPayload(){return {medications:medications(),memo:val('memo'),pharmacyUserId:val('pharmacyUserId'),pharmacyUserName:val('pharmacyUserName'),pharmacyCompletedAt:nowIso(),workflowStage:'pharmacy_completed'};}
+  function medications(){return [...document.querySelectorAll('#ubatContainer .ubat-item')].map(row=>({namaUbat:row.querySelector('[name="nama_ubat[]"]')?.value?.trim()||'',dos:row.querySelector('[name="dos[]"]')?.value?.trim()||'',kekerapan:row.querySelector('[name="kekerapan[]"]')?.value?.trim()||'',kuantitiDipreskripsi:Number(row.querySelector('[name="kuantiti[]"]')?.value||0),nota:row.querySelector('[name="nota[]"]')?.value?.trim()||''})).filter(x=>x.namaUbat||x.dos||x.kekerapan||x.nota);}
   function commandPayload(){return {commandPostUserId:val('commandPostUserId'),commandPostUserName:val('commandPostUserName'),commandPostVerifiedAt:nowIso(),confirmationRole:val('confirmationRole'),finalConfirmed:true,responsibleOfficer:val('confirmOfficerName')||val('commandPostUserName'),officerKedudukan:val('confirmationRole'),verifiedAt:nowIso(),workflowStage:'command_post_verified',recordStatus:'verified'};}
 
   async function patchRecord(payload){
@@ -4984,7 +4983,17 @@ function tambahUbat() {
   }
   function updateCommandSummary(){const r=currentRecord||{};setText('cpRecordId',currentRecordId||'-');setText('cpPatientName',val('patientName')||r.patientName||'-');setText('cpDiagnosis',val('diagnosis')||r.diagnosis||'-');setText('cpOutcome',outcomeText({...r,outcomes:checked('.clinical-check[data-group="Outcome"]')}));setText('cpMedicationCount',medications().length);setText('cpWorkflowStatus',stageInfo[r.workflowStage]?.label||r.workflowStage||'-');const a=document.getElementById('btnViewFullRecord');if(a&&currentRecordId)a.href=`emt_mdsview.html?id=${encodeURIComponent(currentRecordId)}${r.missionId?`&missionId=${encodeURIComponent(r.missionId)}`:''}`;updateCommandActions();}
 
-  document.querySelectorAll('.workflow-tab').forEach(t=>t.addEventListener('click',()=>showStep(t.dataset.stepTarget)));
+  const prescriptionCard=document.querySelector('#workflowStep3 .pharmacy-content-card'),doctorActions=document.querySelector('#workflowStep2 .workflow-actions'),pharmacyActions=document.querySelector('#workflowStep3 .workflow-actions');
+  if(prescriptionCard&&doctorActions){prescriptionCard.querySelector('.pharmacy-section-title').innerHTML='<i class="bi bi-capsule-pill me-2"></i>Arahan Ubat Doktor';doctorActions.before(prescriptionCard);}
+  if(pharmacyActions){pharmacyActions.insertAdjacentHTML('beforebegin','<div class="alert alert-info" id="pharmacyFlowNotice"><strong id="pharmacyFlowTitle">Serahan ubat diuruskan dalam Dispensari Ubat.</strong><br><span id="pharmacyFlowText">Stok hanya ditolak selepas pegawai farmasi mengesahkan ubat telah diberikan kepada pesakit.</span><div class="mt-2"><a class="btn btn-primary btn-sm" id="openDispensary"><i class="bi bi-capsule me-1"></i>Buka Pendispensan Pesakit</a></div></div>');}
+  const updateDispensaryLink=()=>{
+    const link=document.getElementById('openDispensary'),noMedicineButton=document.getElementById('btnConfirmNoMedicine'),title=document.getElementById('pharmacyFlowTitle'),text=document.getElementById('pharmacyFlowText'),mid=currentRecord?.missionId||qs.get('missionId')||'',rid=currentRecordId||val('recordId'),hasMedicine=Array.isArray(currentRecord?.medications)&&currentRecord.medications.length>0,awaitingPharmacy=currentRecord?.workflowStage==='doctor_completed';
+    if(link){link.href=`dispensari_add.html?missionId=${encodeURIComponent(mid)}&mdsId=${encodeURIComponent(rid)}`;link.classList.toggle('d-none',!hasMedicine||!awaitingPharmacy);}
+    noMedicineButton?.classList.toggle('d-none',hasMedicine||!awaitingPharmacy);
+    if(title)title.textContent=!awaitingPharmacy?'Peringkat farmasi tidak menunggu tindakan.':hasMedicine?'Serahan ubat diuruskan dalam Dispensari Ubat.':'Tiada arahan ubat direkodkan.';
+    if(text)text.textContent=!awaitingPharmacy?'Semak status aliran kerja rekod sebelum meneruskan.':hasMedicine?'Stok hanya ditolak selepas pegawai farmasi mengesahkan ubat telah diberikan kepada pesakit.':'Pegawai farmasi perlu mengesahkan bahawa rekod ini tidak memerlukan pendispensan sebelum dihantar ke Pos Kawalan.';
+  };
+  document.querySelectorAll('.workflow-tab').forEach(t=>t.addEventListener('click',()=>{showStep(t.dataset.stepTarget);updateDispensaryLink();}));
   document.querySelectorAll('[data-go-step]').forEach(b=>b.addEventListener('click',()=>showStep(b.dataset.goStep)));
   document.getElementById('btnLoadWorkflowRecord')?.addEventListener('click',async()=>{const ok=await loadRecord(val('workflowRecordLookup'));if(ok){const requested=Number(qs.get('step')||currentStep||2);showStep(requested);}});
   document.getElementById('workflowRecordLookup')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();document.getElementById('btnLoadWorkflowRecord')?.click();}});
@@ -5002,9 +5011,9 @@ function tambahUbat() {
     }catch(err){console.error(err);alert(err.message||'Pendaftaran gagal.');}
   });
 
-  document.getElementById('btnSaveDoctor')?.addEventListener('click',async()=>{if(!requireRecord())return;setIdentity('doctor');try{await patchRecord(doctorPayload());alert('Konsultasi doktor berjaya disimpan.');showStep(3);}catch(err){console.error(err);alert(err.message||'Gagal menyimpan konsultasi.');}});
-  document.getElementById('btnSavePharmacy')?.addEventListener('click',async()=>{if(!requireRecord())return;setIdentity('pharmacy');try{await patchRecord(pharmacyPayload());alert('Maklumat farmasi berjaya disimpan.');showStep(4);}catch(err){console.error(err);alert(err.message||'Gagal menyimpan maklumat farmasi.');}});
-  document.getElementById('btnVerifyCommandPost')?.addEventListener('click',async()=>{if(!requireRecord())return;if(!val('confirmOfficerName')){alert('Sila masukkan nama pegawai pengesah.');return;}if(!val('confirmationRole')){alert('Sila pilih jawatan / peranan.');return;}if(!document.getElementById('finalConfirmation')?.checked){alert('Sila tandakan pengesahan akhir.');return;}setIdentity('commandPost');try{await patchRecord(commandPayload());updateCommandActions();alert('Rekod MDS telah disahkan. Command Post kini boleh memilih tindakan pesakit di bawah.');document.getElementById('commandPostActionPanel')?.scrollIntoView({behavior:'smooth',block:'center'});}catch(err){console.error(err);alert(err.message||'Gagal mengesahkan rekod.');}});
+  document.getElementById('btnSaveDoctor')?.addEventListener('click',async()=>{if(!requireRecord())return;const prescribed=medications();if(prescribed.some(item=>!item.namaUbat||!item.dos||!item.kekerapan||!Number.isInteger(item.kuantitiDipreskripsi)||item.kuantitiDipreskripsi<1)){alert('Lengkapkan nama, dos, kekerapan dan kuantiti bagi setiap arahan ubat.');return;}setIdentity('doctor');try{await patchRecord(doctorPayload());alert('Konsultasi dan arahan ubat doktor berjaya disimpan.');updateDispensaryLink();showStep(3);}catch(err){console.error(err);alert(err.message||'Gagal menyimpan konsultasi.');}});
+  document.getElementById('btnConfirmNoMedicine')?.addEventListener('click',async()=>{if(!requireRecord())return;if(Array.isArray(currentRecord?.medications)&&currentRecord.medications.length){alert('Rekod ini mempunyai arahan ubat dan mesti diproses melalui Dispensari Ubat.');updateDispensaryLink();return;}setIdentity('pharmacy');try{await patchRecord({pharmacyUserId:val('pharmacyUserId'),pharmacyUserName:val('pharmacyUserName'),pharmacyCompletedAt:nowIso(),pharmacyDisposition:'Tiada ubat dipreskripsi',workflowStage:'pharmacy_completed'});alert('Pengesahan tiada ubat berjaya disimpan.');showStep(4);}catch(err){console.error(err);alert(err.message||'Gagal menyimpan pengesahan farmasi.');}});
+  document.getElementById('btnVerifyCommandPost')?.addEventListener('click',async()=>{if(!requireRecord())return;if(!val('confirmOfficerName')){alert('Sila masukkan nama pegawai pengesah.');return;}if(!val('confirmationRole')){alert('Sila pilih jawatan / peranan.');return;}if(!document.getElementById('finalConfirmation')?.checked){alert('Sila tandakan pengesahan akhir.');return;}setIdentity('commandPost');try{await patchRecord(commandPayload());updateCommandActions();alert('Rekod MDS telah disahkan. Pos Kawalan kini boleh memilih tindakan pesakit di bawah.');document.getElementById('commandPostActionPanel')?.scrollIntoView({behavior:'smooth',block:'center'});}catch(err){console.error(err);alert(err.message||'Gagal mengesahkan rekod.');}});
 
   document.getElementById('backBtn')?.addEventListener('click',()=>{if(currentStep>1){showStep(currentStep-1);return;}if(history.length>1){history.back();return;}location.href='landingMyemt.html';});
 

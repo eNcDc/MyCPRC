@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ms">
 <head>
     <meta charset="UTF-8">
     <title>Senarai Logistik</title>
@@ -13,6 +13,8 @@
 
     <!-- Main CSS -->
     <link href="assets/css/main.css" rel="stylesheet">
+    <link href="assets/css/myemt-location.css" rel="stylesheet">
+    <link href="assets/css/myemt-dashboard.css" rel="stylesheet">
 
     <style>
     .mds-card{
@@ -77,22 +79,25 @@
 
 
     <!-- MAIN CONTENT -->
-    <main class="col-md-9 col-lg-10 px-4 py-4">
+    <main class="col-md-9 col-lg-10 px-4 py-4 myemt-dashboard">
 
     <!-- PAGE HEADER -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 dashboard-header">
 
     <div>
         <h4 class="mb-0">Pengurusan Logistik EMT</h4>
         <small class="text-muted">Senarai penyimpanan dan pengangkutan EMT</small>
     </div>
 
-    <a href="landingMyemtAdmin_mission.html"
-    class="btn btn-primary">
-        <i class="bi bi-arrow-left me-1"></i>
-        Kembali
-    </a>
+    <div class="dashboard-toolbar"><input class="form-control" id="logisticsSearch" type="search" placeholder="Cari logistik..." style="width:210px"><select class="form-select" id="ownershipFilter" style="width:auto"><option value="myemt">Milik MyEMT</option><option value="all">Semua pemilikan</option><option value="mission">Dalam misi</option></select><a href="logistik_storageAdd.html" class="btn btn-success"><i class="bi bi-plus-circle me-1"></i>Tambah Penyimpanan MyEMT</a><a href="logistik_transportAdd.html" class="btn btn-success"><i class="bi bi-plus-circle me-1"></i>Tambah Pengangkutan MyEMT</a><a href="landingMyemtAdmin_mission.html" class="btn btn-outline-secondary"><i class="bi bi-arrow-left me-1"></i>Kembali</a></div>
 
+    </div>
+
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-xl-3"><div class="card dashboard-metric h-100"><div class="card-body d-flex justify-content-between"><div><div class="metric-label">Penyimpanan</div><div class="metric-number" id="kpi-storage-total">0</div></div><div class="metric-symbol bg-success-subtle text-success"><i class="bi bi-box-seam"></i></div></div></div></div>
+      <div class="col-6 col-xl-3"><div class="card dashboard-metric h-100"><div class="card-body d-flex justify-content-between"><div><div class="metric-label">Pengangkutan</div><div class="metric-number" id="kpi-transport-total">0</div></div><div class="metric-symbol bg-primary-subtle text-primary"><i class="bi bi-truck"></i></div></div></div></div>
+      <div class="col-6 col-xl-3"><div class="card dashboard-metric h-100"><div class="card-body d-flex justify-content-between"><div><div class="metric-label">Penyelenggaraan</div><div class="metric-number" id="kpi-logistics-maintenance">0</div></div><div class="metric-symbol bg-warning-subtle text-warning"><i class="bi bi-tools"></i></div></div></div></div>
+      <div class="col-6 col-xl-3"><div class="card dashboard-metric h-100"><div class="card-body d-flex justify-content-between"><div><div class="metric-label">Belum dipetakan</div><div class="metric-number" id="kpi-logistics-unmapped">0</div></div><div class="metric-symbol bg-danger-subtle text-danger"><i class="bi bi-geo-alt"></i></div></div></div></div>
     </div>
 
 
@@ -139,11 +144,11 @@
                     <strong id="stor-aktif">-</strong>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
-                    <span><span class="badge bg-primary me-2">&nbsp;</span>Dalam Penggunaan</span>
+                    <span><span class="badge bg-primary me-2">&nbsp;</span>Digunakan</span>
                     <strong id="stor-guna">-</strong>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
-                    <span><span class="badge bg-warning me-2">&nbsp;</span>Standby</span>
+                    <span><span class="badge bg-warning me-2">&nbsp;</span>Sedia Digunakan</span>
                     <strong id="stor-standby">-</strong>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
@@ -151,7 +156,7 @@
                     <strong id="stor-maintenance">-</strong>
                 </li>
                 <li class="list-group-item d-flex justify-content-between">
-                    <span><span class="badge bg-secondary me-2">&nbsp;</span>Ditutup</span>
+                    <span><span class="badge bg-secondary me-2">&nbsp;</span>Tidak Digunakan</span>
                     <strong id="stor-ditutup">-</strong>
                 </li>
                 </ul>
@@ -176,9 +181,9 @@
         <small class="text-muted">Stor, kontena dan crate logistik</small>
         </div>
 
-        <a href="logistic_storageadd.html" class="btn btn-outline-secondary rounded-pill">
+        <a href="logistik_storageAdd.html" class="btn btn-outline-secondary rounded-pill">
         <i class="bi bi-plus-circle me-1"></i>
-        Tambah Rekod
+        Tambah Milik MyEMT
         </a>
 
     </div>
@@ -195,12 +200,13 @@
                 <th>Jenis</th>
                 <th>Lokasi</th>
                 <th>Status</th>
+                <th>Misi</th>
                 <th class="text-end">Tindakan</th>
                 </tr>
             </thead>
 
             <tbody id="tbody-storage">
-                <tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr>
+                <tr><td colspan="7" class="text-center text-muted py-3">Memuatkan...</td></tr>
             </tbody>
 
             </table>
@@ -245,7 +251,7 @@
                         <strong id="veh-guna">-</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span><span class="badge bg-warning me-2">&nbsp;</span>Standby</span>
+                        <span><span class="badge bg-warning me-2">&nbsp;</span>Sedia Digunakan</span>
                         <strong id="veh-standby">-</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
@@ -253,7 +259,7 @@
                         <strong id="veh-maintenance">-</strong>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
-                        <span><span class="badge bg-dark me-2">&nbsp;</span>Rosak</span>
+                        <span><span class="badge bg-dark me-2">&nbsp;</span>Jumlah Kenderaan</span>
                         <strong id="veh-rosak">-</strong>
                     </li>
                 </ul>
@@ -289,9 +295,9 @@
         <small class="text-muted">Fleet EMT (ambulans, lori, 4x4, dll)</small>
         </div>
 
-        <a href="logistic_transportadd.html" class="btn btn-outline-dark rounded-pill">
+        <a href="logistik_transportAdd.html" class="btn btn-outline-dark rounded-pill">
         <i class="bi bi-plus-circle me-1"></i>
-        Tambah Rekod
+        Tambah Milik MyEMT
         </a>
 
     </div>
@@ -307,13 +313,15 @@
                 <th>Jenis</th>
                 <th>No. Plat</th>
                 <th>Pemandu</th>
+                <th>Lokasi</th>
                 <th>Status</th>
+                <th>Misi</th>
                 <th class="text-end">Tindakan</th>
                 </tr>
             </thead>
 
             <tbody id="tbody-transport">
-                <tr><td colspan="6" class="text-center text-muted py-3">Memuatkan...</td></tr>
+                <tr><td colspan="8" class="text-center text-muted py-3">Memuatkan...</td></tr>
             </tbody>
 
             </table>
@@ -349,101 +357,113 @@ fetch("sidebar.html")
 <script src="assets/js/config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="assets/js/myemt-location.js"></script>
 
 <script>
-const STOR_STATUS_BADGE = { 'Aktif':'bg-success', 'Dalam Penggunaan':'bg-primary', 'Standby':'bg-warning text-dark', 'Penyelenggaraan':'bg-danger', 'Ditutup':'bg-secondary' };
-const VEH_STATUS_BADGE  = { 'Tersedia':'bg-success', 'Digunakan':'bg-primary', 'Standby':'bg-warning text-dark', 'Penyelenggaraan':'bg-danger', 'Rosak':'bg-dark' };
+const STOR_STATUS_BADGE = { 'Aktif':'bg-success', 'Digunakan':'bg-primary', 'Sedia Digunakan':'bg-warning text-dark', 'Penyelenggaraan':'bg-danger', 'Tidak Digunakan':'bg-secondary' };
+const VEH_STATUS_BADGE  = { 'Tersedia':'bg-success', 'Digunakan':'bg-primary', 'Sedia Digunakan':'bg-warning text-dark', 'Penyelenggaraan':'bg-danger' };
+const escapeLogisticsHtml=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
+const recordActions=(resource,record)=>{const scope=record.missionId?`&missionId=${encodeURIComponent(record.missionId)}`:'';return `<div class="btn-group btn-group-sm"><a href="logistik_${resource}View.html?id=${encodeURIComponent(record.id)}${scope}" class="btn btn-outline-primary">Papar</a><a href="logistik_${resource}Edit.html?id=${encodeURIComponent(record.id)}${scope}" class="btn btn-outline-secondary">Kemas Kini</a></div>`;};
+const ownershipBadge=record=>record.missionId?`<a class="badge text-bg-primary text-decoration-none" href="mission_detail.html?id=${encodeURIComponent(record.missionId)}#step4">Misi ${escapeLogisticsHtml(record.missionId)}</a>`:'<span class="badge text-bg-success">MyEMT</span>';
+const locationDisplay=record=>`${escapeLogisticsHtml(record.currentLocation||record.location||'Belum direkodkan')}${window.MyEMTLocation?.mapLink(record.latitude,record.longitude)||''}`;
+let logisticsCharts=[];
 
 function count(list, field, val) { return list.filter(x => x[field] === val).length; }
 
 async function loadLogistics() {
+  logisticsCharts.forEach(chart=>chart.destroy());logisticsCharts=[];
   const [storRes, vehRes] = await Promise.all([
     fetch(`${API}/api/storage`),
     fetch(`${API}/api/transport`)
   ]);
-  const storage   = (await storRes.json()).data || [];
-  const transport = (await vehRes.json()).data  || [];
+  const [storageJson,transportJson]=await Promise.all([storRes.json(),vehRes.json()]);
+  if(!storRes.ok||!storageJson.success)throw new Error(storageJson.message||'Data penyimpanan gagal dimuatkan.');
+  if(!vehRes.ok||!transportJson.success)throw new Error(transportJson.message||'Data pengangkutan gagal dimuatkan.');
+  const ownership=document.getElementById('ownershipFilter').value,matchOwner=item=>ownership==='all'||(ownership==='myemt'?!item.missionId:!!item.missionId);
+  const storage=(storageJson.data||[]).filter(matchOwner),transport=(transportJson.data||[]).filter(matchOwner);
+  const validPoint=item=>item.latitude!==''&&item.latitude!=null&&item.longitude!==''&&item.longitude!=null&&Number.isFinite(Number(item.latitude))&&Number.isFinite(Number(item.longitude));
+  document.getElementById('kpi-storage-total').textContent=storage.length;
+  document.getElementById('kpi-transport-total').textContent=transport.length;
+  document.getElementById('kpi-logistics-maintenance').textContent=[...storage,...transport].filter(item=>item.status==='Penyelenggaraan').length;
+  document.getElementById('kpi-logistics-unmapped').textContent=[...storage,...transport].filter(item=>!validPoint(item)).length;
 
   // ── Storage table ───────────────────────────────────────────────────────
   document.getElementById('tbody-storage').innerHTML = storage.length
     ? storage.map(s => `<tr>
-        <td class="fw-semibold">${s.id}</td>
-        <td>${s.name}</td>
-        <td>${s.type}</td>
-        <td>${s.location}</td>
-        <td><span class="badge ${STOR_STATUS_BADGE[s.status]||'bg-secondary'}">${s.status}</span></td>
-        <td class="text-end"><div class="btn-group btn-group-sm">
-          <a href="logistic_storageview.html?id=${s.id}" class="btn btn-outline-primary">Papar</a>
-          <a href="logistic_storageEdit.html?id=${s.id}" class="btn btn-outline-secondary">Kemaskini</a>
-        </div></td></tr>`).join('')
-    : '<tr><td colspan="6" class="text-center text-muted py-3">Tiada rekod.</td></tr>';
+        <td class="fw-semibold">${escapeLogisticsHtml(s.id)}</td>
+        <td>${escapeLogisticsHtml(s.name||'-')}</td>
+        <td>${escapeLogisticsHtml(s.storageType||s.type||'-')}</td>
+        <td>${locationDisplay(s)}</td>
+        <td><span class="badge ${STOR_STATUS_BADGE[s.status]||'bg-secondary'}">${escapeLogisticsHtml(s.status||'-')}</span></td>
+        <td>${ownershipBadge(s)}</td>
+        <td class="text-end">${recordActions('storage',s)}</td></tr>`).join('')
+    : '<tr><td colspan="7" class="text-center text-muted py-3">Tiada rekod.</td></tr>';
 
   // ── Storage legend counts ────────────────────────────────────────────────
   document.getElementById('stor-aktif').textContent       = count(storage,'status','Aktif');
-  document.getElementById('stor-guna').textContent        = count(storage,'status','Dalam Penggunaan');
-  document.getElementById('stor-standby').textContent     = count(storage,'status','Standby');
+  document.getElementById('stor-guna').textContent        = count(storage,'status','Digunakan');
+  document.getElementById('stor-standby').textContent     = count(storage,'status','Sedia Digunakan');
   document.getElementById('stor-maintenance').textContent = count(storage,'status','Penyelenggaraan');
-  document.getElementById('stor-ditutup').textContent     = count(storage,'status','Ditutup');
+  document.getElementById('stor-ditutup').textContent     = count(storage,'status','Tidak Digunakan');
 
   // ── Storage type bar chart ───────────────────────────────────────────────
-  const storTypes = {}; storage.forEach(s => { storTypes[s.type] = (storTypes[s.type]||0)+1; });
-  new Chart(document.getElementById('chartStorage'), {
+  const storTypes = {}; storage.forEach(s => { const type=s.storageType||s.type||'Tidak Dinyatakan';storTypes[type] = (storTypes[type]||0)+1; });
+  logisticsCharts.push(new Chart(document.getElementById('chartStorage'), {
     type:'bar',
     data:{ labels: Object.keys(storTypes), datasets:[{ label:'Bilangan', data: Object.values(storTypes), backgroundColor:'#0d6efd' }] },
     options:{ scales:{ y:{ beginAtZero:true, ticks:{ stepSize:1 } } } }
-  });
+  }));
 
   // ── Storage status doughnut ──────────────────────────────────────────────
-  const storStatuses = ['Aktif','Dalam Penggunaan','Standby','Penyelenggaraan','Ditutup'];
-  new Chart(document.getElementById('chartStorageStatus'), {
+  const storStatuses = ['Aktif','Digunakan','Sedia Digunakan','Penyelenggaraan','Tidak Digunakan'];
+  logisticsCharts.push(new Chart(document.getElementById('chartStorageStatus'), {
     type:'doughnut',
     data:{ labels: storStatuses,
       datasets:[{ data: storStatuses.map(s => count(storage,'status',s)),
         backgroundColor:['#198754','#0d6efd','#ffc107','#fd7e14','#6c757d'] }] },
     options:{ plugins:{ legend:{ display:false } }, cutout:'65%' }
-  });
+  }));
 
   // ── Transport table ──────────────────────────────────────────────────────
   document.getElementById('tbody-transport').innerHTML = transport.length
     ? transport.map(v => `<tr>
-        <td class="fw-semibold">${v.id}</td>
-        <td>${v.type}</td>
-        <td>${v.plate}</td>
-        <td>${v.driver}</td>
-        <td><span class="badge ${VEH_STATUS_BADGE[v.status]||'bg-secondary'}">${v.status}</span></td>
-        <td class="text-end"><div class="btn-group btn-group-sm">
-          <a href="logistic_transportview.html?id=${v.id}" class="btn btn-outline-primary">Papar</a>
-          <a href="logistic_transportEdit.html?id=${v.id}" class="btn btn-outline-secondary">Kemaskini</a>
-        </div></td></tr>`).join('')
-    : '<tr><td colspan="6" class="text-center text-muted py-3">Tiada rekod.</td></tr>';
+        <td class="fw-semibold">${escapeLogisticsHtml(v.id)}</td>
+        <td>${escapeLogisticsHtml(v.vehicleType||v.type||'-')}</td>
+        <td>${escapeLogisticsHtml(v.registrationNumber||v.plate||v.registrationNo||'-')}</td>
+        <td>${escapeLogisticsHtml(v.driver||'-')}</td>
+        <td>${locationDisplay(v)}</td>
+        <td><span class="badge ${VEH_STATUS_BADGE[v.status]||'bg-secondary'}">${escapeLogisticsHtml(v.status||'-')}</span></td>
+        <td>${ownershipBadge(v)}</td>
+        <td class="text-end">${recordActions('transport',v)}</td></tr>`).join('')
+    : '<tr><td colspan="8" class="text-center text-muted py-3">Tiada rekod.</td></tr>';
 
   // ── Transport legend counts ──────────────────────────────────────────────
   document.getElementById('veh-tersedia').textContent    = count(transport,'status','Tersedia');
   document.getElementById('veh-guna').textContent        = count(transport,'status','Digunakan');
-  document.getElementById('veh-standby').textContent     = count(transport,'status','Standby');
+  document.getElementById('veh-standby').textContent     = count(transport,'status','Sedia Digunakan');
   document.getElementById('veh-maintenance').textContent = count(transport,'status','Penyelenggaraan');
-  document.getElementById('veh-rosak').textContent       = count(transport,'status','Rosak');
+  document.getElementById('veh-rosak').textContent       = transport.length;
 
   // ── Transport status pie ─────────────────────────────────────────────────
-  const vehStatuses = ['Tersedia','Digunakan','Standby','Penyelenggaraan','Rosak'];
-  new Chart(document.getElementById('chartTransportStatus'), {
+  const vehStatuses = ['Tersedia','Digunakan','Sedia Digunakan','Penyelenggaraan'];
+  logisticsCharts.push(new Chart(document.getElementById('chartTransportStatus'), {
     type:'pie',
     data:{ labels: vehStatuses,
       datasets:[{ data: vehStatuses.map(s => count(transport,'status',s)),
         backgroundColor:['#198754','#0d6efd','#ffc107','#dc3545','#212529'] }] },
     options:{ plugins:{ legend:{ display:false } } }
-  });
+  }));
 
   // ── Transport type bar chart ─────────────────────────────────────────────
-  const vehTypes = {}; transport.forEach(v => { vehTypes[v.type] = (vehTypes[v.type]||0)+1; });
-  new Chart(document.getElementById('chartTransportType'), {
+  const vehTypes = {}; transport.forEach(v => { const type=v.vehicleType||v.type||'Tidak Dinyatakan';vehTypes[type] = (vehTypes[type]||0)+1; });
+  logisticsCharts.push(new Chart(document.getElementById('chartTransportType'), {
     type:'bar',
     data:{ labels: Object.keys(vehTypes), datasets:[{ label:'Bilangan', data: Object.values(vehTypes), backgroundColor:'#198754' }] },
     options:{ scales:{ y:{ beginAtZero:true, ticks:{ stepSize:1 } } } }
-  });
+  }));
 }
 
-document.addEventListener('DOMContentLoaded', loadLogistics);
+document.addEventListener('DOMContentLoaded',()=>{const run=()=>loadLogistics().catch(error=>{document.getElementById('tbody-storage').innerHTML=`<tr><td colspan="7" class="text-center text-danger py-3">${escapeLogisticsHtml(error.message)}</td></tr>`;document.getElementById('tbody-transport').innerHTML=`<tr><td colspan="8" class="text-center text-danger py-3">${escapeLogisticsHtml(error.message)}</td></tr>`;});document.getElementById('ownershipFilter').addEventListener('change',run);document.getElementById('logisticsSearch').addEventListener('input',event=>{const query=event.target.value.trim().toLowerCase();document.querySelectorAll('#tbody-storage tr,#tbody-transport tr').forEach(row=>row.classList.toggle('d-none',query&&!row.textContent.toLowerCase().includes(query)));});run();});
 </script>
 </body>
 </html>

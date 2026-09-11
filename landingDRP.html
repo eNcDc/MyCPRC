@@ -16,6 +16,11 @@
 
   <!-- CSS utama sistem -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/portal-dashboard-theme.css" rel="stylesheet">
+  <style>
+    #drpMainTabs{display:flex;gap:.45rem;padding:.45rem;background:linear-gradient(135deg,#f0eafa,#e9f5f6);border:1px solid #e0dcec;border-radius:16px;box-shadow:0 6px 18px rgba(39,31,91,.06)}#drpMainTabs .nav-item{flex:1}#drpMainTabs .nav-link{width:100%;border:0;border-radius:12px;padding:.8rem 1rem;color:#526179!important;font-weight:700}#drpMainTabs .nav-link:hover{background:rgba(255,255,255,.7);color:#5b36a8!important}#drpMainTabs .nav-link.active,#drpMainTabs .nav-link.active:hover,#drpMainTabs .nav-link.active:focus{background:#fff!important;color:#552a9a!important;-webkit-text-fill-color:#552a9a!important;opacity:1!important;box-shadow:0 5px 16px rgba(52,35,98,.13)}
+    #drp-dashboard-content .card{border:0;background:linear-gradient(145deg,#fff,#faf8ff);transition:.18s ease}#drp-dashboard-content .card:hover{transform:translateY(-2px)}#drp-dashboard-content .card-header{color:#3f286f}#drpReportsPane>.row .card{border:0;background:linear-gradient(145deg,#fff,#faf8ff);overflow:hidden;position:relative}#drpReportsPane>.row .card:after{content:"";position:absolute;width:75px;height:75px;border-radius:50%;right:-26px;top:-28px;background:#7952b3;opacity:.1}#drpReportsPane>.row h3{font-size:1.85rem;font-weight:800;color:#3f286f}#drpReportsPane>.card{border:0;border-radius:18px;overflow:hidden}#drpReportsPane>.card .card-header{padding:1rem 1.2rem;background:linear-gradient(90deg,#fff,#f7f2fc)!important}#drpReportsPane .table thead th{background:#f4effa;color:#4e3d69;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap}#drpReportsPane .table tbody tr:hover{background:#fbf8fe}@media(max-width:767px){#drpMainTabs{overflow-x:auto;flex-wrap:nowrap}#drpMainTabs .nav-item{min-width:165px}}
+  </style>
 </head>
 
 <body>
@@ -121,7 +126,7 @@
                 <thead class="table-light">
                   <tr>
                     <th>Tarikh</th>
-                    <th>Jenis Bencana</th>
+                    <th>Lokasi</th><th>Kategori / Jenis Bencana</th><th>Kebarangkalian</th><th>Purata Impak</th><th>Skor Risiko</th>
                     <th>Status</th>
                     <th class="text-end">Tindakan</th>
                   </tr>
@@ -129,7 +134,7 @@
 
                 <tbody id="drpReportsTableBody">
                   <tr>
-                    <td colspan="4" class="text-center text-muted py-4">Tiada laporan dijumpai.</td>
+                    <td colspan="8" class="text-center text-muted py-4">Tiada laporan dijumpai.</td>
                   </tr>
                 </tbody>
               </table>
@@ -159,6 +164,7 @@
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 
 <!-- JS DRP -->
+<script src="assets/js/drp-taxonomy.js"></script>
 <script src="assets/js/drp_dashboard3.js"></script>
 <script src="assets/js/drp_forecasting.js"></script>
 <script src="assets/js/reportDRP.js"></script>
@@ -211,5 +217,7 @@
   }
 </script>
 
+<script src="assets/js/portal-dashboard-theme.js"></script>
+<script src="assets/js/preparedness-ms.js"></script>
 </body>
 </html>

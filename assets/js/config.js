@@ -117,10 +117,13 @@ if(!document.querySelector('script[data-shared-layout]')){
 // Load the shared design system only for the MyEMT module.
 (function loadMyEMTDesign(){
   const page=(window.location.pathname.split('/').pop()||'').toLowerCase();
-  const isMyEMT=/^(emt_|landingmyemt|course_|mission_|notifikasi_|referral_|observasi_|discaj_|insiden_|user_health|user_misi)/.test(page);
+  const isMyEMT=/^(emt_|landingmyemt|course_|mission_|asset_|logistik_|dispensari_|hr_|notifikasi_|referral_|observasi_|discaj_|insiden_|user_health|user_misi)/.test(page);
   if(!isMyEMT)return;
   if(!document.querySelector('link[data-myemt-design]')){
     const link=document.createElement('link');link.rel='stylesheet';link.href='assets/css/myemt.css';link.dataset.myemtDesign='true';document.head.appendChild(link);
+  }
+  if(!document.querySelector('script[data-myemt-i18n]')){
+    const script=document.createElement('script');script.src='assets/js/myemt-i18n.js';script.dataset.myemtI18n='true';document.head.appendChild(script);
   }
   const applyBodyClass=()=>{
     if(!document.body)return;
@@ -144,11 +147,26 @@ window.MyEMT.memberId = function memberId() {
     localStorage.getItem('myemt_memberId') || localStorage.getItem('memberId') ||
     sessionStorage.getItem('myemt_memberId') || sessionStorage.getItem('memberId') || '';
 };
+window.MyEMT.actor = function actor() {
+  const params = new URLSearchParams(window.location.search);
+  const read = key => localStorage.getItem(key) || sessionStorage.getItem(key) || '';
+  return {
+    id: params.get('userId') || read('userId') || read('staffId') || read('adminId') || window.MyEMT.memberId(),
+    name: params.get('userName') || read('userName') || read('staffName') || read('adminName') || read('myemt_memberName') || read('memberName')
+  };
+};
 window.MyEMT.escapeHTML = function escapeHTML(value) {
   return String(value ?? '').replace(/[&<>"']/g, character => ({
     '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;'
   })[character]);
 };
+window.MyEMT.normalizeVisibleText = function normalizeVisibleText(root=document.body) {
+  if(!root)return;
+  const replacements=[['\u00e2\u20ac\u00a2','·'],['\u00c2\u00b7','·'],['\u00e2\u20ac\u201c','–'],['\u00e2\u20ac\u201d','—']];
+  const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
+  let node;while((node=walker.nextNode()))replacements.forEach(([bad,good])=>{if(node.nodeValue.includes(bad))node.nodeValue=node.nodeValue.split(bad).join(good);});
+};
+document.addEventListener('DOMContentLoaded',()=>window.MyEMT.normalizeVisibleText(),{once:true});
 
 // Print mode for clinical forms opened from a mission record.
 if(new URLSearchParams(window.location.search).get('print')==='1'){

@@ -538,13 +538,14 @@ function createChart(
 
   const canvas = document.getElementById(id);
   if(!canvas) return;
+  const translate=value=>window.MyEMT?.t?.(String(value)) || String(value);
 
   charts[id] = new Chart(canvas,{
     type,
     data:{
-      labels,
+      labels:labels.map(translate),
       datasets:[{
-        label,
+        label:translate(label),
         data,
         borderWidth:0,
         borderRadius:type === 'bar' ? 5 : 0
@@ -1192,7 +1193,7 @@ function formatMissionDate(value){
     return esc(value);
   }
 
-  return date.toLocaleDateString('ms-MY',{
+  return date.toLocaleDateString(window.MyEMT?.getLanguage?.() === 'en' ? 'en-MY' : 'ms-MY',{
     day:'2-digit',
     month:'2-digit',
     year:'numeric'
@@ -1418,7 +1419,7 @@ function renderRecords(){
                 </div>
 
                 <div class="mission-meta">
-                  Person In Charge
+                  Pegawai Bertanggungjawab (PIC)
                 </div>
               </div>
 
@@ -1532,6 +1533,11 @@ document.querySelectorAll('#emtCrudTabs button[data-bs-toggle="pill"]').forEach(
 });
 
 document.addEventListener('DOMContentLoaded', loadDashboard);
+window.addEventListener('myemt:languagechange',()=>{
+  renderDashboard();
+  populateTypeFilter();
+  renderRecords();
+});
 </script>
 
 </body>

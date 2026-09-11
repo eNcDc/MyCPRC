@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="assets/css/myemt-location.css">
 
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
@@ -160,7 +161,7 @@
 
                         <div class="col-md-4"><label class="form-label">Telefon Pemandu</label><input type="tel" class="form-control" name="driverPhone" maxlength="30"></div>
                         <div class="col-md-4"><label class="form-label">Unit Bertanggungjawab</label><input type="text" class="form-control" name="responsibleUnit" required maxlength="200"></div>
-                        <div class="col-md-4"><label class="form-label">Lokasi Semasa</label><input type="text" class="form-control" name="currentLocation" required maxlength="200"></div>
+                        <div class="col-12"><label class="form-label">Lokasi Semasa</label><input type="text" class="form-control" name="currentLocation" required maxlength="200" data-location-picker><input type="hidden" name="latitude"><input type="hidden" name="longitude"></div>
                         <div class="col-md-4"><label class="form-label">Tarikh Servis Terakhir</label><input type="date" class="form-control" name="lastServiceDate"></div>
                         <div class="col-md-4"><label class="form-label">Tarikh Servis Seterusnya</label><input type="date" class="form-control" name="nextServiceDate"></div>
 
@@ -221,6 +222,7 @@ fetch("sidebar.html")
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script><script src="assets/js/myemt-location.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/operational-form.js"></script>
 

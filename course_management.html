@@ -531,6 +531,7 @@
 </script>
 
 <script src="assets/js/config.js"></script>
+<script src="assets/js/myemt-location.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
@@ -665,7 +666,7 @@
                 <tr>
                     <td>
                         <div class="session-name">${name}</div>
-                        <div class="session-meta"><i class="bi bi-geo-alt me-1"></i>${location}</div>
+<div class="session-meta"><i class="bi bi-geo-alt me-1"></i>${location}</div>${window.MyEMTLocation?.mapLink(session.latitude,session.longitude)||''}
                         <div class="session-meta"><i class="bi bi-calendar-event me-1"></i>${dateRange}</div>
                         <div class="session-meta"><i class="bi bi-list-check me-1"></i>${Array.isArray(session.tentative)?session.tentative.length:0} aktiviti tentatif</div>
                         <div class="session-meta"><i class="bi bi-crosshair me-1"></i>${session.latitude!=null&&session.longitude!=null?`Daftar hadir dalam radius ${escapeHtml(session.attendanceRadiusM||300)} m`:'Lokasi daftar hadir belum ditetapkan'}</div>

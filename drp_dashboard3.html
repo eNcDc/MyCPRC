@@ -1,14 +1,6 @@
 <!-- ===== PAPAN PEMUKA DRP ===== -->
 <div id="drpDashboard">
 
-  <!-- Tajuk papan pemuka -->
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <div>
-      <h4 class="mb-0">Papan Pemuka Profil Risiko Daerah</h4>
-      <small class="text-muted">Paparan data tahun semasa sahaja.</small>
-    </div>
-  </div>
-
   <!-- Bahagian filter -->
   <div class="card shadow-sm mb-4">
     <div class="card-header bg-white">
@@ -50,8 +42,8 @@
     </div>
   </div>
 
-  <!-- Tab kecil untuk ringkasan dan peta -->
-  <ul class="nav flood-segment-tabs mb-4" role="tablist">
+  <!-- Navigasi dalaman disembunyikan: semua infografik penting dipaparkan bersama. -->
+  <ul class="nav flood-segment-tabs mb-4 d-none" role="tablist">
     <li class="nav-item" role="presentation">
       <button class="nav-link active" id="drp-summary-tab" data-bs-toggle="tab" data-bs-target="#summaryView" type="button">
         <i class="bi bi-table me-1"></i> Ringkasan & Jadual
@@ -145,8 +137,8 @@
         </div>
       </div>
 
-      <!-- Jadual daftar risiko penuh diletakkan bawah sekali -->
-      <div class="card shadow-sm">
+      <!-- Jadual terperinci tersedia melalui tab Laporan DRP. -->
+      <div class="card shadow-sm d-none">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
           <strong>Jadual Daftar Risiko</strong>
 
@@ -185,7 +177,7 @@
     </div>
 
     <!-- Paparan peta -->
-    <div class="tab-pane fade" id="mapView">
+    <div class="tab-pane fade show active mt-4" id="mapView">
       <div class="card shadow-sm">
         <div class="card-header bg-white d-flex justify-content-between align-items-center">
           <strong>Peta Risiko Mengikut Daerah</strong>

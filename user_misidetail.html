@@ -168,7 +168,7 @@ textarea{resize:vertical}
 
     <div class="col-6 col-lg-2">
       <div class="metric-card">
-        <div class="metric-label">Needs & Risks Aktif</div>
+        <div class="metric-label">Keperluan dan Risiko Aktif</div>
         <div class="metric-value" id="kpiRisks">0</div>
       </div>
     </div>
@@ -214,7 +214,7 @@ textarea{resize:vertical}
       <div class="row g-4 mt-1">
         <div class="col-lg-7">
           <div class="border rounded p-3 bg-white h-100">
-            <h6 class="fw-semibold mb-3">Needs & Risks Paling Kerap Dilaporkan</h6>
+            <h6 class="fw-semibold mb-3">Keperluan dan Risiko Paling Kerap Dilaporkan</h6>
             <div class="chart-wrap">
               <canvas id="chartRiskFrequency"></canvas>
             </div>
@@ -388,14 +388,14 @@ textarea{resize:vertical}
       <div class="section-head">
         <div>
                 <h5 class="section-title">Laporan Harian Asas / Pasukan</h5>
-          <p class="section-subtitle">Team information, WASH, Needs & Risks dan kekangan operasi harian.</p>
+          <p class="section-subtitle">Maklumat pasukan, WASH, keperluan dan risiko serta kekangan operasi harian.</p>
         </div>
         <span class="badge bg-info text-dark border">Draft & Submitted boleh dilihat</span>
       </div>
 
       <div class="storage-warning alert alert-warning" id="dailyStorageWarning">
         <i class="bi bi-exclamation-triangle me-1"></i>
-        Endpoint <code>/api/daily-reports</code> belum tersedia. Data fallback hanya boleh dilihat pada pelayar yang sama.
+        Perkhidmatan laporan harian tidak dapat dihubungi. Rekod tidak boleh dimuatkan atau disimpan sehingga sambungan API pulih.
       </div>
 
       <div class="non-pic-note alert alert-secondary" id="nonPicNote">
@@ -595,7 +595,7 @@ textarea{resize:vertical}
                 <th>Pasukan</th>
                 <th>Jenis EMT</th>
                 <th>Lokasi / Fasiliti</th>
-                <th>Needs & Risks</th>
+                <th>Keperluan dan Risiko</th>
                 <th>Status</th>
                 <th class="text-end">Tindakan</th>
               </tr>
@@ -658,7 +658,7 @@ textarea{resize:vertical}
           </div>
         </div>
 
-        <h6 class="fw-bold border-bottom pb-2">Needs & Risks Yang Ditanda</h6>
+        <h6 class="fw-bold border-bottom pb-2">Keperluan dan Risiko Yang Ditanda</h6>
         <div id="ddRisks" class="mb-3">-</div>
 
         <h6 class="fw-bold border-bottom pb-2">Komen / Butiran Lanjut</h6>
@@ -673,7 +673,7 @@ textarea{resize:vertical}
     <div class="card-body">
       <div class="section-head">
         <div>
-          <h5 class="section-title">Maklumat Human Resource EMT</h5>
+          <h5 class="section-title">Maklumat Sumber Manusia EMT</h5>
           <p class="section-subtitle">Komposisi anggota yang dipautkan kepada misi.</p>
         </div>
         <span class="badge bg-light text-dark border">Read Only</span>
@@ -878,7 +878,6 @@ const DAILY_RISK_LABELS={
   "65":"Lain-lain"
 };
 
-const DAILY_STORAGE_KEY="myemt_daily_reports_v1";
 
 let missionData=null;
 let isMissionPic=false;
@@ -971,26 +970,7 @@ async function safeApi(path){
 
 
 function currentUserIdentity(){
-  const qs=new URLSearchParams(location.search);
-
-  return {
-    id:
-      localStorage.getItem("memberId") ||
-      localStorage.getItem("userId") ||
-      sessionStorage.getItem("memberId") ||
-      sessionStorage.getItem("userId") ||
-      qs.get("userId") ||
-      qs.get("memberId") ||
-      "",
-
-    name:
-      localStorage.getItem("userName") ||
-      localStorage.getItem("memberName") ||
-      sessionStorage.getItem("userName") ||
-      sessionStorage.getItem("memberName") ||
-      qs.get("userName") ||
-      ""
-  };
+  return window.MyEMT?.actor?.() || {id:"",name:""};
 }
 
 function determinePicAccess(){
@@ -1403,19 +1383,6 @@ function renderDispensary(){
 }
 
 
-function readLocalDaily(){
-  try{
-    const list=JSON.parse(localStorage.getItem(DAILY_STORAGE_KEY)||"[]");
-    return Array.isArray(list) ? list : [];
-  }catch{
-    return [];
-  }
-}
-
-function writeLocalDaily(list){
-  localStorage.setItem(DAILY_STORAGE_KEY,JSON.stringify(list));
-}
-
 async function loadDailyReports(){
   let backendLoaded=false;
 
@@ -1429,6 +1396,7 @@ async function loadDailyReports(){
         data.dailyReports=json.data;
         dailyBackendAvailable=true;
         backendLoaded=true;
+        document.querySelectorAll('#dailyReportForm button').forEach(button=>button.disabled=false);
       }
     }
   }catch(err){
@@ -1437,11 +1405,9 @@ async function loadDailyReports(){
 
   if(!backendLoaded){
     dailyBackendAvailable=false;
-
-    data.dailyReports=readLocalDaily()
-      .filter(r=>String(r.missionId||"")===String(missionId));
-
+    data.dailyReports=[];
     document.getElementById("dailyStorageWarning").classList.add("show");
+    document.querySelectorAll('#dailyReportForm button').forEach(button=>button.disabled=true);
   }else{
     document.getElementById("dailyStorageWarning").classList.remove("show");
   }
@@ -1457,7 +1423,7 @@ async function loadDailyReports(){
     applyMissionDefaultsToDailyForm();
 
     const date=document.getElementById("dailyDate").value;
-    const existing=findDailyByContext(date,refreshDailyLocationId());
+    const existing=findDailyByContext(date);
 
     if(existing) populateDailyForm(existing);
   }
@@ -1484,24 +1450,16 @@ async function persistDaily(report){
         return json.data || report;
       }
 
-      const endpointError=new Error(json.message || "Daily report endpoint failed.");endpointError.isHttp=true;throw endpointError;
+      const endpointError=new Error(json.message || "Perkhidmatan laporan harian gagal dihubungi.");endpointError.isHttp=true;throw endpointError;
 
     }catch(err){
-      if(err.isHttp) throw err;
-      console.warn("Using local fallback:",err);
+      console.warn("Daily report API failed:",err);
       dailyBackendAvailable=false;
       document.getElementById("dailyStorageWarning").classList.add("show");
+      throw new Error(err.message || "Perkhidmatan laporan harian gagal dihubungi.");
     }
   }
-
-  const all=readLocalDaily();
-  const index=all.findIndex(r=>String(r.id)===String(report.id));
-
-  if(index>=0) all[index]=report;
-  else all.push(report);
-
-  writeLocalDaily(all);
-  return report;
+  throw new Error("Perkhidmatan laporan harian tidak tersedia. Rekod tidak disimpan.");
 }
 
 
@@ -1554,9 +1512,9 @@ function setRisks(codes){
   });
 }
 
-function findDailyByContext(date,activityLocationId){
+function findDailyByContext(date){
   return data.dailyReports.find(r=>
-    String(r.activityDate||r.reportDate||"")===String(date||"")&&String(r.activityLocationId||MyEmtMdsRules.canonicalLocationId(r))===String(activityLocationId||"")
+    String(r.activityDate||r.reportDate||r.date||"").slice(0,10)===String(date||"").slice(0,10)
   );
 }
 function refreshDailyLocationId(){const id=MyEmtMdsRules.canonicalLocationId({latitude:document.getElementById('dailyLatitude')?.value,longitude:document.getElementById('dailyLongitude')?.value});if(document.getElementById('dailyActivityLocationId'))document.getElementById('dailyActivityLocationId').value=id;return id;}
@@ -1692,7 +1650,7 @@ async function saveDaily(status){
 
   const payload=buildDailyPayload(status);
   if(!payload.activityLocationId){alert('Koordinat lokasi diperlukan untuk menjana ID lokasi aktiviti.');return;}
-  const sameDate=findDailyByContext(payload.reportDate,payload.activityLocationId);
+  const sameDate=findDailyByContext(payload.reportDate);
 
   if(sameDate && String(sameDate.id)!==String(payload.id)){
     payload.id=sameDate.id;
@@ -1738,10 +1696,8 @@ async function saveDaily(status){
 
 function updateDailyMdsCount(){
   const date=document.getElementById("dailyDate").value;
-  const activityLocationId=refreshDailyLocationId();
-
   const count=data.mds.filter(r=>
-    (!date || String(r.activityDate||r.date||"").slice(0,10)===String(date))&&(!activityLocationId||String(r.activityLocationId||MyEmtMdsRules.canonicalLocationId(r))===activityLocationId)
+    !date || String(r.activityDate||r.date||"").slice(0,10)===String(date)
   ).length;
 
   document.getElementById("dailyMdsCount").textContent=count;
@@ -1857,7 +1813,7 @@ window.showDailyDetail=function(reportId){
             ${esc(code)}. ${esc(DAILY_RISK_LABELS[code] || code)}
           </span>
         `).join("")
-      : `<span class="text-muted">Tiada Needs & Risks ditanda.</span>`;
+      : `<span class="text-muted">Tiada keperluan dan risiko ditanda.</span>`;
 
   document.getElementById("dailyDetailSub").textContent=
     `${formatDate(report.reportDate)} • ${report.teamName || "-"}`;
@@ -2048,7 +2004,7 @@ document.getElementById("dailyDate").addEventListener("change",()=>{
   if(!validateDailyDate()) return;
 
   const date=document.getElementById("dailyDate").value;
-  const existing=findDailyByContext(date,refreshDailyLocationId());
+  const existing=findDailyByContext(date);
 
   if(existing){
     populateDailyForm(existing);
@@ -2105,7 +2061,7 @@ document.addEventListener("DOMContentLoaded",async()=>{
     applyMissionDefaultsToDailyForm();
 
     const date=document.getElementById("dailyDate").value;
-    const existing=findDailyByContext(date,refreshDailyLocationId());
+    const existing=findDailyByContext(date);
 
     if(existing) populateDailyForm(existing);
   }

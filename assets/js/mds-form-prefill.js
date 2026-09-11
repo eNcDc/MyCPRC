@@ -50,7 +50,7 @@
         picker.value=requested;apply(record);
       }
       if(!records.length){status.textContent='Tiada rekod MDS bagi misi ini. Tambah rekod MDS sebelum membuka borang klinikal tambahan.';status.className='small mt-2 text-danger';picker.disabled=true;form.querySelector('[type="submit"]')?.setAttribute('disabled','disabled');}
-    }catch(error){status.textContent=error.message;status.className='small mt-2 text-danger';picker.disabled=true;}
+    }catch(error){status.textContent=error.message;status.className='small mt-2 text-danger';picker.disabled=true;form.querySelector('[type="submit"]')?.setAttribute('disabled','disabled');}
   }
   picker.addEventListener('change',()=>{const record=records.find(r=>String(r.mdsRecordId||r.id)===picker.value);if(record)apply(record);});init();
 }());

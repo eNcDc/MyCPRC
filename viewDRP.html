@@ -13,6 +13,8 @@
 
   <!-- CSS utama sistem -->
   <link href="assets/css/main.css" rel="stylesheet">
+  <link href="assets/css/preparedness-forms.css" rel="stylesheet">
+  <link href="assets/css/portal-dashboard-theme.css" rel="stylesheet">
 </head>
 
 <body>
@@ -29,7 +31,7 @@
     </aside>
 
     <!-- ===== KANDUNGAN UTAMA ===== -->
-    <main class="col-md-9 col-lg-10 px-4 py-4">
+    <main class="col-md-9 col-lg-10 px-4 py-4 preparedness-report-page">
 
       <!-- Tajuk paparan laporan -->
       <div class="d-flex justify-content-between align-items-center mb-4">
@@ -55,6 +57,7 @@
 
       <!-- Kandungan laporan -->
       <div id="reportContent">
+        <div class="d-flex justify-content-end mb-3 no-print"><button type="button" class="btn btn-outline-primary" onclick="window.print()"><i class="bi bi-printer me-1"></i>Cetak Laporan</button></div>
 
         <!-- Maklumat laporan -->
         <div class="card shadow-sm mb-4">
@@ -210,6 +213,7 @@
 
 <!-- JS Bootstrap -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/drp-taxonomy.js"></script>
 
 <script>
   // ===== MUATKAN HEADER =====
@@ -235,7 +239,7 @@
       createdAt: "2026-01-12T08:00:00",
       status: "Dihantar",
 
-      kategori: "Semula Jadi",
+      kategori: "Bencana Semula Jadi",
       negeri: "Kelantan",
       daerah: "Kota Bharu",
       mukim: "Pengkalan Chepa",
@@ -258,7 +262,7 @@
       createdAt: "2026-01-10T08:00:00",
       status: "Draf",
 
-      kategori: "Semula Jadi",
+      kategori: "Bencana Semula Jadi",
       negeri: "Pahang",
       daerah: "Bentong",
       mukim: "Janda Baik",
@@ -312,8 +316,8 @@
     setText("viewLatitude", report.latitude);
     setText("viewLongitude", report.longitude);
 
-    setText("viewKategori", report.kategori);
-    setText("viewDisasterType", report.disasterType);
+    setText("viewKategori", window.DRP_TAXONOMY?.normalizeCategory(report.kategori) || report.kategori);
+    setText("viewDisasterType", window.DRP_TAXONOMY?.normalizeType(report.disasterType) || report.disasterType);
 
     setText("viewLikelihood", report.likelihood);
     setText("viewMortality", report.mortality);
@@ -365,5 +369,6 @@
   }
 </script>
 
+<script src="assets/js/portal-dashboard-theme.js"></script><script src="assets/js/preparedness-ms.js"></script>
 </body>
 </html>
